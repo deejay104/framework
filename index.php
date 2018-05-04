@@ -1,3 +1,4 @@
 <?
-	echo "framework v5";
+
+	require "core/index.php";
 ?>

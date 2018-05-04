@@ -1,0 +1,310 @@
+<!-- BEGIN: icone -->
+	<img src="{path_module}/img/icn48_titre.png" alt="" border=0 />
+<!-- END: icone -->
+<!-- BEGIN: infos -->
+	 {site_title}
+<!-- END: infos -->
+
+
+<!-- BEGIN: corps -->
+
+<link href='external/fullcalendar/fullcalendar.css' rel='stylesheet' />
+<link href='external/fullcalendar/fullcalendar.print.css' rel='stylesheet' media='print' />
+
+<script src='external/fullcalendar/lib/moment.min.js'></script>
+<script src='external/fullcalendar/fullcalendar.min.js'></script>
+<script src='external/fullcalendar/lang/fr.js'></script>
+
+<style>
+	#script-warning {
+		display: none;
+		background: #eee;
+		border-bottom: 1px solid #ddd;
+		padding: 0 10px;
+		line-height: 40px;
+		text-align: center;
+		font-weight: bold;
+		font-size: 12px;
+		color: red;
+	}
+
+	#loading {
+		display: none;
+		position: absolute;
+		top: 10px;
+		right: 10px;
+	}
+
+	#calendar {
+		width: 100%;
+		padding: 0px;
+	}
+
+	.fc-time-grid .fc-slats td {
+		height: 1em;
+		font-size: 10px;
+	}
+
+.fc-time {	color: #000000; }
+.fc-title {	color: black; }
+.fc-end-resizer { color: #777777; }
+
+.fc-toolbar { display: none; }
+.fc-day-grid { display: none; }
+.fc-axis { width: 60px; }
+</style>
+
+<script type="text/javascript">
+	$(function() {
+
+			// auto adjust the height of
+			$('#actualitesNouveau').delegate( 'textarea', 'keydown', function (){
+			    $(this).height( 0 );
+			    $(this).height( this.scrollHeight );
+			});
+			$('#actualitesNouveau').find( 'textarea' ).keydown();
+
+  });
+
+	function ClearText(e,txt) {
+	
+		if(window.event)
+	          {
+	          	//IE
+	          	var t = window.event.srcElement;
+	          } 
+		else
+	          { //firefox
+	          	var t = e.target;
+	          } 
+			
+		if (t.value==txt)
+		  { t.value=''; t.style.color="#000000"; }
+		return;
+	}
+	function CapturePost(e) {
+		seconds=timer;
+		text="";
+	
+		if(window.event)
+	          { key = window.event.keyCode;	} //IE
+		else
+	          { key = e.which;  } //firefox
+	
+		if (key==13)
+		 { 
+		 	document.forms["recherche"].submit(); 
+	 	 }
+	}
+	
+	
+
+	$(document).ready(function() {
+	
+		$('#calendar').fullCalendar({
+			defaultDate: '{form_jour}',
+			defaultView: '{defaultView}',
+			defaultEventMinutes: 60,
+			slotDuration: '01:00:00',
+			timeFormat: 'H:mm',
+			lang: 'fr',
+			editable: true,
+			selectable: true,
+			selectHelper: true,
+			minTime: '{form_debjour}:00:00',
+			maxTime: '{form_finjour}:00:00',
+			scrollTime: '{form_debjour}:00:00',
+			axisFormat: 'HH:mm',
+			height: 400,
+			slotEventOverlap: false,
+
+			header: {
+				left: '',
+				center: '',
+				right: ''
+			},
+
+			businessHours:
+	       {
+			   start: '0:00', // a start time (10am in this example)
+			   end: '23:59', // an end time (12pm in this example)
+			   dow: [ 1,2,3,4,5 ]
+			},
+
+		   views: {
+				agendaFourWeeks: {
+					type: 'agenda',
+					duration: {weeks: 4},
+					buttonText: 'Default',
+					columnFormat: 'DD'
+				}
+			},
+
+			select: function(start, end) {
+				document.location="index.php?mod=reservations&rub=reservation&ress={form_ress}"+"&jstart="+start+"&jend="+end;
+			},
+
+			eventClick: function(event, element) {
+				document.location="index.php?mod=reservations&rub=reservation&id="+event.id;
+		    },
+
+			eventResize: function(event, dayDelta, minuteDelta ) {
+				$.ajax({ url: 'api.php?mod=reservations&rub=updatecal&id='+event.id+'&jstart='+event.start+'&jend='+event.end+'&dayDelta='+dayDelta });
+			},
+			eventDrop: function(event,dayDelta,minuteDelta) {
+				$.ajax({ url: 'api.php?mod=reservations&rub=updatecal&id='+event.id+'&jstart='+event.start+'&jend='+event.end+'&dayDelta='+dayDelta });
+			},
+
+			events: {
+				url: 'api.php?mod=reservations&rub=getcal&ress=0',
+				error: function() {
+					$('#script-warning').show();
+				}
+			},
+
+			loading: function(bool) {
+				$('#loading').toggle(bool);
+			}
+		});
+		
+	});
+	
+</script>
+
+<div class="cadreinfos">
+
+	<div class="encadreInfos">
+		<div class="encadreTitre">Informations Personnelles</div>
+  
+		<!-- BEGIN: mod_aviation_detail -->
+		<p><label>Solde du compte pilote</label>{solde}</p>
+		<p><label>Nombre de vols dans les 3 derniers mois</label>{nb_vols} vols</p>
+		<!-- END: mod_aviation_detail -->
+		<p><label><A href="index.php?mod=forums">Nombre de documents non lus</A></label><span><A href="index.php?mod=forums" class="{color_nonlus}">{nb_nonlus}</A></span></p>
+		<div style="height: 4px;"></div>
+		<!-- BEGIN: lst_echeance -->
+		<p>{form_echeance}</p>
+		<!-- END: lst_echeance -->
+	</div>
+
+<!-- BEGIN: aff_manips -->
+	<div class="encadreInfos">
+		<div class="encadreTitre">{manip_titre} le {manip_date}</div>
+	 	<p align="justify">{manip_txt}</p>
+	 	<p align="right"><a href="index.php?mod=manifestations&rub=detail&id={manip_id}">-Voir les participants-</a></p>
+	</div>
+<!-- END: aff_manips -->
+	<div class="encadreInfos">
+		<div class="encadreTitre">Rechercher dans les actualités</div>
+		<form name="recherche" method="post" action="index.php" enctype="multipart/form-data">
+			<input type="hidden" name="mod" value="actualites">
+			<p><input type="text" name="search" OnClick="ClearText(event,'Termes à rechercher');" value="Termes à rechercher" OnKeyPress="CapturePost(event);" style="color:#bbbbbb;"></p>
+		</form>
+	</div>
+<!-- BEGIN: aff_reservation -->
+	<div class="encadreInfos" style='height:440px;'>
+		<div class="encadreTitre">Réservations du jour</div>
+		
+		<div id='script-warning'>
+			Erreur : <code>api.php</code> doit être accessible.
+		</div>
+
+		<div id='loading'>loading...</div>
+
+		<div id='calendar'></div>
+	</div>
+<!-- END: aff_reservation -->
+</div>
+
+<div id="actualites">
+	<div id="actualitesNouveau">
+		<form name="actualites" method="post" action="index.php" enctype="multipart/form-data">
+			<input type="hidden" name="mod" value="actualites">
+			<input type="hidden" name="id" value="{form_id}">
+			<input type="hidden" name="checktime" value="{form_checktime}">
+	
+			<input type="text" name="form_titre" value="{news_title}"  OnClick="ClearText(event,'{news_title_clear}');"  style="color:#{new_color};"><br />
+			<textarea name="form_message" OnClick="ClearText(event,'{news_message_clear}');"  style="color:#{new_color}; height:51px;">{news_message}</textarea>
+			<p>
+				<input name='fonc' type='submit' value='Poster'>
+			</p>
+		</form>
+	</div>
+	<div id="actualitesMail"></div>
+
+<!-- BEGIN: aff_message -->
+	<div id='actualitesBloc'>
+		<div class="actualitesPhoto" >
+			<img src="{msg_avatar}" alt="">
+		</div>
+		<div id="actualitesMessage">
+			<div class="actualitesTitre">
+				<div class="actualitesTitreMsg">
+					<a name="id{msg_id}"></a>
+					<p>{msg_titre}</p>
+					<span>par {msg_autheur}, {msg_date}</span>
+				</div>
+				<div class="actualitesIcones">
+					<!-- BEGIN: icn_modifier -->
+					<a href="index.php?mod=actualites&fonc=editer&id={msg_id}" class='imgDelete'><img src="{path_module}/img/icn16_editer.png" /></a>
+					<!-- END: icn_modifier -->
+					<!-- BEGIN: icn_supprimer -->
+					<a href="#" class='imgDelete' OnClick="ConfirmeClick('index.php?mod=actualites&fonc=supprimer&id={msg_id}#id{msg_idprev}','Souhaitez-vous supprimer cette actualité ?');"><img src="{path_module}/img/icn16_supprimer.png" /></a>
+					<!-- END: icn_supprimer -->
+				</div>
+			</div>
+			<div class="actualitesTexte">
+				<p>{msg_message}</p>
+			</div>
+		</div>
+	</div>
+<!-- END: aff_message -->
+
+	<div id='actualitesBloc' style='margin-bottom: 45px;'>
+		<div class="actualitesPhoto" style='width:72px;' >&nbsp;</div>
+		<div id="actualitesMessage">
+			<div class="actualitesSuivant">
+				<a href="index.php?mod=actualites&limit={aff_limit}&search={aff_search}#id{msg_lastid}">-Afficher les actualités suivantes-</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- BEGIN: aff_sendmail -->
+<script type="text/javascript">
+	document.getElementById("actualitesMail").innerHTML = "Envoie des emails...";
+	document.getElementById("actualitesMail").style.display = 'block';
+	$(function() {     
+		$.ajax({
+			url:'api.php?mod=actualites&rub=sendmail&id={aff_id}',
+			type: 'html',
+			success: function(content,code)
+			{
+				if (content.charAt(0)=="O")
+				{
+					document.getElementById("actualitesMail").style.backgroundColor = "#BBFFAA";
+				}
+				else
+				{
+					document.getElementById("actualitesMail").style.backgroundColor = "#FFBBAA";
+				}
+
+				document.getElementById("actualitesMail").innerHTML =content;
+
+				if (content.charAt(0)!="*")
+				{
+					document.getElementById("actualitesMail").style.display = 'block';
+				}
+			},
+			error : function(content, code, error)
+			{
+				document.getElementById("actualitesMail").style.backgroundColor = "#FFBBAA";
+				document.getElementById("actualitesMail").innerHTML = "Erreur : "+error;
+				document.getElementById("actualitesMail").style.display = 'block';
+			}
+		});        
+	});
+</script>
+<!-- END: aff_sendmail -->
+
+<!-- END: corps -->
