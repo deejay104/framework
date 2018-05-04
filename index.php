@@ -1,3 +1,3 @@
 <?
-	echo "framework";
+	echo "framework v2";
 ?>
