@@ -1,0 +1,100 @@
+<!-- BEGIN: icone -->
+	<img src="{path_module}/img/icn48_titre.png" alt="" border=0 />
+<!-- END: icone -->
+
+<!-- BEGIN: infos -->
+{aff_menu}
+<!-- END: infos -->
+
+
+<!-- BEGIN: corps -->
+<script>
+function SwitchEdit(champ,id)
+{
+	<!-- document.getElementById("sched_"+id).value = "<input type='text' value='"+document.getElementById("sched_"+id).value+"'>"; -->
+	if (champ=="actif")
+	{
+	}
+	else
+	{
+		document.getElementById(champ+"_"+id).innerHTML = "<input id='"+champ+"_"+id+"_val' onblur=\"SwitchHtml('"+champ+"',"+id+")\" type='text' value='"+document.getElementById(champ+"_"+id+"_a").innerHTML+"' size='4'>";
+		document.getElementById(champ+"_"+id+"_val").focus();
+		document.getElementById(champ+"_"+id+"_val").select();
+	}
+}
+function SwitchHtml(champ,id)
+{
+	$(function() {
+		$.ajax({
+			url:'api.php?mod=admin&rub=updcron&id='+id+'&var='+champ+'&val='+document.getElementById(champ+"_"+id+"_val").value,
+			type: 'html',
+			dataType: 'JSON',
+			success: function(response)
+			{
+				console.log(response);
+
+				if (response.result=="OK")
+				{
+					document.getElementById(champ+"_"+id).style.backgroundColor = "#BBFFAA";
+					document.getElementById(champ+"_"+id).innerHTML = "<a id='"+champ+"_"+id+"_a' onClick=\"SwitchEdit('"+champ+"',"+id+")\">"+response.value+"</a>";
+				}
+				else
+				{
+					document.getElementById(champ+"_"+id).style.backgroundColor = "#FFBBAA";
+					document.getElementById(champ+"_"+id).innerHTML = "<a id='"+champ+"_"+id+"_a' onClick=\"SwitchEdit('"+champ+"',"+id+")\">"+document.getElementById(champ+"_"+id+"_val").value+"</a>";
+				}
+			},
+			error : function(response)
+			{
+				document.getElementById(champ+"_"+id).style.backgroundColor = "#FFBBAA";
+				document.getElementById(champ+"_"+id).innerHTML = "<a id='"+champ+"_"+id+"_a' onClick=\"SwitchEdit('"+champ+"',"+id+")\">"+document.getElementById(champ+"_"+id+"_val").value+"</a>";
+			}
+		});
+	})
+
+}
+
+function SwitchOn(champ,id)
+{
+	$(function() {
+		$.ajax({
+			url:'api.php?mod=admin&rub=updcron&id='+id+'&var='+champ+'&val='+document.getElementById(champ+"_"+id+"_val").innerHTML,
+			type: 'html',
+			dataType: 'JSON',
+			success: function(response)
+			{
+				console.log(response);
+
+				if (response.result=="OK")
+				{
+					document.getElementById(champ+"_"+id).style.backgroundColor = "#BBFFAA";
+					document.getElementById(champ+"_"+id).innerHTML = "<a id='"+champ+"_"+id+"_val' onClick=\"SwitchOn('"+champ+"',"+id+")\">"+response.value+"</a>";
+				}
+				else
+				{
+					document.getElementById(champ+"_"+id).style.backgroundColor = "#FFBBAA";
+					document.getElementById(champ+"_"+id).innerHTML = "<a id='"+champ+"_"+id+"_val' onClick=\"SwitchOn('"+champ+"',"+id+")\">"+document.getElementById(champ+"_"+id+"_val").value+"</a>";
+				}
+			},
+			error : function(response)
+			{
+				document.getElementById(champ+"_"+id).style.backgroundColor = "#FFBBAA";
+				document.getElementById(champ+"_"+id).innerHTML = "<a id='"+champ+"_"+id+"_val' onClick=\"SwitchOn('"+champ+"',"+id+")\">"+document.getElementById(champ+"_"+id+"_val").value+"</a>";
+			}
+		});
+	})
+
+}
+
+
+</script>
+
+<br />
+{aff_tableau}
+
+<!-- BEGIN: resultat -->
+<div style='width: 1060px; border:1px solid #000000; border-radius: 5px; padding: 10px; background-color: #dddddd; margin-top: 30px; '>
+{aff_resultat}
+</div>
+<!-- END: resultat -->
+<!-- END: corps -->

@@ -1,0 +1,116 @@
+<!-- BEGIN: main -->
+<!DOCTYPE html>
+<html>
+  <head>
+	<title>{site_title} - {module} - {rub}</title>
+	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
+	<link rel="stylesheet" href="static/css/style.css" type="text/css" />
+	<link rel="stylesheet" type="text/css" href="external/jquery/css/jquery-ui.css" />
+	<link rel="icon" type="image/png" href="favicon.png" />
+  </head>
+<body>
+
+	<script type="text/javascript" src="static/js/_table.js"></script>
+	<script type="text/javascript" src="external/jquery/jquery.js"></script>
+	<script type="text/javascript" src="external/jquery/jquery-ui.min.js"></script>
+	<script language="JavaScript" src="static/js/_popup.js"></script>
+	
+	<!-- This one in here is responsive menu for tablet and mobiles -->
+	<div id="responsive-navigation">
+		<p class="responsive-extend">
+			<a href="#" class="menu-toggle-btn"><img src="static/images/icn32_extend.png" width="32" height="32"></a>
+		</p>
+		<div class="responsive-menu">
+			<p class="responsive-menulink">
+	   		<a href="index.php"><img src="static/modules/actualites/img/icn32_titre.png" /> Accueil</a>
+	<!-- BEGIN: menu_membres_sm -->
+	   		<a href="index.php?mod=membres"><img src="static/modules/membres/img/icn32_membres.png" /> Membres</a>
+	<!-- END: menu_membres_sm -->
+	<!-- BEGIN: menu_mesinfos_sm -->
+	   		<a href="mesinfos.php"><img src="static/modules/membres/img/icn32_detail.png" /> Mes informations</a>
+	<!-- END: menu_mesinfos_sm -->
+	<!-- BEGIN: menu_logs_sm -->
+	   		<a href="index.php?mod=logs"><img src="static/modules/logs/img/icn32_titre.png" /> Log des vols</a>
+	<!-- END: menu_logs_sm -->
+	<!-- BEGIN: menu_rapports_sm -->
+	   		<a href="index.php?mod=rapports"><img src="static/modules/logs/img/icn32_titre.png" /> Rapports</a>
+	<!-- END: menu_rapports_sm -->
+	<!-- BEGIN: menu_forums_sm -->
+	   		<a href="index.php?mod=forums"><img src="static/modules/forums/img/icn32_titre.png" /> Documents</a>
+	<!-- END: menu_forums_sm -->
+	<!-- BEGIN: menu_configuration_sm -->
+	   		<a href="index.php?mod=admin"><img src="static/modules/admin/img/icn32_titre.png" /> Configuration</a>
+	<!-- END: menu_configuration_sm -->
+	   		<a href="login.php?fonc=logout"><img src="static/images/icn32_logout.png" /> Se déconnecter</A><br />
+			</p>
+			<p style="text-align:center;"><a href="index.php?settheme=phone" style=" color:white;">-Affichage smartphone-</a></p>
+		</div> <!-- /.main_menu -->
+	</div> <!-- /responsive_navigation -->
+
+	<div id="main-sidebar">
+		<div class="logo">
+			<a href=""><img src="{site_logo}" alt="Polygone67" /></a>
+		</div> <!-- /.logo -->
+
+		<div class="navigation">
+			<ul class="main-menu">
+     		<li><a href="index.php"><img src="static/modules/actualites/img/icn32_titre.png" /> Accueil</a></li>
+<!-- BEGIN: menu_membres -->
+     		<li><a href="index.php?mod=membres"><img src="static/modules/membres/img/icn32_membres.png" /> Membres</a></li>
+<!-- END: menu_membres -->
+<!-- BEGIN: menu_mesinfos -->
+     		<li><a href="mesinfos.php"><img src="static/modules/membres/img/icn32_detail.png" /> Mes informations</a></li>
+<!-- END: menu_mesinfos -->
+<!-- BEGIN: menu_logs -->
+			<li><a href="index.php?mod=logs"><img src="static/modules/logs/img/icn32_titre.png" /> Log des vols</a></li>
+<!-- END: menu_logs -->
+<!-- BEGIN: menu_rapports-->
+			<li><a href="index.php?mod=rapports"><img src="static/modules/logs/img/icn32_titre.png" /> Rapports</a></li>
+<!-- END: menu_rapports -->
+<!-- BEGIN: menu_forums -->
+     		<li><a href="index.php?mod=forums"><img src="static/modules/forums/img/icn32_titre.png" /> Documents</a></li>
+<!-- END: menu_forums -->
+<!-- BEGIN: menu_configuration -->
+	   		<li><a href="index.php?mod=admin"><img src="static/modules/admin/img/icn32_titre.png" /> Configuration</a></li>
+<!-- END: menu_configuration -->
+     		<li><a href="login.php?fonc=logout"><img src="static/images/icn32_logout.png" /> Se déconnecter</A></li>
+			</ul> <!-- /.main_menu -->
+		</div> <!-- /.navigation -->
+	</div> <!-- /#main-sidebar -->
+
+	<div id="main-content">
+		<div class='headbox'>
+		<div class='head'>
+			<div class='icone'>{icone}</div>
+			<div class='pagetitle'>{infos}</div>
+		</div>
+		</div>
+		<div class="msgbox">
+		<!-- BEGIN: aff_infos -->
+		<div class="msgbox-std msgbox-{msg_class}">{msg_infos}</div>
+		<!-- END: aff_infos-->
+		</div>
+		<div id='popup'></div>
+		<div class='main'>
+			{corps}
+		</div>
+	</div>
+
+  <div class='footer'>
+    <div class='lastmod'>{username}&nbsp;-&nbsp;Version {version}&nbsp;&nbsp;</div>
+  </div>
+<!--/PageFooterFmt-->
+
+
+<script>
+jQuery(document).ready(function($){
+    /************** Responsive Navigation *********************/
+
+	$('.menu-toggle-btn').click(function(){
+        $('.responsive-menu').stop(true,true).slideToggle();
+    });
+});
+</script>
+</body>
+</html>
+<!-- END: main -->
