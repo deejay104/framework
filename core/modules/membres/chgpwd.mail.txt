@@ -1,9 +1,0 @@
-Bonjour,
-
-Votre mot de passe a été modifié :
-Utilisateur : {username}
-Initiales : {initiales}
-
-Rendez-vous sur {url} pour vous connecter.
-
-Cordialement

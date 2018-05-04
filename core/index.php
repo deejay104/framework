@@ -1,3 +1,0 @@
-<?
-	echo "framework v4";
-?>
