@@ -9,7 +9,7 @@ $MyOptHelp=array();
 $MyOptHelp[""]="";
 
 // Prefixe des tables
-$MyOptTmpl["tbl"]="log";
+$MyOptTmpl["tbl"]="core";
 $MyOptHelp["tbl"]="Prefixe des tables dans la base de données";
 
 // Site en maintenance
@@ -30,7 +30,7 @@ $MyOptTmpl["host"]=htmlentities($_SERVER["REQUEST_SCHEME"]."://".$_SERVER["SERVE
 $MyOptHelp["host"]="Chemin complet du site. Utilisé pour générer les url statiques.";
 
 // Titre du site
-$MyOptTmpl["site_title"]="LogBook";
+$MyOptTmpl["site_title"]="MnMs";
 $MyOptHelp["site_title"]="Titre du site web";
 
 // Logo du site dans le dossier images

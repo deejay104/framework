@@ -11,23 +11,30 @@ function GetModule($mod)
 	  { return false; }
   }
 
-function MyRep($file)
-  { global $mod, $lang, $theme;
+function MyRep($file,$mymod="")
+{
+	global $mod, $theme;
+	
+	if ($mymod=="")
+	{
+		$mymod=$mod;
+	}
+
   	$myfile=substr($file,0,strrpos($file,"."));
 	$myext=substr($file,strrpos($file,".")+1,strlen($file)-strrpos($file,".")-1);
 
-  	if ((file_exists("modules/$mod/tmpl/$myfile.$theme.$myext")) && ($mod!=""))
-  	  { return "modules/$mod/tmpl/$myfile.$theme.$myext"; }
-	else if ((file_exists("modules/$mod/tmpl/$file")) && ($mod!=""))
-  	  { return "modules/$mod/tmpl/$file"; }
-	else if ((file_exists("modules/$mod/$file")) && ($mod!=""))
-  	  { return "modules/$mod/$file"; }
-  	else if (file_exists("modules/$myfile.$theme.$myext"))
-  	  { return "modules/$myfile.$theme.$myext"; }
-  	else if (file_exists("modules/$file"))
-  	  { return "modules/$file"; }
-  	else if (file_exists("config/$file"))
-  	  { return "config/$file"; }
+  	if ((file_exists("modules/$mymod/tmpl/$myfile.$theme.$myext")) && ($mymod!=""))
+  	  { return "modules/$mymod/tmpl/$myfile.$theme.$myext"; }
+	else if ((file_exists("modules/$mymod/tmpl/$file")) && ($mymod!=""))
+  	  { return "modules/$mymod/tmpl/$file"; }
+	else if ((file_exists("modules/$mymod/$file")) && ($mymod!=""))
+  	  { return "modules/$mymod/$file"; }
+  	// else if (file_exists("modules/default/tmpl/$myfile.$theme.$myext"))
+  	  // { return "modules/default/tmpl/$myfile.$theme.$myext"; }
+  	// else if (file_exists("modules/$file"))
+  	  // { return "modules/$file"; }
+  	// else if (file_exists("config/$file"))
+  	  // { return "config/$file"; }
   	else
   	  { return ""; }
   }
@@ -59,6 +66,17 @@ function myPrint($txt)
 	}
 }
 
+// Compresse un fichier
+function Purge($txt)
+{
+	$p[]="/[ ]+/";	$r[]="";
+	$p[]="/\t/";	$r[]="";
+	$p[]="/\r/";	$r[]="";
+	$p[]="/\n/";	$r[]="";
+	
+	$txt=preg_replace($p,$r,$txt);
+	return $txt;
+}
 
 // Affiche un temps en minute en heures/minutes
 function AffTemps($tps,$short="yes") {
@@ -114,7 +132,8 @@ function sql2time($date,$aff="") {
 
 
 // Calcul le nombre de secondes entre deux dates
-function date_diff_txt($date1, $date2) {
+function date_diff_txt($date1, $date2)
+{
   $s = strtotime($date2)-strtotime($date1);
   return $s;
 }
@@ -123,23 +142,11 @@ function date_diff_txt($date1, $date2) {
 
 // Ajoute un nombre de jour à une date
 function CalcDate($dte, $n)
-  {
+{
 		return date("Y-m-d",mktime(0, 0, 0, date("n",strtotime($dte)), date("j",strtotime($dte))+$n, date("Y",strtotime($dte))));
-  }	
+}	
 
 
-function AffInitiales($res)
-  {
-  	if ($res["initiales"]!="")
-  	  { return strtoupper($res["initiales"]); }
-  	else
-  	  { return strtoupper(substr($res["prenom"],0,1).substr($res["nom"],0,1)); }
-  }
-
-function AffInfo($txt,$key,$typeaff="html",$cond=true)
-  {
-	affInformation("*Fonction AffInfo supprimée*","warning");
-  }
 
   
 function SendMailFromFile($from,$to,$tabcc,$subject,$tabvar,$file)
@@ -327,7 +334,7 @@ function SendMail($From,$To,$Cc,$Subject,$Text,$Html,$AttmFiles)
 
 
 function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",$start=0,$limit="",$nbline=0)
-  {global $mod,$rub;
+  {global $mod,$rub,$corefolder;
 	$ret ="\n<table class='tableauAff'>\n";
 
 	$ret.="<tr>";
@@ -358,7 +365,7 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 		{
 			$ret.="<th width='".$v["width"]."'".(($v["align"]!="") ? " align='".$v["align"]."'" : "").">";
 			$ret.="<b><a href='$page&order=$name&trie=".(($trie=="d") ? "i" : "d").(($url!="") ? "&$url" : "")."&ts=0'>".$v["aff"]."</a></b>";
-		  	$ret.=" <img src='static/images/sens_$trie.gif' border=0>";
+		  	$ret.=" <img src='".$corefolder."/static/images/sens_$trie.gif' border=0>";
 			$sub.="<th align='".$v["align"]."'>".((isset($v["sub"])) ? $v["sub"] : "")."</th>";
 			$subb.="<th align='".$v["align"]."'>".((isset($v["bottom"])) ? $v["bottom"] : "")."</th>";
 		}
@@ -513,7 +520,7 @@ function TrieValInv ($a, $b)
 
 function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url="",$start=0,$limit=0,$nbline=0,$affsearch=false)
 {
-	global $mod,$rub,$tabsearch;
+	global $mod,$rub,$tabsearch,$corefolder;
 
 	$ls="";
 	if (is_array($tabsearch))
@@ -556,7 +563,7 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 		{
 			$ret.="<th width='".$v["width"]."'".(((isset($v["align"])) && ($v["align"]!="")) ? " align='".$v["align"]."'" : "").">";
 			$ret.="<b><a href='$page&order=$name&trie=".(($trie=="d") ? "i" : "d").(($url!="") ? "&$url" : "")."&ts=0".$ls."'>".$v["aff"]."</a></b>";
-		  	$ret.=" <img src='static/images/sens_$trie.gif' border=0>";
+		  	$ret.=" <img src='".$corefolder."/static/images/sens_$trie.gif' border=0>";
 			$sub.="<th align='".$v["align"]."'>".((isset($v["sub"])) ? $v["sub"] : "")."</th>";
 			$subb.="<th align='".$v["align"]."'>".((isset($v["bottom"])) ? $v["bottom"] : "")."</th>";
 			$search.="<th><input type='text' style='width:".$v["width"]."px;' name='tabsearch[".$name."]' value='".((isset($tabsearch[$name])) ? $tabsearch[$name] : '')."'></th>";
@@ -711,27 +718,6 @@ function TrieProduit2 ($a, $b)
 	return (strtolower($a["nom_produit"]) < strtolower($b["nom_produit"])) ? 1 : -1;
   }
 
-/*
-function CalcColor($colora,$pourc,$colorb="013366")
-  {
-	$color1=ereg_replace('#','',$colora);
-	$color2=ereg_replace('#','',$colorb);
-	$rr=floor(hexdec(substr($color1, 0, 2))*($pourc/100)+hexdec(substr($color2, 0, 2))); 
-	if ($rr>255) { $rr = 255; }
-	if ($rr<0)   { $rr = 0; }
-	
-	$vv=floor(hexdec(substr($color1, 2, 2))*($pourc/100)+hexdec(substr($color2, 2, 2))); 
-	if ($vv>255) { $vv = 255; }
-	if ($vv<0)   { $vv = 0; }
-
-	$bb=floor(hexdec(substr($color1, 4, 2))*($pourc/100)+hexdec(substr($color2, 4, 2))); 
-	if ($bb>255) { $bb = 255; }
-	if ($bb<0)   { $bb = 0; }
-
-	$colorf=dechex($rr).dechex($vv).dechex($bb);
-	return $colorf;
-  }
-*/
 
 // Calcul un dégradé de couleur
 function CalcColor($color,$pour,$fcolor="FFFFFF")
@@ -792,10 +778,10 @@ function UpperFirstLetter($txt)
   }
 
 function FatalError($txt,$msg="")
-  { global $tmpl_prg;
+  { global $tmpl_prg,$corefolder;
   	if (isset($tmpl_prg))
   	{
-		$tmpl_prg->assign("icone","<IMG src=\"static/images/icn48_erreur.png\">");
+		$tmpl_prg->assign("icone","<IMG src=\"".$corefolder."/static/images/icn48_erreur.png\">");
 		$tmpl_prg->assign("infos","$txt");
 		$tmpl_prg->assign("corps","$msg");
 		$tmpl_prg->parse("main");
@@ -899,11 +885,12 @@ function GetFirstLine($txt,$nb=4)
 	  { return $txt; }
 	else
 	  { return substr($txt,0,$p-1)."<br/>..."; }
-  }
+}
+
 
 // Convertie une couleur en RGB
 function ConvertColor2RGB($col,$add=0)
-  {
+{
   	$r=hexdec(substr($col,0,2));
   	$r=($r+$add>255) ? 255 : $r+$add;
   	$g=hexdec(substr($col,2,2));
@@ -911,33 +898,13 @@ function ConvertColor2RGB($col,$add=0)
   	$b=hexdec(substr($col,4,2));
   	$b=($b+$add>255) ? 255 : $b+$add;
   	return "rgb($r, $g, $b)";
-  }
+}
 
-// Test si un ID correspond à l'utilisateur ou un de ses enfants
-function GetMyId($id)
-  { global $myuser;
-  	if ($id==$myuser->uid)
-  	  { return true; }
 
-	if (GetModule("creche"))
-	  {
-	  	$myuser->LoadEnfants();
-	  }
-	
-  	if (is_array($myuser->data["enfant"]))
-  	  {
-        	foreach($myuser->data["enfant"] as $enfant)
-          	  {
-          		if ($enfant["id"]==$id)
-          		  { return true; }
-          	  }
-	  }
-  	return false;
-  } 
 
 // Affiche une date
 function DisplayDate($dte)
-  {
+{
 	$d=time()-strtotime($dte);
 	$mid=time()-strtotime(date("Y-m-d 23:59:59",time()-3600*24));
 
@@ -987,7 +954,7 @@ function DisplayDate($dte)
 	  }	
 
 
-  }
+}
 
 // Affiche une date SQL avec une couleur
 function AffDate($dte)
@@ -1009,8 +976,9 @@ function AffDate($dte)
 	return $ret;
 }
 
-function EcheanceDate($dte)
+function TestDate($dte)
 {
+// Ex EcheanceDate
 	$ret="ok";
 	if (date_diff_txt($dte,date("Y-m-d"))>0)
 	{
@@ -1048,7 +1016,7 @@ function AffTelephone($txt)
 function GenereVariables($tab)
 {
 	$ret="";
-	$conffile="config/variables.inc.php";
+	$conffile="../config/variables.inc.php";
 	if (!file_exists($conffile))
 		{ $ret.="Création du fichier";}
 
@@ -1119,34 +1087,6 @@ function now()
 	return date("Y-m-d H:i:s");
 }
 
-
-// Obtiens un ID unique pour la création d'un mouvement
-function GetMouvementID($sql)
-{ global $MyOpt;
-	$query="LOCK TABLES ".$MyOpt["tbl"]."_config WRITE";
-	$res=$sql->QueryRow($query);
-
-	$query="SELECT value FROM ".$MyOpt["tbl"]."_config WHERE param='mvtid'";
-	$res=$sql->QueryRow($query);
-	$mvtid=$res["value"];
-
-	if ($mvtid=="")
-	  {
-	  	$mvtid="0";
-		$query="INSERT INTO ".$MyOpt["tbl"]."_config (param,value) VALUES ('mvtid','$mvtid')";
-		$sql->Insert($query);
-	  }
-
- 	$mid=$mvtid+1;
-
-	$query="UPDATE ".$MyOpt["tbl"]."_config SET value='".$mid."' WHERE param='mvtid'";
-	$sql->Update($query);
-
-	$query="UNLOCK TABLES";
-	$res=$sql->QueryRow($query);
-
-	return $mid;
-}
 
 // Calcul de la distance entre 2 points
 function getDistance($lat1, $lon1, $lat2, $lon2, $unit="K") {

@@ -1,7 +1,7 @@
 <?
 /*
-    SoceIt v2.2 ($Revision: 385 $)
-    Copyright (C) 2012 Matthieu Isorez
+    MnMs Framework
+    Copyright (C) 2018 Matthieu Isorez
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,15 +16,11 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    ($Author: miniroot $)
-    ($Date: 2012-07-23 10:18:01 +0200 (lun., 23 juil. 2012) $)
-    ($Revision: 385 $)
 */
 
 // Class Document
 
-class document_class{
+class document_core{
 
  	# Constructor
 	function __construct($id="",$sql,$type="document"){
@@ -47,7 +43,7 @@ class document_class{
 		$this->uid_creat="";
 		$this->dte_creat="";
 		$this->editmode="std";
-		$this->filepath="documents";
+		$this->filepath="../documents";
 
 		if ($id>0)
 		{
@@ -189,9 +185,9 @@ class document_class{
 	}
 
 	function Affiche()
-	{ global $MyOpt;
+	{ global $MyOpt,$corefolder;
 		$myext=GetExtension($this->name);
-		
+
 		if ($myext=="xls")
 		  { $icon="excel"; }
 		else if ($myext=="doc")
@@ -226,27 +222,27 @@ class document_class{
 
 		$txt ="";
 		if ($this->editmode=="form")
-		  {
+		{
 		  	$txt="<input name=\"form_adddocument\" type=\"file\" size=\"60\" />";
-		  }
+		}
 		else
-		  {
-				if (file_exists($this->filepath."/".$this->filename))
-				  {
-						$fsize=CalcSize(filesize($this->filepath."/".$this->filename));
-						$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><img src='".$MyOpt["host"]."/static/images/icn16_".$icon.".png' width=16 height=16 border=0> ".$this->name." ($fsize) </a>";
-				  }
-				else
-				  {
-						$txt.="<img src='".$MyOpt["host"]."/static/images/icn16_".$icon.".png' style='vertical-align:middle; border: 0px; height: 16px; width: 16px;'> <s>".$this->name."</s>";
-					}
+		{
+			if (file_exists($this->filepath."/".$this->filename))
+			{
+					$fsize=CalcSize(filesize($this->filepath."/".$this->filename));
+					$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><img src='".$MyOpt["host"]."/".$corefolder."/static/images/icn16_".$icon.".png' width=16 height=16 border=0> ".$this->name." ($fsize) </a>";
+			}
+			else
+			{
+					$txt.="<img src='".$MyOpt["host"]."/".$corefolder."/static/images/icn16_".$icon.".png' style='vertical-align:middle; border: 0px; height: 16px; width: 16px;'> <s>".$this->name."</s>";
+			}
 
-				// Si mode édition
-				if ($this->editmode=="edit")
-				  {
-		  			$txt.=" <a href=\"#\" OnClick=\"var win=window.open('doc.php?id=".$this->id."&fonc=delete','scrollbars=no,resizable=no,width=10'); return false;\" class='imgDelete'><img src='static/images/icn16_supprimer.png'></a>";
-		  		}
-		  }
+			// Si mode édition
+			if ($this->editmode=="edit")
+			  {
+				$txt.=" <a href=\"#\" OnClick=\"var win=window.open('doc.php?id=".$this->id."&fonc=delete','scrollbars=no,resizable=no,width=10'); return false;\" class='imgDelete'><img src='".$corefolder."/static/images/icn16_supprimer.png'></a>";
+			}
+		}
 
 		return $txt;
 	}
@@ -421,30 +417,30 @@ class document_class{
 		
 		if ($this->droit=="ALL")
 		{
-			if (!is_dir("static/cache/".$myid))
+			if (!is_dir("../static/cache/".$myid))
 			{
-				mkdir("static/cache/".$myid);
+				mkdir("../static/cache/".$myid);
 			}
 
-			if ((file_exists($mypath)) && ($this->expire>0) && (time()-filectime($mypath)>3600*$this->expire))
+			if ((file_exists("../".$mypath)) && ($this->expire>0) && (time()-filectime($mypath)>3600*$this->expire))
 			{
 				error_log("clear cache:".$mypath);
 				unlink($mypath);
 			}
 			
-			if (!file_exists($mypath))
+			if (!file_exists("../".$mypath))
 			{
 				if (($w>0) && ($h>0))
 				{
-					$this->Resize($w,$h,$mypath);
+					$this->Resize($w,$h,"../".$mypath);
 				}
 				else
 				{
-					copy($this->filepath."/".$this->filename,$mypath);
+					copy($this->filepath."/".$this->filename,"../".$mypath);
 				}
 			}
 
-			if (file_exists($mypath))
+			if (file_exists("../".$mypath))
 			{
 				error_log("path from cache:".$mypath);
 				return $mypath;

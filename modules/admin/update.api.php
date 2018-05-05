@@ -68,9 +68,9 @@ function AjoutLog($txt)
 		$MyOpt=UpdateVariables($MyOptTab);
 	}
 
-	if (!file_exists("config/variables.inc.php"))
+	if (!file_exists("../config/variables.inc.php"))
 	{
-		error_log("easy-aero cannot variable file");
+		error_log("easy-aero variable file does not exist");
 		$ret["result"]="NOK";
 		$ret["data"]=AjoutLog("La création du fichier variables a échouée");
 		echo json_encode($ret);

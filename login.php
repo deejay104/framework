@@ -41,16 +41,7 @@
 	require ("class/mysql.inc.php");
 
 // ---- Charge les variables
-
-	if (file_exists("config/config.inc.php"))
-	{
-		require ("config/config.inc.php");
-	}
-	if (file_exists("config/variables.inc.php"))
-	{
-		require ("config/variables.inc.php");
-	}
-	require ("modules/fonctions.inc.php");
+	require ("lib/fonctions.inc.php");
 
 	if ($MyOpt["timezone"]!="")
 	  { date_default_timezone_set($MyOpt["timezone"]); }
@@ -94,7 +85,7 @@
 
 		//preg_match("/^([^ ]*) (.*?)$/",$username,$t);
 
-		$sql   = new mysql_class($mysqluser, $mysqlpassword, $hostname, $db,$port);
+		$sql   = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db,$port);
 		$query = "SELECT id,prenom,nom,mail,password FROM ".$MyOpt["tbl"]."_utilisateurs WHERE ((mail='$username' AND mail<>'') OR (initiales='$username' AND initiales<>'')) AND actif='oui' AND virtuel='non'";
 
 		$res   = $sql->QueryRow($query);
@@ -127,11 +118,10 @@
 
 // ---- Charge les templates
 	$module="modules";
-	$tmpl_prg = new XTemplate (MyRep("login.htm"));
+	$tmpl_prg = new XTemplate (MyRep("login.htm","default"));
 
 	if ($tmpl_prg->text("main.unsecure")=="")
 	  { $tmpl_prg->parse("main.secure"); }
-
 
 // ---- Calcul de l'id
 	$myid=md5(session_id());
@@ -142,25 +132,27 @@
 	$tmpl_prg->assign("errmsg", $errmsg);
 	$tmpl_prg->assign("version", $version);
 	$tmpl_prg->assign("site_title", $MyOpt["site_title"]);
+	$tmpl_prg->assign("corefolder", $corefolder);
+	$tmpl_prg->assign("style_url", $corefolder."/".MyRep("style.css"));
+
 	if (file_exists("custom/".$MyOpt["site_logo"]))
 	{
 		$tmpl_prg->assign("site_logo", "custom/".$MyOpt["site_logo"]);
 	}
 	else
 	{
-		$tmpl_prg->assign("site_logo", "static/images/logo.png");
+		$tmpl_prg->assign("site_logo", $corefolder."/static/images/logo.png");
 	}
 
 // ---- Test si l'installation est faite
 
-
-	if (($mysqluser=="") || (!file_exists("config/config.inc.php")))
+	if ($mysqluser=="")
 	{
 		$tmpl_prg->parse("main.configdb");
 	}
 	else
 	{
-		$sql   = new mysql_class($mysqluser, $mysqlpassword, $hostname, $db,$port);
+		$sql   = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db,$port);
 		$sql->show=false;
 		$query = "SELECT * FROM ".$MyOpt["tbl"]."_config";
 		$res  = $sql->QueryRow($query);

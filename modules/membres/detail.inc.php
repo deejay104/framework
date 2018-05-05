@@ -1,15 +1,7 @@
 <?
-// ---------------------------------------------------------------------------------------------
-//   Détail d'un utilisateur
-//     ($Author: miniroot $)
-//     ($Date: 2016-02-14 23:17:30 +0100 (dim., 14 fÃ©vr. 2016) $)
-//     ($Revision: 445 $)
-// ---------------------------------------------------------------------------------------------
-//   Variables  : 
-// ---------------------------------------------------------------------------------------------
 /*
-    SoceIt v2.0
-    Copyright (C) 2007 Matthieu Isorez
+    MnMs Framework
+    Copyright (C) 2018 Matthieu Isorez
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -35,11 +27,10 @@
 	  { FatalError("Accès non autorisé (AccesMembre)"); }
 
 	require_once ("class/document.inc.php");
-	require_once ("class/echeance.inc.php");
 
 // ---- Charge le template
 	$tmpl_x = new XTemplate (MyRep("detail.htm"));
-	$tmpl_x->assign("path_module","$module/$mod");
+	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 
 // ---- Initialisation des variables
 	$tmpl_x->assign("form_checktime",$_SESSION['checkpost']);
@@ -48,9 +39,9 @@
 	$msg_confirmation="";
 
 	if ($id>0)
-	  { $usr = new user_class($id,$sql,((GetMyId($id)) ? true : false)); }
+	  { $usr = new user_core($id,$sql,((GetMyId($id)) ? true : false)); }
 	else
-	  { $usr = new user_class(0,$sql,false); }
+	  { $usr = new user_core(0,$sql,false); }
 
 
 // ---- Sauvegarde les infos
@@ -89,11 +80,11 @@
 			{
 				foreach($lstdoc as $i=>$did)
 				{
-					$doc = new document_class($did,$sql);
+					$doc = new document_core($did,$sql);
 					$doc->Delete();
 				}
 			}
-		  	$doc = new document_class(0,$sql,"avatar");
+		  	$doc = new document_core(0,$sql,"avatar");
 		  	$doc->droit="ALL";
 		  	$msg_erreur.= $doc->Save($id,$_FILES["form_photo"]);
 			$doc->Resize(200,240);
@@ -104,34 +95,11 @@
 		// Sauvegarde un document
 		if ($_FILES["form_adddocument"]["name"]!="")
 		{
-		  	$doc = new document_class(0,$sql);
+		  	$doc = new document_core(0,$sql);
 		  	$doc->Save($id,$_FILES["form_adddocument"]);
 		}
 
-		$_SESSION['tab_checkpost'][$checktime]=$checktime;
-		
-		// Sauvegarde des échéances
-		if (is_array($form_echeance))
-		{
-			foreach($form_echeance as $i=>$d)
-			{
-				$dte = new echeance_class($i,$sql);
-				if ($i==0)
-				{
-					$dte->typeid=$form_echeance_type;
-					$dte->uid=$id;
-				}
-				if (($d!='') && ($d!='0000-00-00'))
-				{
-					$dte->dte_echeance=$d;
-					$dte->Save();
-				}
-				else
-				{
-					$dte->Delete();
-				}
-			}
-		}
+		$_SESSION['tab_checkpost'][$checktime]=$checktime;		
 	}
 
 	// Sauvegarde les droits
@@ -177,10 +145,10 @@
 // ---- Affiche les infos
 	if ((is_numeric($id)) && ($id>0))
 	  {
-		$usr = new user_class($id,$sql,((GetMyId($id)) ? true : false));
+		$usr = new user_core($id,$sql,((GetMyId($id)) ? true : false));
 		$usr->LoadDonneesComp();
 
-		$usrmaj = new user_class($usr->uidmaj,$sql);
+		$usrmaj = new user_core($usr->uidmaj,$sql);
 
 		$tmpl_x->assign("id", $id);
 		$tmpl_x->assign("info_maj", $usrmaj->prenom." ".$usrmaj->nom." le ".sql2date($usr->dtemaj));
@@ -191,8 +159,8 @@
 	  {
 		$tmpl_x->assign("titre", "Saisie d'un nouvel utilisateur");
 
-		$usr = new user_class("0",$sql,false);
-		$usrmaj = new user_class($usr->uidmaj,$sql);
+		$usr = new user_core("0",$sql,false);
+		$usrmaj = new user_core($usr->uidmaj,$sql);
 
 		$usr->LoadDonneesComp();
 
@@ -205,8 +173,6 @@
 	  {
 		FatalError("Paramètre d'id non valide");
 	  }
-
-	$tmpl_x->assign("unitPoids", $MyOpt["unitPoids"]);
 
 // ---- Affiche les menus
 	if ((GetMyId($id)) || (GetDroit("ModifUser")))
@@ -235,19 +201,15 @@
 	  { $tmpl_x->assign("form_$k", $usr->aff($k,$typeaff)); }
 
 	if ($typeaff=="form")
-	  {
+	{
 		$tmpl_x->parse("corps.photos");
 		$tmpl_x->parse("corps.submit");
-		if ((is_numeric($id)) && ($id>0))
-		  { $tmpl_x->assign("titre", "Modification : ".$usr->Aff("prenom")." ".$usr->Aff("nom")); }
-	  }
-	else if ($typeaff=="html")
-	  {	$tmpl_x->assign("titre", "Détail de ".$usr->Aff("prenom")." ".$usr->Aff("nom")); }
+	}
 
 	if (($typeaff=="form") && ((GetMyId($id)) || (GetDroit("ModifUserPassword"))))
-	  {
+	{
 		$tmpl_x->parse("corps.modif_mdp");
-	  }
+	}
 
 	$tmpl_x->parse("corps.type");
 
@@ -263,22 +225,10 @@
 
   	if ((is_numeric($id)) && ($id>0))
 	  { 
-
-		// Photo du membre
-		// $lstdoc=ListDocument($sql,$id,"avatar");
-		// if (count($lstdoc)>0)
-		  // {
-			// $doc = new document_class($lstdoc[0],$sql);
-		  	// $tmpl_x->assign("id_photo",$lstdoc[0]);
-		  // }
-		// else
-		  // {
-		  	// $tmpl_x->assign("id_photo","0");
-		  // }
 		$lstdoc=ListDocument($sql,$id,"avatar");
 		if (count($lstdoc)>0)
 		{
-			$doc=new document_class($lstdoc[0],$sql);
+			$doc=new document_core($lstdoc[0],$sql);
 			$tmpl_x->assign("aff_avatar",$doc->GenerePath(200,240));
 		}
 		else
@@ -292,7 +242,7 @@
 
 		if ($typeaff=="form")
 		  {
-			$doc = new document_class(0,$sql);
+			$doc = new document_core(0,$sql);
 			$doc->editmode="form";
 			$tmpl_x->assign("form_document",$doc->Affiche());
 			$tmpl_x->parse("corps.lst_document");
@@ -302,36 +252,15 @@
 		  {
 			foreach($lstdoc as $i=>$did)
 			  {
-				$doc = new document_class($did,$sql);
+				$doc = new document_core($did,$sql);
 				$doc->editmode=($typeaff=="form") ? "edit" : "std";
 				$tmpl_x->assign("form_document",$doc->Affiche());
 				$tmpl_x->parse("corps.lst_document");
 			  }
 		  }
 
-		// ---- Affiche les échéances
-		$lstdte=ListEcheance($sql,$id);
 
-		if ($typeaff=="form")
-		{
-			$dte = new echeance_class(0,$sql,$id);
-			$dte->editmode="form";
-			$tmpl_x->assign("form_echeance",$dte->Affiche());
-			$tmpl_x->parse("corps.lst_echeance");
-		}
-		  	
-		if (is_array($lstdte))
-		{
-			foreach($lstdte as $i=>$did)
-			{
-				$dte = new echeance_class($did,$sql,$id);
-				$dte->editmode=($typeaff=="form") ? "edit" : "html";
-				$tmpl_x->assign("form_echeance",$dte->Affiche());
-				$tmpl_x->parse("corps.lst_echeance");
-			}
-		}
-
-
+		// ---- Affiche les données utilisateurs
 		if (count($usr->donnees)>0)
 		{
 			foreach($usr->donnees as $i=>$d)

@@ -1,15 +1,7 @@
 <?
-// ---------------------------------------------------------------------------------------------
-//   Détail d'un utilisateur
-//     ($Author: miniroot $)
-//     ($Date: 2016-04-22 20:48:24 +0200 (ven., 22 avr. 2016) $)
-//     ($Rev: 456 $)
-// ---------------------------------------------------------------------------------------------
-//   Variables  : 
-// ---------------------------------------------------------------------------------------------
 /*
-    SoceIt v2.0
-    Copyright (C) 2007 Matthieu Isorez
+    MnMs Framework
+    Copyright (C) 2018 Matthieu Isorez
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,12 +17,13 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
 ?>
 
 <?
 // ---- Charge le template
 	$tmpl_x = new XTemplate (MyRep("chgpwd.htm"));
-	$tmpl_x->assign("path_module","$module/$mod");
+	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 
 // ---- Initialisation des variables
 	$tmpl_x->assign("form_checktime",$_SESSION['checkpost']);
@@ -39,9 +32,9 @@
 	$msg_confirmation="";
 
 	if ($id>0)
-	  { $usr = new user_class($id,$sql,((GetMyId($id)) ? true : false)); }
+	  { $usr = new user_core($id,$sql,((GetMyId($id)) ? true : false)); }
 	else
-	  { $usr = new user_class(0,$sql,false); }
+	  { $usr = new user_core(0,$sql,false); }
 
 	if ((!GetMyId($id)) && (!GetDroit("ModifUserPassword")))
 	{
@@ -88,8 +81,8 @@
 // ---- Affiche les infos
 	if ((is_numeric($id)) && ($id>0))
 	{
-			$usr = new user_class($id,$sql,((GetMyId($id)) ? true : false));
-			$usrmaj = new user_class($usr->uidmaj,$sql);
+			$usr = new user_core($id,$sql,((GetMyId($id)) ? true : false));
+			$usrmaj = new user_core($usr->uidmaj,$sql);
 	
 			$tmpl_x->assign("id", $id);
 			$tmpl_x->assign("info_maj", $usrmaj->prenom." ".$usrmaj->nom." le ".sql2date($usr->dtemaj));	

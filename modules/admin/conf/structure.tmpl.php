@@ -33,15 +33,6 @@ $tabTmpl=Array
 		"txtlog" => Array("Type" => "text", ),
 		"actif" => Array("Type" => "enum('oui','non')", "Default" => "oui", ),
 	),
-	"disponibilite" => Array
-	(
-		"id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
-		"uid" => Array("Type" => "int(10) unsigned", "Index" => "1", ),
-		"dte_deb" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
-		"dte_fin" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
-		"uid_maj" => Array("Type" => "int(10) unsigned", "Default" => 0, ),
-		"dte_maj" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
-	),
 	"document" => Array
 	(
 		"id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
@@ -63,31 +54,6 @@ $tabTmpl=Array
 		"uid_creat" => Array("Type" => "int(10) unsigned", "Default" => 0, ),
 		"dte_creat" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
 	),
-	"echeance" => Array
-	(
-		"id" => Array("Type" => "bigint(20) unsigned", "Index" => "PRIMARY", ),
-		"typeid" => Array("Type" => "int(10) unsigned", "Index" => "1", ),
-		"uid" => Array("Type" => "int(10) unsigned", "Index" => "1", ),
-		"dte_echeance" => Array("Type" => "date", ),
-		"paye" => Array("Type" => "enum('oui','non')", "Default" => "non", ),
-		"actif" => Array("Type" => "enum('oui','non')", "Default" => "oui", "Index"=>1 ),
-		"dte_create" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
-		"uid_create" => Array("Type" => "int(10) unsigned", ),
-		"dte_maj" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
-		"uid_maj" => Array("Type" => "int(10) unsigned", ),
-	),
-	"echeancetype" => Array
-	(
-		"id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
-		"description" => Array("Type" => "varchar(100)", ),
-		"poste" => Array("Type" => "int(11)", "Index" => "1", ),
-		"cout" => Array("Type" => "decimal(10,2)", "Default" => "0.00", ),
-		"resa" => Array("Type" => "enum('obligatoire','instructeur','facultatif')", ),
-		"droit" => Array("Type" => "varchar(3)", ),
-		"multi" => Array("Type" => "enum('oui','non')", "Default" => "non", ),
-		"notif" => Array("Type" => "enum('oui','non')", "Default" => "non", ),
-		"delai" => Array("Type" => "tinyint(3) unsigned", "Default" => "30", ),
-	),
 	"export" => Array
 	(
 		"id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
@@ -96,23 +62,6 @@ $tabTmpl=Array
 		"requete" => Array("Type" => "text", ),
 		"param" => Array("Type" => "varchar(50)", ),
 		"droit_r" => Array("Type" => "char(3)", ),
-	),
-	"flight" => Array
-	(
-		"id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
-		"uid" => Array("Type" => "int(10) unsigned", "Index"=>"1"),
-		"dte_flight" => Array("Type" => "date", "Default" => "0000-00-00"),
-		"callsign" => Array("Type" => "varchar(8)", "Index"=>"1"),
-		"type" => Array("Type" => "varchar(4)"),
-		"comment" => Array("Type" => "varchar(50)"),
-		"time_dc_day" => Array("Type" => "int(10) unsigned"),
-		"time_cdb_day" => Array("Type" => "int(10) unsigned"),
-		"time_dc_night" => Array("Type" => "int(10) unsigned"),
-		"time_cdb_night" => Array("Type" => "int(10) unsigned"),
-		"time_simu" => Array("Type" => "int(10) unsigned"),
-		"nb_ifr" => Array("Type" => "int(10) unsigned"),
-		"nb_att" => Array("Type" => "int(10) unsigned"),
-		"nb_amerr" => Array("Type" => "int(10) unsigned")
 	),
 	"forums" => Array
 	(
@@ -193,18 +142,14 @@ $tabTmpl=Array
 		"mail" => Array("Type" => "varchar(104)", ),
 		"notification" => Array("Type" => "enum('oui','non')", "Default" => "oui", ),
 		"commentaire" => Array("Type" => "text", ),
-		"time_dc_day" => Array("Type" => "int(10) unsigned"),
-		"time_cdb_day" => Array("Type" => "int(10) unsigned"),
-		"time_dc_night" => Array("Type" => "int(10) unsigned"),
-		"time_cdb_night" => Array("Type" => "int(10) unsigned"),
-		"time_simu" => Array("Type" => "int(10) unsigned"),
 		"droits" => Array("Type" => "varchar(100)", ),
 		"actif" => Array("Type" => "enum('oui','non','off')", "Default" => "oui", "Index" => "1", ),
 		"virtuel" => Array("Type" => "enum('oui','non')", "Default" => "non", "Index" => "1", ),
-		"dte_creat" => Array("Type" => "date", "Default" => "0000-00-00"),
-		"dte_login" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
 		"aff_msg" => Array("Type" => "tinyint(3) unsigned", "Default" => "0", ),
-		"uid_maj" => Array("Type" => "smallint(5) unsigned", "Default" => "0", ),
+		"dte_login" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
+		"uid_creat" => Array("Type" => "int(10) unsigned", "Default" => "0"),
+		"dte_creat" => Array("Type" => "date", "Default" => "0000-00-00"),
+		"uid_maj" => Array("Type" => "int(10) unsigned", "Default" => "0", ),
 		"dte_maj" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00", ),
 	)
 

@@ -5,7 +5,7 @@
 
 // ---- Charge le template
   	$tmpl_menu = new XTemplate (MyRep("menu.htm"));
-	$tmpl_menu->assign("path_module","$module/$mod");
+	$tmpl_menu->assign("path_module",$corefolder."/".$module."/".$mod);
 
 // ---- Sélectionne le menu courant
 	$tmpl_menu->assign("class_".$rub,"class='pageTitleSelected'");
@@ -23,10 +23,6 @@
 	if (GetDroit("AccesConfigGroupes"))
 	{
 		$tmpl_menu->parse("infos.groupes");
-	}
-	if (GetDroit("AccesConfigEcheances"))
-	{
-		$tmpl_menu->parse("infos.echeances");
 	}
 	if (GetDroit("AccesConfigDonneesUser"))
 	{

@@ -1,4 +1,23 @@
 <?
+/*
+    MnMs Framework
+    Copyright (C) 2018 Matthieu Isorez
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
 // ---- Gestion des droits
 	session_start();
 
@@ -17,24 +36,25 @@
 		echo "Incorrect filename."; exit;
 	  }
 
-	if (!file_exists("config/config.inc.php"))
-	  { echo "Fichier de configuration introuvable","Il manque le fichier de configuration 'config/config.inc.php'."; exit;}
+	if ($mysqluser=="")
+	{
+		echo "Fichier de configuration introuvable","Il manque le fichier de configuration 'config/config.inc.php'.";
+		exit;
+	}
 
-  	require ("modules/fonctions.inc.php");
-  	require ("config/config.inc.php");
-  	require ("config/variables.inc.php");
+  	require ("lib/fonctions.inc.php");
 
 // ---- Se connecte à  la base MySQL
 	require ("class/mysql.inc.php");
-	$sql = new mysql_class($mysqluser, $mysqlpassword, $hostname, $db,$port);
+	$sql = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db,$port);
 
 // ---- Charge les informations de l'utilisateur connecté
 	require ("class/user.inc.php");
-	$myuser = new user_class($uid,$sql,true);
+	$myuser = new user_core($uid,$sql,true);
 
 // ---- Charge le document
 	require ("class/document.inc.php");
-	$doc = new document_class($id,$sql);
+	$doc = new document_core($id,$sql);
 
 // ---- Delete document
 	if ( (isset($_REQUEST["fonc"])) && ($_REQUEST["fonc"]=="delete") )

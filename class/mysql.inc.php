@@ -1,6 +1,6 @@
 <?
 
-class mysql_class{
+class mysql_core{
 	# Constructor
 	function __construct($user="phpuser",$pass="php",$host="localhost",$db="test",$port=3306){
 		$this->user=$user;

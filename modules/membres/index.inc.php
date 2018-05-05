@@ -1,6 +1,6 @@
 <?
 /*
-    LogBook
+    MnMs Framework
     Copyright (C) 2018 Matthieu Isorez
 
     This program is free software; you can redistribute it and/or modify
@@ -22,11 +22,9 @@
 <?
 	if (!GetDroit("AccesMembres")) { FatalError("Accès non autorisé (AccesMembres)"); }
 
-	require_once ("class/document.inc.php");
-
 // ---- Charge le template
 	$tmpl_x = new XTemplate (MyRep("index.htm"));
-	$tmpl_x->assign("path_module","$module/$mod");
+	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 
 // ---- Trombino
 	if ($fonc=="trombi")
@@ -35,7 +33,7 @@
 
 		foreach($lstusr as $i=>$id)
 		  {
-			$usr = new user_class($id,$sql,false);
+			$usr = new user_core($id,$sql,false);
 
 			$lstdoc=ListDocument($sql,$id,"avatar");
 			if (count($lstdoc)>0)
@@ -79,7 +77,7 @@
 		{
 			foreach($lstusr as $i=>$id)
 			{
-				$usr = new user_class($id,$sql);
+				$usr = new user_core($id,$sql);
 
 				$tmpl_x->assign("id_membre",$id);
 				$tmpl_x->assign("aff_membre",$usr->aff("fullname"));
@@ -114,7 +112,7 @@
 			$tabValeur=array();
 			foreach($lstusr as $i=>$id)
 			  {
-				$usr = new user_class($id,$sql);
+				$usr = new user_core($id,$sql);
 				$tabValeur[$i]["prenom"]["val"]=$usr->prenom;
 				$tabValeur[$i]["prenom"]["aff"]=$usr->aff("prenom");
 				$tabValeur[$i]["nom"]["val"]=$usr->nom;

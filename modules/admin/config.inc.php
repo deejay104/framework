@@ -28,7 +28,7 @@
 <?
 // ---- Charge le template
 	$tmpl_x = new XTemplate (MyRep("config.htm"));
-	$tmpl_x->assign("path_module","$module/$mod");
+	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 
 // ---- Charge les variables par défault
 	require_once("modules/$mod/conf/variables.tmpl.php");

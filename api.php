@@ -1,18 +1,26 @@
 <?
+/*
+    MnMs Framework
+    Copyright (C) 2018 Matthieu Isorez
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
 // ---- Autorisation d'accès
 	session_start();
 	require ("class/mysql.inc.php");
-
-	if (file_exists("config/config.inc.php"))
-	{
-		require ("config/config.inc.php"); 
-	}
-	else
-	{
-		header("HTTP/1.0 401 Unauthorized"); exit;
-	}
-	if (file_exists("config/variables.inc.php"))
-	  { require ("config/variables.inc.php"); }
 
 	if ((isset($_SESSION['uid'])) && ($_SESSION['uid']>0))
 	{
@@ -20,7 +28,7 @@
 	}
 	else if (($_REQUEST["mod"]=="admin") && ($_REQUEST["rub"]=="update"))
 	{
- 		$sql = new mysql_class($mysqluser, $mysqlpassword, $hostname, $db,$port);
+ 		$sql = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db,$port);
 		$sql->show=false;
 		$query = "SELECT * FROM ".$MyOpt["tbl"]."_config";
 		$res  = $sql->QueryRow($query);
@@ -52,7 +60,13 @@
 	header('Content-type: text/html; charset=ISO-8859-1');
 
 // ---- Charge les informations standards
-	if (!file_exists("config/config.inc.php"))
+  	require ("lib/fonctions.inc.php");
+
+	if ($MyOpt["timezone"]!="")
+	  { date_default_timezone_set($MyOpt["timezone"]); }
+
+// ---- Se connecte à  la base MySQL
+	if ($mysqluser=="")
 	{
 		$res=array();
 		$res["result"]="Fichier de configuration introuvable";
@@ -60,19 +74,13 @@
 		exit;
 	}
 
-  	require ("modules/fonctions.inc.php");
-
-	if ($MyOpt["timezone"]!="")
-	  { date_default_timezone_set($MyOpt["timezone"]); }
-
-// ---- Se connecte à  la base MySQL
-	$sql = new mysql_class($mysqluser, $mysqlpassword, $hostname, $db,$port);
+	$sql = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db,$port);
 
 // ---- Charge les informations de l'utilisateur connecté
 	require ("class/user.inc.php");
 	if ($uid>0)
 	{
-		$myuser = new user_class($uid,$sql,true);
+		$myuser = new user_core($uid,$sql,true);
 		$token=$uid;
 	}
 
