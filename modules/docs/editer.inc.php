@@ -1,15 +1,7 @@
 <?
-// ---------------------------------------------------------------------------------------------
-//   Ajouter un message aux forums
-//   
-// ---------------------------------------------------------------------------------------------
-//   Variables  : $fid   - Numéro du forums
-//		  $mid   - Si non nul alors le message est ouvert en modification
-//		  $fpars - Numéro du message parent
-// ---------------------------------------------------------------------------------------------
 /*
-    Easy-Aero v2.14
-    Copyright (C) 2005 Matthieu Isorez
+    MnMs Framework
+    Copyright (C) 2018 Matthieu Isorez
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,8 +22,8 @@
 <?
 	require_once ("class/document.inc.php");
 // ---- Charge le template
-	$tmpl_x = new XTemplate (MyRep("forums_2.htm"));
-	$tmpl_x->assign("path_module","$module/$mod");
+	$tmpl_x = new XTemplate (MyRep("editer.htm"));
+	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 	
 
 // ---- Titre de la page
@@ -81,7 +73,7 @@
 
 // ---- Liste des documents attachés
 
-	$doc = new document_class(0,$sql);
+	$doc = new document_core(0,$sql);
 	$doc->editmode="form";
 	$tmpl_x->assign("form_document",$doc->Affiche());
 	$tmpl_x->parse("corps.lst_document");
@@ -93,7 +85,7 @@
 		  {
 			foreach($lstdoc as $i=>$did)
 			  {
-					$doc = new document_class($did,$sql);
+					$doc = new document_core($did,$sql);
 					$doc->editmode="edit";
 					$tmpl_x->assign("form_document",$doc->Affiche());
 					$tmpl_x->parse("corps.lst_document");

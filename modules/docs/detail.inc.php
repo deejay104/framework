@@ -1,13 +1,6 @@
 <?
-// ---------------------------------------------------------------------------------------------
-//   Affiche un message du forum
-// ---------------------------------------------------------------------------------------------
-//   Variables  : $fid - Numéro du forums
-//		  $mid - Numéro du message
-//		  $critere - Transmet les criteres de recherches s'il y en a
-// ---------------------------------------------------------------------------------------------
 /*
-    Easy-Aero v2.14
+    MnMs Framework
     Copyright (C) 2018 Matthieu Isorez
 
     This program is free software; you can redistribute it and/or modify
@@ -29,8 +22,8 @@
 <?
 	require_once ("class/document.inc.php");
 // ---- Charge le template
-	$tmpl_x = new XTemplate (MyRep("forums_7.htm"));
-	$tmpl_x->assign("path_module","$module/$mod");
+	$tmpl_x = new XTemplate (MyRep("detail.htm"));
+	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 
 // ---- Vérifie les variables
 	if (!is_numeric($fid))
@@ -89,12 +82,12 @@
 	$tmpl_x->assign("idmsg", $res["id"]);
 
 // ---- Titre de la page
-	$usr = new user_class($res["uid_creat"],$sql,false);
+	$usr = new user_core($res["uid_creat"],$sql,false);
 	$tmpl_x->assign("buque", $usr->fullname);
 	$tmpl_x->assign("titre", htmlentities($res["titre"],ENT_HTML5,"ISO-8859-1"));
 	$tmpl_x->assign("date", DisplayDate($res["date_maj"]));
 
-	$usr = new user_class($res["uid_maj"],$sql,false);
+	$usr = new user_core($res["uid_maj"],$sql,false);
 	$tmpl_x->assign("usr_maj", $usr->fullname);
 
 
@@ -142,7 +135,7 @@
 	  {
 		foreach($lstdoc as $i=>$did)
 		  {
-			$doc = new document_class($did,$sql);
+			$doc = new document_core($did,$sql);
 			$tmpl_x->assign("form_document",$doc->Affiche());
 			$tmpl_x->parse("corps.pieces_jointes.lst_document");
 		  }
@@ -165,12 +158,12 @@
 	
 	foreach($rep as $i=>$d)
 	{
-		$usr = new user_class($d["uid_creat"],$sql,false);
+		$usr = new user_core($d["uid_creat"],$sql,false);
 
 		$lstdoc=ListDocument($sql,$d["uid_creat"],"avatar");
 		if (count($lstdoc)>0)
 		{
-			$doc = new document_class($lstdoc[0],$sql);
+			$doc = new document_core($lstdoc[0],$sql);
 			$tmpl_x->assign("rep_usrid",$lstdoc[0]);
 		}
 		else

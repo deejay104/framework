@@ -83,14 +83,12 @@ $MyOptHelp["expireCache"]="Si supérieur à 0, nombre d'heure durant lesquelles on
 // x : Visible pour tous, y compris invité
 // - : Masqué
 // [Role] : Affiché que pour le role
-$MyOptHelp["menu"]["accueil"]="Affichage des menus du site. [vide]: Visible par tous, x : visible pour tous y compris les invités, - : Masqué, [Role] : Affiché uniquement pour le role correspondant";
+$MyOptHelp["menu"]["accueil"]="Affichage des menus du site. [vide]: Visible par tous, - : Masqué, [Role] : Affiché uniquement pour le role correspondant";
 
 $MyOptTmpl["menu"]["accueil"]="";
-$MyOptTmpl["menu"]["membres"]="x";
-$MyOptTmpl["menu"]["forums"]="";
-$MyOptTmpl["menu"]["mesinfos"]="x";
-$MyOptTmpl["menu"]["logs"]="";
-$MyOptTmpl["menu"]["rapports"]="";
+$MyOptTmpl["menu"]["membres"]="AccesMembres";
+$MyOptTmpl["menu"]["docs"]="";
+$MyOptTmpl["menu"]["mesinfos"]="";
 $MyOptTmpl["menu"]["configuration"]="AccesConfiguration";
 
 

@@ -84,11 +84,61 @@ function AffTemps($tps,$short="yes") {
 	$tm=$tps-$th*60;
 	$tm=substr("00",0,2-strlen($tm)).$tm;
 
-	if (($th>0) || ($short=="no"))
+	if (($th>0) && ($short=="full"))
+	{
+		if ($th>24)
+		{
+			$td=floor($tps/(24*60));
+			$th=floor(($tps-$td*24*60)/60);
+			$tm=$tps-$td*24*60-$th*60;
+
+			$th=substr("00",0,2-strlen($th)).$th;
+			$tm=substr("00",0,2-strlen($tm)).$tm;
+
+			return $td."j ".$th."h ".$tm;
+		}
+		else
+		{
+			return $th."h ".$tm;
+		}
+	}
+	else if (($th>0) || ($short=="no"))
 	  { return $th."h ".$tm; }
 	else
 	  { return $tm."min"; }
 }
+
+// Transforme un temps en minute
+function CalcTemps($tps,$short=true)
+{
+	if ( (preg_match("/^([0-9][0-9])([0-9][0-9])$/",$tps,$m)) && ($short) )
+	{
+		$t=$m[1]*60+$m[2];
+	}
+	else if (preg_match("/^([0-9][0-9]):([0-9][0-9])$/",$tps,$m))
+	{
+		$t=$m[1]*60+$m[2];
+	}
+	else if (preg_match("/^([0-9]?[0-9])h[ ]?([0-9][0-9])$/",$tps,$m))
+	{
+		$t=$m[1]*60+$m[2];
+	}
+	else if (preg_match("/^([0-9]?[0-9])j[ ]?([0-9]?[0-9]?)h?[ ]?([0-9]?[0-9]?)$/",$tps,$m))
+	{
+		$t=$m[1]*60*24+$m[2]*60+$m[3];
+	}
+	else if (is_numeric($tps))
+	{
+		$t=$tps;
+	}
+	else
+	{
+		$t=0;
+	}
+	
+	return $t;
+}
+
 
 // Transforme une date en format SQL
 function date2sql($date) {

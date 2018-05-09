@@ -66,28 +66,6 @@
 	$gl_uid=$uid;
 
 
-// ---- Vérifie la variable $mod
-	if (!isset($mod))
-	  { $mod=""; }
-	if (!preg_match("/^[a-z0-9_]*$/",$mod))
-	  { $mod = ""; }
-	if (trim($mod)=="")
-	  { $mod = ""; }
-
-// ---- Vérifie la variable $rub
-	if (!isset($rub))
-	{
-		$rub="";
-	}
-	if (!preg_match("/^[a-z0-9_]*$/",$rub))
-	{
-		$rub = "index";
-	}
-	if (trim($rub)=="")
-	{
-		$rub = "index";
-	}
-
 // ---- Vérifie la langue
 	$lang="fr";
 
@@ -222,13 +200,35 @@
 // ---- Affichages du menu
 	foreach($MyOpt["menu"] as $menu=>$droit)
 	{
-		if ( ( ($droit=="x") || ((GetDroit($droit)) && ($droit!="")) ) && ($droit!="-") )
+		if ( ( ($droit=="") || ((GetDroit($droit)) && ($droit!="")) ) && ($droit!="-") )
 		{ 
 		  	$tmpl_prg->parse("main.menu_".$menu); 
 		  	$tmpl_prg->parse("main.menu_".$menu."_sm"); 
 		}
 	}
 
+// ---- Vérifie la variable $mod
+	if (!isset($mod))
+	  { $mod="default"; }
+	if (!preg_match("/^[a-z0-9_]*$/",$mod))
+	  { $mod = "default"; }
+	if (trim($mod)=="")
+	  { $mod = "default"; }
+
+// ---- Vérifie la variable $rub
+	if (!isset($rub))
+	{
+		$rub="index";
+	}
+	if (!preg_match("/^[a-z0-9_]*$/",$rub))
+	{
+		$rub = "index";
+	}
+	if (trim($rub)=="")
+	{
+		$rub = "index";
+	}
+	
 // ---- Charge la rubrique
 	$affrub=$rub;
 	while ($affrub!="")

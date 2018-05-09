@@ -116,6 +116,7 @@ $tabTmpl=Array
 		"id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
 		"groupe" => Array("Type" => "varchar(5)", "Index" => "1", ),
 		"role" => Array("Type" => "varchar(40)", "Index" => "1", ),
+		"autorise" => Array("Type" => "enum('oui','non')", "Default" => "oui", "Index" => "1")
 	),
 	"utildonnees" => Array
 	(

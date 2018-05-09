@@ -47,7 +47,7 @@ class user_core{
 		$this->data["mail"]="";
 		$this->data["actif"]="oui";
 		$this->data["virtuel"]="non";
-		$this->data["dte_login"]="";
+		$this->data["dte_login"]="0000-00-00 00:00:00";
 		$this->data["notification"]="oui";
 		$this->data["aff_msg"]="0";
 
@@ -75,7 +75,7 @@ class user_core{
 		if ($setdata)
 		  { $query = "SELECT * FROM ".$this->tbl."_utilisateurs WHERE id='$uid'"; }
 		else
-		  { $query = "SELECT id,prenom,nom,actif,virtuel,type,mail,idcpt,zone,dte_naissance,uid_maj,dte_maj,droits FROM ".$this->tbl."_utilisateurs WHERE id='$uid'"; }
+		  { $query = "SELECT id,prenom,nom,actif,virtuel,mail,uid_maj,dte_maj,droits FROM ".$this->tbl."_utilisateurs WHERE id='$uid'"; }
 		$res = $sql->QueryRow($query);
 		if (!is_array($res))
 		{
@@ -131,13 +131,13 @@ class user_core{
 		$this->role=array();
 		$this->role[""]=true;
 		$sql=$this->sql;
-		$query = "SELECT roles.role FROM ".$this->tbl."_roles AS roles LEFT JOIN ".$this->tbl."_droits AS droits ON droits.groupe=roles.groupe  WHERE (uid='".$this->uid."' OR roles.groupe='ALL') AND roles.role IS NOT NULL GROUP BY roles.role";
+		$query = "SELECT roles.role, roles.autorise FROM ".$this->tbl."_roles AS roles LEFT JOIN ".$this->tbl."_droits AS droits ON droits.groupe=roles.groupe  WHERE (uid='".$this->uid."' OR roles.groupe='ALL') AND roles.role IS NOT NULL ORDER BY roles.autorise";
 		$sql->Query($query);
 
 		for($i=0; $i<$sql->rows; $i++)
 		{ 
 			$sql->GetRow($i);
-			$this->role[$sql->data["role"]]=true;
+			$this->role[$sql->data["role"]]=($sql->data["autorise"]=="oui") ? true : false;
 		}
 	}
 
@@ -382,7 +382,6 @@ class user_core{
 		$sql=$this->sql;
 
 		$this->uid=$sql->Edit("user",$this->tbl."_utilisateurs",$this->uid,array("uid_maj"=>$uid, "dte_maj"=>now()));		
-		$this->data["idcpt"]=$this->uid;
 		
 		return $this->uid;
 	}
@@ -591,9 +590,6 @@ class user_core{
 		$this->actif="off";
 
 		$sql->Edit("user",$this->tbl."_utilisateurs",$this->uid,array("actif"=>'off', "uid_maj"=>$gl_uid, "dte_maj"=>now()));
-
-		$query="UPDATE ".$this->tbl."_abonnement SET actif='non', uid_maj=$gl_uid, dte_maj='".now()."' WHERE uid=$this->uid";
-		$sql->Update($query);
 	}
 
 	function Active(){

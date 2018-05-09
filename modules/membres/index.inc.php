@@ -20,6 +20,7 @@
 ?>
 
 <?
+	require_once ("class/document.inc.php");
 	if (!GetDroit("AccesMembres")) { FatalError("Accès non autorisé (AccesMembres)"); }
 
 // ---- Charge le template
@@ -28,7 +29,8 @@
 
 // ---- Trombino
 	if ($fonc=="trombi")
-	  {
+	{
+		$tmpl_x->assign("aff_trombi","class='pageTitleSelected'");
 		$lstusr=ListActiveUsers($sql,"nom");
 
 		foreach($lstusr as $i=>$id)
@@ -38,35 +40,39 @@
 			$lstdoc=ListDocument($sql,$id,"avatar");
 			if (count($lstdoc)>0)
 			{
-				$doc=new document_class($lstdoc[0],$sql);
+				$doc=new document_core($lstdoc[0],$sql);
 				$tmpl_x->assign("aff_avatar",$doc->GenerePath(200,240));
 			}
 			else
 			{
-				$tmpl_x->assign("aff_avatar","static/images/none.gif");
+				$tmpl_x->assign("aff_avatar",$corefolder."/static/images/none.gif");
 			}	
 			$tmpl_x->assign("id_membre",$id);
 
 			$tmpl_x->parse("corps.trombino.aff_ligne.aff_colonne");
 			$col++;
 			if (($col>1) && ($theme=="phone"))
-			  {
+			{
 				$tmpl_x->parse("corps.trombino.aff_ligne");
 				$col=0;
-			  }
+			}
 			else if ($col>3)
-			  {
+			{
 				$tmpl_x->parse("corps.trombino.aff_ligne");
 				$col=0;
-			  }
- 		  }
+			}
+ 		}
+		if ($col>0)
+		{
+			$tmpl_x->parse("corps.trombino.aff_ligne");
+			$col=0;
+		}
 		$tmpl_x->parse("corps.trombino");
-	  }
+	}
 // ---- Liste les membres
 	else
 	  {
-		if (GetDroit("CreeUser"))
-		  { $tmpl_x->parse("infos.ajout"); }
+		$tmpl_x->assign("aff_liste","class='pageTitleSelected'");
 
 		if (!isset($aff))
 		{ $aff=""; }
@@ -127,6 +133,9 @@
 			$tmpl_x->assign("aff_tableau",AfficheTableau($tabValeur,$tabTitre,$order,$trie));
 		  }
 	}
+
+	if (GetDroit("CreeUser"))
+	  { $tmpl_x->parse("infos.ajout"); }
 	
 	if (GetDroit("ADM"))
 	{

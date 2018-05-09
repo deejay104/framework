@@ -28,7 +28,7 @@
 <?
 // ---- Charge le template
 	$tmpl_x = new XTemplate (MyRep("crontab.htm"));
-	$tmpl_x->assign("path_module","$module/$mod");
+	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 
 // ---- Vérifie le droit d'accès
 	if (!GetDroit("AccesConfigCrontab")) { FatalError("Accès non autorisé (AccesConfigCrontab)"); }
@@ -93,7 +93,7 @@
 
 		$tabValeur[$i]["description"]["val"]=$sql->data["description"];
 		$tabValeur[$i]["schedule"]["val"]=$sql->data["schedule"];
-		$tabValeur[$i]["schedule"]["aff"]="<div id='schedule_".$sql->data["id"]."' class='fieldAdmin'><a id='schedule_".$sql->data["id"]."_a' onClick='SwitchEdit(\"schedule\",".$sql->data["id"].")'>".$sql->data["schedule"]."</a></div>";
+		$tabValeur[$i]["schedule"]["aff"]="<div id='schedule_".$sql->data["id"]."' class='fieldAdmin'><a id='schedule_".$sql->data["id"]."_a' onClick='SwitchEdit(\"schedule\",".$sql->data["id"].")'>".AffTemps($sql->data["schedule"],"full")."</a></div>";
 		$tabValeur[$i]["lastrun"]["val"]=$sql->data["lastrun"];
 		$tabValeur[$i]["nextrun"]["val"]=sql2date($sql->data["nextrun"]);
 		$tabValeur[$i]["resultat"]["val"]=sql2date($sql->data["txtretour"]);

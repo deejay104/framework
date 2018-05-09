@@ -12,18 +12,23 @@
 	}
 	$grp=$_GET["grp"];
 	$grp=substr($grp,0,5);
+	$aut=$_GET["aut"];
 
+	if (($aut!="oui") && ($aut!="non"))
+	{
+		$aut="oui";
+	}
 
 	if (GetDroit("ModifGroupe"))
 	{
 		if (is_array($_POST['id']))
 		{
-			$q="DELETE FROM ".$MyOpt["tbl"]."_roles WHERE groupe='$grp'";
+			$q="DELETE FROM ".$MyOpt["tbl"]."_roles WHERE groupe='$grp' AND autorise='".$aut."'";
 			$res=$sql->Delete($q);
 
 			foreach ($_POST['id'] as $role)
 			{
-				$q="INSERT INTO ".$MyOpt["tbl"]."_roles SET groupe='$grp',role='$role'";
+				$q="INSERT INTO ".$MyOpt["tbl"]."_roles SET groupe='$grp',role='$role',autorise='".$aut."'";
 				$sql->Insert($q);
 			}
 		}

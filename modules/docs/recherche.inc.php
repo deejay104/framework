@@ -1,14 +1,7 @@
 <?
-// ---------------------------------------------------------------------------------------------
-//   Page de recherche dans les forums - Site de prom's 197 - (c) ch197
-//   
-//   27/12/2001 : DeeJay - Création de la page
-// ---------------------------------------------------------------------------------------------
-//   Variables  : $critere - Critères de recherches
-// ---------------------------------------------------------------------------------------------
 /*
-    SoceIt v2.0
-    Copyright (C) 2008 Matthieu Isorez
+    MnMs Framework
+    Copyright (C) 2018 Matthieu Isorez
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,8 +21,8 @@
 
 <?
 // ---- Charge le template
-	$tmpl_x = new XTemplate (MyRep("forums_8.htm"));
-	$tmpl_x->assign("path_module","$module/$mod");
+	$tmpl_x = new XTemplate (MyRep("recherche.htm"));
+	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 
 // ---- Initialisation des variables
 	$tmpl_x->assign("pageIndex", $pageIndex);

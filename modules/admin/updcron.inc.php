@@ -35,18 +35,20 @@
 
 	if ($var=="schedule")
 	{
-		$val=preg_replace("/[ ]+/","+",substr($val,0,10));
-		$val=preg_replace("/[^0-9]*j/","*1440",$val);
-		$val=preg_replace("/[^0-9]*h/","*60",$val);
-		$val=preg_replace("/[^0-9]*m/","",$val);
-error_log("\$sched=".$val.";");
-// $sched=2*60;
-		eval("\$sched=".$val.";");
+		// $val=preg_replace("/[ ]+/","+",substr($val,0,10));
+		// $val=preg_replace("/[^0-9]*j/","*1440",$val);
+		// $val=preg_replace("/[^0-9]*h/","*60",$val);
+		// $val=preg_replace("/[^0-9]*m/","",$val);
+
+		$val=CalcTemps(substr($val,0,10));
+		error_log("\$sched=".$val.";");
+
+		// eval("\$sched=".$val.";");
 		
-		$q="UPDATE ".$MyOpt["tbl"]."_cron SET schedule='".$sched."' WHERE id='".$id."'";
+		$q="UPDATE ".$MyOpt["tbl"]."_cron SET schedule='".$val."' WHERE id='".$id."'";
 		$sql->Update($q);
 		$res["result"]=utf8_encode("OK");
-		$res["value"]=utf8_encode($sched);
+		$res["value"]=utf8_encode(AffTemps($val,"full"));
 	}
 	else if ($var=="actif")
 	{

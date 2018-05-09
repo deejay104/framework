@@ -28,7 +28,7 @@
 <?
 // ---- Charge le template
 	$tmpl_x = new XTemplate (MyRep("grpdetail.htm"));
-	$tmpl_x->assign("path_module","$module/$mod");
+	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 	$tmpl_x->assign("form_checktime",$_SESSION['checkpost']);
 
 // ---- Vérifie le droit d'accès
@@ -51,13 +51,13 @@
 	}
 	else if (($grp!="") && ($fonc=="Enregistrer") && (GetDroit("ModifGroupe")) && (!isset($_SESSION['tab_checkpost'][$checktime])))
 	{
-  	$q="UPDATE ".$MyOpt["tbl"]."_groupe SET groupe='$form_grp',description='$form_desc' WHERE groupe='$grp'";
+		$q="UPDATE ".$MyOpt["tbl"]."_groupe SET groupe='$form_grp',description='$form_desc' WHERE groupe='$grp'";
 		$sql->Update($q);
 
-  	$q="UPDATE ".$MyOpt["tbl"]."_roles SET groupe='$form_grp' WHERE groupe='$grp'";
+		$q="UPDATE ".$MyOpt["tbl"]."_roles SET groupe='$form_grp' WHERE groupe='$grp'";
 		$sql->Update($q);
 
-  	$q="UPDATE ".$MyOpt["tbl"]."_droits SET groupe='$form_grp' WHERE groupe='$grp'";
+		$q="UPDATE ".$MyOpt["tbl"]."_droits SET groupe='$form_grp' WHERE groupe='$grp'";
 		$sql->Update($q);
 
 		$grp=$form_grp;
@@ -131,8 +131,9 @@
 
 // ---- Liste les roles
 	$tabRolesNok=$tabRoles;
-
-	$query="SELECT role FROM ".$MyOpt["tbl"]."_roles WHERE groupe='$grp'";
+	asort($tabRolesNok);
+		
+	$query="SELECT * FROM ".$MyOpt["tbl"]."_roles WHERE groupe='$grp' ORDER BY role";
 	$sql->Query($query);
 	for($i=0; $i<$sql->rows; $i++)
 	{
@@ -140,7 +141,7 @@
 		$tmpl_x->assign("aff_role",$sql->data["role"]);
 		$tmpl_x->assign("aff_help",$tabRoles[$sql->data["role"]]);
 		unset($tabRolesNok[$sql->data["role"]]);
-		$tmpl_x->parse("corps.aff_config.lst_roles_ok");
+		$tmpl_x->parse("corps.aff_config.lst_roles_".$sql->data["autorise"]);
 	}
 
 	foreach($tabRolesNok as $r=>$h)
@@ -171,7 +172,7 @@
 
 	foreach($tUser as $i=>$id)
 	{
-		$usr = new user_class($id,$sql,false,false);
+		$usr = new user_core($id,$sql,false,false);
 		$tmpl_x->assign("aff_user",$usr->aff("fullname"));
 		$tmpl_x->assign("aff_uid",$id);
 	

@@ -28,7 +28,7 @@
 
 <?
 	$tmpl_x = new XTemplate (MyRep("index.htm"));
-	$tmpl_x->assign("path_module","$module/$mod");
+	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 
 // ---- Fonc = marquer
 //	 On marque tous les messages comme lus
@@ -77,7 +77,7 @@
 
 
 // ---- Récupère la liste des forums
-	$sqlb = new mysql_class($mysqluser, $mysqlpassword, $hostname, $db, $port);
+	$sqlb = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db, $port);
 
 	$query ="SELECT id, fid, titre, message AS corps, fil, droit_r AS droit ";
 	$query.="FROM ".$MyOpt["tbl"]."_forums ";
@@ -123,7 +123,7 @@
 				
 					$tmpl_x->assign("id_forum", $res["fid"]);
 					$tmpl_x->assign("id_msg", $id);
-					$usr = new user_class($res["uid_creat"],$sqlb,false);
+					$usr = new user_core($res["uid_creat"],$sqlb,false);
 
 					$tmpl_x->assign("usertxt", $usr->fullname);
 					$tmpl_x->assign("titremsg", htmlentities($res["titre"]));

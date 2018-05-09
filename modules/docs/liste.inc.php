@@ -1,13 +1,6 @@
 <?
-// ---------------------------------------------------------------------------------------------
-//   Arborescence des forums
-// ---------------------------------------------------------------------------------------------
-//   Variables  : $fid  - Numéro du forums
-//		  $opt  - [Numéro du message à supprimer]
-//		  $fonc - [fonctions optionnelles]
-// ---------------------------------------------------------------------------------------------
 /*
-    Easy-Aero v2.14
+    MnMs Framework
     Copyright (C) 2018 Matthieu Isorez
 
     This program is free software; you can redistribute it and/or modify
@@ -29,8 +22,8 @@
 <?
 	require_once ("class/document.inc.php");
 // ---- Charge le template
-	$tmpl_x = new XTemplate (MyRep("forums_1.htm"));
-	$tmpl_x->assign("path_module","$module/$mod");
+	$tmpl_x = new XTemplate (MyRep("liste.htm"));
+	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 	
 // ---- Vérifie les variables
 	if (!is_numeric($fid))
@@ -71,7 +64,7 @@
 
 		foreach($tablus as $id)
 		  {
-			$query ="INSERT INTO ".$MyOpt["tbl"]."_forums_lus SET forum_msg=$id, forum_usr=$uid, forum_date='".now()."'"; 
+			$query ="INSERT INTO ".$MyOpt["tbl"]."_forums_lus SET forum_id='".$fid."', forum_msg=$id, forum_usr=$uid, forum_date='".now()."'"; 
 			$sql->Insert($query);
 		  }
 	  }
@@ -182,7 +175,7 @@
 		{
 			foreach($lstdoc as $i=>$did)
 			{
-				$doc = new document_class($did,$sql);
+				$doc = new document_core($did,$sql);
 				$tmpl_x->assign("form_document",$doc->Affiche());
 				$tmpl_x->parse("corps.lst_msg.aff_piecejointe.lst_document");
 			}
@@ -207,7 +200,7 @@
 		}
 
 		// Paramètres du message
-		$usr = new user_class($msg["usr_id"],$sql,false);
+		$usr = new user_core($msg["usr_id"],$sql,false);
 		$tmpl_x->assign("id_msg",$msg["id"]);
 		$tmpl_x->assign("id_forum",$msg["fid"]);
 		$tmpl_x->assign("msg_titre",htmlentities(($msg["titre"]!="") ? $msg["titre"] : " - ",ENT_HTML5,"ISO-8859-1"));

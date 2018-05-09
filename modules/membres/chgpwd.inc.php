@@ -24,6 +24,7 @@
 // ---- Charge le template
 	$tmpl_x = new XTemplate (MyRep("chgpwd.htm"));
 	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
+	$tmpl_x->assign("corefolder", $corefolder);
 
 // ---- Initialisation des variables
 	$tmpl_x->assign("form_checktime",$_SESSION['checkpost']);

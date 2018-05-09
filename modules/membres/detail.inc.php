@@ -233,7 +233,7 @@
 		}
 		else
 		{
-			$tmpl_x->assign("aff_avatar","static/images/none.gif");
+			$tmpl_x->assign("aff_avatar",$corefolder."/static/images/none.gif");
 		}	
 
 

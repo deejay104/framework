@@ -1,14 +1,6 @@
 <?
-// ---------------------------------------------------------------------------------------------
-//   Script de sauvegarde d'un message
-//   
-// ---------------------------------------------------------------------------------------------
-//   Variables  : $fid   - Numéro du forums
-//		  $mid   - Si non nul alors le message est ouvert en modification
-//		  $fpars - Numéro du message parent
-// ---------------------------------------------------------------------------------------------
 /*
-    Easy-Aero v2.14
+    MnMs Framework
     Copyright (C) 2018 Matthieu Isorez
 
     This program is free software; you can redistribute it and/or modify
@@ -106,7 +98,7 @@
 				$lstfiles=array();
 				if ($_FILES["form_adddocument"]["name"]!="")
 				  {
-					$doc = new document_class(0,$sql,"forum");
+					$doc = new document_core(0,$sql,"forum");
 	
 					$query="SELECT droit_r FROM ".$MyOpt["tbl"]."_forums WHERE id=$fid";
 					$res=$sql->QueryRow($query);
@@ -128,7 +120,7 @@
 						$txtmail.="<br/><br/>Pièce(s) attachée(s) :<br/>";
 						foreach($lstdoc as $i=>$did)
 						{
-							$doc = new document_class($did,$sql);
+							$doc = new document_core($did,$sql);
 							$txtmail.=$doc->Affiche()."<br/>";
 						}
 					}
@@ -144,7 +136,7 @@
 						foreach($lst as $i=>$uid)
 						{
 							// Et on envoie un mail à chacune des personnes de la liste
-							$usr = new user_class($uid,$sql,false);
+							$usr = new user_core($uid,$sql,false);
 		
 							if ($usr->mail!="")
 							{
@@ -180,19 +172,19 @@
 			  {
 			  	// Si pas d'erreur
 				$fonc="";
-				$affrub="forums_7";
+				$affrub="detail";
 			  }
 			else
 			  {
 			  	// Sinon on recharche la page
 				$fonc="";
-				$affrub="forums_2";
+				$affrub="editer";
 			  }
 	  }
 	else if (($fonc=="Annuler") && ($mid>0))
 	  {
 			$fonc="";
-			$affrub="forums_7";
+			$affrub="detail";
 	  }
 	else if (($fonc=="Annuler") && ($fpars>0))
 	  {
@@ -203,7 +195,7 @@
 	else if (($fonc=="Annuler") && ($fid>0))
 	  {
 			$fonc="";
-			$affrub="forums_1";
+			$affrub="liste";
 	  }
 	else if ($fonc=="Annuler")
 	  {

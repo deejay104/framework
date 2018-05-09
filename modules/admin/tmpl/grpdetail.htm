@@ -37,7 +37,7 @@ $(function() {
       }
     });
 
-    $( "#DropEnable" ).sortable({
+    $( "#DropAllow" ).sortable({
 		connectWith: "ul",
 		update: function (event, ui) {
 	        var order = $(this).sortable('serialize');
@@ -46,7 +46,21 @@ $(function() {
 	        $.ajax({
 				data: order,
 	            type: 'post',
-	            url: 'api.php?mod=admin&rub=updgrp&grp={form_grp}'
+	            url: 'api.php?mod=admin&rub=updgrp&grp={form_grp}&aut=oui'
+	        });
+		}
+    });
+
+    $( "#DropDeny" ).sortable({
+		connectWith: "ul",
+		update: function (event, ui) {
+	        var order = $(this).sortable('serialize');
+	
+	        // POST to server using $.post or $.ajax
+	        $.ajax({
+				data: order,
+	            type: 'post',
+	            url: 'api.php?mod=admin&rub=updgrp&grp={form_grp}&aut=non'
 	        });
 		}
     });
@@ -122,10 +136,18 @@ $(function() {
 		.adminRouge { background-color:#FFBBAA !important; }
 	</style>
 
-<ul id="DropEnable" class="dropBox">
-<!-- BEGIN: lst_roles_ok -->
+<ul id="DropAllow" class="dropBox">
+Autoriser :<br/>
+<!-- BEGIN: lst_roles_oui -->
 		<li id="id_{aff_role}" class="ui-state-default" title="{aff_help}">{aff_role}</li>
-<!-- END: lst_roles_ok -->
+<!-- END: lst_roles_oui -->
+</ul>
+
+<ul id="DropDeny" class="dropBox">
+Refuser :<br />
+<!-- BEGIN: lst_roles_non -->
+		<li id="id_{aff_role}" class="ui-state-default" title="{aff_help}">{aff_role}</li>
+<!-- END: lst_roles_non -->
 </ul>
 
 <ul id="DropDisable" class="dropBox dropDisable">

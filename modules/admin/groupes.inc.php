@@ -28,7 +28,7 @@
 <?
 // ---- Charge le template
 	$tmpl_x = new XTemplate (MyRep("groupes.htm"));
-	$tmpl_x->assign("path_module","$module/$mod");
+	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 	$tmpl_x->assign("form_checktime",$_SESSION['checkpost']);
 
 // ---- Vérifie le droit d'accès
