@@ -1,0 +1,144 @@
+<!-- BEGIN: icone -->
+	<img src="{path_module}/img/icn48_titre.png" alt="" border=0 />
+<!-- END: icone -->
+
+<!-- BEGIN: infos -->
+{aff_menu}
+<!-- END: infos -->
+
+
+<!-- BEGIN: corps -->
+<script type="text/javascript">
+	$(function() {
+
+			// auto adjust the height of
+			$('#form_reponse').delegate( 'textarea', 'keydown', function (){
+			    $(this).height( 0 );
+			    $(this).height( this.scrollHeight );
+			});
+			$('#form_reponse').find( 'textarea' ).keydown();
+
+	});
+
+	function ClearText(e,txt) {
+	
+		if(window.event)
+	          {
+	          	//IE
+	          	var t = window.event.srcElement;
+	          } 
+		else
+	          { //firefox
+	          	var t = e.target;
+	          } 
+			
+		if (t.value==txt)
+		  { t.value=''; t.style.color="#000000"; }
+		return;
+	}
+
+</script>
+
+<FORM name="form_detail" method="post" action="index.php" enctype="multipart/form-data">
+<INPUT type="hidden" name="mod" value="ameliorations">
+<INPUT type="hidden" name="rub" value="detail">
+<INPUT type="hidden" name="id" value="{form_id}">
+<INPUT type="hidden" name="checktime" value="{form_checktime}">
+
+<p class="lastupdate">Dernière mise à  jour : {form_usr_maj} le {form_dte_maj}</p>
+
+
+<div class="formulaire">
+
+
+<p><label>Status</label>{form_status}</p>
+<p><label>Version</label>{form_version}</p>
+<p><label>Module</label>{form_module}</p>
+<br />
+
+</div>
+
+	<div class='actualitesBloc'>
+		<div class="actualitesPhoto" >
+			<img src="{form_avatar}" alt="">
+		</div>
+		<div class="actualitesMessage">
+			<div class="actualitesTitre">
+				<div class="actualitesTitreMsg">
+					<a name="id{msg_id}"></a>
+					<p>{form_titre}</p>
+					<span>par {form_usr_maj}, {form_dte_maj}</span>
+				</div>
+				<div class="actualitesIcones">
+					<!-- BEGIN: icn_modifier -->
+					<a href="index.php?mod=actualites&fonc=editer&id={msg_id}" class='imgDelete'><img src="{path_module}/img/icn16_editer.png" /></a>
+					<!-- END: icn_modifier -->
+					<!-- BEGIN: icn_supprimer -->
+					<a href="#" class='imgDelete' OnClick="ConfirmeClick('index.php?mod=actualites&fonc=supprimer&id={msg_id}#id{msg_idprev}','Souhaitez-vous supprimer cette actualité ?');"><img src="{path_module}/img/icn16_supprimer.png" /></a>
+					<!-- END: icn_supprimer -->
+				</div>
+			</div>
+			<div class="actualitesTexte">
+				<p>{form_description}</p>
+			</div>
+		</div>
+	</div>
+
+
+
+<!-- BEGIN: submit -->
+	<div class="formulaireSubmit" style="padding-left:55px;">
+		<input type="submit" name="fonc" id="enregistrer" value="Enregistrer">
+		<input type="submit" name="fonc" id="annuler" value="Annuler">
+	</div>
+<!-- END: submit -->
+
+</form>
+<br />
+
+
+
+
+<!-- BEGIN: aff_commentaire -->
+	<div class='actualitesBloc'>
+		<div class="actualitesPhoto" >
+			<img src="{msg_avatar}" alt="">
+		</div>
+		<div class="actualitesMessage">
+			<div class="actualitesTitre">
+				<div class="actualitesTitreMsg">
+					<a name="id{msg_id}"></a>
+					<span>par {msg_autheur}, {msg_date}</span>
+				</div>
+				<div class="actualitesIcones">
+					<!-- BEGIN: icn_modifier -->
+					<a href="index.php?mod=actualites&fonc=editer&id={msg_id}" class='imgDelete'><img src="{path_module}/img/icn16_editer.png" /></a>
+					<!-- END: icn_modifier -->
+					<!-- BEGIN: icn_supprimer -->
+					<a href="#" class='imgDelete' OnClick="ConfirmeClick('index.php?mod=actualites&fonc=supprimer&id={msg_id}#id{msg_idprev}','Souhaitez-vous supprimer cette actualité ?');"><img src="{path_module}/img/icn16_supprimer.png" /></a>
+					<!-- END: icn_supprimer -->
+				</div>
+			</div>
+			<div class="actualitesTexte">
+				<p>{msg_message}</p>
+			</div>
+		</div>
+	</div>
+<!-- END: aff_commentaire -->
+
+<div id="form_reponse" class="actualitesNouveau">
+	<form name="form_reponse" method="post" action="index.php" enctype="multipart/form-data">
+		<input type="hidden" name="mod" value="ameliorations">
+		<input type="hidden" name="rub" value="detail">
+		<input type="hidden" name="id" value="{form_id}">
+		<input type="hidden" name="checktime" value="{form_checktime}">
+				
+		<textarea name="form_desc" OnClick="ClearText(event,'{reponse_vide}');"  style="color:#bbbbbb; height:51px;">{reponse_vide}</textarea>
+		<p>
+		<input type="submit" name="fonc" value="Poster">
+		</p>
+	</form>
+</div>
+
+
+<!-- END: corps -->

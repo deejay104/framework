@@ -300,11 +300,11 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 .encadreInfos input[type=text] { width: 100%; min-width: 150px; margin-top:4px; font-size:14px; }
 
 
-#actualitesNouveau { margin-left:72px;  margin-right:20px; width: 80%; }
+.actualitesNouveau { margin-left:72px;  margin-right:20px; width: 80%; }
 
-#actualitesNouveau input[type=text] { width: 100%; min-width: 270px; margin-top:4px;  font-size:14px; }
+.actualitesNouveau input[type=text] { width: 100%; min-width: 270px; margin-top:4px;  font-size:14px; }
 
-#actualitesNouveau textarea {
+.actualitesNouveau textarea {
     min-width: 270px;
     width: 100%;
     height: 20px;
@@ -315,14 +315,13 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
     font-size:14px;
 }
 
-#actualitesNouveau p { width: 100%; padding-left:5px; text-align: right; }
-#actualitesNouveau input { height:30px; border: 1px solid #888888; line-height: 16px; padding: 4px 2px 4px 2px; }
+.actualitesNouveau p { width: 100%; padding-left:5px; text-align: right; }
 
 
-#actualitesBloc { display: inline-block; margin-right:20px; width: 100%; margin-bottom:5px; }
-#actualitesMessage { display: inline-block; float: left; width: 80%; border: 1px solid #013366; min-width: 350px; border-radius: 4px;  }
+.actualitesBloc { display: inline-block; margin-right:20px; width: 100%; margin-bottom:5px; }
+.actualitesMessage { display: inline-block; float: left; width: 80%; border: 1px solid #cccccc; min-width: 350px; border-radius: 4px;  }
 
-.actualitesTitre { display: inline-block; background-color: #dddddd; color: black; font-size:18px; border-radius: 4px 4px 0px 0px; width: 100%; }
+.actualitesTitre { display: inline-block; background-color: #eeeeee; color: black; font-size:18px; border-radius: 4px 4px 0px 0px; width: 100%; }
 
 .actualitesPhoto { width: 72px; float: left; }
 .actualitesPhoto img { border-radius: 32px; width:64px; height:64px; }
@@ -332,9 +331,6 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 .actualitesTitreMsg span { margin:0px; padding:0px; font-size:10px; padding-left:30px; }
 
 .actualitesIcones { display: inline-block; position:relative; top:5px; float:right; padding-right:5px; }
-.actualitesIcones2 a { display: inline-block; height:20px; width:20px; padding: 0px; margin: 0px; background-color: #dddddd; border: 1px solid #dddddd; }
-.actualitesIcones2 a:hover { background-color: #cccccc; border: 1px solid #013366; }
-.actualitesIcones2 img { vertical-align:middle; }
 
 .actualitesTexte p { padding:10px; font-size:14px; }
 .actualitesTexte a { text-decoration: underline; }
@@ -342,8 +338,6 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 .actualitesSuivant { width:100%; background-color: #dddddd; text-align:center; }
 .actualitesSuivant a { display:block; }
 .actualitesSuivant a:hover { background-color: #cccccc; color: white; }
-
-#actualitesMail { display: none; width: 90%; border: 1px solid #013366; min-width: 300px;  margin-bottom:10px; border-radius: 4px; padding:5px;  }
 
 
 /* **** FORUMS **** */

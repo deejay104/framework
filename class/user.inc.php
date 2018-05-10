@@ -2,32 +2,25 @@
 /*
     MnMs Framework
     Copyright (C) 2018 Matthieu Isorez
-
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
     (at your option) any later version.
-
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-
-
 // Class Utilisateur
 class user_core{
 	# Constructor
 	function __construct($uid=0,$sql,$me=false,$setdata=true){
 		global $MyOpt;
 		global $gl_uid;
-
 		$this->tbl=$MyOpt["tbl"];
-
 		$this->uid=$uid;
 		$this->sql=$sql;
 		$this->me=$me;
@@ -38,7 +31,6 @@ class user_core{
 		$this->mail="";
 		$this->uidmaj=0;
 		$this->dtemaj=date("Y-m-d");
-
 		$this->data["nom"]="";
 		$this->data["prenom"]="";
 		$this->data["fullname"]="";
@@ -50,26 +42,20 @@ class user_core{
 		$this->data["dte_login"]="0000-00-00 00:00:00";
 		$this->data["notification"]="oui";
 		$this->data["aff_msg"]="0";
-
 		$this->data["uid_maj"]="0";
 		$this->data["dte_maj"]=date("Y-m-d H:i:s");
-
-		// Données utilisateurs
+		// DonnÃ©es utilisateurs
 		$this->donnees=array();
-
 		// Droits utilisateurs
 		$this->groupe=array();
-
 		if ($uid>0)
 		{
 			$this->load($uid,$setdata,$me);
 		}
 	}
-
 	# Load user informations
 	function load($uid,$setdata=true,$me)
 	{ global $Droits;
-
 		$this->uid=$uid;
 		$sql=$this->sql;
 		if ($setdata)
@@ -81,7 +67,6 @@ class user_core{
 		{
 			return "";
 		}
-
 		// Charge les variables
 		$this->prenom=($res["prenom"]!="")?ucwords($res["prenom"]):"";
 		$this->nom=($res["nom"]!="")?strtoupper($res["nom"]):"";
@@ -90,7 +75,6 @@ class user_core{
 		$this->mail=$res["mail"];
 		$this->uidmaj=$res["uid_maj"];
 		$this->dtemaj=$res["dte_maj"];
-
 		if ($setdata)
 		{ 
 			foreach($res as $k=>$v)
@@ -100,7 +84,6 @@ class user_core{
 					$this->data[$k]=$v;
 				}
 			}
-
 			// Charge les droits
 			$query = "SELECT groupe FROM ".$this->tbl."_droits WHERE uid='$uid' ORDER BY groupe";
 			$sql->Query($query);
@@ -115,16 +98,13 @@ class user_core{
 				$s=",";
 			}
 		}
-
 		$this->data["fullname"]=AffFullName($this->prenom,$this->nom);
 		$this->fullname=$this->data["fullname"];
-
 		if ($me)
 		{
 			$this->loadRoles();
 		}
 	}
-
 	function loadRoles()
 	{
 		// Charge les roles
@@ -133,19 +113,16 @@ class user_core{
 		$sql=$this->sql;
 		$query = "SELECT roles.role, roles.autorise FROM ".$this->tbl."_roles AS roles LEFT JOIN ".$this->tbl."_droits AS droits ON droits.groupe=roles.groupe  WHERE (uid='".$this->uid."' OR roles.groupe='ALL') AND roles.role IS NOT NULL ORDER BY roles.autorise";
 		$sql->Query($query);
-
 		for($i=0; $i<$sql->rows; $i++)
 		{ 
 			$sql->GetRow($i);
 			$this->role[$sql->data["role"]]=($sql->data["autorise"]=="oui") ? true : false;
 		}
 	}
-
 	function LoadDonneesComp()
 	{
 		$sql=$this->sql;
 		$query = "SELECT donnees.id,def.id AS did,def.nom,donnees.valeur FROM ".$this->tbl."_utildonneesdef AS def LEFT JOIN ".$this->tbl."_utildonnees AS donnees ON donnees.did=def.id AND (donnees.uid='$this->uid' OR donnees.uid IS NULL) WHERE def.actif='oui' ORDER BY ordre, nom";
-
 		$sql->Query($query);
 		for($i=0; $i<$sql->rows; $i++)
 		{ 
@@ -160,7 +137,6 @@ class user_core{
 	function aff($key,$typeaff="html",$formname="form_info")
 	{ global $MyOpt,$tabTypeNom;
 		$txt=$this->data[$key];
-
 		if (is_numeric($key))
 		  { $ret="******"; }
 		else if ($key=="prenom")
@@ -185,14 +161,11 @@ class user_core{
 		  { $ret="******"; }
 		else
 		  { $ret=$txt; }
-
-		// Défini les droits de modification des utilisateurs
-		$mycond=$this->me;	// Le user a le droit de modifier toutes ses données
-
+		// DÃ©fini les droits de modification des utilisateurs
+		$mycond=$this->me;	// Le user a le droit de modifier toutes ses donnÃ©es
 		// Si on a le droit de modif on autorise
 		if (GetDroit("ModifUser"))
 		  { $mycond=true; }
-
 		// Test les exceptions
 		if ($key=="prenom")
 		{
@@ -209,11 +182,9 @@ class user_core{
 			if (!GetDroit("ModifUserDroits"))
 			  { $mycond=false; }
 		}
-
 		// Si l'utilisateur a le droit de tout modifier alors on force
 		if (GetDroit("ModifUserAll"))
 		  { $mycond=true; }
-
 		// Si on a pas le droit on repasse en visu
 		if ((!$mycond) && ($typeaff!="val"))
 		  { $typeaff="html"; }
@@ -250,7 +221,6 @@ class user_core{
 					$sql->GetRow($i);
 		  	  		$ret.="<input type='checkbox' name='form_droits[".$sql->data["groupe"]."]' ".(($this->groupe[$sql->data["groupe"]]>0) ? "checked" : "")." value='".$sql->data["groupe"]."' /> ".$sql->data["description"]." (".$sql->data["groupe"].")<br />";
 				}
-
 				if (GetDroit("SYS"))
 				{
 					$ret.="<input type='checkbox' name='form_droits[SYS]' ".(($this->groupe["SYS"]>0) ? "checked" : "")." value='SYS' /> Super Administrateur (SYS)<br />";
@@ -338,12 +308,10 @@ class user_core{
 	
 		return $ret;
 	}
-
 	function AffDonnees($i,$typeaff="html")
 	{
-		// Défini les droits de modification des utilisateurs
-		$mycond=$this->me;	// Le user a le droit de modifier toutes ses données
-
+		// DÃ©fini les droits de modification des utilisateurs
+		$mycond=$this->me;	// Le user a le droit de modifier toutes ses donnÃ©es
 		// Si on a le droit de modif on autorise
 		if (GetDroit("ModifUserDonnees"))
 		  { $mycond=true; }
@@ -351,7 +319,6 @@ class user_core{
 		// Si l'utilisateur a le droit de tout modifier alors on force
 		if (GetDroit("ModifUserAll"))
 		  { $mycond=true; }
-
 		// Si on a pas le droit on repasse en visu
 		if ((!$mycond) && ($typeaff!="val"))
 		  { $typeaff="html"; }
@@ -366,21 +333,16 @@ class user_core{
   	  	}
 		return $ret;
 	}
-
 	# Save Password
 	function SaveMdp($mdp){
 		$sql=$this->sql;
 		$this->data["password"]=$mdp;
-
 		$sql->Edit("user",$this->tbl."_utilisateurs",$this->uid,array("password"=>$mdp));		
-
 		return "";
 	}
-
 	function Create(){
 		global $uid;
 		$sql=$this->sql;
-
 		$this->uid=$sql->Edit("user",$this->tbl."_utilisateurs",$this->uid,array("uid_maj"=>$uid, "dte_maj"=>now()));		
 		
 		return $this->uid;
@@ -399,13 +361,12 @@ class user_core{
 			{
 			  	$vv=$v;
 			}
-
 			$sql=$this->sql;
 			$query = "SELECT COUNT(*) AS nb FROM ".$this->tbl."_utilisateurs WHERE initiales='".$vv."' AND id<>'".$this->uid."' AND actif='oui'";
 			$res = $sql->QueryRow($query);
 			if (($res["nb"]>0) && ($ret==false) && ($v!=""))
 			{
-				return "Les initiales choisies existent déjà !";
+				return "Les initiales choisies existent dÃ©jÃ  !";
 			}
 			else if ($res["nb"]>0)
 			{
@@ -419,13 +380,12 @@ class user_core{
 		else if ($k=="mail")
 		{
 		  	$vv=$v;
-
 			$sql=$this->sql;
 			$query = "SELECT COUNT(*) AS nb FROM ".$this->tbl."_utilisateurs WHERE mail='".$vv."' AND id<>'".$this->uid."' AND actif='oui'";
 			$res = $sql->QueryRow($query);
 			if (($res["nb"]>0) && ($ret==false) && ($v!=""))
 			{
-				return "Le mail choisi existe déjà !";
+				return "Le mail choisi existe dÃ©jÃ  !";
 			}
 			else if ($res["nb"]>0)
 			{
@@ -453,18 +413,15 @@ class user_core{
 	  	  { $vv=$v; }
 	  	else
 	  	  { $vv=strtolower($v); }
-
 		if ( (!is_numeric($k)) && ("($vv)"!="(**none**)") && ($ret==false))
 		  { $this->data[$k]=$vv; }
 		else if ($ret==true)
 		  { return addslashes($vv); }
 	}
-
 	function Save()
 	{
 		global $uid;
 		$sql=$this->sql;
-
 		$td=array();
 		foreach($this->data as $k=>$v)
 		{ 
@@ -477,15 +434,11 @@ class user_core{
 		$td["uid_maj"]=$uid;
 		$td["dte_maj"]=now();
 		$sql->Edit("user",$this->tbl."_utilisateurs",$this->uid,$td);
-
 	}
-
 	function SaveDroits($tabDroits)
 	{
 		global $uid;
-
 		$sql=$this->sql;
-
 		// Charge les enregistrements
 		$query = "SELECT * FROM ".$this->tbl."_groupe";
 		$sql->Query($query);
@@ -512,7 +465,6 @@ class user_core{
 				}
 			}
 		}
-
 		// Charge les anciennnes
 		if (is_array($this->groupe))
 		{
@@ -525,7 +477,7 @@ class user_core{
 			}
 		}
 		
-		// Vérifie la différence
+		// VÃ©rifie la diffÃ©rence
 		foreach($tabgrp as $grp=>$v)
 		{
 			if (($v["new"]==1) && ($v["old"]>0))
@@ -559,19 +511,16 @@ class user_core{
 			$sql->Insert($query);
 		}
 	}
-
 	function DelGroupe($grp) {
 		$sql=$this->sql;
 		$query="DELETE FROM ".$this->tbl."_droits WHERE uid='$this->uid' AND groupe='$grp'";
 		$sql->Delete($query);
 	}
-
 	function RazGroupe() {
 		$sql=$this->sql;
 		$query="DELETE FROM ".$this->tbl."_droits WHERE uid='$this->uid'";
 		$sql->Delete($query);
 	}
-
 	function SaveDonnees()
 	{ 
 		global $uid;
@@ -583,20 +532,16 @@ class user_core{
 			$sql->Edit("user",$this->tbl."_utildonnees",$d["id"],$td);
 		}
 	}
-
 	function Desactive(){
 		global $gl_uid;
 		$sql=$this->sql;
 		$this->actif="off";
-
 		$sql->Edit("user",$this->tbl."_utilisateurs",$this->uid,array("actif"=>'off', "uid_maj"=>$gl_uid, "dte_maj"=>now()));
 	}
-
 	function Active(){
 		global $gl_uid;
 		$sql=$this->sql;
 		$this->actif="oui";
-
 		$sql->Edit("user",$this->tbl."_utilisateurs",$this->uid,array("actif"=>'oui', "uid_maj"=>$gl_uid, "dte_maj"=>now()));
 	}
 	
@@ -604,16 +549,9 @@ class user_core{
 		global $uid;
 		$sql=$this->sql;
 		$this->actif="non";
-
 		$sql->Edit("user",$this->tbl."_utilisateurs",$this->uid,array("actif"=>'non', "uid_maj"=>$gl_uid, "dte_maj"=>now()));
 	}	
-
-
 } # End of class
-
-
-
-
 function ListActiveUsers($sql,$order="",$tabtype="",$virtuel="non")
  { global $MyOpt;
  	$lstuser=array();
@@ -623,7 +561,6 @@ function ListActiveUsers($sql,$order="",$tabtype="",$virtuel="non")
 	  { 
 	  	$type=explode(",",$tabtype);
 	  }
-
 	$reqAnd="";
 	$reqOr="";
 	if ( (is_array($type)) && (count($type)>0) )
@@ -635,19 +572,15 @@ function ListActiveUsers($sql,$order="",$tabtype="",$virtuel="non")
 			  	else
 			  	  { $reqOr.="type='$t' OR "; }
 			  }
-
 			if ($reqOr!="")
 			  {
 					$reqOr.="1=0";
 				}
-
 	  }
 	if ($order=="std")
 	  { $order=(($MyOpt["globalTrie"]=="nom") ? "nom,prenom" : "prenom,nom"); }
-
 	$query="SELECT id FROM ".$MyOpt["tbl"]."_utilisateurs WHERE (";
 	$query.="actif='oui'";
-
 	if ((GetDroit("ListeUserDesactive")) && ($MyOpt["showDesactive"]=="on"))
 	{
 		$query.=" OR actif='off'";
@@ -656,11 +589,9 @@ function ListActiveUsers($sql,$order="",$tabtype="",$virtuel="non")
 	{
 		$query.="OR actif='non'";
 	}
-
 	$query.=") ";
 	$query.=(($virtuel!="") ? " AND virtuel='$virtuel'" : "").(($reqOr!="") ? " AND (".$reqOr.")" : "").(($reqAnd!="") ? $reqAnd : "").(($order!="") ? " ORDER BY $order" : "");
 	$sql->Query($query);
-
 	for($i=0; $i<$sql->rows; $i++)
 	  { 
 		$sql->GetRow($i);
@@ -668,11 +599,9 @@ function ListActiveUsers($sql,$order="",$tabtype="",$virtuel="non")
 	  }
 	return $lstuser;
   }
-
 function ListActiveMails($sql)
  { global $MyOpt;
 		$lstuser=array();
-
 		$query="SELECT id FROM ".$MyOpt["tbl"]."_utilisateurs WHERE actif='oui' AND virtuel='non' AND mail<>'' AND notification='oui'";
 		$sql->Query($query);
 		
@@ -683,12 +612,10 @@ function ListActiveMails($sql)
 		}
 		return $lstuser;
   }
-
 function AffListeMembres($sql,$form_uid,$name,$type="",$sexe="",$order="std",$virtuel="non")
  { global $MyOpt;
 	if ($order=="std")
 	  { $order=(($MyOpt["globalTrie"]=="nom") ? "nom,prenom" : "prenom,nom"); }
-
 	$query ="SELECT id,prenom,nom FROM ".$MyOpt["tbl"]."_utilisateurs WHERE actif='oui' ";
 	$query.=(($virtuel!="") ? "AND virtuel='$virtuel' " : "");
 	$query.=(($type!="") ? "AND type='$type' " : "");
@@ -696,34 +623,26 @@ function AffListeMembres($sql,$form_uid,$name,$type="",$sexe="",$order="std",$vi
 	$query.=(($order!="") ? " ORDER BY $order" : "");
 	
 	$sql->Query($query);
-
 	$lstuser ="<select name=\"$name\">";
 	$lstuser.="<option value=\"0\">Aucun</option>";
-
 	for($i=0; $i<$sql->rows; $i++)
 	  { 
 		$sql->GetRow($i);
-
 		$sql->data["nom"]=strtoupper($sql->data["nom"]);
 		$sql->data["prenom"]=ucwords($sql->data["prenom"]);
 		$fullname=AffFullName($sql->data["prenom"],$sql->data["nom"]);
 		$lstuser.="<option value=\"".$sql->data["id"]."\" ".(($form_uid==$sql->data["id"]) ? "selected" : "").">".$fullname."</option>";
 	  }
 	$lstuser.="</select>";
-
 	return $lstuser;
   }
-
-
 function AffFullname($prenom,$nom)
   { global $MyOpt;
 		$fullname="";
 		$nom=strtoupper($nom);
-
 		$prenom=preg_replace("/-/"," ",$prenom);
 		$prenom=ucwords($prenom);
 		$prenom=preg_replace("/ /","-",$prenom);
-
 		if ($MyOpt["globalTrie"]=="nom")
 		  {
 		  	$fullname=$nom;
@@ -748,13 +667,11 @@ function AffInitiales($res)
   	else
   	  { return strtoupper(substr($res["prenom"],0,1).substr($res["nom"],0,1)); }
 }
-
-// Test si un ID correspond à l'utilisateur ou un de ses enfants
+// Test si un ID correspond Ã  l'utilisateur ou un de ses enfants
 function GetMyId($id)
   { global $myuser;
   	if ($id==$myuser->uid)
   	  { return true; }
-
 	if (GetModule("creche"))
 	  {
 	  	$myuser->LoadEnfants();

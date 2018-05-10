@@ -76,7 +76,7 @@
 // ---- Test si l'on a validé la page
 	$ok=0;
 	$errmsg="";
-	
+
 	if (($fonc == "Connecter") && ($mysqluser!="") && ($MyOpt["tbl"]!=""))
 	{
 		if ($password=="") { $password="nok"; }

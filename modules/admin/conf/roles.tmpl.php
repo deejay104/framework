@@ -28,6 +28,7 @@ $tabRoles["SupprimeMessage"]="Supprimer un message dans le module document";
 $tabRoles["SupprimeGroupe"]="Supprimer un groupe";
 
 
+$tabRoles["AccesDocuments"]="Accès au module de documents";
 $tabRoles["VisuDocument"]="Visualisation de tous les documents";
 
 
@@ -54,5 +55,14 @@ $tabRoles["ListeUserDesactive"]="Autorise l'affichage des membres désactivés";
 $tabRoles["SupprimeUser"]="Supprimer un membre";
 
 
+// ---- Améliorations
+
+$tabRoles["AccesAmeliorations"]="Accès à la liste des améliorations";
+$tabRoles["AccesAmelioration"]="Accès aux fiche d'amélioration";
+$tabRoles["CreeAmelioration"]="Créer une fiche d'amélioration";
+$tabRoles["CreeAmeliorationCommentaire"]="Créer une réponse à une amélioration";
+$tabRoles["ModifAmelioration"]="Modifier une fiche d'amélioration";
+$tabRoles["ModifAmeliorationStatus"]="Modifier le status d'une amélioration";
+$tabRoles["SupprimeAmelioration"]="Supprimer un membre";
 
 ?>

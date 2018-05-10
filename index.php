@@ -55,7 +55,9 @@
 // ---- Gestion des droits
 	session_start();
 
-	if ((isset($_SESSION['uid'])) && ($_SESSION['uid']>0))
+	if ($fonc=="logout")
+	  { include "login.php"; exit; }
+	else if ((isset($_SESSION['uid'])) && ($_SESSION['uid']>0))
 	  { $uid = $_SESSION['uid']; }
 	else
 	  { include "login.php"; exit; }
@@ -120,9 +122,11 @@
 
 // ---- Charge les class
 	require ("class/user.inc.php");
+	require ("class/objet.inc.php");
+	require ("class/mysql.inc.php");
+	require ("class/document.inc.php");
 
 // ---- Se connecte à la base MySQL
-	require ("class/mysql.inc.php");
 	$sql = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db, $port);
 
 // ---- Fonction des informations de l'utilisateur
@@ -198,15 +202,14 @@
 	//Mon, 22 Jul 2002 11:12:01 GMT
 	
 // ---- Affichages du menu
-	foreach($MyOpt["menu"] as $menu=>$droit)
-	{
-		if ( ( ($droit=="") || ((GetDroit($droit)) && ($droit!="")) ) && ($droit!="-") )
-		{ 
-		  	$tmpl_prg->parse("main.menu_".$menu); 
-		  	$tmpl_prg->parse("main.menu_".$menu."_sm"); 
-		}
-	}
 
+	require("modules/default/menu.inc.php");
+	
+	if (file_exists("../modules/default/menu.inc.php"))
+	{
+		require("../modules/default/menu.inc.php");
+	}
+	
 // ---- Vérifie la variable $mod
 	if (!isset($mod))
 	  { $mod="default"; }
