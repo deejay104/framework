@@ -21,22 +21,10 @@
 		<div class="responsive-menu">
 			<p class="responsive-menulink">
 	   		<a href="index.php"><img src="{corefolder}/static/modules/actualites/img/icn32_titre.png" /> Accueil</a>
-	<!-- BEGIN: menu_membres_sm -->
-	   		<a href="index.php?mod=membres"><img src="{corefolder}/static/modules/membres/img/icn32_membres.png" /> Membres</a>
-	<!-- END: menu_membres_sm -->
-	<!-- BEGIN: menu_mesinfos_sm -->
-	   		<a href="index.php?mod=membres&id={gl_uid}"><img src="{corefolder}/static/modules/membres/img/icn32_detail.png" /> Mes informations</a>
-	<!-- END: menu_mesinfos_sm -->
-	<!-- BEGIN: menu_docs_sm -->
-	   		<a href="index.php?mod=docs"><img src="{corefolder}/static/modules/docs/img/icn32_titre.png" /> Documents</a>
-	<!-- END: menu_docs_sm -->
-	<!-- BEGIN: menu_configuration_sm -->
-	   		<a href="index.php?mod=admin"><img src="{corefolder}/static/modules/admin/img/icn32_titre.png" /> Configuration</a>
-	<!-- END: menu_configuration_sm -->
-	<!-- BEGIN: menu_problemes_sm -->
-	   		<a href="index.php?mod=ameliorations"><img src="{corefolder}/static/modules/ameliorations/img/icn32_titre.png" /> Améliorations</a>
-	<!-- END: menu_problemes_sm -->
-{aff_menu_custom_sm}
+<!-- BEGIN: menu_lst_sm -->
+     		<a href="index.php?{menu_url}"><img src="{menu_icone}" /> {menu_nom}</a>
+<!-- END: menu_lst_sm -->
+
 	   		<a href="index.php?fonc=logout"><img src="{corefolder}/static/images/icn32_logout.png" /> Se déconnecter</A><br />
 			</p>
 			<p style="text-align:center;"><a href="index.php?settheme=phone" style=" color:white;">-Affichage smartphone-</a></p>
@@ -51,22 +39,10 @@
 		<div class="navigation">
 			<ul class="main-menu">
      		<li><a href="index.php"><img src="{corefolder}/static/modules/actualites/img/icn32_titre.png" /> Accueil</a></li>
-<!-- BEGIN: menu_membres -->
-     		<li><a href="index.php?mod=membres"><img src="{corefolder}/static/modules/membres/img/icn32_membres.png" /> Membres</a></li>
-<!-- END: menu_membres -->
-<!-- BEGIN: menu_mesinfos -->
-     		<li><a href="index.php?mod=membres&rub=detail&id={gl_uid}"><img src="{corefolder}/static/modules/membres/img/icn32_detail.png" /> Mes informations</a></li>
-<!-- END: menu_mesinfos -->
-<!-- BEGIN: menu_docs -->
-     		<li><a href="index.php?mod=docs"><img src="{corefolder}/static/modules/docs/img/icn32_titre.png" /> Documents</a></li>
-<!-- END: menu_docs -->
-<!-- BEGIN: menu_configuration -->
-	   		<li><a href="index.php?mod=admin"><img src="{corefolder}/static/modules/admin/img/icn32_titre.png" /> Configuration</a></li>
-<!-- END: menu_configuration -->
-<!-- BEGIN: menu_problemes -->
-	   		<li><a href="index.php?mod=ameliorations"><img src="{corefolder}/static/modules/ameliorations/img/icn32_titre.png" /> Améliorations</a></li>
-<!-- END: menu_problemes -->
-{aff_menu_custom}
+<!-- BEGIN: menu_lst -->
+     		<li><a href="index.php?{menu_url}"><img src="{menu_icone}" /> {menu_nom}</a></li>
+<!-- END: menu_lst -->
+
      		<li><a href="index.php?fonc=logout"><img src="{corefolder}/static/images/icn32_logout.png" /> Se déconnecter</A></li>
 			</ul> <!-- /.main_menu -->
 		</div> <!-- /.navigation -->
@@ -101,7 +77,7 @@ jQuery(document).ready(function($){
     /************** Responsive Navigation *********************/
 
 	$('.menu-toggle-btn').click(function(){
-        $('.responsive-menu').stop(true,true).slideToggle();
+        $('.responsive-menu').stop(true,true).slideToggle(100);
     });
 });
 </script>

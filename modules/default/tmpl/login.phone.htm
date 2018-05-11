@@ -3,13 +3,13 @@
 <html>
   <head>
 	  <title>{site_title} - Login</title>
-	  <link rel='stylesheet' href='static/css/style.phone.css' type='text/css' />
-	  <link rel="SHORTCUT ICON" href="favicon.png" />
+	  <link rel='stylesheet' href='{style_url}' type='text/css' />
+	  <link rel="SHORTCUT ICON" href="{corefolder}/static/images/favicon.png" />
 	  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
   </head>
   
 <body onload="setFormFocus();">
-	<script language="JavaScript" src="static/js/_md5.js"></script>
+	<script language="JavaScript" src="{corefolder}/static/js/_md5.js"></script>
 	<script language="javascript">
 	<!-- 
 		function setFormFocus()
@@ -53,7 +53,7 @@
   </head>
 
 
-<form METHOD="post" ACTION="login.php" NAME="FormLogin" OnSubmit="cryptData();">
+<form METHOD="post" ACTION="index.php" NAME="FormLogin" OnSubmit="cryptData();">
 	<input type="hidden" name="varlogin" value="{var}">
   <input type="hidden" name="password" />
   <input type="hidden" name="myid" value="{myid}" />
@@ -66,7 +66,7 @@
 			<div class="loginAuthBox">
 				<div class="loginAuthTitre">
 					<p>
-						<label><img src="static/images/icn64_login.png"></label>
+						<label><img src="{corefolder}/static/images/icn64_login.png"></label>
 					  Authentification
 					</p>
 				</div>

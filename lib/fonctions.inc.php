@@ -66,17 +66,7 @@ function myPrint($txt)
 	}
 }
 
-// Compresse un fichier
-function Purge($txt)
-{
-	$p[]="/[ ]+/";	$r[]="";
-	$p[]="/\t/";	$r[]="";
-	$p[]="/\r/";	$r[]="";
-	$p[]="/\n/";	$r[]="";
-	
-	$txt=preg_replace($p,$r,$txt);
-	return $txt;
-}
+
 
 // Affiche un temps en minute en heures/minutes
 function AffTemps($tps,$short="yes") {
@@ -1070,12 +1060,7 @@ function GenereVariables($tab)
 	if (!file_exists($conffile))
 		{ $ret.="Création du fichier";}
 
-	if (!file_exists($conffile))
-	{
-		$ret.=" - La création du fichier a échouée";
-		return $ret;
-	}
-
+	$tab["styletime"]["valeur"]=time();
 	if(is_writable($conffile))
 	{
 		$fd=fopen($conffile,"w");
@@ -1194,4 +1179,57 @@ function affInformation($txt,$res)
 	$tmpl_prg->parse("main.aff_infos");
 }
 
+function GenereStyle($name)
+{
+	global $MyOpt,$core_version,$myrev,$corefolder;
+	
+	if (!is_numeric($MyOpt["styletime"]))
+	{
+		$MyOpt["styletime"]=0;
+	}
+
+	$sfile="static/cache/style/".$name.".".$MyOpt["styletime"].".".$myrev.".".$core_version.".css";
+	if (file_exists("../".$sfile))
+	{
+		return $sfile;
+	}
+	
+	if (!is_dir("../static/cache/style"))
+	{
+		mkdir("../static/cache/style");
+	}
+	$tmpl_style = new XTemplate ("modules/default/tmpl/".$name.".css");
+
+	foreach($MyOpt["styleColor"] as $n=>$c)
+	{
+		$tmpl_style->assign($n,$c);
+	}
+
+	$tmpl_style->parse("main");
+	
+	$fd=fopen("../".$sfile,"w");
+	
+	$s=Purge($tmpl_style->text("main"));
+	fwrite($fd,$s);
+	fclose($fd);
+	return $sfile;
+}
+
+// Compresse un fichier
+function Purge($txt)
+{
+	$p=array();
+	$r=array();
+	$p[]="/ [ ]*/";	$r[]=" ";
+	$p[]="/:[ ]*/";	$r[]=":";
+	$p[]="/;[ ]*/";	$r[]=";";
+	$p[]="/{[ ]*/";	$r[]="{";
+	$p[]="/\t/";	$r[]="";
+	$p[]="/\r/";	$r[]="";
+	$p[]="/\n/";	$r[]="";
+	
+	$txt=preg_replace($p,$r,$txt);
+
+	return $txt;
+}
 ?>

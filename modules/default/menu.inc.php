@@ -1,27 +1,29 @@
 <?
-	if (GetDroit("AccesMembres"))
-	{
-	  	$tmpl_prg->parse("main.menu_membres"); 
-	  	$tmpl_prg->parse("main.menu_membres_sm"); 
-	}
-	if (GetDroit("AccesMembre"))
-	{
-	  	$tmpl_prg->parse("main.menu_mesinfos"); 
-	  	$tmpl_prg->parse("main.menu_mesinfos_sm"); 
-	}
-	if (GetDroit("AccesDocuments"))
-	{
-	  	$tmpl_prg->parse("main.menu_docs"); 
-	  	$tmpl_prg->parse("main.menu_docs_sm"); 
-	}
-	if (GetDroit("AccesConfiguration"))
-	{
-	  	$tmpl_prg->parse("main.menu_configuration"); 
-	  	$tmpl_prg->parse("main.menu_configuration_sm"); 
-	}
-	if (GetDroit("AccesAmeliorations"))
-	{
-	  	$tmpl_prg->parse("main.menu_problemes"); 
-	  	$tmpl_prg->parse("main.menu_problemes_sm"); 
-	}
+// ---- Desktop
+	$tabMenu["membres"]["icone"]=$corefolder."/static/modules/membres/img/icn32_membres.png";
+	$tabMenu["membres"]["nom"]="Membres";
+	$tabMenu["membres"]["droit"]="AccesMembres";
+	$tabMenu["membres"]["url"]="mod=membres";
+
+	$tabMenu["mesinfos"]["icone"]=$corefolder."/static/modules/membres/img/icn32_detail.png";
+	$tabMenu["mesinfos"]["nom"]="Mes informations";
+	$tabMenu["mesinfos"]["droit"]="AccesMembre";
+	$tabMenu["mesinfos"]["url"]="mod=membres&rub=detail&id=".$gl_uid;
+
+	$tabMenu["docs"]["icone"]=$corefolder."/static/modules/docs/img/icn32_titre.png";
+	$tabMenu["docs"]["nom"]="Documents";
+	$tabMenu["docs"]["droit"]="AccesDocuments";
+	$tabMenu["docs"]["url"]="mod=docs";
+		
+// ---- Phone
+	$tabMenuPhone["membres"]["icone"]=$corefolder."/static/modules/membres/img/icn48_membres.png";
+	$tabMenuPhone["membres"]["nom"]="";
+	$tabMenuPhone["membres"]["droit"]="AccesMembres";
+	$tabMenuPhone["membres"]["url"]="mod=membres";
+
+	$tabMenuPhone["docs"]["icone"]=$corefolder."/static/modules/docs/img/icn48_titre.png";
+	$tabMenuPhone["docs"]["nom"]="";
+	$tabMenuPhone["docs"]["droit"]="AccesDocuments";
+	$tabMenuPhone["docs"]["url"]="mod=docs";
+	
 ?>

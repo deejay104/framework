@@ -77,6 +77,9 @@ $MyOptHelp["expireCache"]="Si supérieur à 0, nombre d'heure durant lesquelles on
 
 
 // Modules
+$MyOptTmpl["modules"]["actualites"]="on";
+$MyOptHelp["modules"]["actualites"]="Active le module d'actualités (on=Activé)";
+
 
 // Dénini les droits d'accès aux rubriques
 // [vide] : Visible par tous
@@ -91,5 +94,22 @@ $MyOptTmpl["menu"]["docs"]="";
 $MyOptTmpl["menu"]["mesinfos"]="";
 $MyOptTmpl["menu"]["configuration"]="AccesConfiguration";
 
+// Timestamp pour le cache de la feuille de style
+$MyOptHelp["styletime"]="Timestamp pour le cache de la feuille de style. Cette valeur sera re-écrite lors de l'enregistrement";
+$MyOptTmpl["styletime"]=time();
+
+// Couleurs pour les feuilles de style
+$MyOptTmpl["styleColor"]["MenuBackgroundNormal"]="888e91";
+$MyOptTmpl["styleColor"]["MenuBackgroundHover"]="585e61";
+$MyOptTmpl["styleColor"]["TitleBackgroundNormal"]="38a9e3";
+$MyOptTmpl["styleColor"]["TitleBackgroundHover"]="1799c3";
+$MyOptTmpl["styleColor"]["FormulaireBackgroundNormal"]="e8e8e8";
+$MyOptTmpl["styleColor"]["FormulaireBackgroundLight"]="f5f5f5";
+$MyOptTmpl["styleColor"]["msgboxBackgroundOk"]="bbffaa";
+$MyOptTmpl["styleColor"]["msgboxBackgroundWarning"]="ffe49c";
+$MyOptTmpl["styleColor"]["msgboxBackgroundError"]="ffbbaa";
+$MyOptTmpl["styleColor"]["TextBackgroundHover"]="ff6600";
+$MyOptTmpl["styleColor"]["LineBackgroundHover"]="ffe1e1";
+$MyOptTmpl["styleColor"]["BorderBlack"]="013366";
 
 ?>

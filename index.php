@@ -21,10 +21,10 @@
 <?php
 
 // ---- Header de la page
-	// Date du passÃ©
+	// Date du passé
 	header("Expires: " . gmdate("D, d M Y H:i:s") . " GMT");
 	
-	// toujours modifiÃ©
+	// toujours modifié
 	header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
 	
 	// HTTP/1.1
@@ -38,7 +38,7 @@
 
 	//error_reporting( E_ALL ^ E_NOTICE ^ E_DEPRECATED );
 
-// ---- RÃ©cupÃ¨re les paramÃ¨tres
+// ---- Récupère les paramètres
 	$e ="foreach( \$_REQUEST as \$key=>\$value) {"."\n";
 	$e.="if (!isset(\$_SESSION[\"\$key\"])) {"."\n";
 
@@ -62,13 +62,13 @@
 	else
 	  { include "login.php"; exit; }
 
-// ---- DÃ©fini les variables globales
+// ---- Défini les variables globales
 	$prof="";
 	$gl_mode="html";
 	$gl_uid=$uid;
 
 
-// ---- VÃ©rifie la langue
+// ---- Vérifie la langue
 	$lang="fr";
 
 // ---- Charge la config  
@@ -78,7 +78,7 @@
 	if ($MyOpt["timezone"]!="")
 	  { date_default_timezone_set($MyOpt["timezone"]); }
 
-// ---- Gestion des thÃ¨mes
+// ---- Gestion des thèmes
 
 // Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_2 like Mac OS X; fr-fr) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8H7 Safari/6533.18.5
 // Mozilla/5.0 (Linux; U; Android 2.2.1; fr-fr; HTC_Wildfire-orange-LS Build/FRG83D) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1
@@ -114,7 +114,7 @@
 // ---- Charge les variables et fonctions
 	$module="static/modules";
 
-// ---- Charge le numÃ©ro de version
+// ---- Charge le numéro de version
 	require ("version.php");
 
 // ---- Charge les templates
@@ -126,7 +126,7 @@
 	require ("class/mysql.inc.php");
 	require ("class/document.inc.php");
 
-// ---- Se connecte Ã  la base MySQL
+// ---- Se connecte à la base MySQL
 	$sql = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db, $port);
 
 // ---- Fonction des informations de l'utilisateur
@@ -161,8 +161,13 @@
 	$tmpl_prg->assign("version", $version."-".$core_version.(($MyOpt["maintenance"]=="on") ? " - MAINTENANCE ACTIVE" : ""));
 	$tmpl_prg->assign("site_title", $MyOpt["site_title"]);
 	$tmpl_prg->assign("corefolder", $corefolder);
-	$tmpl_prg->assign("style_url", $corefolder."/".MyRep("style.css","default"));
 	$tmpl_prg->assign("gl_uid", $gl_uid);
+
+	
+	// $tmpl_prg->assign("style_url", $corefolder."/".MyRep("style.css","default"));
+
+	$tmpl_prg->assign("style_url", GenereStyle(($theme=="phone") ? "phone" : "default"));
+	// $tmpl_prg->assign("style_url_phone", $corefolder."/".MyRep("style.phone.css","default"));
 
 	if (file_exists("custom/".$MyOpt["site_logo"]))
 	{
@@ -173,7 +178,7 @@
 		$tmpl_prg->assign("site_logo", $corefolder."/static/images/logo.png");
 	}
 
-// ---- Flag pour ne pouvoir poster qu'une seule fois les mÃªmes infos
+// ---- Flag pour ne pouvoir poster qu'une seule fois les mêmes infos
 	if (!isset($_SESSION["checkpost"]))
 	{
 		$_SESSION["checkpost"]=1;
@@ -191,7 +196,7 @@
 	  }
 
 
-// ---- DÃ©finition des variables
+// ---- Définition des variables
 	$gl_myprint_txt="";
 
 // ---- Initialisation des variables
@@ -203,14 +208,44 @@
 	
 // ---- Affichages du menu
 
+	$tabMenu=array();
+	$tabMenuPhone=array();
 	require("modules/default/menu.inc.php");
-	
 	if (file_exists("../modules/default/menu.inc.php"))
 	{
 		require("../modules/default/menu.inc.php");
 	}
+
+
+	$tabMenu["configuration"]["icone"]=$corefolder."/static/modules/admin/img/icn32_titre.png";
+	$tabMenu["configuration"]["nom"]="Configuration";
+	$tabMenu["configuration"]["droit"]="AccesConfiguration";
+	$tabMenu["configuration"]["url"]="mod=admin";
+	$tabMenu["amelioration"]["icone"]=$corefolder."/static/modules/ameliorations/img/icn32_titre.png";
+	$tabMenu["amelioration"]["nom"]="Améliorations";
+	$tabMenu["amelioration"]["droit"]="AccesAmeliorations";
+	$tabMenu["amelioration"]["url"]="mod=ameliorations";
+
+	$tabMenuPhone["amelioration"]["icone"]=$corefolder."/static/modules/ameliorations/img/icn48_titre.png";
+	$tabMenuPhone["amelioration"]["nom"]="";
+	$tabMenuPhone["amelioration"]["droit"]="AccesAmeliorations";
+	$tabMenuPhone["amelioration"]["url"]="mod=ameliorations";
+
+	if ($theme=="phone")
+	{
+		$tabMenu=$tabMenuPhone;
+	}
+
+	foreach ($tabMenu as $m=>$d)
+	{
+		$tmpl_prg->assign("menu_icone", $d["icone"]);
+		$tmpl_prg->assign("menu_nom", $d["nom"]);
+		$tmpl_prg->assign("menu_url", $d["url"]);
+		$tmpl_prg->parse("main.menu_lst");
+		$tmpl_prg->parse("main.menu_lst_sm");
+	}
 	
-// ---- VÃ©rifie la variable $mod
+// ---- Vérifie la variable $mod
 	if (!isset($mod))
 	  { $mod="default"; }
 	if (!preg_match("/^[a-z0-9_]*$/",$mod))
@@ -218,7 +253,7 @@
 	if (trim($mod)=="")
 	  { $mod = "default"; }
 
-// ---- VÃ©rifie la variable $rub
+// ---- Vérifie la variable $rub
 	if (!isset($rub))
 	{
 		$rub="index";
@@ -237,6 +272,7 @@
 	while ($affrub!="")
 	{
 			$oldrub=$affrub;
+			$oldmod=$mod;
 	
 			// Initialise les variables
 			$infos="";
@@ -254,7 +290,7 @@
 				FatalError("Fichier introuvable","Fichier : $affrub.inc.php");
 			}
 			
-			if ($affrub==$oldrub)
+			if (($affrub==$oldrub) && ($mod==$oldmod))
 			{
 				$affrub="";
 			}
@@ -276,10 +312,10 @@
 	$tmpl_prg->parse("main");
 	echo $tmpl_prg->text("main");
 
-// ---- Ferme la connexion Ã  la base de donnÃ©es	  
+// ---- Ferme la connexion à la base de données	  
     $sql->closedb();
 
-// ---- DÃ©charge les variables postÃ©es
+// ---- Décharge les variables postées
 //	eval ("foreach( \$_".$_SERVER["REQUEST_METHOD"]." as \$key=>\$value) { unset (\$_".$_SERVER['REQUEST_METHOD']."[\$key]);  }");
 
 

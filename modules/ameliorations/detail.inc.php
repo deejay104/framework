@@ -27,6 +27,8 @@
 	$tmpl_x = new XTemplate (MyRep("detail.htm"));
 	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 	$tmpl_x->assign("form_checktime",$_SESSION['checkpost']);
+
+	$newmsg="Ecrivez votre message...";
 	
 // ---- Enregistrer
 	$msg_erreur="";
@@ -61,7 +63,7 @@
 	}
 
 // ---- Sauver une réponse
-	if (($fonc=="Poster") && ($id>0) && (GetDroit("CreeAmeliorationCommentaire")) && (!isset($_SESSION['tab_checkpost'][$checktime])))
+	if (($fonc=="Poster") && ($id>0) && (GetDroit("CreeAmeliorationCommentaire")) && ($form_desc!="") && ($form_desc!=$newmsg) && (!isset($_SESSION['tab_checkpost'][$checktime])))
 	{
 		$pb=new amelioration_class($id,$sql);
 		$pb->AddCommentaire($form_desc);
@@ -121,7 +123,7 @@
 
 // ---- Réponses
 
-	$tmpl_x->assign("reponse_vide","Ecrivez votre message...");
+	$tmpl_x->assign("reponse_vide",$newmsg);
 
 	$lst=$pb->ListeCommentaire();
 

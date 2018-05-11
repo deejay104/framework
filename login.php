@@ -134,6 +134,7 @@
 	$tmpl_prg->assign("site_title", $MyOpt["site_title"]);
 	$tmpl_prg->assign("corefolder", $corefolder);
 	$tmpl_prg->assign("style_url", $corefolder."/".MyRep("style.css","default"));
+	$tmpl_prg->assign("style_url_phone", $corefolder."/".MyRep("style.phone.css","default"));
 
 	if (file_exists("custom/".$MyOpt["site_logo"]))
 	{

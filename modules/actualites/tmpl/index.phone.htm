@@ -54,33 +54,21 @@
 
 <div class="cadreinfos">
 
-	<div class="encadreInfos">
-		<div class="encadreTitre">Informations Personnelles</div>
+<div class="encadreInfos">
+	<div class="encadreTitre">Informations Personnelles</div>
   
-		<div style="height: 4px;"></div>
-		<!-- BEGIN: lst_echeance -->
-		<p>{form_echeance}</p>
-		<!-- END: lst_echeance -->
-	</div>
-
-<!-- BEGIN: aff_manips -->
-	<div class="encadreInfos">
-		<div class="encadreTitre">{manip_titre} le {manip_date}</div>
-	 	<p align="right"><a href="index.php?mod=manifestations&rub=detail&id={manip_id}">-Voir les participants-</a></p>
-	</div>
-<!-- END: aff_manips -->
 	<a name="poster"></a>
 
 	<div class="encadreInfos">
 		<div class="encadreTitre">Poster un nouveau message</div>
-			<div id="actualitesNouveau">		
+			<div id="actualitesNouveau" class="actualitesNouveau">		
 				<form name="actualites" method="post" action="index.php#poster" enctype="multipart/form-data">
 					<input type="hidden" name="mod" value="actualites">
 					<input type="hidden" name="id" value="{form_id}">
 					<input type="hidden" name="checktime" value="{form_checktime}">
 			
-					<input type="text" name="form_titre" value="{news_title}"  OnClick="ClearText(event,'{news_title_clear}');"  style="color:#bbbbbb;"><br />
-					<textarea name="form_message" OnClick="ClearText(event,'{news_message_clear}');" style="color:#bbbbbb;">{news_message}</textarea>
+					<input type="text" name="form_titre" value="{news_title}" OnFocus="ClearText(event,'{news_title_clear}');"  style="color:#bbbbbb;"><br />
+					<textarea name="form_message" OnFocus="ClearText(event,'{news_message_clear}');" style="color:#bbbbbb;">{news_message}</textarea>
 					<p>
 						<input name='fonc' type='submit' value='Poster'>
 					</p>
@@ -90,10 +78,10 @@
 
 </div>
 
-<div id="actualites">
+<div id="actualites" class="actualites">
 
 <!-- BEGIN: aff_message -->
-	<div id="actualitesMessage">
+	<div class="actualitesMessage">
 		<div class="actualitesTitre">
 			<div class="actualitesPhoto">
 				<img src="{msg_avatar}" alt="">

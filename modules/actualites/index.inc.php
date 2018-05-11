@@ -1,12 +1,7 @@
 <?
-// ---------------------------------------------------------------------------------------------
-//   Actualités
-//   
-// ---------------------------------------------------------------------------------------------
-//   Variables  :
-// ---------------------------------------------------------------------------------------------
 /*
-    Copyright (C) 2016 Matthieu Isorez
+    MnMs Framework
+    Copyright (C) 2018 Matthieu Isorez
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,16 +24,12 @@
 	if ((!isset($token)) || ($token==""))
 	  { header("HTTP/1.0 401 Unauthorized"); exit; }
 
-// ---- Charge les dépendances
-	require_once ("class/document.inc.php");
-	require_once ("class/echeance.inc.php");
-
 // ---- Charge le template
 	$tmpl_x = new XTemplate (MyRep("index.htm"));
 
 	$tmpl_x->assign("site_title", $MyOpt["site_title"]);
+	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 	$tmpl_x->assign("form_checktime",$_SESSION['checkpost']);
-	$tmpl_x->assign("path_module","$module/$mod");
 
 // ---- Enregistre le post
 	$txtnewmsg="Ecrivez votre message...";
@@ -91,20 +82,6 @@
 
 
 // ---- Informations personnelles
-
-// ---- Affiche les échéances
-		$lstdte=ListEcheance($sql,$gl_uid);
-		  	
-		if (is_array($lstdte))
-		{
-			foreach($lstdte as $i=>$did)
-			  {
-				$dte = new echeance_class($did,$sql,$gl_uid);
-				$dte->editmode="html";
-				$tmpl_x->assign("form_echeance",$dte->Affiche());
-				$tmpl_x->parse("corps.lst_echeance");
-			  }
-		}
 
 
 // ---- Derniers message des forums
@@ -164,7 +141,7 @@
 	$idprev=0;
 	foreach($news as $id=>$d)
 	{
-		$resusr=new user_class($d["uid_creat"],$sql,false,false);
+		$resusr=new user_core($d["uid_creat"],$sql,false,false);
 
 		// $txt=nl2br(htmlentities($d["message"],ENT_HTML5,"ISO-8859-1"));
 		$txt=nl2br($d["message"]);
@@ -181,7 +158,7 @@
 
 		if (count($lstdoc)>0)
 		{
-			$img=new document_class($lstdoc[0],$sql);
+			$img=new document_core($lstdoc[0],$sql);
 			$tmpl_x->assign("msg_avatar",$img->GenerePath(64,64));
 		}
 		else

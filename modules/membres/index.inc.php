@@ -87,18 +87,18 @@
 
 				$tmpl_x->assign("id_membre",$id);
 				$tmpl_x->assign("aff_membre",$usr->aff("fullname"));
-				$tmpl_x->assign("tel_membre",$usr->AffTel());
+				// $tmpl_x->assign("tel_membre",$usr->AffTel());
 				$tmpl_x->assign("mail_membre",$usr->aff("mail"));
 
 				$lstdoc=ListDocument($sql,$id,"avatar");
 				if (count($lstdoc)>0)
 				{
-					$doc=new document_class($lstdoc[0],$sql);
+					$doc=new document_core($lstdoc[0],$sql);
 					$tmpl_x->assign("aff_avatar",$doc->GenerePath(64,64));
 				}
 				else
 				{
-					$tmpl_x->assign("aff_avatar","static/images/icn64_membre.png");
+					$tmpl_x->assign("aff_avatar",$corefolder."/static/images/icn64_membre.png");
 				}	
 
 				$tmpl_x->assign("id_membre",$usr->uid);
