@@ -46,6 +46,7 @@ class amelioration_class extends objet_core
 
 		parent::__construct($id,$sql);
 		
+		$this->usr_maj = new user_core($this->uid_maj,$sql,false,false);
 		// print_r($this);
 	}
 

@@ -20,9 +20,9 @@
 
 
 // Class Utilisateur
-class objet_core{
-	# Constructor
-	
+class objet_core
+{
+	# Constructor	
 	function __construct($id=0,$sql)
 	{
 		global $MyOpt;
@@ -48,7 +48,6 @@ class objet_core{
 			$this->load($id);
 		}
 
-		$this->usr_maj = new user_core($this->uid_maj,$sql,false,false);
 	}
 
 	# Load object informations
@@ -69,6 +68,7 @@ class objet_core{
 		$this->dte_maj=$res["dte_maj"];
 		
 		// Charge les variables
+
 		foreach($this->data as $k=>$v)
 		{
 			$this->data[$k]=$res[$k];
@@ -86,6 +86,36 @@ class objet_core{
 		  { $ret="******"; }
 		else if ($key=="uid_maj")
 		  { $ret="******"; }
+		else if ($this->type[$key]=="ucword")
+		{
+			$ret=ucwords($txt);
+		}
+		else if ($this->type[$key]=="uppercase")
+		{
+			$ret=strtoupper($txt);
+		}
+		else if ($this->type[$key]=="lowercase")
+		{
+			$ret=strtolower($txt);
+		}
+		else if ($this->type[$key]=="mail")
+		{
+			$ret=strtolower($txt);
+			$type="email";
+		}
+		else if ($this->type[$key]=="number")
+		{
+			if (!is_numeric($txt))
+			{
+				$ret=0;
+			}
+			else
+			{
+				$ret=$txt;
+			}
+			$type="number";
+		}
+
 		else
 		  { $ret=$txt; }
 
@@ -100,7 +130,7 @@ class objet_core{
 		  { $mycond=true; }
 
 		// Champs en lecture seule
-		if (($key=="id") || ($key=="dte_maj"))
+		if (($key=="id") || ($key=="uid_maj") || ($key=="dte_maj"))
 		  { $mycond=false; }
 	  
 		// Si on a pas le droit on repasse en visu
@@ -115,6 +145,11 @@ class objet_core{
 		  	{
 				$ret="<textarea id='".$key."'  name=\"".$formname."[$key]\" rows=5>".$ret."</textarea>";
 			}
+			else if ($this->type[$key]=="bool")
+		  	{
+				$ret ="<input id='".$key."' type='radio' name=\"".$formname."[$key]\" value='oui' ".(($txt=="oui") ? "checked='checked'" : "")."> Oui";
+				$ret.="<input id='".$key."' type='radio' name=\"".$formname."[$key]\" value='non' ".(($txt=="non") ? "checked='checked'" : "")."> Non";
+			}
 			else if (($this->type[$key]=="enum") && (is_array($this->tabList[$key])))
 			{
 		  	  	$ret ="<select id='".$key."'  name=\"".$formname."[$key]\">";
@@ -128,7 +163,7 @@ class objet_core{
 			else
 			{
 				$type=(isset($this->type[$key])) ? $this->type[$key] : "";
-				$ret="<INPUT id='".$key."'  name=\"".$formname."[$key]\" id=\"$key\" value=\"".$ret."\" ".(($type!="") ? "type=\"".$type."\"" : "").">";
+				$ret="<INPUT id='".$key."'  name=\"".$formname."[$key]\" value=\"".$ret."\" ".(($type!="") ? "type=\"".$type."\"" : "").">";
 			}
 		}
 		else
@@ -217,6 +252,7 @@ class objet_core{
 		}
 		$td["uid_maj"]=$gl_uid;
 		$td["dte_maj"]=now();
+
 		$sql->Edit($this->table,$this->tbl."_".$this->table,$this->id,$td);
 	}
 

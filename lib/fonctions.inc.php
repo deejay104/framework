@@ -1198,18 +1198,29 @@ function GenereStyle($name)
 	{
 		mkdir("../static/cache/style");
 	}
-	$tmpl_style = new XTemplate ("modules/default/tmpl/".$name.".css");
 
+	// Feuille de style framework
+	$tmpl_style = new XTemplate ("modules/default/tmpl/".$name.".css");
 	foreach($MyOpt["styleColor"] as $n=>$c)
 	{
 		$tmpl_style->assign($n,$c);
 	}
-
 	$tmpl_style->parse("main");
+	$s=Purge($tmpl_style->text("main"));
+
+	// Feuille de style custom
+	if (file_exists("../modules/default/tmpl/".$name.".css"))
+	{
+		$tmpl_style = new XTemplate ("../modules/default/tmpl/".$name.".css");
+		foreach($MyOpt["styleColor"] as $n=>$c)
+		{
+			$tmpl_style->assign($n,$c);
+		}
+		$tmpl_style->parse("main");
+		$s.="\n".Purge($tmpl_style->text("main"));
+	}
 	
 	$fd=fopen("../".$sfile,"w");
-	
-	$s=Purge($tmpl_style->text("main"));
 	fwrite($fd,$s);
 	fclose($fd);
 	return $sfile;

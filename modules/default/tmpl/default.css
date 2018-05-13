@@ -125,8 +125,8 @@ img { color: #FFFFFF; border: 0px; }
 .main-menu li a:hover { background-color: #{MenuBackgroundHover}; }
 
 .responsive-menu { display: none; background-color: #{MenuBackgroundNormal}; border: 0px; line-height: 30px; padding: 1px; margin:0px; }
-.responsive-menulink a { width: 200px;  color: white; display: inline-block;  padding: 0px 0px 0px 10px; -webkit-transition: all 150ms ease-in; -moz-transition: all 150ms ease-in; -o-transition: all 150ms ease-in; transition: all 150ms ease-in; }
-.responsive-menulink a:hover { background-color: #{MenuBackgroundHover}; }
+.responsive-menulink a { width: 200px;  color: white; display: inline-block;  padding-left: 10px; padding-top: 5px; -webkit-transition: all 150ms ease-in; -moz-transition: all 150ms ease-in; -o-transition: all 150ms ease-in; transition: all 150ms ease-in; }
+.responsive-menulink a:hover { background-color: #{MenuBackgroundHover}; border-radius: 4px; }
 .responsive-extend { width:100%;  background-color: #{TitleBackgroundNormal}; text-align: center; margin:0px; }
 
 /* **** Haut de page **** */

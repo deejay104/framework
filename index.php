@@ -121,8 +121,8 @@
 	require ("class/xtpl.inc.php");
 
 // ---- Charge les class
-	require ("class/user.inc.php");
 	require ("class/objet.inc.php");
+	require ("class/user.inc.php");
 	require ("class/mysql.inc.php");
 	require ("class/document.inc.php");
 
@@ -163,11 +163,7 @@
 	$tmpl_prg->assign("corefolder", $corefolder);
 	$tmpl_prg->assign("gl_uid", $gl_uid);
 
-	
-	// $tmpl_prg->assign("style_url", $corefolder."/".MyRep("style.css","default"));
-
 	$tmpl_prg->assign("style_url", GenereStyle(($theme=="phone") ? "phone" : "default"));
-	// $tmpl_prg->assign("style_url_phone", $corefolder."/".MyRep("style.phone.css","default"));
 
 	if (file_exists("custom/".$MyOpt["site_logo"]))
 	{
@@ -238,11 +234,14 @@
 
 	foreach ($tabMenu as $m=>$d)
 	{
-		$tmpl_prg->assign("menu_icone", $d["icone"]);
-		$tmpl_prg->assign("menu_nom", $d["nom"]);
-		$tmpl_prg->assign("menu_url", $d["url"]);
-		$tmpl_prg->parse("main.menu_lst");
-		$tmpl_prg->parse("main.menu_lst_sm");
+		if (GetDroit($d["droit"]))
+		{
+			$tmpl_prg->assign("menu_icone", $d["icone"]);
+			$tmpl_prg->assign("menu_nom", $d["nom"]);
+			$tmpl_prg->assign("menu_url", $d["url"]);
+			$tmpl_prg->parse("main.menu_lst");
+			$tmpl_prg->parse("main.menu_lst_sm");
+		}
 	}
 	
 // ---- Vérifie la variable $mod

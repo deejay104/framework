@@ -59,9 +59,9 @@
 	if (($fonc=="Enregistrer") && ((GetMyId($id)) || (GetDroit("ModifUserSauve"))) && (!isset($_SESSION['tab_checkpost'][$checktime])))
 	{
 		// Sauvegarde les données
-		if (count($form_info)>0)
+		if (count($form_data)>0)
 		{
-			foreach($form_info as $k=>$v)
+			foreach($form_data as $k=>$v)
 		  	{
 		  		$msg_erreur.=$usr->Valid($k,$v);
 		  	}
@@ -111,7 +111,8 @@
 	// Sauvegarde les données utilisateurs
 	if (($fonc=="Enregistrer") && ($id>0) && (GetDroit("ModifUserDonnees")) && (is_array($form_donnees)))
 	{
-		$msg_erreur.=$usr->SaveDonnees($form_donnees);
+		$usr->LoadDonneesComp();
+		$msg_erreur.=$usr->SaveDonneesComp($form_donnees);
 	}
 
 // ---- Supprimer l'utilisateur
@@ -148,10 +149,10 @@
 		$usr = new user_core($id,$sql,((GetMyId($id)) ? true : false));
 		$usr->LoadDonneesComp();
 
-		$usrmaj = new user_core($usr->uidmaj,$sql);
-
 		$tmpl_x->assign("id", $id);
-		$tmpl_x->assign("info_maj", $usrmaj->prenom." ".$usrmaj->nom." le ".sql2date($usr->dtemaj));
+
+		$usrmaj = new user_core($usr->uid_maj,$sql);
+		$tmpl_x->assign("info_maj", $usrmaj->fullname." le ".sql2date($usr->data["dte_maj"]));
 		$tmpl_x->assign("info_connect", sql2date($usr->data["dte_login"]));
 	
 	  }
@@ -217,7 +218,7 @@
 	if (GetDroit("ModifUserDroits"))
 	  { $tmpl_x->parse("corps.droits"); }
 
-  	if ( GetDroit("ADM") )
+  	if ( GetDroit("ModifUserVirtuel") )
 	{
 	  	$tmpl_x->parse("corps.virtuel");
 	}
@@ -265,7 +266,7 @@
 		{
 			foreach($usr->donnees as $i=>$d)
 			{
-				$tmpl_x->assign("form_donnees",$usr->AffDonnees($i,$typeaff));
+				$tmpl_x->assign("form_donnees",$usr->AffDonneesComp($i,$typeaff));
 				$tmpl_x->parse("corps.aff_donnees.lst_donnees");
 			}
 			$tmpl_x->parse("corps.aff_donnees");
