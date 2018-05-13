@@ -77,6 +77,7 @@
 	$sql = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db,$port);
 
 // ---- Charge les informations de l'utilisateur connecté
+	require ("class/objet.inc.php");
 	require ("class/user.inc.php");
 	if ($uid>0)
 	{

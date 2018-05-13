@@ -81,6 +81,20 @@ function AjoutLog($txt)
 	$ret["data"].=AjoutLog("Vérification de la base de données");
 	require ("modules/admin/conf/structure.tmpl.php");
 
+	if (file_exists("../modules/admin/conf/structure.tmpl.php"))
+	{
+		require("../modules/admin/conf/structure.tmpl.php");
+		
+		foreach($tabCustom as $tab=>$fields)
+		{
+			foreach($fields as $field=>$desc)
+			{
+				$tabTmpl[$tab][$field]=$desc;
+			}
+		}
+	}
+	
+	
 // ---- Charge la structure des tables en base
 	$tabProd=array();
 	$q="SHOW TABLES;";
