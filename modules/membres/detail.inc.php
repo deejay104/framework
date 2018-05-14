@@ -21,12 +21,13 @@
 
 <?
 	if (!is_numeric($id))
-      { $id=0; }
+      { $id=$gl_uid; }
 
-	if ( (!GetDroit("AccesMembre")) && (!GetMyId($id)) )
+  if ( (!GetDroit("AccesMembre")) && (!GetMyId($id)) )
 	  { FatalError("Accès non autorisé (AccesMembre)"); }
 
 	require_once ("class/document.inc.php");
+	require_once ("class/echeance.inc.php");
 
 // ---- Charge le template
 	$tmpl_x = new XTemplate (MyRep("detail.htm"));
@@ -97,6 +98,29 @@
 		{
 		  	$doc = new document_core(0,$sql);
 		  	$doc->Save($id,$_FILES["form_adddocument"]);
+		}
+
+		// Sauvegarde des échéances
+		if (is_array($form_echeance))
+		{
+			foreach($form_echeance as $i=>$d)
+			{
+				$dte = new echeance_core($i,$sql);
+				if ($i==0)
+				{
+					$dte->typeid=$form_echeance_type;
+					$dte->uid=$id;
+				}
+				if (($d!='') && ($d!='0000-00-00'))
+				{
+					$dte->dte_echeance=$d;
+					$dte->Save();
+				}
+				else
+				{
+					$dte->Delete();
+				}
+			}
 		}
 
 		$_SESSION['tab_checkpost'][$checktime]=$checktime;		
@@ -225,7 +249,8 @@
   	$tmpl_x->parse("corps.disponibilite");
 
   	if ((is_numeric($id)) && ($id>0))
-	  { 
+	{ 
+		// Affiche la photo
 		$lstdoc=ListDocument($sql,$id,"avatar");
 		if (count($lstdoc)>0)
 		{
@@ -238,30 +263,54 @@
 		}	
 
 
-		// ---- Affiche les documents
+		// Affiche les documents
 		$lstdoc=ListDocument($sql,$id,"document");
 
 		if ($typeaff=="form")
-		  {
+		{
 			$doc = new document_core(0,$sql);
 			$doc->editmode="form";
 			$tmpl_x->assign("form_document",$doc->Affiche());
 			$tmpl_x->parse("corps.lst_document");
-		  }
+		}
 		  	
 		if (is_array($lstdoc))
-		  {
+		{
 			foreach($lstdoc as $i=>$did)
-			  {
+			{
 				$doc = new document_core($did,$sql);
 				$doc->editmode=($typeaff=="form") ? "edit" : "std";
 				$tmpl_x->assign("form_document",$doc->Affiche());
 				$tmpl_x->parse("corps.lst_document");
-			  }
-		  }
+			}
+		}
 
+		// Echéances
+		$lstdte=ListEcheance($sql,$id);
 
-		// ---- Affiche les données utilisateurs
+		if ((is_numeric($id)) && ($id>0))
+		{ 
+			if ($typeaff=="form")
+			{
+				$dte = new echeance_core(0,$sql,$id);
+				$dte->editmode="form";
+				$tmpl_x->assign("form_echeance",$dte->Affiche());
+				$tmpl_x->parse("corps.lst_echeance");
+			}
+				
+			if (is_array($lstdte))
+			{
+				foreach($lstdte as $i=>$did)
+				{
+					$dte = new echeance_core($did,$sql,$id);
+					$dte->editmode=($typeaff=="form") ? "edit" : "html";
+					$tmpl_x->assign("form_echeance",$dte->Affiche());
+					$tmpl_x->parse("corps.lst_echeance");
+				}
+			}
+		}
+			
+		// Affiche les données utilisateurs
 		if (count($usr->donnees)>0)
 		{
 			foreach($usr->donnees as $i=>$d)
@@ -273,6 +322,21 @@
 		}
 	}
 
+// ---- Données spécifique
+	if (file_exists($appfolder."/modules/membres/custom.inc.php"))
+	{
+		require($appfolder."/modules/membres/custom.inc.php");
+		
+		if ($left!="")
+		{
+				$tmpl_x->assign("aff_data_left",$left);
+		}
+		if ($right!="")
+		{
+				$tmpl_x->assign("aff_data_right",$right);
+		}
+	}
+	
 // ---- Messages
 	if ($msg_erreur!="")
 	{

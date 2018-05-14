@@ -35,6 +35,8 @@ $tabRoles["VisuDocument"]="Visualisation de tous les documents";
 // ---- Users
 $tabRoles["AccesMembre"]="Accès au détail d'un membre";
 $tabRoles["AccesMembres"]="Accès à la liste des membres";
+$tabRoles["AccesMesInformations"]="Accès à la page de modification de ses informations";
+
 
 $tabRoles["CreeUser"]="Créer un nouveau membre";
 

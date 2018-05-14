@@ -24,7 +24,7 @@ class user_core extends objet_core
 
 	protected $droit=array("prenom"=>"ModifUser","nom"=>"ModifUser","droits"=>"ModifUserDroits","password"=>"modifUserPassword","dte_login"=>"ModifUserDteLogin");
 	protected $type=array("prenom"=>"ucword","nom"=>"uppercase","initiales"=>"uppercase","mail"=>"mail","commentaire"=>"text","notification"=>"bool","virtuel"=>"bool");
-	
+
 	// protected $tabList=array(
 		// "status"=>array('1new'=>'Nouveau','2sched'=>'Prochaine version','3inprg'=>'En cours','4test'=>'En test','5close'=>'Publié'),
 		// "module"=>array("core"=>"Framework","user"=>"Utilisateur","admin"=>"Administration","docs"=>"Documents","custom"=>"Autre")
@@ -281,10 +281,9 @@ class user_core extends objet_core
 		return "";
 	}
 
-	function Valid($k,$v,$ret=false)
+	function Valid($key,$v,$ret=false)
 	{
-		$vv="**none**";
-		if ($k=="initiales")
+		if ($key=="initiales")
 		  {
 			if ($v=="")
 			{ 
@@ -296,7 +295,7 @@ class user_core extends objet_core
 			  	$vv=$v;
 			}
 			$sql=$this->sql;
-			$query = "SELECT COUNT(*) AS nb FROM ".$this->tbl."_utilisateurs WHERE initiales='".$vv."' AND id<>'".$this->uid."' AND actif='oui'";
+			$query = "SELECT COUNT(*) AS nb FROM ".$this->tbl."_utilisateurs WHERE initiales='".$vv."' AND id<>'".$this->id."' AND actif='oui'";
 			$res = $sql->QueryRow($query);
 			if (($res["nb"]>0) && ($ret==false) && ($v!=""))
 			{
@@ -311,11 +310,11 @@ class user_core extends objet_core
 			  	$vv=strtolower($vv);
 			}
 		}
-		else if ($k=="mail")
+		else if ($key=="mail")
 		{
 		  	$vv=$v;
 			$sql=$this->sql;
-			$query = "SELECT COUNT(*) AS nb FROM ".$this->tbl."_utilisateurs WHERE mail='".$vv."' AND id<>'".$this->uid."' AND actif='oui'";
+			$query = "SELECT COUNT(*) AS nb FROM ".$this->tbl."_utilisateurs WHERE mail='".$vv."' AND id<>'".$this->id."' AND actif='oui'";
 			$res = $sql->QueryRow($query);
 			if (($res["nb"]>0) && ($ret==false) && ($v!=""))
 			{
@@ -330,12 +329,12 @@ class user_core extends objet_core
 			  	$vv=strtolower($vv);
 			}
 		}
-		else if ($k=="prenom")
+		else if ($key=="prenom")
 		{	
 			$vv=preg_replace("/ /","-",$v);
 			$vv=strtolower($vv);
 		}
-		else if ($k=="nom")
+		else if ($key=="nom")
 		{
 		  	if ($v=="")
 		  	  {
@@ -343,17 +342,21 @@ class user_core extends objet_core
 			  }
 			$vv=strtolower($v);
 		}
-	  	else if ($k=="commentaire")
-	  	{
+		else if ($this->type[$key]=="duration")
+		{
+			$vv=CalcTemps($v,false);
+		}
+		else if ($this->type[$key]=="text")
+		{
 			$vv=$v;
 		}
-	  	else
-	  	{
+		else
+		{
 			$vv=strtolower($v);
 		}
 
-		if ( (!is_numeric($k)) && ("($vv)"!="(**none**)") && ($ret==false))
-		  { $this->data[$k]=$vv; }
+		if ( (!is_numeric($key)) && ("($vv)"!="(**none**)") && ($ret==false))
+		  { $this->data[$key]=$vv; }
 		else if ($ret==true)
 		  { return addslashes($vv); }
 	}
@@ -363,7 +366,7 @@ class user_core extends objet_core
 	function SaveMdp($mdp){
 		$sql=$this->sql;
 		$this->data["password"]=$mdp;
-		$sql->Edit("user",$this->tbl."_utilisateurs",$this->uid,array("password"=>$mdp));		
+		$sql->Edit("user",$this->tbl."_utilisateurs",$this->id,array("password"=>$mdp));		
 		return "";
 	}
 	
@@ -540,8 +543,9 @@ function AffInitiales($res)
 function GetMyId($id)
 {
 	global $myuser;
-  	if ($id==$myuser->uid)
+  	if ($id==$myuser->id)
   	  { return true; }
+
 	if (GetModule("creche"))
 	{
 	  	$myuser->LoadEnfants();

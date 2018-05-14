@@ -67,6 +67,10 @@
 	$gl_mode="html";
 	$gl_uid=$uid;
 
+	if (!isset($appfolder))
+	{
+		$appfolder="..";
+	}
 
 // ---- Vérifie la langue
 	$lang="fr";
@@ -165,9 +169,9 @@
 
 	$tmpl_prg->assign("style_url", GenereStyle(($theme=="phone") ? "phone" : "default"));
 
-	if (file_exists("custom/".$MyOpt["site_logo"]))
+	if (file_exists($appfolder."/custom/".$MyOpt["site_logo"]))
 	{
-		$tmpl_prg->assign("site_logo", "custom/".$MyOpt["site_logo"]);
+		$tmpl_prg->assign("site_logo", $appfolder."/custom/".$MyOpt["site_logo"]);
 	}
 	else
 	{
@@ -207,9 +211,9 @@
 	$tabMenu=array();
 	$tabMenuPhone=array();
 	require("modules/default/menu.inc.php");
-	if (file_exists("../modules/default/menu.inc.php"))
+	if (file_exists($appfolder."/modules/default/menu.inc.php"))
 	{
-		require("../modules/default/menu.inc.php");
+		require($appfolder."/modules/default/menu.inc.php");
 	}
 
 

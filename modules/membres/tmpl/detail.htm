@@ -44,7 +44,7 @@
 			</div>
 		</td>
 		<td>
-			<div class="formulaire">
+			<div class="formulaire" style='padding-left: 20px;'>
 				<p>
 					<label for="prenom">Prénom</label>{form_prenom}
 				</p>
@@ -58,66 +58,85 @@
 				<p>
 					<label for="mail">Mail</label>{form_mail}
 				</p>
+				<!-- BEGIN: virtuel -->
+				<p>
+					<label>Utilisateur virtuel</label>{form_virtuel}
+				</p>
+				<!-- END: virtuel -->
+				
+				<p>
+					<label>Notifications par mail</label>{form_notification}
+				</p>
 
-				<!-- BEGIN: aff_donnees -->
-					<div class="formulaire">
-				<!-- BEGIN: lst_donnees -->
-					<p>{form_donnees}</p>
-				<!-- END: lst_donnees -->
-					</div>
-				<!-- END: aff_donnees -->
-
+				<!-- BEGIN: photos -->
+				<p><br/>
+					Sélectionner ci-dessous la photo voulue.<br />
+					Celle-ci sera transférée sur le serveur et remplacera la photo existante.<br />
+					&nbsp;<INPUT name="form_photo" type="file" size=60>
+				</p>
+				<!-- END: photos -->
+			</div>
 		</td>
 	</tr>
 </table>
 
-<br />
-<!-- BEGIN: photos -->
-<p>Sélectionner ci-dessous la photo voulue. Celle-ci sera transférée sur le 
-   	serveur et remplacera la photo existante.<br />
-   	&nbsp;<INPUT name="form_photo" type="file" size=60>
-</p>
-<!-- END: photos -->
 
-<div style='width:100%; display: inline-block;'>
-  <div style='width:50%; display: inline-block; float:right; padding-bottom: 0px; '>
-	<div class="formulaireTitre">Commentaires</div>
-	<div class="formulaire">
-		<p>
-			{form_commentaire}
+<table width='100%'>
+<tr>
+	<td width='50%' valign="top" style='border: 1px solid #e8e8e8; padding: 5px;'>
+		<div class="formulaireTitre">Commentaires</div>
+		<div class="formulaire" style='padding-left: 20px;'>
+			<p>
+				{form_commentaire}
+			</p>
+		</div>
+
+		<div class="formulaireTitre">Données</div>
+		<div class="formulaire" style='padding-left: 20px;'>
+
+		{aff_data_left}
+
+		<!-- BEGIN: aff_donnees -->
+			<div class="formulaire">
+		<!-- BEGIN: lst_donnees -->
+			<p>{form_donnees}</p>
+		<!-- END: lst_donnees -->
+			</div>
+		<!-- END: aff_donnees -->
+		</div>
+	
+	</td>
+	<td width='50%' valign="top" style='border: 1px solid #e8e8e8; padding: 5px;'>
+		<div class="formulaireTitre">Documents</div>
+		<div class="formulaire" style="padding-left: 20px; padding-bottom: 2px;">
+			<!-- BEGIN: lst_document -->
+			<p>{form_document}</p>
+			<!-- END: lst_document -->
+		</div>
+
+		<div class="formulaireTitre">Echéances</div>
+		<div class="formulaire" style="padding-left: 20px;">
+			<!-- BEGIN: lst_echeance -->
+			<p>{form_echeance}</p>
+			<!-- END: lst_echeance -->
+		</div>
+
+		{aff_data_right}
+		
+		<!-- BEGIN: droits -->
+		<div class="formulaireTitre">Droits</div>
+		<p style="padding-left: 20px;">
+			{form_droits}
 		</p>
-	</div>
-  </div>
-
-  <div style='width:50%; display: inline-block; padding-bottom: 0px; '>
-	<div class="formulaireTitre">Documents</div>
-
-	<div class="formulaire" style="padding-left: 20px;">
-		<!-- BEGIN: lst_document -->
-		<p>{form_document}</p>
-		<!-- END: lst_document -->
-	</div>
-  </div>
-</div>
-
-
-<div class="formulaireTitre">Options</div>
-<div class="formulaire">
-	<!-- BEGIN: virtuel -->
-	<p>
-		<label>Utilisateur virtuel</label>{form_virtuel}
-	</p>
-	<!-- END: virtuel -->
+		<!-- END: droits -->
 	
-	<p>
-		<label>Notifications par mail</label>{form_notification}
-	</p>
+	</td>
+</tr>
+</table>
+
+
 	
-	<!-- BEGIN: droits -->
-	<p>
-		<label for="droits">Droits</label>{form_droits}
-	</p>
-	<!-- END: droits -->
+
 </div>
 
 

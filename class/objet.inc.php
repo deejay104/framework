@@ -103,6 +103,10 @@ class objet_core
 			$ret=strtolower($txt);
 			$type="email";
 		}
+		else if ($this->type[$key]=="duration")
+		{
+			$ret=AffTemps($txt,"no");
+		}
 		else if ($this->type[$key]=="number")
 		{
 			if (!is_numeric($txt))
@@ -224,14 +228,31 @@ class objet_core
 		return $this->uid;
 	}
 	
-	function Valid($k,$v,$ret=false){
+	function Valid($key,$v,$ret=false){
 		$vv="**none**";
-	  	$vv=$v;
 
-		if ( (!is_numeric($k)) && ("($vv)"!="(**none**)") && ($ret==false))
-		  { $this->data[$k]=$vv; }
+		if ($this->type[$key]=="duration")
+		{
+			$vv=CalcTemps($v,false);
+		}
+		else if ($this->type[$key]=="text")
+		{
+			$vv=$v;
+		}
+		else
+		{
+			$vv=strtolower($v);
+		}
+
+		if ( (!is_numeric($key)) && ("($vv)"!="(**none**)") && ($ret==false))
+		{
+			$this->data[$key]=$vv;
+			return "";
+		}
 		else if ($ret==true)
-		  { return addslashes($vv); }
+		{
+			return addslashes($vv);
+		}
 	}
 
 	function Save()
@@ -270,7 +291,10 @@ class objet_core
 		global $tmpl_x;
 
 		$tmpl_x->assign($form."_id",$this->id);
-		$tmpl_x->assign($form."_usr_maj",$this->usr_maj->aff("fullname"));
+		if (isset($this->usr_maj))
+		{
+			$tmpl_x->assign($form."_usr_maj",$this->usr_maj->aff("fullname"));
+		}
 		foreach($this->data as $k=>$v)
 		{
 			$tmpl_x->assign($form."_".$k,$this->aff($k,$typeaff));

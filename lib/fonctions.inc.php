@@ -13,7 +13,7 @@ function GetModule($mod)
 
 function MyRep($file,$mymod="")
 {
-	global $mod, $theme;
+	global $mod, $theme,$appfolder;
 	
 	if ($mymod=="")
 	{
@@ -23,7 +23,13 @@ function MyRep($file,$mymod="")
   	$myfile=substr($file,0,strrpos($file,"."));
 	$myext=substr($file,strrpos($file,".")+1,strlen($file)-strrpos($file,".")-1);
 
-  	if ((file_exists("modules/$mymod/tmpl/$myfile.$theme.$myext")) && ($mymod!=""))
+  	if ((file_exists("../modules/$mymod/tmpl/$myfile.$theme.$myext")) && ($mymod!=""))
+  	  { return $appfolder."/modules/$mymod/tmpl/$myfile.$theme.$myext"; }
+	else if ((file_exists("../modules/$mymod/tmpl/$file")) && ($mymod!=""))
+  	  { return $appfolder."/modules/$mymod/tmpl/$file"; }
+	else if ((file_exists("../modules/$mymod/$file")) && ($mymod!=""))
+  	  { return $appfolder."/modules/$mymod/$file"; }
+  	else if ((file_exists("modules/$mymod/tmpl/$myfile.$theme.$myext")) && ($mymod!=""))
   	  { return "modules/$mymod/tmpl/$myfile.$theme.$myext"; }
 	else if ((file_exists("modules/$mymod/tmpl/$file")) && ($mymod!=""))
   	  { return "modules/$mymod/tmpl/$file"; }
@@ -109,7 +115,7 @@ function CalcTemps($tps,$short=true)
 	{
 		$t=$m[1]*60+$m[2];
 	}
-	else if (preg_match("/^([0-9]?[0-9])h[ ]?([0-9][0-9])$/",$tps,$m))
+	else if (preg_match("/^([0-9]*?[0-9])h[ ]?([0-9]?[0-9])$/",$tps,$m))
 	{
 		$t=$m[1]*60+$m[2];
 	}
@@ -1018,7 +1024,7 @@ function AffDate($dte)
 
 function TestDate($dte)
 {
-// Ex EcheanceDate
+	// Ex EcheanceDate
 	$ret="ok";
 	if (date_diff_txt($dte,date("Y-m-d"))>0)
 	{
@@ -1206,7 +1212,7 @@ function GenereStyle($name)
 		$tmpl_style->assign($n,$c);
 	}
 	$tmpl_style->parse("main");
-	$s=Purge($tmpl_style->text("main"));
+	$s=$tmpl_style->text("main");
 
 	// Feuille de style custom
 	if (file_exists("../modules/default/tmpl/".$name.".css"))
@@ -1217,8 +1223,10 @@ function GenereStyle($name)
 			$tmpl_style->assign($n,$c);
 		}
 		$tmpl_style->parse("main");
-		$s.="\n".Purge($tmpl_style->text("main"));
+		$s.="\n\n".$tmpl_style->text("main");
 	}
+	
+	$s=Purge($s);
 	
 	$fd=fopen("../".$sfile,"w");
 	fwrite($fd,$s);

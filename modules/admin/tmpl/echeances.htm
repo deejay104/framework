@@ -38,7 +38,12 @@
 			</select>
 		</td>
 		<td>
-			<INPUT type="text" name="form_droit[{form_id}]" style="width:50px;" value="{form_droit}" maxlength="3">
+			<select name="form_droit[{form_id}]">
+				<option value="">Tout le monde</option>
+	<!-- BEGIN: lst_groupe -->
+				<option value="{form_groupe}" {select_groupe}>{form_groupe}</option>
+	<!-- END: lst_groupe -->
+			</select>
 		</td>
 		<td>
 			<select name="form_multi[{form_id}]">
@@ -72,9 +77,13 @@
 			<option value="obligatoire">Obligatoire</option>
 			</select>
 		</td>
-
 		<td>
-			<INPUT type="text" name="form_droit[0]" style="width:50px;" value="" maxlength="3">
+			<select name="form_droit[0]">
+				<option value="">Tout le monde</option>
+	<!-- BEGIN: lst_groupe -->
+				<option value="{form_groupe}" {select_groupe}>{form_groupe}</option>
+	<!-- END: lst_groupe -->
+			</select>
 		</td>
 		<td>
 			<select name="form_multi[0]">

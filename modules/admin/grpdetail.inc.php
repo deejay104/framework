@@ -35,6 +35,10 @@
 	if (!GetDroit("AccesConfigGroupes")) { FatalError("Accès non autorisé (AccesConfigGroupes)"); }
 
 	require_once("modules/".$mod."/conf/roles.tmpl.php");
+	if (file_exists($appfolder."/modules/".$mod."/conf/roles.tmpl.php"))
+	{
+		require_once($appfolder."/modules/".$mod."/conf/roles.tmpl.php");
+	}
 
 // ---- Affiche le menu
 	$aff_menu="";
@@ -44,7 +48,7 @@
 // ---- Enregistre le groupe
 	if (($grp=="") && ($fonc=="Enregistrer") && (GetDroit("CreeGroupe")) && (!isset($_SESSION['tab_checkpost'][$checktime])))
 	{
-  	$q="INSERT INTO ".$MyOpt["tbl"]."_groupe SET groupe='$form_grp',description='$form_desc'";
+		$q="INSERT INTO ".$MyOpt["tbl"]."_groupe SET groupe='$form_grp',description='$form_desc'";
 		$sql->Insert($q);
 		$grp=$form_grp;
 		$_SESSION['tab_checkpost'][$checktime]=$checktime;
@@ -131,7 +135,6 @@
 
 // ---- Liste les roles
 	$tabRolesNok=$tabRoles;
-	asort($tabRolesNok);
 		
 	$query="SELECT * FROM ".$MyOpt["tbl"]."_roles WHERE groupe='$grp' ORDER BY role";
 	$sql->Query($query);
@@ -143,6 +146,8 @@
 		unset($tabRolesNok[$sql->data["role"]]);
 		$tmpl_x->parse("corps.aff_config.lst_roles_".$sql->data["autorise"]);
 	}
+
+	ksort($tabRolesNok,SORT_STRING | SORT_FLAG_CASE);
 
 	foreach($tabRolesNok as $r=>$h)
 	{

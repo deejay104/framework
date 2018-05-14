@@ -29,8 +29,6 @@
 <INPUT type="hidden" name="id" value="{id}">
 <INPUT type="hidden" name="checktime" value="{form_checktime}">
 
-<BR><BR>
-
 <SCRIPT language="JavaScript" src="{corefolder}/static/js/_md5.js"></SCRIPT>
 <SCRIPT language="javascript">
 	<!-- 
@@ -76,41 +74,24 @@
 </SCRIPT>
 
 
-<BR><BR>
-<!-- BEGIN: msgerror -->
-<p class="msgerror">{msg_erreur}</p>
-<!-- END: msgerror -->
-<!-- BEGIN: msgok -->
-<p class="msgok">{msg_confirmation}</p>
-<!-- END: msgok -->
 
-	<BR>
+<div class="formulaireTitre">Changement de mot de passe</div>
+
+
+<div class="formulaire" style='padding-left: 20px;'>
+
 <!-- BEGIN: neverset -->
-	Le mot de passe n'a jamais été défini.<br/><br/>
+	<p>Le mot de passe n'a jamais été défini.</p>
+	<br/>
 <!-- END: neverset -->
-	
-	
-	<TABLE border=0 cellpadding=0 cellspacing=0>
 
 <!-- BEGIN: oldpwd -->
-		<TR height=17>
-			<TD width=190>Ancien mot de passe</TD>
-			<TD><INPUT type="password" id="my_form_mdp0" name="my_form_mdp0"></TD>
-		</TR>
-		<TR height=17>
-			<TD>&nbsp;</TD>
-			<TD>&nbsp;</TD>
-		</TR>
+		<p><label>Ancien mot de passe</label><INPUT type="password" id="my_form_mdp0" name="my_form_mdp0"></p>
+		<br />
 <!-- END: oldpwd -->
-		<TR height=17>
-			<TD>Nouveau mot de passe</TD>
-			<TD><INPUT type="password" id="my_form_mdp1" name="my_form_mdp1"></TD>
-		</TR>
-		<TR height=17>
-			<TD>Confirmation du mot de passe</TD>
-			<TD><INPUT type="password" id="my_form_mdp2" name="my_form_mdp2"></TD>
-		</TR>
-	</TABLE>
+		<p><label>Nouveau mot de passe</label><INPUT type="password" id="my_form_mdp1" name="my_form_mdp1"></p>
+		<p><label>Confirmation</label><INPUT type="password" id="my_form_mdp2" name="my_form_mdp2"></p>
+
 <!-- BEGIN: oldpwdadm -->
 	<INPUT type="hidden"  id="my_form_mdp0" name="my_form_mdp0">
 <!-- END: oldpwdadm -->

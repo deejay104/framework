@@ -7,7 +7,7 @@
 
 	$tabMenu["mesinfos"]["icone"]=$corefolder."/static/modules/membres/img/icn32_detail.png";
 	$tabMenu["mesinfos"]["nom"]="Mes informations";
-	$tabMenu["mesinfos"]["droit"]="AccesMembre";
+	$tabMenu["mesinfos"]["droit"]="AccesMesInformations";
 	$tabMenu["mesinfos"]["url"]="mod=membres&rub=detail&id=".$gl_uid;
 
 	$tabMenu["docs"]["icone"]=$corefolder."/static/modules/docs/img/icn32_titre.png";
