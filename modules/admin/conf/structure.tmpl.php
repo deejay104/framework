@@ -79,6 +79,31 @@ $tabTmpl=Array
 		"uid_creat" => Array("Type" => "int(10) unsigned", "Default" => 0, ),
 		"dte_creat" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
 	),
+	"echeance" => Array
+	(
+		"id" => Array("Type" => "bigint(20) unsigned", "Index" => "PRIMARY", ),
+		"typeid" => Array("Type" => "int(10) unsigned", "Index" => "1", ),
+		"uid" => Array("Type" => "int(10) unsigned", "Index" => "1", ),
+		"dte_echeance" => Array("Type" => "date", ),
+		"paye" => Array("Type" => "enum('oui','non')", "Default" => "non", ),
+		"actif" => Array("Type" => "enum('oui','non')", "Default" => "oui", "Index"=>1 ),
+		"dte_create" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
+		"uid_create" => Array("Type" => "int(10) unsigned", ),
+		"dte_maj" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
+		"uid_maj" => Array("Type" => "int(10) unsigned", ),
+	),
+	"echeancetype" => Array
+	(
+		"id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
+		"description" => Array("Type" => "varchar(100)", ),
+		"poste" => Array("Type" => "int(11)", "Index" => "1", ),
+		"cout" => Array("Type" => "decimal(10,2)", "Default" => "0.00", ),
+		"resa" => Array("Type" => "enum('obligatoire','instructeur','facultatif')", ),
+		"droit" => Array("Type" => "varchar(3)", ),
+		"multi" => Array("Type" => "enum('oui','non')", "Default" => "non", ),
+		"notif" => Array("Type" => "enum('oui','non')", "Default" => "non", ),
+		"delai" => Array("Type" => "tinyint(3) unsigned", "Default" => "30", ),
+	)
 	"export" => Array
 	(
 		"id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
