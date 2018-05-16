@@ -33,9 +33,11 @@ class user_core extends objet_core
 	# Constructor
 	function __construct($id=0,$sql,$me=false,$setdata=true)
 	{
+		$this->id=$id;
 		$this->me=$me;
 		$this->prenom="";
 		$this->nom="";
+		$this->fullname="";
 		$this->actif="oui";
 		$this->virtuel="non";
 		$this->mail="";
@@ -70,6 +72,7 @@ class user_core extends objet_core
 	{
 		parent::load($id);
 		
+		$this->id=$id;
 		$this->prenom=($this->data["prenom"]!="") ? ucwords($this->data["prenom"]) : "";
 		$this->nom=($this->data["nom"]!="") ? strtoupper($this->data["nom"]) : "";
 		$this->actif=$this->data["actif"];

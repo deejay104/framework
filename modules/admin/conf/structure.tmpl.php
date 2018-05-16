@@ -103,7 +103,7 @@ $tabTmpl=Array
 		"multi" => Array("Type" => "enum('oui','non')", "Default" => "non", ),
 		"notif" => Array("Type" => "enum('oui','non')", "Default" => "non", ),
 		"delai" => Array("Type" => "tinyint(3) unsigned", "Default" => "30", ),
-	)
+	),
 	"export" => Array
 	(
 		"id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
