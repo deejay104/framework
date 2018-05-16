@@ -18,9 +18,6 @@
 	<!-- BEGIN: suppression -->
 	<p><A href="#" OnClick="ConfirmeClick('index.php?mod=membres&rub=detail&id={id}&fonc=delete','Voulez-vous supprimer cette utilisateur ?');"><IMG src="{path_module}/img/icn32_supprimer.png" border=0 alt=""></A></p>
 	<!-- END: suppression -->
-	<!-- BEGIN: disponibilite -->
-	<p><A href="index.php?mod=membres&rub=disponibilite&id={id}"><IMG src="{path_module}/img/icn32_editer.png" border=0 alt="">Disponibilités</A></p>
-	<!-- END: disponibilite -->
 <!-- END: infos -->
 
 
@@ -68,6 +65,16 @@ Nombre d'heure de vol : {nbheurevol}<br />
 		<label for="mail">Mail :</label>
 		{form_mail}
 	</p>
+	<!-- BEGIN: virtuel -->
+	<p>
+		<label>Utilisateur virtuel</label>{form_virtuel}
+	</p>
+	<!-- END: virtuel -->
+	<p>
+		<label>Notifications</label>
+		{form_notification}
+	</p>
+	
 </div>
 
 <div class="formulaireTitre">Photos</div>
@@ -90,20 +97,23 @@ Nombre d'heure de vol : {nbheurevol}<br />
 	<!-- END: lst_document -->
 </div>
 
-<div class="formulaireTitre">Options</div>
+<div class="formulaireTitre">Echéances</div>
+<div class="formulaire" style="padding-left: 20px;">
+	<!-- BEGIN: lst_echeance -->
+	<p>{form_echeance}</p>
+	<!-- END: lst_echeance -->
+</div>
 
-<div class="formulaire">
-	<p>
-		<label>Notifications</label>
-		{form_notification}
-	</p>
-	
-	<!-- BEGIN: droits -->
-	<p>
-		<label for="droits">Droits</label>
-		<span>{form_droits}</span>
-	</p>
-	<!-- END: droits -->
+<div class="formulaireTitre">Données</div>
+<div class="formulaire" style='padding-left: 20px;'>
+{aff_data_left}
+<!-- BEGIN: aff_donnees -->
+	<div class="formulaire">
+<!-- BEGIN: lst_donnees -->
+	<p>{form_donnees}</p>
+<!-- END: lst_donnees -->
+	</div>
+<!-- END: aff_donnees -->
 </div>
 
 <div class="formulaireTitre">Commentaires</div>
@@ -113,6 +123,15 @@ Nombre d'heure de vol : {nbheurevol}<br />
   </p>
 </div>
 
+<!-- BEGIN: droits -->
+<div class="formulaireTitre">Droits</div>
+<div class="formulaire">
+	<p>
+		<label for="droits">Droits</label>
+		<span>{form_droits}</span>
+	</p>
+</div>
+<!-- END: droits -->
 
 
 <!-- BEGIN: submit -->

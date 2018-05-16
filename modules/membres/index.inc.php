@@ -86,7 +86,7 @@
 				$usr = new user_core($id,$sql);
 
 				$tmpl_x->assign("id_membre",$id);
-				$tmpl_x->assign("aff_membre",$usr->aff("fullname"));
+				$tmpl_x->assign("aff_membre",$usr->fullname);
 				// $tmpl_x->assign("tel_membre",$usr->AffTel());
 				$tmpl_x->assign("mail_membre",$usr->aff("mail"));
 
