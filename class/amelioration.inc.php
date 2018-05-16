@@ -39,7 +39,7 @@ class amelioration_class extends objet_core
 		$this->data["titre"]="";
 		$this->data["description"]="";
 		$this->data["version"]="";
-		$this->data["status"]="";
+		$this->data["status"]="1new";
 		$this->data["module"]="";
 
 

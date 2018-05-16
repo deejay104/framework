@@ -436,7 +436,7 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 		{
 			$affsub=1;
 		}
-		if (isset($v["subb"]))
+		if (isset($v["bottom"]))
 		{
 			$affsubb=1;
 		}
