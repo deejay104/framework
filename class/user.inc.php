@@ -174,6 +174,10 @@ class user_core extends objet_core
 				}
 				$ret="<span>".$ret."</span>";
 			}
+			else if ($key=="fullname")
+			{
+				$ret="<a href='index.php?mod=membres&rub=detail&id=".$this->id."'>".$this->fullname."</a>";
+			}
 		}
 		return $ret;
 	}
@@ -551,7 +555,7 @@ function GetMyId($id)
 	  	$myuser->LoadEnfants();
 	}
 	
-  	if (is_array($myuser->data["enfant"]))
+  	if ( (isset($myuser->data["enfant"])) && (is_array($myuser->data["enfant"])) )
   	{
        	foreach($myuser->data["enfant"] as $enfant)
 		{

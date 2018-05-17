@@ -74,15 +74,6 @@
 		$tmpl_x->assign("select_multi_".$sql->data["multi"],"selected");
 		$tmpl_x->assign("select_notif_".$sql->data["notif"],"selected");
 
-		foreach($tabposte as $id=>$d)
-		{
-			$tmpl_x->assign("form_poste",$d["description"]);
-			$tmpl_x->assign("form_posteid",$id);
-			$tmpl_x->assign("select_poste",($sql->data["poste"]==$id) ? "selected" : "");
-			
-			$tmpl_x->parse("corps.lst_echeance.lst_poste");
-		}
-
 		foreach($tabgrp as $grp=>$d)
 		{
 			$tmpl_x->assign("form_groupe",$grp);
@@ -94,14 +85,6 @@
 		$tmpl_x->parse("corps.lst_echeance");
 	}
 
-	foreach($tabposte as $id=>$d)
-	{
-		$tmpl_x->assign("form_poste",$d["description"]);
-		$tmpl_x->assign("form_posteid",$id);
-		$tmpl_x->assign("select_poste",($sql->data["poste"]==$id) ? "selected" : "");
-		
-		$tmpl_x->parse("corps.lst_poste");
-	}
 	
 // ---- Affecte les variables d'affichage
 	$tmpl_x->parse("icone");

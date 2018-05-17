@@ -36,6 +36,8 @@
 	$lst=ListActiveAmeliorations($sql);
 
 	$tabTitre=array();
+	$tabTitre["id"]["aff"]="Num";
+	$tabTitre["id"]["width"]=100;
 	$tabTitre["titre"]["aff"]="Titre";
 	$tabTitre["titre"]["width"]=300;
 	$tabTitre["status"]["aff"]="Status";
@@ -50,6 +52,8 @@
 	{
 		$pb = new amelioration_class($i,$sql);
 
+		$tabValeur[$i]["id"]["val"]=$pb->id;
+		$tabValeur[$i]["id"]["aff"]=$pb->aff("id");
 		$tabValeur[$i]["titre"]["val"]=$pb->val("titre");
 		$tabValeur[$i]["titre"]["aff"]=$pb->aff("titre");
 		$tabValeur[$i]["status"]["val"]=$pb->val("status");

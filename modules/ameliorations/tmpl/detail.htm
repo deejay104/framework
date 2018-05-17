@@ -40,23 +40,22 @@
 </script>
 
 <FORM name="form_detail" method="post" action="index.php" enctype="multipart/form-data">
-<INPUT type="hidden" name="mod" value="ameliorations">
-<INPUT type="hidden" name="rub" value="detail">
-<INPUT type="hidden" name="id" value="{form_id}">
-<INPUT type="hidden" name="checktime" value="{form_checktime}">
+	<INPUT type="hidden" name="mod" value="ameliorations">
+	<INPUT type="hidden" name="rub" value="detail">
+	<INPUT type="hidden" name="id" value="{form_id}">
+	<INPUT type="hidden" name="checktime" value="{form_checktime}">
 
-<p class="lastupdate">Dernière mise à  jour : {form_usr_maj} le {form_dte_maj}</p>
-
-
-<div class="formulaire">
+	<p class="lastupdate">Dernière mise à  jour : {form_usr_maj} le {form_dte_maj}</p>
 
 
-<p><label>Status</label>{form_status}</p>
-<p><label>Version</label>{form_version}</p>
-<p><label>Module</label>{form_module}</p>
-<br />
+	<div class="formulaire" style='padding-left:75px;'>
+	<p><label>Numéro</label>{form_numid}</p>
+	<p><label>Status</label>{form_status}</p>
+	<p><label>Version</label>{form_version}</p>
+	<p><label>Module</label>{form_module}</p>
+	<br />
 
-</div>
+	</div>
 
 	<div class='actualitesBloc'>
 		<div class="actualitesPhoto" >

@@ -62,11 +62,8 @@
 	  }
 
 // ---- Initialisation des variables
-	$tmpl_x->assign("pageIndex", $pageIndex);
-	$tmpl_x->assign("color",$color);
-	$tmpl_x->assign("color2",$color2);
-
-	$tmpl_x->assign("critere", $critere);
+	$tmpl_x->assign("pageIndex", (isset($pageIndex)) ? $pageIndex : "");
+	$tmpl_x->assign("critere", (isset($critere)) ? $critere : "");
 
 
 // ---- Affiche les bouttons

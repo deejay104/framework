@@ -11,7 +11,14 @@
 	$tmpl_menu->assign("class_".$rub,"class='pageTitleSelected'");
 	
 // ---- Affiche les menus
-	$tmpl_menu->assign("form_id",$id);
+	if (isset($id))
+	{
+		$tmpl_menu->assign("form_id",$id);
+	}
+	else
+	{
+		$id=0;
+	}
 
 	if (GetDroit("CreeAmelioration"))
 	{

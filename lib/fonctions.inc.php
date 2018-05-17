@@ -5,7 +5,7 @@
 
 function GetModule($mod)
   { global $MyOpt;
-	if ($MyOpt["module"][$mod]=="on")
+	if ( (isset($MyOpt["module"][$mod])) && ($MyOpt["module"][$mod]=="on") )
 	  { return true; }
 	else
 	  { return false; }
@@ -465,10 +465,9 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 		  { $limit=count($tabValeur); }
 
 		foreach($tabValeur as $i=>$val)
-		  { 
+		{ 
 			if (($ii>=$start) && ($ii<$start+$limit))
-			  {
-				$col = abs($col-110);
+			{
 				$ret.="<tr >";
 				// $ret.="<tr onmouseover=\"setPointer(this, 'over', '#".$myColor[$col]."', '#".$myColor[$col+5]."', '#FF0000')\" onmouseout=\"setPointer(this, 'out', '#".$myColor[$col]."', '#".$myColor[$col+5]."', '#FF0000')\">";
 				// $ret.="<td bgcolor=\"#".$myColor[$col]."\">&nbsp;</td>";
@@ -476,24 +475,28 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 		
 				foreach($tabTitre as $name=>$v)
 				  {
+					if ((!isset($val[$name]["aff"])) || ($val[$name]["aff"]==""))
+					{
+						$val[$name]["aff"]=$val[$name]["val"];
+					}
 					if (!isset($val[$name]["align"]))
 					{
 						$val[$name]["align"]="left";
 					}
 					if ($val[$name]["val"]=="<line>")
-					  {
+					{
 						$ret.="<td style='border-left: 1px solid black;'></td>";
-					  }
+					}
 					else
-					  {
-						$ret.="<td ".(($val[$name]["align"]!="") ? "align='".$val[$name]["align"]."'" : "").">".(($val[$name]["aff"]=="") ? $val[$name]["val"] : $val[$name]["aff"])."</td>";
-					  }
-				  }
+					{
+						$ret.="<td ".(($val[$name]["align"]!="") ? "align='".$val[$name]["align"]."'" : "").">".$val[$name]["aff"]."</td>";
+					}
+				}
 				$ret.="</tr>\n";
-			  }
+			}
 			$ii=$ii+1;
-		  }
-	  }
+		}
+	}
 	
 	if ($affsubb==1)
 	{
@@ -539,7 +542,17 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
   }
 
 function TrieVal ($a, $b)
-  { global $order;
+{
+	global $order;
+	if (!isset($a[$order]["val"]))
+	{
+		return 1;
+	}
+	if (!isset($b[$order]["val"]))
+	{
+		return 1;
+	}
+
 	if (strtolower($a[$order]["val"]) == strtolower($b[$order]["val"]))
 	  { return 0; }
 	else if (strtolower($a[$order]["val"]) < strtolower($b[$order]["val"]))
@@ -547,7 +560,7 @@ function TrieVal ($a, $b)
 	else
 	  { return 1; }
 //	return (strtolower($a[$order]["val"]) < strtolower($b[$order]["val"])) ? -1 : 1;
-  }
+}
 function TrieValInv ($a, $b)
   { global $order;
 //	return (strtolower($a[$order]["val"]) < strtolower($b[$order]["val"])) ? 1 : -1;

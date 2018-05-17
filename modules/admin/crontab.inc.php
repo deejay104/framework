@@ -103,8 +103,8 @@
 		$tabValeur[$i]["action"]["aff"]="<div class='fieldAdmin'><a href='index.php?mod=admin&rub=crontab&id=".$sql->data["id"]."&fonc=start'>Démarrer</a></div>";
 	}
 	
-	if ($order=="") { $order="groupe"; }
-	if ($trie=="") { $trie="d"; }
+	if ((!isset($order)) || ($order=="")) { $order="groupe"; }
+	if ((!isset($trie)) || ($trie=="")) { $trie="d"; }
 
 	$tmpl_x->assign("aff_tableau",AfficheTableau($tabValeur,$tabTitre,$order,$trie));
 

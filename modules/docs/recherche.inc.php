@@ -25,10 +25,10 @@
 	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 
 // ---- Initialisation des variables
-	$tmpl_x->assign("pageIndex", $pageIndex);
+	$tmpl_x->assign("pageIndex", (isset($pageIndex)) ? $pageIndex : "");
+	$tmpl_x->assign("critere", (isset($critere)) ? $critere : "");
+	$tmpl_x->assign("fid", (isset($fid)) ? $fid : "");
 
-	$tmpl_x->assign("critere", $critere);
-	$tmpl_x->assign("fid", $fid);
 
 // ---- Effectue la recherche
 

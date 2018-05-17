@@ -154,7 +154,7 @@
 			$news[$i]=$sql->data;
 	  }
 
-	$tmpl_x->assign("msg_lastid", $sql->data["id"]);	
+	$tmpl_x->assign("msg_lastid", (isset($sql->data["id"])) ? $sql->data["id"] : "0" );	
 
 	$idprev=0;
 	foreach($news as $id=>$d)

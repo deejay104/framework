@@ -101,19 +101,19 @@
 	$pb = new amelioration_class($id,$sql);
 
 	$pb->Render("form",$typeaff);
+	$tmpl_x->assign("form_numid",$pb->aff("id"));
 
-	
-		$lstdoc=ListDocument($sql,$pb->uid_creat,"avatar");
+	$lstdoc=ListDocument($sql,$pb->uid_creat,"avatar");
 
-		if (count($lstdoc)>0)
-		{
-			$img=new document_core($lstdoc[0],$sql);
-			$tmpl_x->assign("form_avatar",$img->GenerePath(64,64));
-		}
-		else
-		{
-			$tmpl_x->assign("form_avatar",$corefolder."/static/images/icn64_membre.png");
-		}
+	if (count($lstdoc)>0)
+	{
+		$img=new document_core($lstdoc[0],$sql);
+		$tmpl_x->assign("form_avatar",$img->GenerePath(64,64));
+	}
+	else
+	{
+		$tmpl_x->assign("form_avatar",$corefolder."/static/images/icn64_membre.png");
+	}
 	
 	if ($typeaff=="form")
 	{

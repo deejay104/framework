@@ -50,6 +50,22 @@ class amelioration_class extends objet_core
 		// print_r($this);
 	}
 
+	function aff($key,$typeaff="html",$formname="form_data")
+	{
+		$ret=parent::aff($key,$typeaff,$formname);
+
+		if ($key=="id")
+		{
+			$ret="<a href='index.php?mod=ameliorations&rub=detail&id=".$this->id."'>#".CompleteTxt($this->id,4,"0")."</a>";
+		}
+		else if (($key=="description") && ($typeaff!="form"))
+		{
+			$ret=preg_replace("/&num;([0-9]+)/","<a href='index.php?mod=ameliorations&rub=detail&id=$1'>#$1</a>",$ret);
+		}
+		return $ret;
+	}
+	
+	
 	function AddCommentaire($txt)
 	{
 		global $gl_uid;

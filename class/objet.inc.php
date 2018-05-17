@@ -80,6 +80,11 @@ class objet_core
 	function aff($key,$typeaff="html",$formname="form_data")
 	{
 		global $MyOpt;
+		if (!isset($this->type[$key]))
+		{
+			return "";
+		}
+
 		$txt=$this->data[$key];
 
 		if (is_numeric($key))
@@ -126,7 +131,7 @@ class objet_core
 
 		// Si on a le droit de modif on autorise
 		$mycond=true;
-		if (($this->droit[$key]!="") && (!GetDroit($this->droit[$key])))
+		if ((isset($this->droit[$key])) && ($this->droit[$key]!="") && (!GetDroit($this->droit[$key])))
 		  { $mycond=false; }
 
 		// Si l'utilisateur a le droit de tout modifier alors on force
@@ -173,6 +178,7 @@ class objet_core
 		else
 		{
 			$link=true;
+
 			if ($this->type[$key]=="text")
 			{
 				$ret=nl2br(htmlentities($ret,ENT_HTML5,"ISO-8859-1"));
@@ -209,6 +215,12 @@ class objet_core
 	function val($key)
 	{
 		global $MyOpt;
+
+		if (!isset($this->type[$key]))
+		{
+			return "";
+		}
+
 		$ret=strtolower($this->data[$key]);
 
 		if ($this->type[$key]=="text")
@@ -225,7 +237,7 @@ class objet_core
 
 		$this->id=$sql->Edit($this->table,$this->tbl."_".$this->table,$this->id,array("uid_creat"=>$gl_uid, "dte_creat"=>now(),"uid_maj"=>$gl_uid, "dte_maj"=>now()));		
 		
-		return $this->uid;
+		return $this->id;
 	}
 	
 	function Valid($key,$v,$ret=false){
@@ -267,9 +279,12 @@ class objet_core
 		
 		$td=array();
 		foreach($this->data as $k=>$v)
-		{ 
-			$vv=$this->Valid($k,$v,true);
-			$td[$k]=$vv;
+		{
+			if ( ((isset($this->droit[$key])) && (GetDroit($this->droit[$key]))) || (!isset($this->droit[$key])) || ($this->droit[$key]=="") )
+			{
+				$vv=$this->Valid($k,$v,true);
+				$td[$k]=$vv;
+			}
 		}
 		$td["uid_maj"]=$gl_uid;
 		$td["dte_maj"]=now();

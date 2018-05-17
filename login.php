@@ -130,15 +130,15 @@
 	$tmpl_prg->assign("myid", $myid);
 	$tmpl_prg->assign("var", $var);
 	$tmpl_prg->assign("errmsg", $errmsg);
-	$tmpl_prg->assign("version", $version);
+	$tmpl_prg->assign("version", $version."-".$core_version.(($MyOpt["maintenance"]=="on") ? " - MAINTENANCE ACTIVE" : ""));
 	$tmpl_prg->assign("site_title", $MyOpt["site_title"]);
 	$tmpl_prg->assign("corefolder", $corefolder);
 
 	$tmpl_prg->assign("style_url", GenereStyle(($theme=="phone") ? "phone" : "default"));
 
-	if (file_exists("custom/".$MyOpt["site_logo"]))
+	if (file_exists($appfolder."/custom/".$MyOpt["site_logo"]))
 	{
-		$tmpl_prg->assign("site_logo", "custom/".$MyOpt["site_logo"]);
+		$tmpl_prg->assign("site_logo", $appfolder."/custom/".$MyOpt["site_logo"]);
 	}
 	else
 	{

@@ -52,9 +52,23 @@
 
 	eval($e);
 
+// ---- Nettoyage des variables
+	if (!isset($fonc))
+	{
+		$fonc="";
+	}
+
+// ---- Vérifie la variable $mod
+	if (!isset($mod))
+	  { $mod="default"; }
+	if (!preg_match("/^[a-z0-9_]*$/",$mod))
+	  { $mod = "default"; }
+	if (trim($mod)=="")
+	  { $mod = "default"; }
+
 // ---- Gestion des droits
 	session_start();
-
+ 
 	if ($fonc=="logout")
 	  { include "login.php"; exit; }
 	else if ((isset($_SESSION['uid'])) && ($_SESSION['uid']>0))
@@ -145,12 +159,21 @@
 	  	exit;
 	}	  	
 
-// ---- Nettoyage des variables
-	if (!isset($fonc))
-	{
-		$fonc="";
-	}
 
+// ---- Vérifie la variable $rub
+	if (!isset($rub))
+	{
+		$rub="index";
+	}
+	if (!preg_match("/^[a-z0-9_]*$/",$rub))
+	{
+		$rub = "index";
+	}
+	if (trim($rub)=="")
+	{
+		$rub = "index";
+	}
+	
 // ---- Template par default
 	if ( (!isset($tmpl)) || (!preg_match("/[a-z]+/i",$tmpl)) )
 	{
@@ -248,27 +271,7 @@
 		}
 	}
 	
-// ---- Vérifie la variable $mod
-	if (!isset($mod))
-	  { $mod="default"; }
-	if (!preg_match("/^[a-z0-9_]*$/",$mod))
-	  { $mod = "default"; }
-	if (trim($mod)=="")
-	  { $mod = "default"; }
 
-// ---- Vérifie la variable $rub
-	if (!isset($rub))
-	{
-		$rub="index";
-	}
-	if (!preg_match("/^[a-z0-9_]*$/",$rub))
-	{
-		$rub = "index";
-	}
-	if (trim($rub)=="")
-	{
-		$rub = "index";
-	}
 	
 // ---- Charge la rubrique
 	$affrub=$rub;

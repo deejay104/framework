@@ -82,11 +82,10 @@
 // ---- Affiche les infos
 	if ((is_numeric($id)) && ($id>0))
 	{
-			$usr = new user_core($id,$sql,((GetMyId($id)) ? true : false));
-			$usrmaj = new user_core($usr->uidmaj,$sql);
+		$usr = new user_core($id,$sql,((GetMyId($id)) ? true : false));
+		$usrmaj = new user_core($usr->uid_maj,$sql);
 	
-			$tmpl_x->assign("id", $id);
-			$tmpl_x->assign("info_maj", $usrmaj->prenom." ".$usrmaj->nom." le ".sql2date($usr->dtemaj));	
+		$tmpl_x->assign("id", $id);
 	}
 
 
@@ -94,8 +93,8 @@
 	  { $tmpl_x->parse("corps.neverset"); }
 	  	
 
-	foreach($usr->data as $k=>$v)
-	  { $tmpl_x->assign("form_$k", $usr->aff($k,$typeaff)); }
+	// foreach($usr->data as $k=>$v)
+	  // { $tmpl_x->assign("form_$k", $usr->aff($k,$typeaff)); }
 
 	if (!GetDroit("ModifUserPassword"))
 	  { $tmpl_x->parse("corps.oldpwd"); }
