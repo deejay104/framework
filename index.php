@@ -191,10 +191,9 @@
 	$tmpl_prg->assign("gl_uid", $gl_uid);
 
 	$tmpl_prg->assign("style_url", GenereStyle(($theme=="phone") ? "phone" : "default"));
-
 	if (file_exists($appfolder."/custom/".$MyOpt["site_logo"]))
 	{
-		$tmpl_prg->assign("site_logo", $appfolder."/custom/".$MyOpt["site_logo"]);
+		$tmpl_prg->assign("site_logo", "custom/".$MyOpt["site_logo"]);
 	}
 	else
 	{

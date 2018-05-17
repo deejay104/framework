@@ -119,7 +119,7 @@ img { color: #FFFFFF; border: 0px; }
 
 
 /* **** Menu **** */
-.main-menu { text-align: left; background-color: #{MenuBackgroundNormal};  }
+.main-menu { padding-top:10px; text-align: left; background-color: #{MenuBackgroundNormal};  }
 .main-menu li { margin-bottom: 1px; line-height:20px;  }
 .main-menu li a { color: white; display: block;  padding: 0px 10px; -webkit-transition: all 150ms ease-in; -moz-transition: all 150ms ease-in; -o-transition: all 150ms ease-in; transition: all 150ms ease-in; }
 .main-menu li a:hover { background-color: #{MenuBackgroundHover}; }
@@ -131,7 +131,7 @@ img { color: #FFFFFF; border: 0px; }
 
 /* **** Haut de page **** */
 
-.logo { margin: 0px 0; background-color: #{TitleBackgroundNormal}; padding: 0px 0px; text-align: center; display: block; }
+.logo { margin: 0px 0; background-color: #{TitleBackgroundNormal}; padding: 0px 0px; text-align: center; display: block; min-height: 95px}
 .logo a { color: white; }
 .logo a h1 { text-transform: uppercase; font-size: 25px; margin: 0; font-weight: 800; }
 .logo span { color: #bee3f6; font-size: 13px; }
