@@ -68,7 +68,6 @@ class objet_core
 		$this->dte_maj=$res["dte_maj"];
 		
 		// Charge les variables
-
 		foreach($this->data as $k=>$v)
 		{
 			$this->data[$k]=$res[$k];
@@ -82,7 +81,11 @@ class objet_core
 		global $MyOpt;
 		if (!isset($this->type[$key]))
 		{
-			return "";
+			$type="";
+		}
+		else
+		{
+			$type=$this->type[$key];
 		}
 
 		$txt=$this->data[$key];
@@ -91,28 +94,28 @@ class objet_core
 		  { $ret="******"; }
 		else if ($key=="uid_maj")
 		  { $ret="******"; }
-		else if ($this->type[$key]=="ucword")
+		else if ($type=="ucword")
 		{
 			$ret=ucwords($txt);
 		}
-		else if ($this->type[$key]=="uppercase")
+		else if ($type=="uppercase")
 		{
 			$ret=strtoupper($txt);
 		}
-		else if ($this->type[$key]=="lowercase")
+		else if ($type=="lowercase")
 		{
 			$ret=strtolower($txt);
 		}
-		else if ($this->type[$key]=="mail")
+		else if ($type=="mail")
 		{
 			$ret=strtolower($txt);
 			$type="email";
 		}
-		else if ($this->type[$key]=="duration")
+		else if ($type=="duration")
 		{
 			$ret=AffTemps($txt,"no");
 		}
-		else if ($this->type[$key]=="number")
+		else if ($type=="number")
 		{
 			if (!is_numeric($txt))
 			{
@@ -150,16 +153,16 @@ class objet_core
  	
 		if ($typeaff=="form")
 		{
-			if ($this->type[$key]=="text")
+			if ($type=="text")
 		  	{
 				$ret="<textarea id='".$key."'  name=\"".$formname."[$key]\" rows=5>".$ret."</textarea>";
 			}
-			else if ($this->type[$key]=="bool")
+			else if ($type=="bool")
 		  	{
 				$ret ="<input id='".$key."' type='radio' name=\"".$formname."[$key]\" value='oui' ".(($txt=="oui") ? "checked='checked'" : "")."> Oui";
 				$ret.="<input id='".$key."' type='radio' name=\"".$formname."[$key]\" value='non' ".(($txt=="non") ? "checked='checked'" : "")."> Non";
 			}
-			else if (($this->type[$key]=="enum") && (is_array($this->tabList[$key])))
+			else if (($type=="enum") && (is_array($this->tabList[$key])))
 			{
 		  	  	$ret ="<select id='".$key."'  name=\"".$formname."[$key]\">";
 				foreach($this->tabList[$key] as $k=>$v)
@@ -169,34 +172,48 @@ class objet_core
 		  	  	$ret.="</select>";
 
 			}
+			else if ($type=="datetime")
+			{
+				// $ret=sql2date($ret);
+				$type="date";
+				$ret="<INPUT id='".$key."'  name=\"".$formname."[$key][date]\" value=\"".date2sql(sql2date($ret,"jour"))."\" type=\"date\"> <INPUT id='".$key."'  name=\"".$formname."[$key][time]\" value=\"".sql2time($ret)."\" type=\"time\">";
+			}
 			else
 			{
-				$type=(isset($this->type[$key])) ? $this->type[$key] : "";
+				$type=(isset($type)) ? $type : "";
 				$ret="<INPUT id='".$key."'  name=\"".$formname."[$key]\" value=\"".$ret."\" ".(($type!="") ? "type=\"".$type."\"" : "").">";
 			}
+		}
+		else if ($typeaff=="val")
+		{
+
 		}
 		else
 		{
 			$link=true;
 
-			if ($this->type[$key]=="text")
+			if ($type=="text")
 			{
 				$ret=nl2br(htmlentities($ret,ENT_HTML5,"ISO-8859-1"));
 				$link=false;
 			}
-			else if ($this->type[$key]=="date")
+			else if ($type=="date")
 			{
 				$ret=sql2date($ret);
 			}
-			else if ($this->type[$key]=="datetime")
+			else if ($type=="datetime")
 			{
+				if ($ret=="0000-00-00 00:00:00")
+				{
+					$ret="-";
+				}
 				$ret=sql2date($ret);
 			}
-			else if ($this->type[$key]=="mail")
+			else if ($type=="mail")
 			{
 				$ret="<A href=\"mailto:".strtolower($ret)."\">".strtolower($ret)."</A>";
 			}
-			else if (($this->type[$key]=="enum") && (is_array($this->tabList[$key])))
+			else if (($type=="enum") && (is_array($this->tabList[$key])))
 			{
 				$ret=$this->tabList[$key][$ret];
 			}
@@ -218,7 +235,11 @@ class objet_core
 
 		if (!isset($this->type[$key]))
 		{
-			return "";
+			$type="";
+		}
+		else
+		{
+			$type=$this->type[$key];
 		}
 
 		$ret=strtolower($this->data[$key]);
@@ -250,6 +271,32 @@ class objet_core
 		else if ($this->type[$key]=="text")
 		{
 			$vv=$v;
+		}
+	  	else if ($this->type[$key]=="date")
+		{
+	  	  	if (date2sql($v)!="nok")
+	  	  	  { $vv=date2sql($v); }
+	  	  	else if (preg_match("/^([0-9]{2,4})-([0-9]{1,2})-([0-9]{1,2})([0-9: ]*)$/",$v))
+	  	  	  { $vv=$v; }
+		}
+	  	else if ($this->type[$key]=="datetime")
+		{
+	  	  	if (is_array($v))
+	  	  	{
+				$vv=$v["date"]." ".$v["time"];
+			}
+	  	  	else if (preg_match("/^([0-9]{2,4})-([0-9]{1,2})-([0-9]{1,2})([0-9: ]*)$/",$v))
+			{
+				$vv=$v;
+			}
+	  	  	else if (date2sql($v)!="nok")
+	  	  	{
+				$vv=date2sql($v); 
+			}
+			else
+			{
+				$vv="0000-00-00 00:00:00";
+			}
 		}
 		else
 		{

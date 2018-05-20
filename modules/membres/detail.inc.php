@@ -23,7 +23,7 @@
 	if (!is_numeric($id))
       { $id=$gl_uid; }
 
-  if ( (!GetDroit("AccesMembre")) && (!GetMyId($id)) )
+	if ( (!GetDroit("AccesMembre")) && (!GetMyId($id)) )
 	  { FatalError("Accès non autorisé (AccesMembre)"); }
 
 	require_once ("class/document.inc.php");

@@ -36,7 +36,7 @@
 
 <div class="formulaireTitre">Etat civil</div>
 
-<table>
+<table width='100%'>
 	<tr>
 		<td width="220">
 			<div class="formulairePhoto">
@@ -44,7 +44,7 @@
 			</div>
 		</td>
 		<td>
-			<div class="formulaire" style='padding-left: 20px;'>
+			<div class="formulaire" style='width:100%; height:240px; padding-left: 20px;'>
 				<p>
 					<label for="prenom">Prénom</label>{form_prenom}
 				</p>
@@ -83,7 +83,7 @@
 
 <table width='100%'>
 <tr>
-	<td width='50%' valign="top" style='border: 1px solid #e8e8e8; padding: 5px;'>
+	<td width='50%' valign="top" style='padding: 5px;'>
 		<div class="formulaireTitre">Commentaires</div>
 		<div class="formulaire" style='padding-left: 20px;'>
 			<p>
@@ -97,16 +97,16 @@
 		{aff_data_left}
 
 		<!-- BEGIN: aff_donnees -->
-			<div class="formulaire">
+		<div style='margin-top:5px;'>
 		<!-- BEGIN: lst_donnees -->
 			<p>{form_donnees}</p>
 		<!-- END: lst_donnees -->
-			</div>
+		</div>
 		<!-- END: aff_donnees -->
 		</div>
 	
 	</td>
-	<td width='50%' valign="top" style='border: 1px solid #e8e8e8; padding: 5px;'>
+	<td width='50%' valign="top" style='padding: 5px;'>
 		<div class="formulaireTitre">Documents</div>
 		<div class="formulaire" style="padding-left: 20px; padding-bottom: 2px;">
 			<!-- BEGIN: lst_document -->
@@ -125,20 +125,14 @@
 		
 		<!-- BEGIN: droits -->
 		<div class="formulaireTitre">Droits</div>
-		<p style="padding-left: 20px;">
+		<div  class="formulaire" style="padding-left: 20px;">
 			{form_droits}
-		</p>
+		</div>
 		<!-- END: droits -->
 	
 	</td>
 </tr>
 </table>
-
-
-	
-
-</div>
-
 
 
 <!-- BEGIN: submit -->
@@ -147,7 +141,6 @@
 	<input type="submit" name="fonc" id="annuler" value="Annuler">
 </div>
 <!-- END: submit -->
-
 
 </FORM>
 

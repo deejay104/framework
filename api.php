@@ -105,7 +105,11 @@
 // ---- Charge la page
 	if (($mod!="") && ($rub!=""))
 	{
-		if (file_exists("modules/".$mod."/".$rub.".api.php"))
+		if (file_exists($appfolder."/modules/".$mod."/".$rub.".api.php"))
+		{
+			require($appfolder."/modules/".$mod."/".$rub.".api.php");
+		}
+		else if (file_exists("modules/".$mod."/".$rub.".api.php"))
 		{
 			require("modules/".$mod."/".$rub.".api.php");
 		}

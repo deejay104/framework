@@ -23,11 +23,11 @@ function MyRep($file,$mymod="")
   	$myfile=substr($file,0,strrpos($file,"."));
 	$myext=substr($file,strrpos($file,".")+1,strlen($file)-strrpos($file,".")-1);
 
-  	if ((file_exists("../modules/$mymod/tmpl/$myfile.$theme.$myext")) && ($mymod!=""))
+  	if ((file_exists($appfolder."/modules/$mymod/tmpl/$myfile.$theme.$myext")) && ($mymod!=""))
   	  { return $appfolder."/modules/$mymod/tmpl/$myfile.$theme.$myext"; }
-	else if ((file_exists("../modules/$mymod/tmpl/$file")) && ($mymod!=""))
+	else if ((file_exists($appfolder."/modules/$mymod/tmpl/$file")) && ($mymod!=""))
   	  { return $appfolder."/modules/$mymod/tmpl/$file"; }
-	else if ((file_exists("../modules/$mymod/$file")) && ($mymod!=""))
+	else if ((file_exists($appfolder."/modules/$mymod/$file")) && ($mymod!=""))
   	  { return $appfolder."/modules/$mymod/$file"; }
   	else if ((file_exists("modules/$mymod/tmpl/$myfile.$theme.$myext")) && ($mymod!=""))
   	  { return "modules/$mymod/tmpl/$myfile.$theme.$myext"; }

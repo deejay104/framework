@@ -23,7 +23,7 @@ class user_core extends objet_core
 	protected $rub="detail";
 
 	protected $droit=array("prenom"=>"ModifUser","nom"=>"ModifUser","droits"=>"ModifUserDroits","password"=>"modifUserPassword","dte_login"=>"ModifUserDteLogin");
-	protected $type=array("prenom"=>"ucword","nom"=>"uppercase","initiales"=>"uppercase","mail"=>"mail","commentaire"=>"text","notification"=>"bool","virtuel"=>"bool");
+	protected $type=array("prenom"=>"ucword","nom"=>"uppercase","initiales"=>"uppercase","mail"=>"mail","commentaire"=>"text","notification"=>"bool","virtuel"=>"bool","aff_jour"=>"date","dte_login"=>"datetime");
 
 	// protected $tabList=array(
 		// "status"=>array('1new'=>'Nouveau','2sched'=>'Prochaine version','3inprg'=>'En cours','4test'=>'En test','5close'=>'Publié'),
@@ -52,6 +52,7 @@ class user_core extends objet_core
 		$this->data["actif"]="oui";
 		$this->data["virtuel"]="non";
 		$this->data["aff_msg"]="0";
+		$this->data["aff_jour"]=date("Y-m-d");
 		$this->data["dte_login"]="0000-00-00 00:00:00";
 
 
@@ -156,6 +157,13 @@ class user_core extends objet_core
 					$ret.="<input type='checkbox' name='form_droits[SYS]' ".(($this->groupe["SYS"]>0) ? "checked" : "")." value='SYS' /> Super Administrateur (SYS)<br />";
 				}
 				$ret="<span>".$ret."</span>";
+			}
+		}
+		else if ($typeaff=="val")
+		{
+			if ($key=="fullname")
+			{
+				$ret=$this->fullname;
 			}
 		}
 		else

@@ -437,13 +437,13 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 .resaInfos a { display: inline-block; width:100%;padding: 4px; }
 .resaInfos a:hover { display: inline-block; background-color:#{FormulaireBackgroundNormal}; }
 
-.formulaire { margin-bottom: 10px;  }
+.formulaire { padding: 5px; margin-bottom: 10px; border: 1px solid #{FormulaireBackgroundNormal}; }
 .formulaire p { margin: 0px; padding-bottom: 2px;}
 .formulaire label { display: inline-block; width: 180px; margin-right: 10px; text-align: left; vertical-align: top; }
 .formulaire span { display: inline-block; width:160px; } /* Overlapped by responsive */
 .formulaire2 span { display: inline-block; width:450px; border: 1px solid #{BorderBlack}; border-radius: 4px; padding: 4px; }
 
-.formulaireTitre { background-color: #{FormulaireBackgroundNormal}; border-bottom: 1px solid #{BorderBlack}; margin-bottom: 15px; padding-left: 20px; padding-top:7px; padding-bottom:7px; line-height:24px; }
+.formulaireTitre { background-color: #{FormulaireBackgroundNormal}; border-bottom: 1px solid #{BorderBlack}; margin-bottom: 5px; padding-left: 20px; padding-top:7px; padding-bottom:7px; line-height:24px; }
 .formulairePhoto img { border: 1px solid #{BorderBlack}; border-radius: 5px; }
 .formulaireSubmit { margin-left: 20px; margin-top: 20px; }
 .formulaireListe p { margin: 0px; padding-left:20px; }
@@ -525,49 +525,49 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 
 
 /* **** ToolTip **** */
-.ui-tooltip-content { padding: 0px;font-size: 12px; line-height:16px; }
+.ui-tooltip-content { padding: 0px; font-size: 10px; line-height:12px; }
 
-.ui-tooltip, .settings:after { background: #ff0000; border: 2px solid white; }
+.ui-tooltip, .settings:after { border: 1px solid white; }
 .ui-tooltip {
-padding: 10px 20px;
-color: white;
-border-radius: 20px;
-box-shadow: 0 0 7px black;
+	padding: 10px 20px;
+	color: white;
+	border-radius: 10px;
+	box-shadow: 0 0 1px black;
 }
 
 .arrow {
-width: 70px;
-height: 16px;
-overflow: hidden;
-position: absolute;
-left: 50%;
-margin-left: -35px;
-bottom: -16px;
-font-size: 12px; 
+	width: 70px;
+	height: 16px;
+	overflow: hidden;
+	position: absolute;
+	left: 50%;
+	margin-left: -35px;
+	bottom: -16px;
+	font-size: 12px; 
 }
 
 .arrow.top {
-top: -16px;
-bottom: auto;
+	top: -16px;
+	bottom: auto;
 }
 
 .arrow.left {
-left: 20%;
+	left: 20%;
 }
 
 .arrow:after {
-background: #{FormulaireBackgroundLight};
-border: 2px solid white;
-content: "";
-position: absolute;
-left: 20px;
-top: -20px;
-width: 25px;
-height: 25px;
-box-shadow: 5px 5px 9px -9px #{FormulaireBackgroundLight};
--webkit-transform: rotate(45deg);
--ms-transform: rotate(45deg);
-transform: rotate(45deg);
+	background-color: #{FormulaireBackgroundNormal};
+	border: 1px solid white;
+	content: "";
+	position: absolute;
+	left: 20px;
+	top: -20px;
+	width: 25px;
+	height: 25px;
+	box-shadow: 5px 5px 9px -9px #{FormulaireBackgroundNormal};
+	-webkit-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
 }
 
 .arrow.top:after {
