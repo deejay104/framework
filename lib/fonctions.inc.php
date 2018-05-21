@@ -35,16 +35,11 @@ function MyRep($file,$mymod="")
   	  { return "modules/$mymod/tmpl/$file"; }
 	else if ((file_exists("modules/$mymod/$file")) && ($mymod!=""))
   	  { return "modules/$mymod/$file"; }
-  	// else if (file_exists("modules/default/tmpl/$myfile.$theme.$myext"))
-  	  // { return "modules/default/tmpl/$myfile.$theme.$myext"; }
-  	// else if (file_exists("modules/$file"))
-  	  // { return "modules/$file"; }
-  	// else if (file_exists("config/$file"))
-  	  // { return "config/$file"; }
   	else
   	  { return ""; }
   }
 
+  
 function GetDroit($droit)
   { global $myuser;
 

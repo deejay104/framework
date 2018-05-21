@@ -25,7 +25,11 @@
 	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 
 // ---- Charge les variables par défault
-	require_once("modules/$mod/conf/variables.tmpl.php");
+	require_once("modules/admin/conf/variables.tmpl.php");
+	if (file_exists($appfolder."/modules/admin/conf/variables.tmpl.php"))
+	{
+		require_once($appfolder."/modules/admin/conf/variables.tmpl.php");
+	}
 
 // ---- Vérifie le droit d'accès
 	if (!GetDroit("AccesConfigVar")) { FatalError("Accès non autorisé (AccesConfiguration)"); }

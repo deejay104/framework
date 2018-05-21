@@ -21,7 +21,7 @@
 
 <?
 	if (!is_numeric($id))
-      { $id=$gl_uid; }
+      { $id=0; }
 
 	if ( (!GetDroit("AccesMembre")) && (!GetMyId($id)) )
 	  { FatalError("Accès non autorisé (AccesMembre)"); }
@@ -49,7 +49,7 @@
 	if (($fonc=="Enregistrer") && (($id=="") || ($id==0)) && ((GetDroit("CreeUser"))) && (!isset($_SESSION['tab_checkpost'][$checktime])))
 	{
 		$usr->Create();
-		$id=$usr->uid;
+		$id=$usr->id;
 	}
 	else if (($fonc=="Enregistrer") && ($id=="") && (isset($_SESSION['tab_checkpost'][$checktime])))
 	{
@@ -185,7 +185,7 @@
 		$tmpl_x->assign("titre", "Saisie d'un nouvel utilisateur");
 
 		$usr = new user_core("0",$sql,false);
-		$usrmaj = new user_core($usr->uidmaj,$sql);
+		$usrmaj = new user_core($usr->uid_maj,$sql);
 
 		$usr->LoadDonneesComp();
 

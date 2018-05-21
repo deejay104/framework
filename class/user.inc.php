@@ -273,7 +273,7 @@ class user_core extends objet_core
 				}
 			}
 		}
-		
+
 		// Vérifie la différence
 		foreach($tabgrp as $grp=>$v)
 		{
@@ -302,7 +302,7 @@ class user_core extends objet_core
 		  {
 			if ($v=="")
 			{ 
-				$this->data["initiales"]=substr($this->data["prenom"],0,1).substr($this->data["nom"],0,2);
+				$this->data["initiales"]=substr($this->data["prenom"],0,1).substr($this->data["nom"],0,1).substr($this->data["nom"],-1,1);
 				$vv=$this->data["initiales"];
 			}
 			else
@@ -392,15 +392,14 @@ class user_core extends objet_core
 		
 		if (($grp!="") && (($grp!="SYS") || (($grp=="SYS") && (GetDroit("SYS")))))
 		{	
-			$query ="INSERT INTO ".$this->tbl."_droits (`groupe` ,`uid` ,`uid_creat` ,`dte_creat`) ";
-			$query.="VALUES ('".trim($grp)."' , '".$this->id."', '".$gl_uid."', '".now()."')";
+			$query ="INSERT INTO ".$this->tbl."_droits SET groupe='".trim($grp)."',uid='".$this->id."',uid_creat='".$gl_uid."',dte_creat='".now()."'";
 			$sql->Insert($query);
 		}
 	}
 
 	function DelGroupe($grp) {
 		$sql=$this->sql;
-		$query="DELETE FROM ".$this->tbl."_droits WHERE uid='".$this->id."' AND groupe='".$gl_grp."'";
+		$query="DELETE FROM ".$this->tbl."_droits WHERE uid='".$this->id."' AND groupe='".$grp."'";
 		$sql->Delete($query);
 	}
 
@@ -430,36 +429,35 @@ class user_core extends objet_core
 // *********************************************************************************************************
 
 
-function ListActiveUsers($sql,$order="",$tabtype="",$virtuel="non")
+function ListActiveUsers($sql,$order="",$tabtype,$virtuel="non")
 {
 	global $MyOpt;
  
 	$lstuser=array();
-	$type=array();
-	
-	if ($tabtype!="")
-	  { 
-	  	$type=explode(",",$tabtype);
-	  }
-	$reqAnd="";
-	$reqOr="";
-	if ( (is_array($type)) && (count($type)>0) )
-	  {
-			foreach($type as $t)
-			  {
-			  	if (substr($t,0,1)=="!")
-			  	  { $reqAnd.=" AND type<>'".substr($t,1,strlen($t)-1)."'"; }
-			  	else
-			  	  { $reqOr.="type='$t' OR "; }
-			  }
-			if ($reqOr!="")
-			  {
-					$reqOr.="1=0";
-				}
-	  }
+
 	if ($order=="std")
-	  { $order=(($MyOpt["globalTrie"]=="nom") ? "nom,prenom" : "prenom,nom"); }
-	$query="SELECT id FROM ".$MyOpt["tbl"]."_utilisateurs WHERE (";
+	{
+		$order=(($MyOpt["globalTrie"]=="nom") ? "nom,prenom" : "prenom,nom");
+	}
+
+	$query ="SELECT id ";
+
+	if (is_array($tabtype))
+	{
+		$type="";
+		$s="";
+		foreach($tabtype as $i=>$t)
+		{
+			$type.=$s."'".$t."'";
+			$s=",";
+		}
+		
+		$query.=", (SELECT COUNT(*) FROM ".$MyOpt["tbl"]."_droits AS droits LEFT JOIN ".$MyOpt["tbl"]."_roles AS roles ON droits.groupe=roles.groupe WHERE roles.role IN (".$type.") AND droits.uid=usr.id) AS nb ";
+	}
+
+	$query.="FROM ".$MyOpt["tbl"]."_utilisateurs AS usr ";
+
+	$query.="WHERE (";
 	$query.="actif='oui'";
 	if ((GetDroit("ListeUserDesactive")) && ($MyOpt["showDesactive"]=="on"))
 	{
@@ -470,13 +468,20 @@ function ListActiveUsers($sql,$order="",$tabtype="",$virtuel="non")
 		$query.="OR actif='non'";
 	}
 	$query.=") ";
-	$query.=(($virtuel!="") ? " AND virtuel='$virtuel'" : "").(($reqOr!="") ? " AND (".$reqOr.")" : "").(($reqAnd!="") ? $reqAnd : "").(($order!="") ? " ORDER BY $order" : "");
+	$query.=(($virtuel!="") ? " AND virtuel='$virtuel'" : "");
+	
+	$query.=" ORDER BY ".$order;
+
 	$sql->Query($query);
+
 	for($i=0; $i<$sql->rows; $i++)
-	  { 
+	{ 
 		$sql->GetRow($i);
-		$lstuser[$i]=$sql->data["id"];
-	  }
+		if (($sql->data["nb"]>0) || (!is_array($tabtype)))
+		{
+			$lstuser[$i]=$sql->data["id"];
+		}
+	}
 	return $lstuser;
 }
 
@@ -544,14 +549,6 @@ function AffFullname($prenom,$nom)
 		$fullname.=(($prenom=="")&&($nom==""))?"N/A":"";
 	}		
 	return $fullname;
-}
- 
-function AffInitiales($res)
-{
-  	if ($res["initiales"]!="")
-  	  { return strtoupper($res["initiales"]); }
-  	else
-  	  { return strtoupper(substr($res["prenom"],0,1).substr($res["nom"],0,1)); }
 }
 
 // Test si un ID correspond à l'utilisateur ou un de ses enfants
