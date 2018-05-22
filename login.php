@@ -24,15 +24,13 @@
 	$fonc=$_REQUEST["fonc"];
 	
 	if ($_REQUEST["varlogin"]!="")
-	  {
-	  	//eval("if (is_array(\$HTTP_".$_SERVER["REQUEST_METHOD"]."_VARS)) { foreach( \$HTTP_".$_SERVER["REQUEST_METHOD"]."_VARS as \$key=>\$value) { \$var .= \"&\$key=\$value\"; } }");
-	  	//$var.="&rub=$rub";
+	{
 		$var=$_REQUEST["varlogin"];
-	  }
+	}
 	else
-	  {
+	{
 	  	$var=$_SERVER["REQUEST_URI"];
-	  }
+	}
 
 	$var=preg_replace("/\/login.php/","",$var);
 
@@ -49,26 +47,28 @@
 // ---- Gestion des thèmes
 	$theme="";
 	if ( (isset($_REQUEST["settheme"])) && ($_REQUEST["settheme"]!="") )
-	  {	
+	{	
 	  	$theme=$themes[$_REQUEST["settheme"]];
 		$_SESSION['mytheme']=$theme;
-	  }
+	}
 	else if ((isset($_SESSION['mytheme'])) && ($_SESSION['mytheme']!=""))
-	  {	$theme=$_SESSION['mytheme']; }
+	{	
+		$theme=$_SESSION['mytheme'];
+	}
 	else if ($_SESSION['mytheme']=="")
-	  {
+	{
 		if ((preg_match("/CPU iPhone OS/",$_SERVER["HTTP_USER_AGENT"])) ||
 			(preg_match("/Linux; U; Android/",$_SERVER["HTTP_USER_AGENT"])) ||
 			(preg_match("/iPad; U; CPU OS/",$_SERVER["HTTP_USER_AGENT"])) || 
 			(preg_match("/Linux; Android/",$_SERVER["HTTP_USER_AGENT"])) 
 			
 		   )
-		  {
+		{
 			$theme="phone";
 			$_SESSION['mytheme']=$theme;
-		  }
+		}
 		
-	  }
+	}
 
 // ---- Charge le numéro de version
 	require ("version.php");

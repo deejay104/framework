@@ -33,43 +33,43 @@
 <SCRIPT language="javascript">
 	<!-- 
 	function cryptData()
-	  {
+	{
    		var str0 = document.getElementById('my_form_mdp0').value;
-			var str1 = document.getElementById('my_form_mdp1').value;
-			var str2 = document.getElementById('my_form_mdp2').value;
+		var str1 = document.getElementById('my_form_mdp1').value;
+		var str2 = document.getElementById('my_form_mdp2').value;
 
 		if ((str1=="") || (str2==""))
-		  {
-        alert("Le mot de passe ne doit pas être vide.");
+		{
+			alert("Le mot de passe ne doit pas être vide.");
 		  	return false;
-		  }
+		}
 
 		if ((str1==str2))
-		  {
+		{
 			if (str1=="")
-			  {
-					document.getElementById('form_newmdp').value = "**NONE**";
-        	alert("Le mot de passe ne doit pas être vide.");
-					return false;
-			  }
+			{
+				document.getElementById('form_newmdp').value = "**NONE**";
+				alert("Le mot de passe ne doit pas être vide.");
+				return false;
+			}
 			else
-			  {
+			{
 			  	document.getElementById('form_oldmdp').value = MD5(str0);
 			  	document.getElementById('form_newmdp').value = MD5(str1);
-			  }
+			}
 
 			document.getElementById('my_form_mdp0').value = "";
 			document.getElementById('my_form_mdp1').value = "";
 			document.getElementById('my_form_mdp2').value = "";
 
 			document.form_detail.submit();
-		  }
+		}
 		else
-		  {
+		{
 		  	alert ("Les deux mots de passe sont différents !");
 		  	return false;
-		  }
-	  }
+		}
+	}
 	// -->
 </SCRIPT>
 
