@@ -103,42 +103,42 @@ class amelioration_class extends objet_core
 
 		if ((isset($MyOpt["amelioration"]["url"])) && ($MyOpt["amelioration"]["url"]!=""))
 		{
-				$post=array();
-				// $post[1]['titre']=utf8_encode("hello");
-				// $post['description']=utf8_encode("Description détaillée de l'amélioration");
-				foreach($this->data as $k=>$v)
-				{
-					$post["data"][$k]=utf8_encode($v);
-				}
+			$post=array();
+			// $post[1]['titre']=utf8_encode("hello");
+			// $post['description']=utf8_encode("Description détaillée de l'amélioration");
+			foreach($this->data as $k=>$v)
+			{
+				$post["data"][$k]=utf8_encode($v);
+			}
 
-				$url=$MyOpt["amelioration"]["url"]."/api.php?mod=ameliorations&rub=upddetail&id=".$this->id;
-				$options = array(
-					CURLOPT_RETURNTRANSFER => true,     // return web page
-					CURLOPT_HEADER         => false,    // don't return headers
-					CURLOPT_FOLLOWLOCATION => true,     // follow redirects
-					CURLOPT_ENCODING       => "",       // handle all encodings
-					CURLOPT_USERAGENT      => "MNMS", // who am i
-					CURLOPT_AUTOREFERER    => true,     // set referer on redirect
-					CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
-					CURLOPT_TIMEOUT        => 120,      // timeout on response
-					CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
-					CURLOPT_SSL_VERIFYPEER => false,     // Disabled SSL Cert checks
-					CURLOPT_USERPWD        => $MyOpt["amelioration"]["login"].':'.md5($MyOpt["amelioration"]["pwd"]),
-					CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
-					CURLOPT_CUSTOMREQUEST  => "POST",
-					CURLOPT_POSTFIELDS     => json_encode($post)
-				);
+			$url=$MyOpt["amelioration"]["url"]."/api.php?mod=ameliorations&rub=upddetail&id=".$this->id;
+			$options = array(
+				CURLOPT_RETURNTRANSFER => true,     // return web page
+				CURLOPT_HEADER         => false,    // don't return headers
+				CURLOPT_FOLLOWLOCATION => true,     // follow redirects
+				CURLOPT_ENCODING       => "",       // handle all encodings
+				CURLOPT_USERAGENT      => "MNMS", // who am i
+				CURLOPT_AUTOREFERER    => true,     // set referer on redirect
+				CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
+				CURLOPT_TIMEOUT        => 120,      // timeout on response
+				CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
+				CURLOPT_SSL_VERIFYPEER => false,     // Disabled SSL Cert checks
+				CURLOPT_USERPWD        => $MyOpt["amelioration"]["login"].':'.md5($MyOpt["amelioration"]["pwd"]),
+				CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
+				CURLOPT_CUSTOMREQUEST  => "PUT",
+				CURLOPT_POSTFIELDS     => json_encode($post)
+			);
 
-				$ch = curl_init($url); 
-				curl_setopt_array( $ch, $options );
-				$data = curl_exec($ch); 
-				curl_close($ch); 
-				
-				$tabList=json_decode($data,true);
-				if ($this->id==0)
-				{
-					$this->id=$tabList["id"];
-				}
+			$ch = curl_init($url); 
+			curl_setopt_array( $ch, $options );
+			$data = curl_exec($ch); 
+			curl_close($ch); 
+			
+			$tabList=json_decode($data,true);
+			if ($this->id==0)
+			{
+				$this->id=$tabList["id"];
+			}
 		}
 		else
 		{
@@ -197,7 +197,7 @@ class amelioration_class extends objet_core
 				CURLOPT_SSL_VERIFYPEER => false,     // Disabled SSL Cert checks
 				CURLOPT_USERPWD        => $MyOpt["amelioration"]["login"].':'.md5($MyOpt["amelioration"]["pwd"]),
 				CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
-				CURLOPT_CUSTOMREQUEST  => "POST",
+				CURLOPT_CUSTOMREQUEST  => "PUT",
 				CURLOPT_POSTFIELDS     => json_encode($td)
 			);
 
@@ -223,21 +223,66 @@ class amelioration_class extends objet_core
 	
 	function ListeCommentaire()
 	{
+		global $MyOpt;
 		$sql=$this->sql;
 
-		$q="SELECT * FROM ".$this->tbl."_ameliore_com WHERE fid='".$this->id."' ORDER BY dte_creat";
-		$sql->Query($q);
+		if ((isset($MyOpt["amelioration"]["url"])) && ($MyOpt["amelioration"]["url"]!=""))
+		{
 
-		$lst=array();
-		for($i=0; $i<$sql->rows; $i++)
-		{ 
-			$sql->GetRow($i);
-			$lst[$i]=$sql->data;
+			$url=$MyOpt["amelioration"]["url"]."/api.php?mod=ameliorations&rub=getcomm&id=".$this->id;
+
+			$options = array(
+				CURLOPT_RETURNTRANSFER => true,     // return web page
+				CURLOPT_HEADER         => false,    // don't return headers
+				CURLOPT_FOLLOWLOCATION => true,     // follow redirects
+				CURLOPT_ENCODING       => "",       // handle all encodings
+				CURLOPT_USERAGENT      => "MNMS", // who am i
+				CURLOPT_AUTOREFERER    => true,     // set referer on redirect
+				CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
+				CURLOPT_TIMEOUT        => 120,      // timeout on response
+				CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
+				CURLOPT_SSL_VERIFYPEER => false,     // Disabled SSL Cert checks
+				CURLOPT_USERPWD        => $MyOpt["amelioration"]["login"].':'.md5($MyOpt["amelioration"]["pwd"])
+			);
+
+			$ch = curl_init($url); 
+			curl_setopt_array( $ch, $options );
+			$data = curl_exec($ch); 
+			curl_close($ch); 
+			$tabList=json_decode($data,true);
+
+			$lst=array();
+			if (count($tabList["lst"])>0)
+			{
+				foreach($tabList["lst"] as $k=>$v)
+				{
+					foreach($v as $kk=>$vv)
+					{
+						$lst[$k][$kk]=utf8_decode($vv);
+					}
+				}
+			}
 		}
+		else
+		{
+			$q="SELECT * FROM ".$this->tbl."_ameliore_com WHERE fid='".$this->id."' ORDER BY dte_creat";
+			$sql->Query($q);
 
+			$lst=array();
+			for($i=0; $i<$sql->rows; $i++)
+			{ 
+				$sql->GetRow($i);
+				$lst[$i]=$sql->data;
+			}
+		}
 		foreach($lst as $i=>$d)
 		{
 			$lst[$i]["usr_creat"]=new user_core($d["uid_creat"],$sql,false,false);
+
+			if ($d["uid_creat"]==0)
+			{
+				$lst[$i]["usr_creat"]->fullname="Développeur";
+			}
 		}
 		return $lst;
 	}
@@ -245,6 +290,46 @@ class amelioration_class extends objet_core
 
 function ListActiveAmeliorations($sql)
 {
-	return ListeObjets($sql,"ameliorations",array("id"),array("actif"=>"oui"));
+	global $MyOpt;
+
+	if ((isset($MyOpt["amelioration"]["url"])) && ($MyOpt["amelioration"]["url"]!=""))
+	{
+		$url=$MyOpt["amelioration"]["url"]."/api.php?mod=ameliorations&rub=getlist";
+
+		$options = array(
+			CURLOPT_RETURNTRANSFER => true,     // return web page
+			CURLOPT_HEADER         => false,    // don't return headers
+			CURLOPT_FOLLOWLOCATION => true,     // follow redirects
+			CURLOPT_ENCODING       => "",       // handle all encodings
+			CURLOPT_USERAGENT      => "MNMS", // who am i
+			CURLOPT_AUTOREFERER    => true,     // set referer on redirect
+			CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
+			CURLOPT_TIMEOUT        => 120,      // timeout on response
+			CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
+			CURLOPT_SSL_VERIFYPEER => false,     // Disabled SSL Cert checks
+			CURLOPT_USERPWD        => $MyOpt["amelioration"]["login"].':'.md5($MyOpt["amelioration"]["pwd"])
+		);
+
+		$ch = curl_init($url); 
+		curl_setopt_array( $ch, $options );
+		$data = curl_exec($ch); 
+		curl_close($ch); 
+		$tabList=json_decode($data,true);
+
+		$lst=array();
+		if (count($tabList["lst"])>0)
+		{
+			foreach($tabList["lst"] as $k=>$v)
+			{
+				$lst[$k]=array();
+			}
+		}
+
+		return $lst;
+	}
+	else
+	{
+		return ListeObjets($sql,"ameliorations",array("id"),array("actif"=>"oui"));
+	}
 }
 ?>
