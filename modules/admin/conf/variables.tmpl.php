@@ -75,6 +75,14 @@ $MyOptHelp["showSupprime"]="on : Affiche les membres supprimés";
 $MyOptTmpl["expireCache"]="0";
 $MyOptHelp["expireCache"]="Si supérieur à 0, nombre d'heure durant lesquelles on garde les fichiers en cache. Si 0, on garde indéfiniment.";
 
+// API améliorations
+$MyOptTmpl["amelioration"]["url"]="https://admin.les-mnms.net";
+$MyOptHelp["amelioration"]="URL de l'API pour la centralisation des améliorations";
+$MyOptTmpl["amelioration"]["login"]="";
+$MyOptHelp["amelioration"]="login de l'API pour la centralisation des améliorations";
+$MyOptTmpl["amelioration"]["pwd"]="";
+$MyOptHelp["amelioration"]="Mot de passe de l'API pour la centralisation des améliorations";
+
 
 // Modules
 $MyOptTmpl["modules"]["actualites"]="on";

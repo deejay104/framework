@@ -41,8 +41,7 @@ class amelioration_class extends objet_core
 		$this->data["version"]="";
 		$this->data["status"]="1new";
 		$this->data["module"]="";
-
-
+		$this->data["uid_dist"]=0;
 
 		parent::__construct($id,$sql);
 		
@@ -53,7 +52,6 @@ class amelioration_class extends objet_core
 	function load($id)
 	{
 		global $MyOpt;
-	// $MyOpt["amelioration"]["url"]="https://admin.les-mnms.net/";
 	
 		if ((isset($MyOpt["amelioration"]["url"])) && ($MyOpt["amelioration"]["url"]!=""))
 		{
@@ -71,19 +69,79 @@ class amelioration_class extends objet_core
 				CURLOPT_TIMEOUT        => 120,      // timeout on response
 				CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
 				CURLOPT_SSL_VERIFYPEER => false,     // Disabled SSL Cert checks
-				CURLOPT_USERPWD        => 'ea:'.md5("vmez2ctOFqBAkhH5")
+				CURLOPT_USERPWD        => $MyOpt["amelioration"]["login"].':'.md5($MyOpt["amelioration"]["pwd"])
 			);
 
 			$ch = curl_init($url); 
 			curl_setopt_array( $ch, $options );
 			$data = curl_exec($ch); 
-		print_r($data);
+			curl_close($ch); 
 			$tabList=json_decode($data,true);
-			
+
+			$this->id=$id;
+			$this->uid_creat=utf8_decode($tabList["uid_creat"]);
+			$this->dte_creat=utf8_decode($tabList["dte_creat"]);
+			$this->uid_maj=utf8_decode($tabList["uid_maj"]);
+			$this->dte_maj=utf8_decode($tabList["dte_maj"]);
+
+			foreach($this->data as $k=>$v)
+			{
+				$this->data[$k]=utf8_decode($tabList["data"][$k]);
+			}
 		}
 		else
 		{
 			parent::load($id);
+		}
+	}
+
+	function Save()
+	{
+		global $MyOpt;
+		$this->data["uid_dist"]=$this->uid_creat;
+
+		if ((isset($MyOpt["amelioration"]["url"])) && ($MyOpt["amelioration"]["url"]!=""))
+		{
+				$post=array();
+				// $post[1]['titre']=utf8_encode("hello");
+				// $post['description']=utf8_encode("Description détaillée de l'amélioration");
+				foreach($this->data as $k=>$v)
+				{
+					$post["data"][$k]=utf8_encode($v);
+				}
+
+				$url=$MyOpt["amelioration"]["url"]."/api.php?mod=ameliorations&rub=upddetail&id=".$this->id;
+				$options = array(
+					CURLOPT_RETURNTRANSFER => true,     // return web page
+					CURLOPT_HEADER         => false,    // don't return headers
+					CURLOPT_FOLLOWLOCATION => true,     // follow redirects
+					CURLOPT_ENCODING       => "",       // handle all encodings
+					CURLOPT_USERAGENT      => "MNMS", // who am i
+					CURLOPT_AUTOREFERER    => true,     // set referer on redirect
+					CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
+					CURLOPT_TIMEOUT        => 120,      // timeout on response
+					CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
+					CURLOPT_SSL_VERIFYPEER => false,     // Disabled SSL Cert checks
+					CURLOPT_USERPWD        => $MyOpt["amelioration"]["login"].':'.md5($MyOpt["amelioration"]["pwd"]),
+					CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
+					CURLOPT_CUSTOMREQUEST  => "POST",
+					CURLOPT_POSTFIELDS     => json_encode($post)
+				);
+
+				$ch = curl_init($url); 
+				curl_setopt_array( $ch, $options );
+				$data = curl_exec($ch); 
+				curl_close($ch); 
+				
+				$tabList=json_decode($data,true);
+				if ($this->id==0)
+				{
+					$this->id=$tabList["id"];
+				}
+		}
+		else
+		{
+			parent::save();
 		}
 	}
 	
