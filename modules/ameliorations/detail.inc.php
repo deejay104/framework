@@ -129,16 +129,23 @@
 
 	foreach($lst as $i=>$d)
 	{
-		$lstdoc=ListDocument($sql,$d["uid_creat"],"avatar");
-
-		if (count($lstdoc)>0)
+		if ($d["uid_creat"]>0)
 		{
-			$img=new document_core($lstdoc[0],$sql);
-			$tmpl_x->assign("msg_avatar",$img->GenerePath(64,64));
+			$lstdoc=ListDocument($sql,$d["uid_creat"],"avatar");
+
+			if (count($lstdoc)>0)
+			{
+				$img=new document_core($lstdoc[0],$sql);
+				$tmpl_x->assign("msg_avatar",$img->GenerePath(64,64));
+			}
+			else
+			{
+				$tmpl_x->assign("msg_avatar",$corefolder."/static/images/icn64_membre.png");
+			}
 		}
 		else
 		{
-			$tmpl_x->assign("msg_avatar",$corefolder."/static/images/icn64_membre.png");
+			$tmpl_x->assign("msg_avatar",$corefolder."/static/images/icn64_dev.png");
 		}
 
 		$tmpl_x->assign("msg_autheur",$d["usr_creat"]->aff("fullname"));
