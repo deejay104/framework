@@ -100,7 +100,6 @@ class amelioration_class extends objet_core
 	function Save()
 	{
 		global $MyOpt;
-		$this->data["uid_dist"]=$this->uid_creat;
 
 		if ((isset($MyOpt["amelioration"]["url"])) && ($MyOpt["amelioration"]["url"]!=""))
 		{
@@ -126,7 +125,7 @@ class amelioration_class extends objet_core
 				CURLOPT_SSL_VERIFYPEER => false,     // Disabled SSL Cert checks
 				CURLOPT_USERPWD        => $MyOpt["amelioration"]["login"].':'.md5($MyOpt["amelioration"]["pwd"]),
 				CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
-				CURLOPT_CUSTOMREQUEST  => "POST",
+				CURLOPT_CUSTOMREQUEST  => "PUT",
 				CURLOPT_POSTFIELDS     => json_encode($post)
 			);
 
@@ -193,7 +192,7 @@ class amelioration_class extends objet_core
 				CURLOPT_SSL_VERIFYPEER => false,     // Disabled SSL Cert checks
 				CURLOPT_USERPWD        => $MyOpt["amelioration"]["login"].':'.md5($MyOpt["amelioration"]["pwd"]),
 				CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
-				CURLOPT_CUSTOMREQUEST  => "POST",
+				CURLOPT_CUSTOMREQUEST  => "PUT",
 				CURLOPT_POSTFIELDS     => json_encode($td)
 			);
 

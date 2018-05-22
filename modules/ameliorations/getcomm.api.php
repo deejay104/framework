@@ -15,16 +15,19 @@
 	if ($id>0)
 	{
 		$pb = new amelioration_class($id,$sql);
+		$lst=$pb->ListeCommentaire();
 
-		$res["id"]=$id;
-		$res["uid_creat"]=$pb->data["uid_dist"];
-		$res["dte_creat"]=$pb->dte_creat;
-		$res["uid_maj"]=$pb->data["uid_dist"];
-		$res["dte_maj"]=$pb->dte_creat;
-
-		foreach($pb->data as $k=>$v)
+		foreach($lst as $i=>$d)
 		{
-			$res["data"][$k]=utf8_encode($v);
+			foreach($d as $k=>$v)
+			{
+				if (($k!="usr_creat") && (!is_numeric($k)))
+
+				{
+					$res["lst"][$i][$k]=utf8_encode($v);
+				}
+			}
+			$res["lst"][$i]["uid_creat"]=$res["lst"][$i]["uid_dist"];
 		}
 	}
 
