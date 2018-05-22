@@ -50,6 +50,43 @@ class amelioration_class extends objet_core
 		// print_r($this);
 	}
 
+	function load($id)
+	{
+		global $MyOpt;
+	// $MyOpt["amelioration"]["url"]="https://admin.les-mnms.net/";
+	
+		if ((isset($MyOpt["amelioration"]["url"])) && ($MyOpt["amelioration"]["url"]!=""))
+		{
+
+			$url=$MyOpt["amelioration"]["url"]."/api.php?mod=ameliorations&rub=getdetail&id=".$id;
+
+			$options = array(
+				CURLOPT_RETURNTRANSFER => true,     // return web page
+				CURLOPT_HEADER         => false,    // don't return headers
+				CURLOPT_FOLLOWLOCATION => true,     // follow redirects
+				CURLOPT_ENCODING       => "",       // handle all encodings
+				CURLOPT_USERAGENT      => "MNMS", // who am i
+				CURLOPT_AUTOREFERER    => true,     // set referer on redirect
+				CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
+				CURLOPT_TIMEOUT        => 120,      // timeout on response
+				CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
+				CURLOPT_SSL_VERIFYPEER => false,     // Disabled SSL Cert checks
+				CURLOPT_USERPWD        => 'ea:'.md5("vmez2ctOFqBAkhH5")
+			);
+
+			$ch = curl_init($url); 
+			curl_setopt_array( $ch, $options );
+			$data = curl_exec($ch); 
+		print_r($data);
+			$tabList=json_decode($data,true);
+			
+		}
+		else
+		{
+			parent::load($id);
+		}
+	}
+	
 	function aff($key,$typeaff="html",$formname="form_data")
 	{
 		$ret=parent::aff($key,$typeaff,$formname);
@@ -94,9 +131,10 @@ class amelioration_class extends objet_core
 			$sql->GetRow($i);
 			$lst[$i]=$sql->data;
 		}
+
 		foreach($lst as $i=>$d)
 		{
-			$lst[$i]["usr_creat"]=new user_core($sql->data["uid_maj"],$sql,false,false);
+			$lst[$i]["usr_creat"]=new user_core($d["uid_creat"],$sql,false,false);
 		}
 		return $lst;
 	}

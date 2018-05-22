@@ -52,7 +52,6 @@ class user_core extends objet_core
 		$this->data["actif"]="oui";
 		$this->data["virtuel"]="non";
 		$this->data["aff_msg"]="0";
-		$this->data["aff_jour"]=date("Y-m-d");
 		$this->data["dte_login"]="0000-00-00 00:00:00";
 
 

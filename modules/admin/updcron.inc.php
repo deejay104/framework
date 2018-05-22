@@ -4,6 +4,7 @@
 	  { header("HTTP/1.0 401 Unauthorized"); exit; }
 
 // ---- Vérifie les paramètres
+	$res=array();
 	if (!isset($_GET["id"]))
 	{
 		$res["result"]=utf8_encode("NOK");

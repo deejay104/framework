@@ -39,6 +39,31 @@ function MyRep($file,$mymod="")
   	  { return ""; }
   }
 
+function checkVar($var,$type)
+{
+	global $_REQUEST;
+	
+	if (!isset($_REQUEST[$var]))
+	{
+		$v="";
+	}
+	else
+	{
+		$v=$_REQUEST[$var];
+	}
+	
+	if ($type=="numeric")
+	{
+		if (is_numeric($v))
+		{
+			return $v;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+}
   
 function GetDroit($droit)
   { global $myuser;
