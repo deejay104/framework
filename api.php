@@ -24,6 +24,7 @@
 	$sql = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db,$port);
 	$sql->show=false;
 
+	$gl_uid = 0;
 	if ((isset($_SESSION['uid'])) && ($_SESSION['uid']>0))
 	{
 		$gl_uid = $_SESSION['uid'];

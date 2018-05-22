@@ -12,20 +12,10 @@
 	
 	$res=array();
 
-	if ($id>0)
+	$lst=ListeObjets($sql,"ameliorations",array("id"),array("actif"=>"oui","uid_creat"=>$gl_uid));
+	foreach($lst as $i=>$d)
 	{
-		$pb = new amelioration_class($id,$sql);
-
-		$res["id"]=$id;
-		$res["uid_creat"]=$pb->data["uid_dist"];
-		$res["dte_creat"]=$pb->dte_creat;
-		$res["uid_maj"]=$pb->data["uid_dist"];
-		$res["dte_maj"]=$pb->dte_creat;
-
-		foreach($pb->data as $k=>$v)
-		{
-			$res["data"][$k]=utf8_encode($v);
-		}
+		$res["lst"][$i]=$d;
 	}
 
 	// Send JSON to the client.

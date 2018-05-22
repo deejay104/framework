@@ -36,12 +36,14 @@ class amelioration_class extends objet_core
 	# Constructor
 	function __construct($id=0,$sql)
 	{
+		global $gl_uid;
+		
 		$this->data["titre"]="";
 		$this->data["description"]="";
 		$this->data["version"]="";
 		$this->data["status"]="1new";
 		$this->data["module"]="";
-		$this->data["uid_dist"]=0;
+		$this->data["uid_dist"]=$gl_uid;
 
 		parent::__construct($id,$sql);
 		
@@ -98,7 +100,6 @@ class amelioration_class extends objet_core
 	function Save()
 	{
 		global $MyOpt;
-		$this->data["uid_dist"]=$this->uid_creat;
 
 		if ((isset($MyOpt["amelioration"]["url"])) && ($MyOpt["amelioration"]["url"]!=""))
 		{
@@ -161,19 +162,58 @@ class amelioration_class extends objet_core
 	}
 	
 	
-	function AddCommentaire($txt)
+	function AddCommentaire($txt,$uid=0)
 	{
-		global $gl_uid;
-		$sql=$this->sql;
+		global $MyOpt,$gl_uid;
 
-		$td=array();
-		$td["fid"]=$this->id;
-		$td["description"]=addslashes($txt);
-		$td["uid_creat"]=$gl_uid;
-		$td["dte_creat"]=now();
-		$td["uid_maj"]=$gl_uid;
-		$td["dte_maj"]=$td["dte_creat"];
-		$sql->Edit("ameliorations",$this->tbl."_ameliore_com",0,$td);
+
+		if ((isset($MyOpt["amelioration"]["url"])) && ($MyOpt["amelioration"]["url"]!=""))
+		{
+			$td=array();
+			$td["fid"]=$this->id;
+			$td["description"]=utf8_encode($txt);
+			$td["uid_dist"]=$gl_uid;
+			$td["uid_creat"]=$gl_uid;
+			$td["dte_creat"]=now();
+			$td["uid_maj"]=$gl_uid;
+			$td["dte_maj"]=$td["dte_creat"];
+
+			$url=$MyOpt["amelioration"]["url"]."/api.php?mod=ameliorations&rub=updcomm";
+			$options = array(
+				CURLOPT_RETURNTRANSFER => true,     // return web page
+				CURLOPT_HEADER         => false,    // don't return headers
+				CURLOPT_FOLLOWLOCATION => true,     // follow redirects
+				CURLOPT_ENCODING       => "",       // handle all encodings
+				CURLOPT_USERAGENT      => "MNMS", // who am i
+				CURLOPT_AUTOREFERER    => true,     // set referer on redirect
+				CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
+				CURLOPT_TIMEOUT        => 120,      // timeout on response
+				CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
+				CURLOPT_SSL_VERIFYPEER => false,     // Disabled SSL Cert checks
+				CURLOPT_USERPWD        => $MyOpt["amelioration"]["login"].':'.md5($MyOpt["amelioration"]["pwd"]),
+				CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
+				CURLOPT_CUSTOMREQUEST  => "POST",
+				CURLOPT_POSTFIELDS     => json_encode($td)
+			);
+
+			$ch = curl_init($url); 
+			curl_setopt_array( $ch, $options );
+			$data = curl_exec($ch); 
+			curl_close($ch); 
+		}
+		else
+		{
+			$td=array();
+			$td["fid"]=$this->id;
+			$td["description"]=addslashes($txt);
+			$td["uid_dist"]=$uid;
+			$td["uid_creat"]=$gl_uid;
+			$td["dte_creat"]=now();
+			$td["uid_maj"]=$gl_uid;
+			$td["dte_maj"]=$td["dte_creat"];
+			$sql=$this->sql;
+			$sql->Edit("ameliorations",$this->tbl."_ameliore_com",0,$td);
+		}
 	}
 	
 	function ListeCommentaire()

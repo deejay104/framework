@@ -387,7 +387,7 @@ function ListeObjets($sql,$table,$champs=array(),$crit=array())
 		
 	$q="SELECT id".$s.implode(",",$champs)." FROM ".$MyOpt["tbl"]."_".$table." ".$w;
 	$sql->Query($q);
-
+error_log($q);
 	$lst=array();
 	for($i=0; $i<$sql->rows; $i++)
 	{ 
