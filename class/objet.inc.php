@@ -298,6 +298,10 @@ class objet_core
 				$vv="0000-00-00 00:00:00";
 			}
 		}
+		else if ($this->type[$key]=="varchar")
+		{
+			$vv=$v;
+		}
 		else
 		{
 			$vv=strtolower($v);

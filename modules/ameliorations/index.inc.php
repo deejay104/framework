@@ -46,6 +46,8 @@
 	$tabTitre["version"]["width"]=100;
 	$tabTitre["module"]["aff"]="Module";
 	$tabTitre["module"]["width"]=100;
+	$tabTitre["creat"]["aff"]="Demandeur";
+	$tabTitre["creat"]["width"]=180;
 
 	$tabValeur=array();
 	foreach($lst as $i=>$d)
@@ -62,6 +64,8 @@
 		$tabValeur[$i]["version"]["aff"]=$pb->aff("version");
 		$tabValeur[$i]["module"]["val"]=$pb->val("module");
 		$tabValeur[$i]["module"]["aff"]=$pb->aff("module");
+		$tabValeur[$i]["creat"]["val"]=$pb->val("uid_creat");
+		$tabValeur[$i]["creat"]["aff"]=$pb->aff("uid_creat");
 	}
 
 	if ((!isset($order)) || ($order=="")) { $order="status"; }

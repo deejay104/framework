@@ -26,7 +26,7 @@ class amelioration_class extends objet_core
 	protected $rub="detail";
 
 	protected $droit=array("status"=>"ModifAmeliorationStatus");
-	protected $type=array("description"=>"text","status"=>"enum","module"=>"enum");
+	protected $type=array("titre"=>"varchar","description"=>"text","status"=>"enum","module"=>"enum");
 	
 	protected $tabList=array(
 			"status"=>array('1new'=>'Nouveau','2sched'=>'Prochaine version','3inprg'=>'En cours','4test'=>'En test','5close'=>'Publié'),
@@ -157,6 +157,11 @@ class amelioration_class extends objet_core
 		else if (($key=="description") && ($typeaff!="form"))
 		{
 			$ret=preg_replace("/&num;([0-9]+)/","<a href='index.php?mod=ameliorations&rub=detail&id=$1'>#$1</a>",$ret);
+		}
+		else if ($key=="uid_creat")
+		{
+			$usr=new user_core($this->uid_creat,$this->sql);
+			$ret=$usr->aff("fullname");
 		}
 		return $ret;
 	}
