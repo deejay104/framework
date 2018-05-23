@@ -18,8 +18,8 @@
 // ---- Phone
 	$tabMenuPhone["membres"]["icone"]=$corefolder."/static/modules/membres/img/icn48_membres.png";
 	$tabMenuPhone["membres"]["nom"]="";
-	$tabMenuPhone["membres"]["droit"]="AccesMesInformations";
-	$tabMenuPhone["membres"]["url"]="mod=membres&rub=detail&id=".$gl_uid;
+	$tabMenuPhone["membres"]["droit"]="AccesMembres";
+	$tabMenuPhone["membres"]["url"]="mod=membres";
 
 	$tabMenuPhone["docs"]["icone"]=$corefolder."/static/modules/docs/img/icn48_titre.png";
 	$tabMenuPhone["docs"]["nom"]="";

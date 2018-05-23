@@ -27,7 +27,7 @@ Type:
 	ucword
 	uppercase
 	lowercase
-	mail
+	email
 	text
 	bool
 	enum
@@ -126,10 +126,9 @@ class objet_core
 		{
 			$ret=strtolower($txt);
 		}
-		else if ($type=="mail")
+		else if ($type=="email")
 		{
 			$ret=strtolower($txt);
-			$type="email";
 		}
 		else if ($type=="duration")
 		{
@@ -238,9 +237,10 @@ class objet_core
 				}
 				$ret=sql2date($ret);
 			}
-			else if ($type=="mail")
+			else if ($type=="email")
 			{
 				$ret="<A href=\"mailto:".strtolower($ret)."\">".strtolower($ret)."</A>";
+				$link=false;
 			}
 			else if (($type=="enum") && (is_array($this->tabList[$key])))
 			{

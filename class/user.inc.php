@@ -23,7 +23,7 @@ class user_core extends objet_core
 	protected $rub="detail";
 
 	protected $droit=array("prenom"=>"ModifUser","nom"=>"ModifUser","droits"=>"ModifUserDroits","password"=>"modifUserPassword","dte_login"=>"ModifUserDteLogin");
-	protected $type=array("prenom"=>"ucword","nom"=>"uppercase","initiales"=>"uppercase","mail"=>"mail","commentaire"=>"text","notification"=>"bool","virtuel"=>"bool","aff_jour"=>"date","dte_login"=>"datetime");
+	protected $type=array("prenom"=>"ucword","nom"=>"uppercase","initiales"=>"uppercase","mail"=>"email","commentaire"=>"text","notification"=>"bool","virtuel"=>"bool","aff_jour"=>"date","dte_login"=>"datetime");
 
 	// protected $tabList=array(
 		// "status"=>array('1new'=>'Nouveau','2sched'=>'Prochaine version','3inprg'=>'En cours','4test'=>'En test','5close'=>'Publié'),

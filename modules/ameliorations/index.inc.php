@@ -40,14 +40,19 @@
 	$tabTitre["id"]["width"]=100;
 	$tabTitre["titre"]["aff"]="Titre";
 	$tabTitre["titre"]["width"]=300;
+	
 	$tabTitre["status"]["aff"]="Status";
 	$tabTitre["status"]["width"]=150;
-	$tabTitre["version"]["aff"]="Version";
-	$tabTitre["version"]["width"]=100;
-	$tabTitre["module"]["aff"]="Module";
-	$tabTitre["module"]["width"]=100;
-	$tabTitre["creat"]["aff"]="Demandeur";
-	$tabTitre["creat"]["width"]=180;
+	
+	if ($theme!="phone")
+	{
+		$tabTitre["version"]["aff"]="Version";
+		$tabTitre["version"]["width"]=100;
+		$tabTitre["module"]["aff"]="Module";
+		$tabTitre["module"]["width"]=100;
+		$tabTitre["creat"]["aff"]="Demandeur";
+		$tabTitre["creat"]["width"]=180;
+	}
 
 	$tabValeur=array();
 	foreach($lst as $i=>$d)
