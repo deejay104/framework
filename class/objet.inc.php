@@ -18,6 +18,20 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+Type:
+	number: Nombre
+	date
+	datetime
+	duration: Temps
+	ucword
+	uppercase
+	lowercase
+	mail
+	text
+	bool
+	enum
+*/
 
 // Class Utilisateur
 class objet_core
@@ -76,7 +90,7 @@ class objet_core
 	}
 	
 	# Show object informations
-	function aff($key,$typeaff="html",$formname="form_data")
+	function aff($key,$typeaff="html",$formname="form_data",&$render="")
 	{
 		global $MyOpt;
 		if (!isset($this->type[$key]))
@@ -88,7 +102,13 @@ class objet_core
 			$type=$this->type[$key];
 		}
 
+		if ($render=="")
+		{
+			$render=$typeaff;
+		}
+		
 		$txt=$this->data[$key];
+		$len=0;
 
 		if (is_numeric($key))
 		  { $ret="******"; }
@@ -114,6 +134,8 @@ class objet_core
 		else if ($type=="duration")
 		{
 			$ret=AffTemps($txt,"no");
+			$len=80;
+			$type="";
 		}
 		else if ($type=="number")
 		{
@@ -132,10 +154,12 @@ class objet_core
 		  { $ret=$txt; }
 
 
-		// Si on a le droit de modif on autorise
 		$mycond=true;
+		// Si on pas le droit de modif alors on repasse en lecture
 		if ((isset($this->droit[$key])) && ($this->droit[$key]!="") && (!GetDroit($this->droit[$key])))
-		  { $mycond=false; }
+		{
+			$mycond=false;
+		}
 
 		// Si l'utilisateur a le droit de tout modifier alors on force
 		if (GetDroit("SYS"))
@@ -148,10 +172,10 @@ class objet_core
 		// Si on a pas le droit on repasse en visu
 		if (!$mycond)
 		{
-			$typeaff="html";
+			$render="html";
 		}
  	
-		if ($typeaff=="form")
+		if ($render=="form")
 		{
 			if ($type=="text")
 		  	{
@@ -178,13 +202,17 @@ class objet_core
 				$type="date";
 				$ret="<INPUT id='".$key."'  name=\"".$formname."[$key][date]\" value=\"".date2sql(sql2date($ret,"jour"))."\" type=\"date\"> <INPUT id='".$key."'  name=\"".$formname."[$key][time]\" value=\"".sql2time($ret)."\" type=\"time\">";
 			}
+			else if ($type=="date")
+			{
+				$ret="<INPUT id='".$key."'  name=\"".$formname."[$key]\" value=\"".date2sql(sql2date($ret,"jour"))."\" type=\"date\">";
+			}
 			else
 			{
-				$type=(isset($type)) ? $type : "";
-				$ret="<INPUT id='".$key."'  name=\"".$formname."[$key]\" value=\"".$ret."\" ".(($type!="") ? "type=\"".$type."\"" : "").">";
+				$type=(isset($type)) ? $type : "text";
+				$ret="<INPUT id='".$key."'  name=\"".$formname."[$key]\" value=\"".$ret."\" ".(($type!="") ? "type=\"".$type."\"" : "")." ".(($len>0) ? "style='width:".$len."px!important;'" : "").">";
 			}
 		}
-		else if ($typeaff=="val")
+		else if ($render=="val")
 		{
 
 		}
@@ -195,11 +223,12 @@ class objet_core
 			if ($type=="text")
 			{
 				$ret=nl2br(htmlentities($ret,ENT_HTML5,"ISO-8859-1"));
+				$ret="<p class='formulaire'>".$ret."</p>";
 				$link=false;
 			}
 			else if ($type=="date")
 			{
-				$ret=sql2date($ret);
+				$ret=sql2date($ret,"jour");
 			}
 			else if ($type=="datetime")
 			{
@@ -352,7 +381,7 @@ class objet_core
 		$sql->Edit($this->table,$this->tbl."_".$this->table,$this->id,array("actif"=>'non', "uid_maj"=>$gl_uid, "dte_maj"=>now()));
 	}
 
-	function Render($form,$typeaff)
+	function Render($form,$render)
 	{
 		global $tmpl_x;
 
@@ -363,7 +392,7 @@ class objet_core
 		}
 		foreach($this->data as $k=>$v)
 		{
-			$tmpl_x->assign($form."_".$k,$this->aff($k,$typeaff));
+			$tmpl_x->assign($form."_".$k,$this->aff($k,$render));
 		}
 	}
 	

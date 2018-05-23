@@ -85,8 +85,8 @@ $MyOptHelp["amelioration"]="Mot de passe de l'API pour la centralisation des amé
 
 
 // Modules
-$MyOptTmpl["modules"]["actualites"]="on";
-$MyOptHelp["modules"]["actualites"]="Active le module d'actualités (on=Activé)";
+$MyOptTmpl["module"]["actualites"]="on";
+$MyOptHelp["module"]["actualites"]="Active le module d'actualités (on=Activé)";
 
 
 // Dénini les droits d'accès aux rubriques

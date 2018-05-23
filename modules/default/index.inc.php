@@ -1,5 +1,5 @@
 <?
-if ($MyOpt["modules"]["actualites"]=="on")
+if ($MyOpt["module"]["actualites"]=="on")
 {
 	$mod="actualites";
 	$affrub="index";

@@ -148,13 +148,13 @@ class amelioration_class extends objet_core
 	
 	function aff($key,$typeaff="html",$formname="form_data")
 	{
-		$ret=parent::aff($key,$typeaff,$formname);
+		$ret=parent::aff($key,$typeaff,$formname,$render);
 
 		if ($key=="id")
 		{
 			$ret="<a href='index.php?mod=ameliorations&rub=detail&id=".$this->id."'>#".CompleteTxt($this->id,4,"0")."</a>";
 		}
-		else if (($key=="description") && ($typeaff!="form"))
+		else if (($key=="description") && ($render!="form"))
 		{
 			$ret=preg_replace("/&num;([0-9]+)/","<a href='index.php?mod=ameliorations&rub=detail&id=$1'>#$1</a>",$ret);
 		}

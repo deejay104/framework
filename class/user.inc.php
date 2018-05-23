@@ -31,7 +31,7 @@ class user_core extends objet_core
 	// );
 
 	# Constructor
-	function __construct($id=0,$sql,$me=false,$setdata=true)
+	function __construct($id=0,$sql,$me=false)
 	{
 		$this->id=$id;
 		$this->me=$me;
@@ -117,6 +117,18 @@ class user_core extends objet_core
 		}
 	}
 
+	function CheckDroit($role)
+	{
+		if (trim($role)=="")
+		  { return true; }
+		else if ((isset($this->role[$role])) && ($this->role[$role]))
+		  { return true; }
+		else if ((isset($this->groupe["SYS"])) && ($this->groupe["SYS"]))
+		  { return true; }
+		else
+		  { return false; }
+	}
+
 	// Charge les données complémentaires
 	function LoadDonneesComp()
 	{
@@ -132,12 +144,12 @@ class user_core extends objet_core
 		}
 	}
 
-	function aff($key,$typeaff="html",$formname="form_data")
+	function aff($key,$typeaff="html",$formname="form_data",&$render="")
 	{
-		$ret=parent::aff($key,$typeaff,$formname);
+		$ret=parent::aff($key,$typeaff,$formname,$render);
 
 		$sql=$this->sql;
-		if ($typeaff=="form")
+		if ($render=="form")
 		{
 			if ($key=="droits")
 			{
@@ -158,7 +170,7 @@ class user_core extends objet_core
 				$ret="<span>".$ret."</span>";
 			}
 		}
-		else if ($typeaff=="val")
+		else if ($render=="val")
 		{
 			if ($key=="fullname")
 			{
@@ -193,7 +205,7 @@ class user_core extends objet_core
 	}
 	
 	// Affiche les données complémentaires
-	function AffDonneesComp($i,$typeaff="html")
+	function AffDonneesComp($i,$render="html")
 	{
 		// Défini les droits de modification des utilisateurs
 		$mycond=$this->me;	// Le user a le droit de modifier toutes ses données
@@ -205,10 +217,10 @@ class user_core extends objet_core
 		if (GetDroit("ModifUserAll"))
 		  { $mycond=true; }
 		// Si on a pas le droit on repasse en visu
-		if ((!$mycond) && ($typeaff!="val"))
-		  { $typeaff="html"; }
+		if ((!$mycond) && ($render!="val"))
+		  { $render="html"; }
  	
-		if ($typeaff=="form")
+		if ($render=="form")
 		{
 			$ret="<label>".$this->donnees[$i]["nom"]."</label><input name='form_donnees[".$i."]' value='".$this->donnees[$i]["valeur"]."'></br>";
 		}
