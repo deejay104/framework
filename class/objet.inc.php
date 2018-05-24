@@ -195,6 +195,22 @@ class objet_core
 		  	  	$ret.="</select>";
 
 			}
+			else if (($type=="multi") && (is_array($this->tabList[$key])))
+			{
+				$t=explode(",",$txt);
+				$tt=array();
+				foreach($t as $i=>$v)
+				{
+					$tt[$v]="on";
+				}
+
+				$ret="<span>";
+				foreach($this->tabList[$key] as $k=>$v)
+				{
+					$ret.="<input type='checkbox' name='".$formname."[".$key."][".$k."]' value='".$k."' ".(($tt[$k]=="on") ? "checked" : "")."> ".$this->tabList[$key][$k]."<br />";
+				}
+				$ret.="</span>";
+			}
 			else if ($type=="datetime")
 			{
 				// $ret=sql2date($ret);
@@ -227,7 +243,14 @@ class objet_core
 			}
 			else if ($type=="date")
 			{
-				$ret=sql2date($ret,"jour");
+				if ($ret=="0000-00-00")
+				{
+					$ret="-";
+				}
+				else
+				{
+					$ret=sql2date($ret,"jour");
+				}
 			}
 			else if ($type=="datetime")
 			{
@@ -325,6 +348,17 @@ class objet_core
 			else
 			{
 				$vv="0000-00-00 00:00:00";
+			}
+		}
+		else if ($this->type[$key]=="multi")
+		{
+			if (is_array($v))
+			{
+				$vv=implode(",",$v);
+			}
+			else
+			{
+				$vv=$v;
 			}
 		}
 		else if ($this->type[$key]=="varchar")

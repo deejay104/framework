@@ -77,11 +77,11 @@ $MyOptHelp["expireCache"]="Si supérieur à 0, nombre d'heure durant lesquelles on
 
 // API améliorations
 $MyOptTmpl["amelioration"]["url"]="https://admin.les-mnms.net";
-$MyOptHelp["amelioration"]="URL de l'API pour la centralisation des améliorations";
+$MyOptHelp["amelioration"]["url"]="URL de l'API pour la centralisation des améliorations";
 $MyOptTmpl["amelioration"]["login"]="";
-$MyOptHelp["amelioration"]="login de l'API pour la centralisation des améliorations";
+$MyOptHelp["amelioration"]["login"]="login de l'API pour la centralisation des améliorations";
 $MyOptTmpl["amelioration"]["pwd"]="";
-$MyOptHelp["amelioration"]="Mot de passe de l'API pour la centralisation des améliorations";
+$MyOptHelp["amelioration"]["pwd"]="Mot de passe de l'API pour la centralisation des améliorations";
 
 
 // Modules

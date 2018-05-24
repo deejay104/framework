@@ -175,7 +175,7 @@ function date2sql($date) {
 // Transforme une date SQL en date jj/mm/aaaa
 function sql2date($date,$aff="") {
 	if ($aff=="jour")
-	  { return preg_replace('/^([0-9]{2,4})-([0-9]{1,2})-([0-9]{1,2}) [^$]*$/','\\3/\\2/\\1', $date); }
+	  { return preg_replace('/^([0-9]{2,4})-([0-9]{1,2})-([0-9]{1,2}) ?[^$]*$/','\\3/\\2/\\1', $date); }
 	else if ($aff=="nosec")
 	  { return preg_replace('/^([0-9]{2,4})-([0-9]{1,2})-([0-9]{1,2}) ([0-9]*):([0-9]*):([0-9 ]*)$/','\\3/\\2/\\1 \\4:\\5', $date); }
 	else if ($aff=="heure")
