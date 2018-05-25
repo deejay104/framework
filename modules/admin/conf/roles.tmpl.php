@@ -18,9 +18,7 @@ $tabRoles["ModifGroupe"]="Modification d'un groupe (roles et informations)";
 $tabRoles["ModifForum"]="Modifier la liste de forum (et suppression)";
 $tabRoles["ModifActualite"]="Modifier une actualite";
 
-$tabRoles["CreeForum"]="Créer un nouveau forum";
 $tabRoles["CreeFamille"]="Créer une famille";
-$tabRoles["CreeClasseur"]="Créer un nouveau classeur dans le module document";
 $tabRoles["CreeGroupe"]="Créer un nouveau groupe";
 
 $tabRoles["SupprimeActualite"]="Suppression d'une actualite";
@@ -28,6 +26,7 @@ $tabRoles["SupprimeMessage"]="Supprimer un message dans le module document";
 $tabRoles["SupprimeGroupe"]="Supprimer un groupe";
 
 
+$tabRoles["CreeClasseur"]="Créer un nouveau classeur dans le module document";
 $tabRoles["AccesDocuments"]="Accès au module de documents";
 $tabRoles["VisuDocument"]="Visualisation de tous les documents";
 
@@ -67,5 +66,10 @@ $tabRoles["CreeAmeliorationCommentaire"]="Créer une réponse à une amélioration";
 $tabRoles["ModifAmelioration"]="Modifier une fiche d'amélioration";
 $tabRoles["ModifAmeliorationStatus"]="Modifier le status d'une amélioration";
 $tabRoles["SupprimeAmelioration"]="Supprimer un membre";
+
+// ---- Echéances
+$tabRoles["AccesConfigEcheances"]="Accès à la gestion des échéances";
+$tabRoles["NotifEcheances"]="Accès à la gestion des échéances";
+
 
 ?>

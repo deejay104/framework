@@ -325,6 +325,8 @@
 // ---- Données spécifique
 	if (file_exists($appfolder."/modules/membres/custom.inc.php"))
 	{
+		$left="";
+		$right="";
 		require($appfolder."/modules/membres/custom.inc.php");
 		
 		if ($left!="")

@@ -18,7 +18,7 @@
 	$q[]="DELETE FROM `".$MyOpt["tbl"]."_cron`";
 
 	$q[]="INSERT INTO `".$MyOpt["tbl"]."_cron` SET description='Mail d\'actualités', module='actualites', script='sendmail', schedule='5', actif='non'";
-	$q[]="INSERT INTO `".$MyOpt["tbl"]."_cron` SET description='Notification des échéances', module='comptabilite', script='echeances', schedule='10080', actif='non'";
+	$q[]="INSERT INTO `".$MyOpt["tbl"]."_cron` SET description='Notification des échéances', module='admin', script='echeances', schedule='10080', actif='non'";
 
   	foreach($q as $i=>$query)
 	{

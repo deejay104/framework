@@ -33,6 +33,10 @@ $MyOptHelp["host"]="Chemin complet du site. Utilisé pour générer les url statiqu
 $MyOptTmpl["site_title"]="MnMs";
 $MyOptHelp["site_title"]="Titre du site web";
 
+// email par défault d'envoie des mails
+$MyOptTmpl["from_email"]="noreply@les-mnms.net";
+$MyOptHelp["from_email"]="Email par défault d'envoie des mails";
+
 // Logo du site dans le dossier images
 $MyOptTmpl["site_logo"]="logo.png";
 $MyOptHelp["site_logo"]="Nom du fichier pour le logo. Il doit se trouver dans le dossier custom.";
@@ -87,6 +91,10 @@ $MyOptHelp["amelioration"]["pwd"]="Mot de passe de l'API pour la centralisation 
 // Modules
 $MyOptTmpl["module"]["actualites"]="on";
 $MyOptHelp["module"]["actualites"]="Active le module d'actualités (on=Activé)";
+
+// Unité
+$MyOptTmpl["devise"]="€";
+$MyOptHelp["devise"]="Devise";
 
 
 // Dénini les droits d'accès aux rubriques

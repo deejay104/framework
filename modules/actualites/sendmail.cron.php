@@ -31,8 +31,8 @@
 	{
 		myPrint($d["titre"]);
 		
-		$auth = new user_class($d["uid_creat"],$sql,false);
-		$from["mail"]=$auth->mail;
+		$auth = new user_core($d["uid_creat"],$sql,false);
+		$from["mail"]=$auth->data["mail"];
 		$from["name"]=$auth->fullname;
 
 		$txt=nl2br(htmlentities( utf8_encode($d["message"]) ));
@@ -43,19 +43,19 @@
 		foreach($lst as $i=>$uid)
 		{
 			// Et on envoie un mail à chacune des personnes de la liste
-			$usr = new user_class($uid,$sql,false);
-			
-			if ($usr->mail!="")
+			$usr = new user_core($uid,$sql,false);
+			$to=$usr->data["mail"];
+			if ($to!="")
 			{
-				if (!MyMail($from,$usr->mail,array(),$d["titre"],$txt))
+				if (!MyMail($from,$to,array(),$d["titre"],$txt))
 				{
-					myPrint($usr->mail." NOK");
-					$dest.=$usr->mail." NOK, ";
+					myPrint($to." NOK");
+					$dest.=$to." NOK, ";
 					$ret=false;
 				}
 				else
 				{
-					myPrint($usr->mail." OK");
+					myPrint($to." OK");
 				}
 
 			}

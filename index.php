@@ -229,7 +229,6 @@
 	//Mon, 22 Jul 2002 11:12:01 GMT
 	
 // ---- Affichages du menu
-
 	$tabMenu=array();
 	$tabMenuPhone=array();
 	require("modules/default/menu.inc.php");
@@ -276,29 +275,29 @@
 	$affrub=$rub;
 	while ($affrub!="")
 	{
-			$oldrub=$affrub;
-			$oldmod=$mod;
-	
-			// Initialise les variables
-			$infos="";
-			$icone="";
-			$corps="";
+		$oldrub=$affrub;
+		$oldmod=$mod;
 
-			// Charge la rubrique
-			if (MyRep("$affrub.inc.php")!="")
-			{
-			  	$rub=$affrub;
-			  	require(MyRep("$affrub.inc.php"));
-			}
-			else
-			{
-				FatalError("Fichier introuvable","Fichier : $affrub.inc.php");
-			}
-			
-			if (($affrub==$oldrub) && ($mod==$oldmod))
-			{
-				$affrub="";
-			}
+		// Initialise les variables
+		$infos="";
+		$icone="";
+		$corps="";
+
+		// Charge la rubrique
+		if (MyRep("$affrub.inc.php")!="")
+		{
+			$rub=$affrub;
+			require(MyRep("$affrub.inc.php"));
+		}
+		else
+		{
+			FatalError("Fichier introuvable","Fichier : $affrub.inc.php");
+		}
+		
+		if (($affrub==$oldrub) && ($mod==$oldmod))
+		{
+			$affrub="";
+		}
 	}
 
 	

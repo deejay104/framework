@@ -243,6 +243,43 @@ function AjoutLog($txt)
 	}
 
 // ---- Applique les patchs
+	$ret["data"].=AjoutLog("Application des patchs framework");
+
+	$tabPatch=array();
+	$q="SELECT * FROM ".$MyOpt["tbl"]."_config WHERE param='core'";
+	$sql->Query($q);
+	for($i=0; $i<$sql->rows; $i++)
+	{
+		$sql->GetRow($i);
+		$tabPatch[$sql->data["value"]]=$sql->data["dte_creat"];
+	}
+
+	$dir = "modules/admin/patch";
+	$tdir = array_diff(scandir($dir), array('..', '.'));
+
+	foreach ($tdir as $ii=>$d)
+	{
+		preg_match("/v([0-9]*)\.inc\.php/",$d,$p);
+		$num=$p[1];
+
+		if (!isset($tabPatch[$num]))
+		{
+			$ok=0;
+			require($dir."/".$d);
+			if ($ok==0)
+			{
+				$ret["data"].=AjoutLog(" - Patch ".$p[1]);
+				$q="INSERT INTO ".$MyOpt["tbl"]."_config SET param='core',value='".$num."',dte_creat='".now()."'";
+				$sql->Insert($q);
+			}
+			else
+			{
+				$ret["data"].=AjoutLog(" ! Erreur patch ".$p[1]);
+			}
+		}
+	}
+
+// ---- Applique les patchs custom
 	$ret["data"].=AjoutLog("Application des patchs");
 
 	$tabPatch=array();
@@ -254,7 +291,7 @@ function AjoutLog($txt)
 		$tabPatch[$sql->data["value"]]=$sql->data["dte_creat"];
 	}
 
-	$dir = "modules/$mod/patch";
+	$dir = $appfolder."/modules/admin/patch";
 	$tdir = array_diff(scandir($dir), array('..', '.'));
 
 	foreach ($tdir as $ii=>$d)
@@ -279,21 +316,22 @@ function AjoutLog($txt)
 		}
 	}
 
+	
 // ---- Mise à jour de la base
 	require("version.php");
-	$query="SELECT value FROM ".$MyOpt["tbl"]."_config WHERE param='version'";
+	require($appfolder."/version.php");
+	$query="SELECT id FROM ".$MyOpt["tbl"]."_config WHERE param='version'";
 	$res=$sql->QueryRow($query);
-	$ver=$res["value"];
 
-	if ($ver=="")
+	if ($id>0)
 	{
-		$query="INSERT INTO ".$MyOpt["tbl"]."_config SET param='version',value='".$myrev."',dte_creat='".now()."'";
-		$sql->Insert($query);
+		$query="UPDATE ".$MyOpt["tbl"]."_config SET value='".$myrev."-".$core_version."',dte_creat='".now()."' WHERE id='".$id."'";
+		$sql->Update($query);
 	}
 	else
 	{
-		$query="UPDATE ".$MyOpt["tbl"]."_config SET value='".$myrev."',dte_creat='".now()."' WHERE param='version'";
-		$sql->Update($query);
+		$query="INSERT INTO ".$MyOpt["tbl"]."_config SET param='version',value='".$myrev."-".$core_version."',dte_creat='".now()."'";
+		$sql->Insert($query);
 	}
 	
 // ---- Renvoie le log

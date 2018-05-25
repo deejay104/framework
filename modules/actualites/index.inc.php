@@ -198,8 +198,19 @@
 		$tmpl_x->parse("corps.aff_message");
 	}
 
+	
+// ---- Personalisation
   	
-
+	if (file_exists($appfolder."/modules/actualites/custom.inc.php"))
+	{
+		$custom="";
+		require($appfolder."/modules/actualites/custom.inc.php");
+		
+		if ($custom!="")
+		{
+			$tmpl_x->assign("aff_custom",$custom);
+		}
+	}
 
 // ---- Affecte les variables d'affichage
 

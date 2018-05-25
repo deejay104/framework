@@ -56,8 +56,8 @@
 <div class="cadreinfos">
 
 	<div class="encadreInfos">
-		<div class="encadreTitre">Informations Personnelles</div>
-  		<p style='padding-bottom: 5px;'><label><A href="index.php?mod=docs">Nombre de documents non lus</A></label><span><A href="index.php?mod=docs" class="{color_nonlus}">{nb_nonlus}</A></span></p>
+		<div class="encadreTitre">Informations</div>
+  		<p style='padding-bottom: 5px;'><A href="index.php?mod=docs">Nombre de documents non lus</A> : <A href="index.php?mod=docs" class="{color_nonlus}">{nb_nonlus}</A></p>
 		<!-- BEGIN: lst_echeance -->
 		<p>{form_echeance}</p>
 		<!-- END: lst_echeance -->
@@ -70,7 +70,7 @@
 			<p><input type="text" name="search" OnClick="ClearText(event,'Termes à rechercher');" value="Termes à rechercher" OnKeyPress="CapturePost(event);" style="color:#bbbbbb;"></p>
 		</form>
 	</div>
-
+	{aff_custom}
 </div>
 
 <div id="actualites" class="actualites">

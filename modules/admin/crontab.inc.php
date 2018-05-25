@@ -52,13 +52,28 @@
 			$gl_id=$id;
 			$gl_res="";
 			$mod=$sql->data["module"];
-			require("modules/".$sql->data["module"]."/".$sql->data["script"].".cron.php");
+
+			$f="modules/".$sql->data["module"]."/".$sql->data["script"].".cron.php";
+			if (file_exists($appfolder."/".$f))
+			{
+				require($appfolder."/".$f);
+			}
+			else if (file_exists($f))
+			{
+				require($f);
+			}
+			else
+			{
+				$gl_res="NOK";
+				$gl_myprint_txt=utf8_encode("Script non trouvé : ".$sql->data["script"]);
+			}
 
 			$q="UPDATE ".$MyOpt["tbl"]."_cron SET lastrun='".now()."', txtretour='".$gl_res."', txtlog='".addslashes($gl_myprint_txt)."' WHERE id='".$gl_id."'";
 			$sql->Update($q);
 			
 			$tmpl_x->assign("aff_resultat",nl2br(htmlentities(utf8_decode($gl_myprint_txt),ENT_HTML5,"ISO-8859-1")));
 			$tmpl_x->parse("corps.resultat");
+			$mod="admin";
 		}
 	}
 
