@@ -215,7 +215,8 @@ class objet_core
 			{
 				// $ret=sql2date($ret);
 				$type="date";
-				$ret="<INPUT id='".$key."'  name=\"".$formname."[$key][date]\" value=\"".date2sql(sql2date($ret,"jour"))."\" type=\"date\"> <INPUT id='".$key."'  name=\"".$formname."[$key][time]\" value=\"".sql2time($ret)."\" type=\"time\">";
+				$ret="<INPUT id='".$key."'  name=\"".$formname."[$key][date]\" value=\"".date2sql(sql2date($txt,"jour"))."\" type=\"date\"> ";
+				$ret.="<INPUT id='".$key."'  name=\"".$formname."[$key][time]\" value=\"".sql2time($txt)."\" type=\"time\" style=\"width:110px!important;\">";
 			}
 			else if ($type=="date")
 			{
