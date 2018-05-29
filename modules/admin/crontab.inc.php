@@ -68,10 +68,11 @@
 				$gl_myprint_txt=utf8_encode("Script non trouvé : ".$sql->data["script"]);
 			}
 
-			$q="UPDATE ".$MyOpt["tbl"]."_cron SET lastrun='".now()."', txtretour='".$gl_res."', txtlog='".addslashes($gl_myprint_txt)."' WHERE id='".$gl_id."'";
+			$q="UPDATE ".$MyOpt["tbl"]."_cron SET lastrun='".now()."', nextrun='".date("Y-m-d H:i:s",time()+$res["schedule"]*60)."', txtretour='".$gl_res."', txtlog='".addslashes($gl_myprint_txt)."' WHERE id='".$gl_id."'";
 			$sql->Update($q);
+
 			
-			$tmpl_x->assign("aff_resultat",nl2br(htmlentities(utf8_decode($gl_myprint_txt),ENT_HTML5,"ISO-8859-1")));
+			$tmpl_x->assign("aff_resultat",nl2br(utf8_decode($gl_myprint_txt)));
 			$tmpl_x->parse("corps.resultat");
 			$mod="admin";
 		}

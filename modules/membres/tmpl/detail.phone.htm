@@ -46,24 +46,22 @@ Nombre d'heure de vol : {nbheurevol}<br />
 <div class="msgok">{msg_confirmation}</div>
 <!-- END: msgok -->
 
-<div class="formulaireTitre">Etat civil</div>
+{aff_data_right}
+
+<div class="formulaireTitre">Informations</div>
 <div class="formulaire">
 	<p>
-		<label for="prenom">Prénom :</label>
-		{form_prenom}
+		<label for="prenom">Prénom :</label>{form_prenom}
 	</p>
 	<p>
-		<label for="nom">Nom :</label>
-		{form_nom}
+		<label for="nom">Nom :</label>{form_nom}
 	</p>
 
 	<p>
-		<label for="initiales">Initiales :</label>
-		{form_initiales}
+		<label for="initiales">Initiales :</label>{form_initiales}
 	</p>
 	<p>
-		<label for="mail">Mail :</label>
-		{form_mail}
+		<label for="mail">Mail :</label>{form_mail}
 	</p>
 	<!-- BEGIN: virtuel -->
 	<p>
@@ -71,41 +69,40 @@ Nombre d'heure de vol : {nbheurevol}<br />
 	</p>
 	<!-- END: virtuel -->
 	<p>
-		<label>Notifications</label>
-		{form_notification}
+		<label>Notifications</label>{form_notification}
 	</p>
 	
 </div>
 
-<div class="formulaireTitre">Photos</div>
-<div class="formulaire">
 <!-- BEGIN: photos -->
-  <p>
-    Sélectionner ci-dessous la photo voulue. Celle-ci sera transférée sur le 
-    	serveur et remplacera la photo existante.<br />
-    	<INPUT name="form_photo" type="file" style="width: 400px;">
-  </p>
-<!-- END: photos -->
+<div class="formulaireTitre">Photos</div>
+<div class="formulaire" style="padding-left:10px;">
+	<p>
+		Sélectionner ci-dessous la photo voulue. Celle-ci sera transférée sur le 
+		serveur et remplacera la photo existante.
+	</p>
+   <p><INPUT name="form_photo" type="file" style="width: 400px;"></p>
 </div>
+<!-- END: photos -->
 
 
 <div class="formulaireTitre">Documents</div>
 
-<div class="formulaire" style="padding-left: 20px;">
+<div class="formulaire" style="padding-left: 10px;">
 	<!-- BEGIN: lst_document -->
 	<p>{form_document}</p>
 	<!-- END: lst_document -->
 </div>
 
 <div class="formulaireTitre">Echéances</div>
-<div class="formulaire" style="padding-left: 20px;">
+<div class="formulaire" style="padding-left: 10px;">
 	<!-- BEGIN: lst_echeance -->
 	<p>{form_echeance}</p>
 	<!-- END: lst_echeance -->
 </div>
 
 <div class="formulaireTitre">Données</div>
-<div class="formulaire" style='padding-left: 20px;'>
+<div class="formulaire" >
 {aff_data_left}
 <!-- BEGIN: aff_donnees -->
 	<div class="formulaire">
@@ -117,10 +114,8 @@ Nombre d'heure de vol : {nbheurevol}<br />
 </div>
 
 <div class="formulaireTitre">Commentaires</div>
-<div class="formulaire">
-  <p>
-			{form_commentaire}
-  </p>
+<div class="formulaire" style="padding-left: 20px;">
+	{form_commentaire}
 </div>
 
 <!-- BEGIN: droits -->

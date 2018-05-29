@@ -216,11 +216,15 @@ function CalcDate($dte, $n)
 
   
 function SendMailFromFile($from,$to,$tabcc,$subject,$tabvar,$file)
-{ global $mod;
+{ global $mod,$appfolder,$MyOpt;
 
-	if (file_exists("custom/".$file.".mail.txt"))
+	if (file_exists($appfolder."/custom/".$file.".mail.txt"))
 	{
-		$tmail=file("custom/".$file.".mail.txt");
+		$tmail=file($appfolder."/custom/".$file.".mail.txt");
+	}
+	else if (file_exists($appfolder."/modules/".$mod."/".$file.".mail.txt"))
+	{
+		$tmail=file($appfolder."/modules/".$mod."/".$file.".mail.txt");
 	}
 	else if (file_exists("modules/".$mod."/".$file.".mail.txt"))
 	{
@@ -244,7 +248,8 @@ function SendMailFromFile($from,$to,$tabcc,$subject,$tabvar,$file)
 		$mail=str_replace("{".$p."}",$d,$mail);
 	}
 
-	$mail=str_replace("{url}",substr($_SERVER["HTTP_REFERER"],0,strrpos($_SERVER["HTTP_REFERER"],"/")),$mail);
+	// $mail=str_replace("{url}",substr($_SERVER["HTTP_REFERER"],0,strrpos($_SERVER["HTTP_REFERER"],"/")),$mail);
+	$mail=str_replace("{url}",$MyOpt["host"],$mail);
 	
 	MyMail($from,$to,$tabcc,$subject,$mail,"","");
 
@@ -319,7 +324,7 @@ function MyMail($from,$to,$tabcc,$subject,$message,$headers="",$files="")
 	}
 
 	//Set who the message is to be sent from
-	$mail->setFrom($fromadd, $me);
+	$mail->setFrom($MyOpt["from_email"], $me);
 	//Set an alternative reply-to address
 	$mail->addReplyTo($fromadd, "");
 	//Set who the message is to be sent to

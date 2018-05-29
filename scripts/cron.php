@@ -1,6 +1,6 @@
 <?php
 /*
-    Easy Aero v2.14
+    MnMs Framework
     Copyright (C) 2018 Matthieu Isorez
 
     This program is free software; you can redistribute it and/or modify
@@ -16,7 +16,6 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
 */
 
 	set_time_limit(0);
@@ -30,32 +29,35 @@
 	echo "MyDir: '".$mydir."'\n";
 	chdir($mydir);
 
+	$appfolder="..";
+	
 // ---- Défini les variables globales
 	$prof="";
 	$gl_mode="batch";
 	
-	require ("modules/fonctions.inc.php");
+	require ("lib/fonctions.inc.php");
 
 // ---- Charge la config  
-	if (!file_exists("config/config.inc.php"))
+	if (!file_exists($appfolder."/config/config.inc.php"))
 	  { FatalError("Fichier de configuration introuvable","Il manque le fichier de configuration."); }
-	if (!file_exists("config/variables.inc.php"))
+	if (!file_exists($appfolder."/config/variables.inc.php"))
 	  { FatalError("Fichier des variables introuvable","Il manque le fichier de variables."); }
 
-  	require ("config/config.inc.php");
-	require ("config/variables.inc.php");
+  	require ($appfolder."/config/config.inc.php");
+	require ($appfolder."/config/variables.inc.php");
 
 // ---- Charge le numéro de version
 	require ("version.php");
 
 // ---- Charge les class
+	require ("class/objet.inc.php");
 	require ("class/user.inc.php");
 
 // ---- Se connecte à la base MySQL
 	require ("class/mysql.inc.php");
 
-	$sql = new mysql_class($mysqluser, $mysqlpassword, $hostname, $db);
-	$sql_cron = new mysql_class($mysqluser, $mysqlpassword, $hostname, $db);
+	$sql = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db);
+	$sql_cron = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db);
 
 // ---- Défini l'utilisateur d'execution du batch
 	if ((!is_numeric($MyOpt["uid_system"])) || ($MyOpt["uid_system"]==0))
@@ -71,7 +73,7 @@
 // ---- Fonction des informations de l'utilisateur
 	if ($gl_uid>0)
 	{
-		$myuser = new user_class($gl_uid,$sql,true);
+		$myuser = new user_core($gl_uid,$sql,true);
 		$res_user=$myuser->data;
 	}
 
@@ -91,15 +93,15 @@
 		echo utf8_encode($sql_cron->data["description"])."\n";
 
 		$mod=$sql_cron->data["module"];
-		require(MyRep($sql_cron->data["script"].".cron.php"));
 
 		echo "-----------------------------\n";
+		require(MyRep($sql_cron->data["script"].".cron.php"));
+
 		echo $gl_myprint_txt;
 		echo "-----------------------------\n\n";
 
 		$q="UPDATE ".$MyOpt["tbl"]."_cron SET lastrun='".now()."', nextrun='".date("Y-m-d H:i:s",time()+$sql_cron->data["schedule"]*60)."', txtretour='".$gl_res."', txtlog='".addslashes($gl_myprint_txt)."' WHERE id='".$sql_cron->data["id"]."'";
 		$sql->Update($q);
-		
 	}
 
 // ---- Ferme la connexion à la base de données	

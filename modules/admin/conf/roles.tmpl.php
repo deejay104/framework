@@ -69,7 +69,7 @@ $tabRoles["SupprimeAmelioration"]="Supprimer un membre";
 
 // ---- Echéances
 $tabRoles["AccesConfigEcheances"]="Accès à la gestion des échéances";
-$tabRoles["NotifEcheances"]="Accès à la gestion des échéances";
+$tabRoles["NotifEcheance"]="Personne à mettre en copie des notifications d'échéance";
 
 
 ?>

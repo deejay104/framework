@@ -54,31 +54,32 @@
 
 <div class="cadreinfos">
 
-<div class="encadreInfos">
-	<div class="encadreTitre">Informations Personnelles</div>
-  
-		<!-- BEGIN: lst_echeance -->
-		<p>{form_echeance}</p>
-		<!-- END: lst_echeance -->
-	<br />
-		
-	<a name="poster"></a>
+	<div class="encadreInfos">
+		<div class="encadreTitre">Informations Personnelles</div>
+	  
+			<!-- BEGIN: lst_echeance -->
+			<p>{form_echeance}</p>
+			<!-- END: lst_echeance -->
+		<br />
+	</div>	
+
 
 	<div class="encadreInfos">
+		<a name="poster"></a>
 		<div class="encadreTitre">Poster un nouveau message</div>
-			<div id="actualitesNouveau" class="actualitesNouveau">		
-				<form name="actualites" method="post" action="index.php#poster" enctype="multipart/form-data">
-					<input type="hidden" name="mod" value="actualites">
-					<input type="hidden" name="id" value="{form_id}">
-					<input type="hidden" name="checktime" value="{form_checktime}">
-			
-					<input type="text" name="form_titre" value="{news_title}" OnFocus="ClearText(event,'{news_title_clear}');"  style="color:#bbbbbb;"><br />
-					<textarea name="form_message" OnFocus="ClearText(event,'{news_message_clear}');" style="color:#bbbbbb;">{news_message}</textarea>
-					<p>
-						<input name='fonc' type='submit' value='Poster'>
-					</p>
-				</form>
-			</div>
+		<div id="actualitesNouveau" class="actualitesNouveau">		
+			<form name="actualites" method="post" action="index.php#poster" enctype="multipart/form-data">
+				<input type="hidden" name="mod" value="actualites">
+				<input type="hidden" name="id" value="{form_id}">
+				<input type="hidden" name="checktime" value="{form_checktime}">
+		
+				<input type="text" name="form_titre" value="{news_title}" OnFocus="ClearText(event,'{news_title_clear}');"  style="color:#bbbbbb;"><br />
+				<textarea name="form_message" OnFocus="ClearText(event,'{news_message_clear}');" style="color:#bbbbbb;">{news_message}</textarea>
+				<p>
+					<input name='fonc' type='submit' value='Poster'>
+				</p>
+			</form>
+		</div>
 	</div>
 
 </div>

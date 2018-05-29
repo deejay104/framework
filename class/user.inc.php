@@ -161,7 +161,10 @@ class user_core extends objet_core
 				for($i=0; $i<$sql->rows; $i++)
 				{ 
 					$sql->GetRow($i);
-					$ret.="<input type='checkbox' name='form_droits[".$sql->data["groupe"]."]' ".(($this->groupe[$sql->data["groupe"]]>0) ? "checked" : "")." value='".$sql->data["groupe"]."' /> ".$sql->data["description"]." (".$sql->data["groupe"].")<br />";
+					if ($sql->data["groupe"]!="SYS")
+					{
+						$ret.="<input type='checkbox' name='form_droits[".$sql->data["groupe"]."]' ".(($this->groupe[$sql->data["groupe"]]>0) ? "checked" : "")." value='".$sql->data["groupe"]."' /> ".$sql->data["description"]." (".$sql->data["groupe"].")<br />";
+					}
 				}
 				if (GetDroit("SYS"))
 				{
@@ -182,13 +185,17 @@ class user_core extends objet_core
 			if ($key=="droits")
 			{
 				$sql=$this->sql;
-				$query="SELECT droits.groupe, groupe.description FROM ".$this->tbl."_droits AS droits LEFT JOIN ".$this->tbl."_groupe AS groupe ON droits.groupe=groupe.groupe WHERE uid='".$this->id."' ORDER BY description";
+				$query="SELECT droits.groupe, groupe.description FROM ".$this->tbl."_droits AS droits LEFT JOIN ".$this->tbl."_groupe AS groupe ON droits.groupe=groupe.groupe WHERE uid='".$this->id."' GROUP BY droits.groupe ORDER BY description";
 				$sql->Query($query);
-		
+
 				$ret="";
 				for($i=0; $i<$sql->rows; $i++)
 				{ 
 					$sql->GetRow($i);
+					if ($sql->data["groupe"]=="SYS")
+					{
+						$sql->data["description"]="Système";
+					}
 					if (($sql->data["groupe"]!="SYS") || GetDroit("SYS"))
 					{
 						$ret.=(($sql->data["description"]!="") ? $sql->data["description"]." (".$sql->data["groupe"].")" : $sql->data["groupe"])."<br/>";
@@ -453,7 +460,7 @@ function ListActiveUsers($sql,$order="",$tabtype,$virtuel="non")
 
 	$query ="SELECT id ";
 
-	if (is_array($tabtype))
+	if ((is_array($tabtype)) && (count($tabtype)>0))
 	{
 		$type="";
 		$s="";
@@ -481,14 +488,17 @@ function ListActiveUsers($sql,$order="",$tabtype,$virtuel="non")
 	$query.=") ";
 	$query.=(($virtuel!="") ? " AND virtuel='$virtuel'" : "");
 	
-	$query.=" ORDER BY ".$order;
+	if ($order!="")
+	{
+		$query.=" ORDER BY ".$order;
+	}
 
 	$sql->Query($query);
 
 	for($i=0; $i<$sql->rows; $i++)
 	{ 
 		$sql->GetRow($i);
-		if (($sql->data["nb"]>0) || (!is_array($tabtype)))
+		if ( ((isset($sql->data["nb"])) && ($sql->data["nb"]>0)) || (!is_array($tabtype)) || (count($tabtype)==0))
 		{
 			$lstuser[$i]=$sql->data["id"];
 		}

@@ -25,9 +25,9 @@ h1, h2, h3, h4, h5, h6 { font-family: inherit; }
 .main-menu, .responsive-menu ul, .social-member, .progess-bars, .first-footer .social-footer ul { padding: 0; margin: 0; list-style: none; }
 .visible-xs,.visible-sm,.visible-md,.visible-lg {display:none!important}
 
-input {	-webkit-appearance: none; -moz-appearance: none; appearance: none; font-size: 20px; width: 285px; font-family: inherit; height:30px; }
-select { font-size: 20px; font-family: inherit; width: 285px; height:30px; -webkit-appearance: none; background-color: #ffffff; background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");  background-repeat: no-repeat; background-position-x: 100%; background-position-y: 5px;  }
-textarea { width:420px; font-size: 20px; font-family: inherit; margin-left:5px; padding: 5px; }
+input { padding: 2px; -webkit-appearance: none; -moz-appearance: none; appearance: none; font-size: 20px; width: 240px; font-family: inherit; height:30px; }
+select { padding: 2px; font-size: 20px; font-family: inherit; width: 240px; height:30px; -webkit-appearance: none; background-color: #ffffff; background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");  background-repeat: no-repeat; background-position-x: 100%; background-position-y: 5px;  }
+textarea { width:420px; font-size: 20px; font-family: inherit; padding: 5px; }
 
 
 p { margin-top: 0px; line-height:18px;}
@@ -350,7 +350,7 @@ input[type=submit] { -webkit-appearance: none; -moz-appearance: none; appearance
 .tableauBas { background-color: #{FormulaireBackgroundNormal}; border-top: 1px solid black; height: 20px; }
 
 .formulaire p { margin: 4px 15px 4px 10px;  }
-.formulaire label { display: inline-block; width: 100px; margin-left: 10px; margin-right: 10px; text-align: left; vertical-align: middle; }
+.formulaire label { display: inline-block; width: 160px; margin-left: 10px; margin-right: 10px; text-align: left; vertical-align: top; }
 .formulaire span { display: inline-block;  }
 .formulaire2 span { display: inline-block; width:450px; border: 1px solid #{BorderBlack}; border-radius: 4px; padding: 4px; }
 
