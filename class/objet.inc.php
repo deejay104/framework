@@ -107,7 +107,11 @@ class objet_core
 			$render=$typeaff;
 		}
 		
-		$txt=$this->data[$key];
+		$txt="";
+		if (isset($this->data[$key]))
+		{
+			$txt=$this->data[$key];
+		}
 		$len=0;
 
 		if (is_numeric($key))

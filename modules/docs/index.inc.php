@@ -30,6 +30,9 @@
 	$tmpl_x = new XTemplate (MyRep("index.htm"));
 	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 
+	if ( (!GetDroit("AccesDocuments")) && (!GetMyId($id)) )
+	  { FatalError("Accès non autorisé (AccesDocuments)"); }
+
 // ---- Fonc = marquer
 //	 On marque tous les messages comme lus
 	if (isset($fonc) && ($fonc=='marquer')) 

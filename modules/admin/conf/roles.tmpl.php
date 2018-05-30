@@ -11,11 +11,7 @@ $tabRoles["AccesConfigGroupes"]="Accès à la page de configuration des groupes";
 $tabRoles["AccesConfigDonneesUser"]="Accès à la page de configuration des données utilisateurs personnalisées";
 $tabRoles["AccesConfigCrontab"]="Accès à la page de gestion des taches planifiées";
 
-$tabRoles["ModifMessage"]="Modification d'un message dans le module document";
-$tabRoles["ModifClasseur"]="Modification d'un classeur dans le module document";
 $tabRoles["ModifGroupe"]="Modification d'un groupe (roles et informations)";
-
-$tabRoles["ModifForum"]="Modifier la liste de forum (et suppression)";
 $tabRoles["ModifActualite"]="Modifier une actualite";
 
 $tabRoles["CreeFamille"]="Créer une famille";
@@ -26,9 +22,13 @@ $tabRoles["SupprimeMessage"]="Supprimer un message dans le module document";
 $tabRoles["SupprimeGroupe"]="Supprimer un groupe";
 
 
+// ---- Documents
 $tabRoles["CreeClasseur"]="Créer un nouveau classeur dans le module document";
+$tabRoles["ModifClasseur"]="Modification d'un classeur dans le module document";
 $tabRoles["AccesDocuments"]="Accès au module de documents";
+$tabRoles["AccesDocument"]="Accès au détail d'un document";
 $tabRoles["VisuDocument"]="Visualisation de tous les documents";
+$tabRoles["ModifMessage"]="Modification d'un message dans le module document";
 
 
 // ---- Users
@@ -39,11 +39,12 @@ $tabRoles["AccesMesInformations"]="Accès à la page de modification de ses inform
 
 $tabRoles["CreeUser"]="Créer un nouveau membre";
 
-$tabRoles["ModifUser"]="Ouvre la modification des informations des membres";
-$tabRoles["ModifUserSauve"]="Sauvegarder la fiche d'un membre";
+$tabRoles["ModifUser"]="Ouvre la modification des informations des utilisateurs";
+$tabRoles["ModifUserInfos"]="Modification des informations générales d'un utilisateur";
+$tabRoles["ModifUserSauve"]="Sauvegarder la fiche d'un utilisateurs";
 $tabRoles["ModifUserDonnees"]="Modification des données complémentaires des utilisateurs";
-$tabRoles["ModifUserAll"]="Modification de toutes les entrées d'un membre";
-$tabRoles["ModifUserPassword"]="Modifier les mots de passe des membres";
+$tabRoles["ModifUserAll"]="Modification de toutes les entrées d'un utilisateur";
+$tabRoles["ModifUserPassword"]="Modifier les mots de passe des utilisateurs";
 $tabRoles["ModifUserDroits"]="Modifier les droits des utilisateurs";
 $tabRoles["ModifUserVirtuel"]="Modifier le champs utilisateur virtuel";
 $tabRoles["ModifUserGroupe"]="Modifier le groupe principal d'un utilisateur";

@@ -46,7 +46,7 @@
 
 	if ( ($fonc=="Enregistrer") && ($form_newmdp!="") && ($form_newmdp!="**NONE**") && ( ((GetMyId($id)) && ($form_oldmdp!="")) || (GetDroit("ModifUserPassword")) ) )
 	{
-		if (($usr->data["password"]==$form_oldmdp) || (GetDroit("ModifUserPassword")))
+		if (($usr->password==$form_oldmdp) || (GetDroit("ModifUserPassword")))
 		{
 			$ret=$usr->SaveMdp($form_newmdp);
 
@@ -89,7 +89,7 @@
 	}
 
 
-	if ($usr->data["password"]=="")
+	if ($usr->password=="")
 	  { $tmpl_x->parse("corps.neverset"); }
 	  	
 

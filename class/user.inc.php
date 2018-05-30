@@ -22,7 +22,7 @@ class user_core extends objet_core
 	protected $mod="membres";
 	protected $rub="detail";
 
-	protected $droit=array("prenom"=>"ModifUser","nom"=>"ModifUser","droits"=>"ModifUserDroits","dte_login"=>"ModifUserDteLogin","groupe"=>"ModifUserGroupe");
+	protected $droit=array("prenom"=>"ModifUserInfos","nom"=>"ModifUserInfos","droits"=>"ModifUserDroits","dte_login"=>"ModifUserDteLogin","groupe"=>"ModifUserGroupe");
 	protected $type=array("prenom"=>"ucword","nom"=>"uppercase","initiales"=>"uppercase","mail"=>"email","commentaire"=>"text","notification"=>"bool","virtuel"=>"bool","groupe"=>"uppercase","aff_jour"=>"date","dte_login"=>"datetime");
 
 	// protected $tabList=array(
@@ -40,6 +40,7 @@ class user_core extends objet_core
 		$this->fullname="";
 		$this->actif="oui";
 		$this->virtuel="non";
+		$this->password="";
 		$this->mail="";
 
 		$this->data["nom"]="";
@@ -80,11 +81,15 @@ class user_core extends objet_core
 		$this->mail=strtolower($this->data["mail"]);
 
 		$this->fullname=AffFullName($this->prenom,$this->nom);
-		// $this->data["fullname"]=$this->fullname;
 		$this->data["droits"]="";
 
-		// Charge les droits
 		$sql=$this->sql;
+
+		$query = "SELECT password FROM ".$this->tbl."_utilisateurs WHERE id='".$this->id."'";
+		$res=$sql->QueryRow($query);
+		$this->password=$res["password"];
+		
+		// Charge les droits
 		$query = "SELECT groupe FROM ".$this->tbl."_droits WHERE uid='".$this->id."' ORDER BY groupe";
 		$sql->Query($query);
 		$this->groupe=array();
