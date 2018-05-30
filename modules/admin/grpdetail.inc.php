@@ -167,7 +167,7 @@
 
 // ---- Liste les utilisateurs
 	$tUser=array();
-	$query="SELECT uid FROM ".$MyOpt["tbl"]."_droits AS droits LEFT JOIN ".$MyOpt["tbl"]."_utilisateurs AS usr ON droits.uid=usr.id WHERE groupe='$grp' ORDER BY usr.nom";
+	$query="SELECT uid FROM ".$MyOpt["tbl"]."_droits AS droits LEFT JOIN ".$MyOpt["tbl"]."_utilisateurs AS usr ON droits.uid=usr.id WHERE droits.groupe='$grp' ORDER BY usr.nom";
 	$sql->Query($query);
 	for($i=0; $i<$sql->rows; $i++)
 	{

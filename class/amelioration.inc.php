@@ -156,7 +156,7 @@ class amelioration_class extends objet_core
 		}
 		else if (($key=="description") && ($render!="form"))
 		{
-			$ret=preg_replace("/&num;([0-9]+)/","<a href='index.php?mod=ameliorations&rub=detail&id=$1'>#$1</a>",$ret);
+			$ret=preg_replace("/&num;([0-9]{4})/","<a href='index.php?mod=ameliorations&rub=detail&id=$1'>#$1</a>",$ret);
 		}
 		else if ($key=="uid_creat")
 		{
@@ -277,8 +277,8 @@ class amelioration_class extends objet_core
 		}
 		foreach($lst as $i=>$d)
 		{
+			$lst[$i]["description"]=preg_replace("/#([0-9]{4})/","<a href='index.php?mod=ameliorations&rub=detail&id=$1'>#$1</a>",$lst[$i]["description"]);
 			$lst[$i]["usr_creat"]=new user_core($d["uid_creat"],$sql,false,false);
-
 			if ($d["uid_creat"]==0)
 			{
 				$lst[$i]["usr_creat"]->fullname="Développeur";

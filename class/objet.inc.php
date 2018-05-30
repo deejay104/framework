@@ -314,7 +314,8 @@ class objet_core
 		return $this->id;
 	}
 	
-	function Valid($key,$v,$ret=false){
+	function Valid($key,$v,$ret=false)
+	{
 		$vv="**none**";
 
 		if ($this->type[$key]=="duration")

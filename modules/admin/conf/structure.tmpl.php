@@ -196,6 +196,7 @@ $tabTmpl=Array
 		"notification" => Array("Type" => "enum('oui','non')", "Default" => "oui", ),
 		"commentaire" => Array("Type" => "text", ),
 		"droits" => Array("Type" => "varchar(100)", ),
+		"groupe" => Array("Type" => "varchar(5)", "Default"=>"ALL"),
 		"actif" => Array("Type" => "enum('oui','non','off')", "Default" => "oui", "Index" => "1", ),
 		"virtuel" => Array("Type" => "enum('oui','non')", "Default" => "non", "Index" => "1", ),
 		"aff_msg" => Array("Type" => "tinyint(3) unsigned", "Default" => "0", ),

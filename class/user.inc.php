@@ -22,8 +22,8 @@ class user_core extends objet_core
 	protected $mod="membres";
 	protected $rub="detail";
 
-	protected $droit=array("prenom"=>"ModifUser","nom"=>"ModifUser","droits"=>"ModifUserDroits","password"=>"modifUserPassword","dte_login"=>"ModifUserDteLogin");
-	protected $type=array("prenom"=>"ucword","nom"=>"uppercase","initiales"=>"uppercase","mail"=>"email","commentaire"=>"text","notification"=>"bool","virtuel"=>"bool","aff_jour"=>"date","dte_login"=>"datetime");
+	protected $droit=array("prenom"=>"ModifUser","nom"=>"ModifUser","droits"=>"ModifUserDroits","dte_login"=>"ModifUserDteLogin","groupe"=>"ModifUserGroupe");
+	protected $type=array("prenom"=>"ucword","nom"=>"uppercase","initiales"=>"uppercase","mail"=>"email","commentaire"=>"text","notification"=>"bool","virtuel"=>"bool","groupe"=>"uppercase","aff_jour"=>"date","dte_login"=>"datetime");
 
 	// protected $tabList=array(
 		// "status"=>array('1new'=>'Nouveau','2sched'=>'Prochaine version','3inprg'=>'En cours','4test'=>'En test','5close'=>'Publié'),
@@ -45,12 +45,12 @@ class user_core extends objet_core
 		$this->data["nom"]="";
 		$this->data["prenom"]="";
 		$this->data["initiales"]="";
-		$this->data["password"]="";
 		$this->data["mail"]="";
 		$this->data["notification"]="oui";
 		$this->data["commentaire"]="";
 		$this->data["actif"]="oui";
 		$this->data["virtuel"]="non";
+		$this->data["groupe"]="ALL";
 		$this->data["aff_msg"]="0";
 		$this->data["dte_login"]="0000-00-00 00:00:00";
 
@@ -172,6 +172,26 @@ class user_core extends objet_core
 				}
 				$ret="<span>".$ret."</span>";
 			}
+			else if ($key=="groupe")
+			{
+				$txt=strtoupper($this->data[$key]);
+				$ret="";
+				$sql=$this->sql;
+				$query="SELECT id,groupe, description FROM ".$this->tbl."_groupe ORDER BY description";
+				$sql->Query($query);
+		
+		  	  	$ret ="<select id='".$key."'  name=\"".$formname."[$key]\">";
+				$ret.="<option value=\"ALL\" ".(($txt=="ALL") ? "selected" : "").">Aucun</option>";
+				for($i=0; $i<$sql->rows; $i++)
+				{ 
+					$sql->GetRow($i);
+					if ($sql->data["groupe"]!="SYS")
+					{
+						$ret.="<option value=\"".$sql->data["groupe"]."\" ".(($txt==$sql->data["groupe"]) ? "selected" : "").">".$sql->data["description"]."</option>";
+					}
+				}
+				$ret.="</select>";
+			}
 		}
 		else if ($render=="val")
 		{
@@ -202,6 +222,23 @@ class user_core extends objet_core
 					}
 				}
 				$ret="<span>".$ret."</span>";
+			}
+			else if ($key=="groupe")
+			{
+				$txt=strtoupper($this->data[$key]);
+				
+				if (($txt!="ALL") && ($txt!=""))
+				{
+					$sql=$this->sql;
+					$query="SELECT id,groupe, description FROM ".$this->tbl."_groupe WHERE groupe='".$txt."'";
+					$res=$sql->QueryRow($query);
+
+					$ret=$res["description"];
+				}
+				else
+				{
+					$ret="Aucun";
+				}
 			}
 			else if ($key=="fullname")
 			{
@@ -316,6 +353,8 @@ class user_core extends objet_core
 
 	function Valid($key,$v,$ret=false)
 	{
+		$v=stripslashes(parent::Valid($key,$v,true));
+
 		if ($key=="initiales")
 		  {
 			if ($v=="")
@@ -375,17 +414,13 @@ class user_core extends objet_core
 			  }
 			$vv=strtolower($v);
 		}
-		else if ($this->type[$key]=="duration")
+		else if ($key=="groupe")
 		{
-			$vv=CalcTemps($v,false);
-		}
-		else if ($this->type[$key]=="text")
-		{
-			$vv=$v;
+			$vv=strtoupper($v);
 		}
 		else
 		{
-			$vv=strtolower($v);
+			$vv=$v;
 		}
 
 		if ( (!is_numeric($key)) && ("($vv)"!="(**none**)") && ($ret==false))

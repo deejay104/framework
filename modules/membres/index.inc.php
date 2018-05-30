@@ -114,17 +114,21 @@
 			$tabTitre["nom"]["width"]=($theme!="phone") ? 200 : 180;
 			$tabTitre["mail"]["aff"]="Mail";
 			$tabTitre["mail"]["width"]=280;
+			$tabTitre["groupe"]["aff"]="Groupe";
+			$tabTitre["groupe"]["width"]=150;
 
 			$tabValeur=array();
 			foreach($lstusr as $i=>$id)
 			  {
 				$usr = new user_core($id,$sql);
-				$tabValeur[$i]["prenom"]["val"]=$usr->prenom;
+				$tabValeur[$i]["prenom"]["val"]=$usr->val("prenom");
 				$tabValeur[$i]["prenom"]["aff"]=$usr->aff("prenom");
-				$tabValeur[$i]["nom"]["val"]=$usr->nom;
+				$tabValeur[$i]["nom"]["val"]=$usr->val("nom");
 				$tabValeur[$i]["nom"]["aff"]=$usr->aff("nom");
-				$tabValeur[$i]["mail"]["val"]=$usr->mail;
+				$tabValeur[$i]["mail"]["val"]=$usr->val("mail");
 				$tabValeur[$i]["mail"]["aff"]=$usr->aff("mail");
+				$tabValeur[$i]["groupe"]["val"]=$usr->val("groupe");
+				$tabValeur[$i]["groupe"]["aff"]=$usr->aff("groupe");
 			  }
 
 			if ((!isset($order)) || ($order=="")) { $order="nom"; }

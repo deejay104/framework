@@ -51,7 +51,7 @@
 	  {
 		$query = "SELECT forum.id AS mid, forum.fid AS fid ";
 		$query.= "FROM ".$MyOpt["tbl"]."_forums AS forum ";
-		$query.= "LEFT JOIN ".$MyOpt["tbl"]."_forums_lus AS forumlus ON forum.id = forumlus.forum_msg AND forumlus.forum_usr = $uid ";
+		$query.= "LEFT JOIN ".$MyOpt["tbl"]."_forums_lus AS forumlus ON forum.id = forumlus.forum_msg AND forumlus.forum_usr = $gl_uid ";
 		$query.= "WHERE forumlus.forum_msg  IS NULL AND forum.fid = $fid AND forum.actif = 'oui'";
  	  	$sql->Query($query);
 
@@ -64,7 +64,7 @@
 
 		foreach($tablus as $id)
 		  {
-			$query ="INSERT INTO ".$MyOpt["tbl"]."_forums_lus SET forum_id='".$fid."', forum_msg=$id, forum_usr=$uid, forum_date='".now()."'"; 
+			$query ="INSERT INTO ".$MyOpt["tbl"]."_forums_lus SET forum_id='".$fid."', forum_msg=$id, forum_usr=$gl_uid, forum_date='".now()."'"; 
 			$sql->Insert($query);
 		  }
 	  }
@@ -102,10 +102,10 @@
 	$critere = trim($critere);
 	$tabcrit=explode(" ",$critere);
 
-	$query ="SELECT forum.id AS id, forum.fid AS fid, forum.uid_creat AS usr_id, forum.dte_maj AS date_maj, forum.titre AS titre, forum.message AS message, forumlus.forum_id AS lu, COUNT(reponse.id) AS nbrep ";
+	$query ="SELECT forum.id AS id, forum.fid AS fid, forum.uid_creat AS usr_id, forum.dte_maj AS date_maj, forum.titre AS titre, forum.message AS message, forumlus.id AS lu, COUNT(reponse.id) AS nbrep ";
 	$query.="FROM ".$MyOpt["tbl"]."_forums AS forum ";
 	$query.="LEFT JOIN ".$MyOpt["tbl"]."_forums AS reponse ON forum.id = reponse.fil ";
-	$query.="LEFT JOIN ".$MyOpt["tbl"]."_forums_lus AS forumlus ON forum.id = forumlus.forum_msg AND forumlus.forum_usr = $uid ";
+	$query.="LEFT JOIN ".$MyOpt["tbl"]."_forums_lus AS forumlus ON forum.id = forumlus.forum_msg AND forumlus.forum_usr = $gl_uid ";
 	$query.="WHERE forum.actif='oui' ";
 
 	if ($fonc=="Rechercher")

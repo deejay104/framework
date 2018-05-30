@@ -15,7 +15,7 @@
 
 
 	<INPUT type="hidden" name="mod" value="docs">
-	<INPUT type="hidden" name="rub" value="forums_1">
+	<INPUT type="hidden" name="rub" value="liste">
 	<INPUT type="hidden" name="fid" value="{fid}">
 
 </FORM>
@@ -38,15 +38,12 @@
 </TR>
 <TR valign=top bgcolor="#{bgcolor}">
 	<TD width=20>&nbsp;</TD>
-	<TD><A href="index.php?mod=forums&rub=forums_1&fid={fid_msg}&critere={crit}" style="display: block;">{forum_msg}</A></TD>
-	<TD><A href="index.php?mod=forums&rub=forums_7&fid={fid_msg}&mid={mid_msg}&critere={crit}" style="display: block;">{titre_msg}</A></TD>
+	<TD><A href="index.php?mod=forums&rub=liste&fid={fid_msg}&critere={crit}" style="display: block;">{forum_msg}</A></TD>
+	<TD><A href="index.php?mod=forums&rub=detail&fid={fid_msg}&mid={mid_msg}&critere={crit}" style="display: block;">{titre_msg}</A></TD>
 	<TD>{pseudo_msg}</TD>
 	<TD>{date_msg}</TD>
 </TR>
 <!-- END: lst_msg -->
-<TR valign=top bgcolor="{bgcolor}">
-	<TD colspan=5 bgcolor="#013366"><img src="images/rien.gif" alt="" height=1 /></TD>
-</TR>
 
 <!-- BEGIN: noresponse -->
 <TR><TD colspan=5>Pas de réponse</TD></TR>

@@ -1,5 +1,5 @@
 <?
 
-$core_version = "7";
+$core_version = "8";
 
 ?>

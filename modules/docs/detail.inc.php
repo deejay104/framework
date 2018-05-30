@@ -34,18 +34,18 @@
 
 
 // ---- On marque le message comme lu
-	if ($uid>0)
+	if ($gl_uid>0)
 	  {
-		$query="SELECT forum_msg AS id FROM ".$MyOpt["tbl"]."_forums_lus WHERE forum_msg=$mid AND forum_usr=$uid";
+		$query="SELECT forum_msg AS id FROM ".$MyOpt["tbl"]."_forums_lus WHERE forum_msg=$mid AND forum_usr=$gl_uid";
 		$res=$sql->QueryRow($query);
 		if ($res["id"]>0)
 		  {
-				$query ="UPDATE ".$MyOpt["tbl"]."_forums_lus SET forum_date = '".now()."' WHERE forum_msg=$mid AND forum_usr=$uid";
+				$query ="UPDATE ".$MyOpt["tbl"]."_forums_lus SET forum_date = '".now()."' WHERE forum_msg=$mid AND forum_usr=$gl_uid";
 				$sql->Update($query);
 		  }
 		else
-		  {
-				$query="INSERT INTO ".$MyOpt["tbl"]."_forums_lus SET forum_msg=$mid, forum_usr=$uid, forum_date='".now()."'";
+		  {	
+				$query="INSERT INTO ".$MyOpt["tbl"]."_forums_lus SET forum_msg=$mid, forum_usr=$gl_uid, forum_date='".now()."'";
 				$sql->Insert($query);
 		  }
 	  }
