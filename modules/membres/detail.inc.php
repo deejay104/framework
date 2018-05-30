@@ -33,6 +33,7 @@
 	$tmpl_x = new XTemplate (MyRep("detail.htm"));
 	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 
+	
 // ---- Initialisation des variables
 	$tmpl_x->assign("form_checktime",$_SESSION['checkpost']);
 
@@ -43,6 +44,11 @@
 	  { $usr = new user_core($id,$sql,((GetMyId($id)) ? true : false)); }
 	else
 	  { $usr = new user_core(0,$sql,false); }
+
+ // ---- Affiche le menu
+	$aff_menu="";
+	require_once("modules/".$mod."/menu.inc.php");
+	$tmpl_x->assign("aff_menu",$aff_menu);
 
 
 // ---- Sauvegarde les infos
@@ -199,35 +205,16 @@
 		FatalError("Paramètre d'id non valide");
 	  }
 
-// ---- Affiche les menus
-	if ((GetMyId($id)) || (GetDroit("ModifUser")))
-	  { $tmpl_x->parse("infos.modification"); }
-
-	if ((GetMyId($id)) || (GetDroit("ModifUserPassword")))
-	  { $tmpl_x->parse("infos.password"); }
-
-	if (GetDroit("CreeUser"))
-	  { $tmpl_x->parse("infos.ajout"); }
-
-	if ((GetDroit("DesactiveUser")) && ($usr->actif=="oui"))
-	  { $tmpl_x->parse("infos.desactive"); }
-
-  	if ((GetDroit("DesactiveUser")) && ($usr->actif=="off"))
-	  { $tmpl_x->parse("infos.active"); }
-
-	if ((GetDroit("SupprimeUser")) && ($usr->actif=="off"))
-	  { $tmpl_x->parse("infos.suppression"); }
-
-  	if (GetDroit("ModifDisponibilite"))
-	  { $tmpl_x->parse("infos.disponibilite"); }
-
 // ---- Affiche toutes les donnees
 	foreach($usr->data as $k=>$v)
 	  { $tmpl_x->assign("form_$k", $usr->aff($k,$typeaff)); }
 
 	if ($typeaff=="form")
 	{
-		$tmpl_x->parse("corps.photos");
+		if ((GetMyId($id)) || (GetDroit("ModifUserInfos")))
+		{
+			$tmpl_x->parse("corps.photos");
+		}
 		$tmpl_x->parse("corps.submit");
 	}
 
@@ -246,8 +233,7 @@
 	{
 	  	$tmpl_x->parse("corps.virtuel");
 	}
-  	$tmpl_x->parse("corps.disponibilite");
-
+ 
   	if ((is_numeric($id)) && ($id>0))
 	{ 
 		// Affiche la photo
@@ -266,7 +252,7 @@
 		// Affiche les documents
 		$lstdoc=ListDocument($sql,$id,"document");
 
-		if ($typeaff=="form")
+		if (($typeaff=="form") && ((GetMyId($id)) || (GetDroit("ModifUserDocument"))))
 		{
 			$doc = new document_core(0,$sql);
 			$doc->editmode="form";
@@ -323,6 +309,7 @@
 	}
 
 // ---- Données spécifique
+
 	if (file_exists($appfolder."/modules/membres/custom.inc.php"))
 	{
 		$left="";

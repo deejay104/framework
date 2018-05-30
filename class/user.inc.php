@@ -22,8 +22,18 @@ class user_core extends objet_core
 	protected $mod="membres";
 	protected $rub="detail";
 
-	protected $droit=array("prenom"=>"ModifUserInfos","nom"=>"ModifUserInfos","droits"=>"ModifUserDroits","dte_login"=>"ModifUserDteLogin","groupe"=>"ModifUserGroupe");
 	protected $type=array("prenom"=>"ucword","nom"=>"uppercase","initiales"=>"uppercase","mail"=>"email","commentaire"=>"text","notification"=>"bool","virtuel"=>"bool","groupe"=>"uppercase","aff_jour"=>"date","dte_login"=>"datetime");
+	protected $droit=array(
+		"prenom"=>"ModifUserInfos",
+		"nom"=>"ModifUserInfos",
+		"droits"=>"ModifUserDroits",
+		"dte_login"=>"ModifUserDteLogin",
+		"groupe"=>"ModifUserGroupe",
+		"virtuel"=>"ModifUserVirtuel",
+		"initiales"=>array("owner","ModifUserInfos"),
+		"mail"=>array("owner","ModifUserInfos"),
+		"notification"=>array("owner","ModifUserInfos"),
+	);
 
 	// protected $tabList=array(
 		// "status"=>array('1new'=>'Nouveau','2sched'=>'Prochaine version','3inprg'=>'En cours','4test'=>'En test','5close'=>'Publié'),
@@ -49,7 +59,6 @@ class user_core extends objet_core
 		$this->data["mail"]="";
 		$this->data["notification"]="oui";
 		$this->data["commentaire"]="";
-		$this->data["actif"]="oui";
 		$this->data["virtuel"]="non";
 		$this->data["groupe"]="";
 		$this->data["aff_msg"]="0";
@@ -76,7 +85,7 @@ class user_core extends objet_core
 		$this->id=$id;
 		$this->prenom=($this->data["prenom"]!="") ? ucwords($this->data["prenom"]) : "";
 		$this->nom=($this->data["nom"]!="") ? strtoupper($this->data["nom"]) : "";
-		$this->actif=$this->data["actif"];
+		// $this->actif=$this->data["actif"];
 		$this->virtuel=$this->data["virtuel"];
 		$this->mail=strtolower($this->data["mail"]);
 
@@ -102,12 +111,12 @@ class user_core extends objet_core
 		// Charge les roles
 		if ($this->me)
 		{
-			$this->loadRoles();
+			$this->LoadRoles();
 		}
 	}
 
 	// Charge les roles
-	function loadRoles()
+	function LoadRoles()
 	{
 		$this->role=array();
 		$this->role[""]=true;
@@ -124,14 +133,19 @@ class user_core extends objet_core
 
 	function CheckDroit($role)
 	{
-		if (trim($role)=="")
-		  { return true; }
-		else if ((isset($this->role[$role])) && ($this->role[$role]))
-		  { return true; }
-		else if ((isset($this->groupe["SYS"])) && ($this->groupe["SYS"]))
-		  { return true; }
-		else
-		  { return false; }
+		$mycond=parent::CheckDroit($role);
+
+		if (GetDroit("ModifUserAll"))
+		{
+			$mycond=true;
+		}
+
+		if (($role=="owner") && (GetMyId($this->id)))
+		{
+			$mycond=true;
+		} 
+	  
+		return $mycond;
 	}
 
 	// Charge les données complémentaires
@@ -168,7 +182,7 @@ class user_core extends objet_core
 					$sql->GetRow($i);
 					if ($sql->data["groupe"]!="SYS")
 					{
-						$ret.="<input type='checkbox' name='form_droits[".$sql->data["groupe"]."]' ".(($this->groupe[$sql->data["groupe"]]>0) ? "checked" : "")." value='".$sql->data["groupe"]."' /> ".$sql->data["description"]." (".$sql->data["groupe"].")<br />";
+						$ret.="<input type='checkbox' name='form_droits[".$sql->data["groupe"]."]' ".(((isset($this->groupe[$sql->data["groupe"]])) && ($this->groupe[$sql->data["groupe"]]>0)) ? "checked" : "")." value='".$sql->data["groupe"]."' /> ".$sql->data["description"]." (".$sql->data["groupe"].")<br />";
 					}
 				}
 				if (GetDroit("SYS"))
@@ -257,15 +271,21 @@ class user_core extends objet_core
 	function AffDonneesComp($i,$render="html")
 	{
 		// Défini les droits de modification des utilisateurs
-		$mycond=$this->me;	// Le user a le droit de modifier toutes ses données
-		// Si on a le droit de modif on autorise
+		$mycond=false;
+		
+		// Le user a le droit de modifier toutes ses données
+		if (GetMyId($this->id))
+		  { $mycond=true; }
+
+	  // Si on a le droit de modif on autorise
 		if (GetDroit("ModifUserDonnees"))
 		  { $mycond=true; }
 		  
 		// Si l'utilisateur a le droit de tout modifier alors on force
 		if (GetDroit("ModifUserAll"))
 		  { $mycond=true; }
-		// Si on a pas le droit on repasse en visu
+
+	  // Si on a pas le droit on repasse en visu
 		if ((!$mycond) && ($render!="val"))
 		  { $render="html"; }
  	
@@ -447,6 +467,7 @@ class user_core extends objet_core
 		return "";
 	}
 	
+	
 	function AddGroupe($grp) {
 		global $gl_uid;
 		$sql=$this->sql;
@@ -484,6 +505,7 @@ class user_core extends objet_core
 		$this->actif="oui";
 		$sql->Edit("user",$this->tbl."_utilisateurs",$this->id,array("actif"=>'oui', "uid_maj"=>$gl_uid, "dte_maj"=>now()));
 	}
+	
 }
 
 
@@ -614,29 +636,6 @@ function AffFullname($prenom,$nom)
 		$fullname.=(($prenom=="")&&($nom==""))?"N/A":"";
 	}		
 	return $fullname;
-}
-
-// Test si un ID correspond à l'utilisateur ou un de ses enfants
-function GetMyId($id)
-{
-	global $myuser;
-  	if ($id==$myuser->id)
-  	  { return true; }
-
-	if (GetModule("creche"))
-	{
-	  	$myuser->LoadEnfants();
-	}
-	
-  	if ( (isset($myuser->data["enfant"])) && (is_array($myuser->data["enfant"])) )
-  	{
-       	foreach($myuser->data["enfant"] as $enfant)
-		{
-        	if ($enfant["id"]==$id)
-        	  { return true; }
-        }
-	}
-  	return false;
 }
  
 ?>

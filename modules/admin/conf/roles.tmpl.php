@@ -48,6 +48,7 @@ $tabRoles["ModifUserPassword"]="Modifier les mots de passe des utilisateurs";
 $tabRoles["ModifUserDroits"]="Modifier les droits des utilisateurs";
 $tabRoles["ModifUserVirtuel"]="Modifier le champs utilisateur virtuel";
 $tabRoles["ModifUserGroupe"]="Modifier le groupe principal d'un utilisateur";
+$tabRoles["ModifUserDocument"]="Modifier les documents d'un utilisateur";
 
 
 $tabRoles["DesactiveUser"]="Désactiver un membre";

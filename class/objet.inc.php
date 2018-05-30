@@ -157,20 +157,24 @@ class objet_core
 		  { $ret=$txt; }
 
 
-		$mycond=true;
+		$mycond=$this->GetDroit($key);
 		// Si on pas le droit de modif alors on repasse en lecture
-		if ((isset($this->droit[$key])) && ($this->droit[$key]!="") && (!GetDroit($this->droit[$key])))
-		{
-			$mycond=false;
-		}
+		// if ((isset($this->droit[$key])) && ($this->droit[$key]!="") && (!GetDroit($this->droit[$key])) )
+		// {
+			// $mycond=false;
+		// }
+		// if ((isset($this->droit[$key])) && ($this->droit[$key]=="owner") && (GetMyId($this->uid_creat)))
+		// {
+			// $mycond=true;
+		// }
 
 		// Si l'utilisateur a le droit de tout modifier alors on force
-		if (GetDroit("SYS"))
-		  { $mycond=true; }
+		// if (GetDroit("SYS"))
+		  // { $mycond=true; }
 
 		// Champs en lecture seule
-		if (($key=="id") || ($key=="uid_maj") || ($key=="dte_maj"))
-		  { $mycond=false; }
+		// if (($key=="id") || ($key=="uid_maj") || ($key=="dte_maj"))
+		  // { $mycond=false; }
 	  
 		// Si on a pas le droit on repasse en visu
 		if (!$mycond)
@@ -225,6 +229,10 @@ class objet_core
 			else if ($type=="date")
 			{
 				$ret="<INPUT id='".$key."'  name=\"".$formname."[$key]\" value=\"".date2sql(sql2date($ret,"jour"))."\" type=\"date\">";
+			}
+			else if (is_array($ret))
+			{
+				$ret="";
 			}
 			else
 			{
@@ -284,6 +292,10 @@ class objet_core
 				}
 				$ret=implode(",",$tt);
 			}
+			else if (is_array($ret))
+			{
+				$ret="";
+			}
 			
 			// A voir si on met tous les champs en clicable ou pas
 			if (($this->mod!="") && ($this->rub!="") && ($link))
@@ -332,7 +344,18 @@ class objet_core
 	{
 		$vv="**none**";
 
-		if ($this->type[$key]=="duration")
+		if (!isset($this->type[$key]))
+		{
+			if (!is_array($v))
+			{
+				$vv=strtolower($v);
+			}
+			else
+			{
+				$vv="";
+			}
+		}
+		else if ($this->type[$key]=="duration")
 		{
 			$vv=CalcTemps($v,false);
 		}
@@ -414,7 +437,8 @@ class objet_core
 		$td=array();
 		foreach($this->data as $k=>$v)
 		{
-			if ( ((isset($this->droit[$key])) && (GetDroit($this->droit[$key]))) || (!isset($this->droit[$key])) || ($this->droit[$key]=="") )
+			// if ( ((isset($this->droit[$key])) && (GetDroit($this->droit[$key]))) || (!isset($this->droit[$key])) || ($this->droit[$key]=="") )
+			if ($this->GetDroit($k))
 			{
 				$vv=$this->Valid($k,$v,true);
 				$td[$k]=$vv;
@@ -426,6 +450,57 @@ class objet_core
 		$sql->Edit($this->table,$this->tbl."_".$this->table,$this->id,$td);
 	}
 
+	function GetDroit($key)
+	{
+		if (!isset($this->droit[$key]))
+		{
+			return true;
+		}
+		if ((!is_array($this->droit[$key])) && ($this->droit[$key]==""))
+		{
+			return true;
+		}
+
+		$mycond=false;
+		if (is_array($this->droit[$key]))
+		{
+			foreach($this->droit[$key] as $i=>$role)
+			{
+				if ($this->CheckDroit($role))
+				{
+					$mycond=true;
+				}
+			}
+		}
+		else
+		{
+			$mycond=$this->CheckDroit($this->droit[$key]);
+		}
+
+		// Champs en lecture seule
+		if (($key=="id") || ($key=="uid_creat") || ($key=="dte_creat") || ($key=="uid_maj") || ($key=="dte_maj"))
+		{
+			$mycond=false;
+		}
+	
+		return $mycond;
+	}
+
+	function CheckDroit($role)
+	{
+		$mycond=false;
+		if (GetDroit($role))
+		{
+			$mycond=true;
+		} 
+
+		// Si l'utilisateur a le droit de tout modifier alors on force
+		if (GetDroit("SYS"))
+		  { $mycond=true; }
+	  
+		return $mycond;
+	}
+	
 	function Delete()
 	{
 		global $gl_uid;

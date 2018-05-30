@@ -66,19 +66,31 @@ function checkVar($var,$type)
 }
   
 function GetDroit($droit)
-  { global $myuser;
+{
+	global $myuser;
 
-		if (trim($droit)=="")
-		  { return true; }
-		else if ((isset($myuser->role[$droit])) && ($myuser->role[$droit]))
-		  { return true; }
-		else if ((isset($myuser->groupe["SYS"])) && ($myuser->groupe["SYS"]))
-		  { return true; }
-		elseif ((isset($myuser->groupe[$droit])) && ($myuser->groupe[$droit]))
-		  { return true; }
-		else
-		  { return false; }
-  }
+	if (trim($droit)=="")
+	  { return true; }
+	else if ((isset($myuser->role[$droit])) && ($myuser->role[$droit]))
+	  { return true; }
+	else if ((isset($myuser->groupe["SYS"])) && ($myuser->groupe["SYS"]))
+	  { return true; }
+	// elseif ((isset($myuser->groupe[$droit])) && ($myuser->groupe[$droit]))
+	  // { return true; }
+	else
+	  { return false; }
+}
+
+// Test si un ID correspond à l'utilisateur ou un de ses enfants
+function GetMyId($id)
+{
+	global $myuser;
+
+  	if ($id==$myuser->id)
+  	  { return true; }
+
+  	return false;
+}
 
 function myPrint($txt)
 { global $gl_mode,$gl_myprint_txt;
@@ -249,7 +261,7 @@ function SendMailFromFile($from,$to,$tabcc,$subject,$tabvar,$file)
 	}
 
 	// $mail=str_replace("{url}",substr($_SERVER["HTTP_REFERER"],0,strrpos($_SERVER["HTTP_REFERER"],"/")),$mail);
-	$mail=str_replace("{url}",$MyOpt["host"],$mail);
+	// $mail=str_replace("{url}",$MyOpt["host"],$mail);
 	
 	MyMail($from,$to,$tabcc,$subject,$mail,"","");
 

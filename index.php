@@ -148,7 +148,7 @@
 	$sql = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db, $port);
 
 // ---- Fonction des informations de l'utilisateur
-	$myuser = new user_core($uid,$sql,true);
+	$myuser = new user_core($gl_uid,$sql,true);
 	$res_user=$myuser->data;
 	$token=$uid;
 

@@ -137,7 +137,8 @@ class mysql_core{
 		if ($res["id"]>0)
 		{
 			$query="UPDATE ".$tab." SET ".$v." WHERE id='".$id."'";
-			$ret=$this->Update($query);
+			$this->Update($query);
+			$ret=$id;
 
 			$query ="INSERT INTO ".$MyOpt["tbl"]."_historique (`class` ,`table` ,`idtable` ,`uid_maj` ,`dte_maj` ,`type` ,`comment`) ";
 			$query.="VALUES ('".$class."', '".$tab."', '$id', '$uid', '".now()."', 'MOD', '".(($comment!="") ? $comment : $c)."')";
