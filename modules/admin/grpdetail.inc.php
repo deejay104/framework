@@ -34,6 +34,7 @@
 // ---- Vérifie le droit d'accès
 	if (!GetDroit("AccesConfigGroupes")) { FatalError("Accès non autorisé (AccesConfigGroupes)"); }
 
+	$tabRoles=array();
 	require_once("modules/".$mod."/conf/roles.tmpl.php");
 	if (file_exists($appfolder."/modules/".$mod."/conf/roles.tmpl.php"))
 	{
@@ -48,14 +49,14 @@
 // ---- Enregistre le groupe
 	if (($grp=="") && ($fonc=="Enregistrer") && (GetDroit("CreeGroupe")) && (!isset($_SESSION['tab_checkpost'][$checktime])))
 	{
-		$q="INSERT INTO ".$MyOpt["tbl"]."_groupe SET groupe='$form_grp',description='$form_desc'";
+		$q="INSERT INTO ".$MyOpt["tbl"]."_groupe SET groupe='$form_grp',description='$form_desc',principale='$form_princ'";
 		$sql->Insert($q);
 		$grp=$form_grp;
 		$_SESSION['tab_checkpost'][$checktime]=$checktime;
 	}
 	else if (($grp!="") && ($fonc=="Enregistrer") && (GetDroit("ModifGroupe")) && (!isset($_SESSION['tab_checkpost'][$checktime])))
 	{
-		$q="UPDATE ".$MyOpt["tbl"]."_groupe SET groupe='$form_grp',description='$form_desc' WHERE groupe='$grp'";
+		$q="UPDATE ".$MyOpt["tbl"]."_groupe SET groupe='$form_grp',description='$form_desc',principale='$form_princ' WHERE groupe='$grp'";
 		$sql->Update($q);
 
 		$q="UPDATE ".$MyOpt["tbl"]."_roles SET groupe='$form_grp' WHERE groupe='$grp'";
@@ -129,9 +130,10 @@
 // ---- Affiche les informations
 	$tmpl_x->assign("form_grp",$grp);
 
-	$query="SELECT description FROM ".$MyOpt["tbl"]."_groupe WHERE groupe='$grp' LIMIT 1";
+	$query="SELECT description,principale FROM ".$MyOpt["tbl"]."_groupe WHERE groupe='$grp' LIMIT 1";
 	$res=$sql->QueryRow($query);
 	$tmpl_x->assign("form_desc",$res["description"]);
+	$tmpl_x->assign("form_princ_".$res["principale"],"checked");
 
 // ---- Liste les roles
 	$tabRolesNok=$tabRoles;

@@ -50,7 +50,7 @@ class user_core extends objet_core
 		$this->data["commentaire"]="";
 		$this->data["actif"]="oui";
 		$this->data["virtuel"]="non";
-		$this->data["groupe"]="ALL";
+		$this->data["groupe"]="";
 		$this->data["aff_msg"]="0";
 		$this->data["dte_login"]="0000-00-00 00:00:00";
 
@@ -177,11 +177,11 @@ class user_core extends objet_core
 				$txt=strtoupper($this->data[$key]);
 				$ret="";
 				$sql=$this->sql;
-				$query="SELECT id,groupe, description FROM ".$this->tbl."_groupe ORDER BY description";
+				$query="SELECT id,groupe, description FROM ".$this->tbl."_groupe WHERE principale='oui' ORDER BY description";
 				$sql->Query($query);
 		
 		  	  	$ret ="<select id='".$key."'  name=\"".$formname."[$key]\">";
-				$ret.="<option value=\"ALL\" ".(($txt=="ALL") ? "selected" : "").">Aucun</option>";
+				$ret.="<option value=\"\" ".(($txt=="") ? "selected" : "").">Aucun</option>";
 				for($i=0; $i<$sql->rows; $i++)
 				{ 
 					$sql->GetRow($i);
@@ -316,6 +316,10 @@ class user_core extends objet_core
 					$tabgrp[$g]["new"]=1;
 				}
 			}
+		}
+		if ($this->data["groupe"]!="")
+		{
+			$tabgrp[$this->data["groupe"]]["new"]=1;
 		}
 		// Charge les anciennnes
 		if (is_array($this->groupe))

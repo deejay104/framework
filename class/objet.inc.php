@@ -270,7 +270,17 @@ class objet_core
 			{
 				$ret=$this->tabList[$key][$ret];
 			}
-
+			else if (($type=="multi") && (is_array($this->tabList[$key])))
+			{
+				$t=explode(",",$txt);
+				$tt=array();
+				foreach($t as $i=>$v)
+				{
+					$tt[]=$this->tabList[$key][$v];
+				}
+				$ret=implode(",",$tt);
+			}
+			
 			// A voir si on met tous les champs en clicable ou pas
 			if (($this->mod!="") && ($this->rub!="") && ($link))
 			{
@@ -364,6 +374,10 @@ class objet_core
 			}
 		}
 		else if ($this->type[$key]=="varchar")
+		{
+			$vv=$v;
+		}
+		else if ($this->type[$key]=="enum")
 		{
 			$vv=$v;
 		}

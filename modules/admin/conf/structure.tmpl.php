@@ -43,6 +43,7 @@ $tabTmpl=Array
 	),
 	"config" => Array
 	(
+		"id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
 		"param" => Array("Type" => "varchar(20)", ),
 		"value" => Array("Type" => "varchar(20)", ),
 		"dte_creat" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00" ),
@@ -135,15 +136,18 @@ $tabTmpl=Array
 	),
 	"forums_lus" => Array
 	(
-		"forum_id" => Array("Type" => "mediumint(8) unsigned", "Index" => "PRIMARY", ),
+		"id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
+		"forum_id" => Array("Type" => "mediumint(8) unsigned"),
 		"forum_msg" => Array("Type" => "mediumint(8) unsigned", "Index" => "1", ),
 		"forum_usr" => Array("Type" => "int(10) unsigned", "Index" => "1", ),
 		"forum_date" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
 	),
 	"groupe" => Array
 	(
+		"id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
 		"groupe" => Array("Type" => "varchar(5)", "Index" => "PRIMARY", ),
 		"description" => Array("Type" => "varchar(200)", ),
+		"principale" => Array("Type" => "enum('oui','non')", "Default" => "non", "Index" => "1", ),
 	),
 	"historique" => Array
 	(
