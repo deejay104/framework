@@ -1,15 +1,7 @@
 <?
-// ---------------------------------------------------------------------------------------------
-//   Page de suivi des comptes
-//     ($Author: miniroot $)
-//     ($Date: 2013-02-05 20:35:03 +0100 (mar., 05 févr. 2013) $)
-//     ($Revision: 420 $)
-// ---------------------------------------------------------------------------------------------
-//   Variables  : 
-// ---------------------------------------------------------------------------------------------
 /*
-    SoceIt v2.2
-    Copyright (C) 2012 Matthieu Isorez
+    MnMs Framework
+    Copyright (C) 2018 Matthieu Isorez
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,19 +22,43 @@
 <?
 
 	if (GetDroit("AccesConfigVar"))
-	  {
-	  	$affrub="config";
-	  }
-	else if (GetDroit("AccesConfigGroupes"))
-	  {
-	  	$affrub="groupes";
-	  }
-	else if (GetDroit("AccesConfigEcheances"))
-	  {
-	  	$affrub="echeances";
-	  }
-	else if (GetDroit("AccesConfigPostes"))
 	{
-		$affrub="postes";
+	  	$affrub="config";
 	}
+	else if (GetDroit("AccesConfigBase"))
+	{
+	  	$affrub="base";
+	}
+	else if (GetDroit("AccesConfigGroupes"))
+	{
+	  	$affrub="groupes";
+	}
+	else if (GetDroit("AccesConfigEcheances"))
+	{
+	  	$affrub="echeances";
+	}
+	else if (GetDroit("AccesConfigDonneesUser"))
+	{
+	  	$affrub="utildonnees";
+	}
+	else if (GetDroit("AccesConfigCrontab"))
+	{
+	  	$affrub="crontab";
+	}
+	else
+	{
+	// ---- Affiche le menu
+		$tmpl_x = new XTemplate (MyRep("config.htm"));
+		$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
+
+		$aff_menu="";
+		require_once("modules/".$mod."/menu.inc.php");
+		$infos=$aff_menu;
+		
+		$tmpl_x->parse("icone");
+		$icone=$tmpl_x->text("icone");
+
+		$corps="Module de configuration";
+	}
+	
 ?>
