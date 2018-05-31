@@ -70,7 +70,7 @@
 
 
 // ---- Affiche les bouttons
-	if (GetDroit("CreeForum"))
+	if (GetDroit("CreeClasseur"))
 	  {
 			$tmpl_x->parse("infos.nouveau");
 	  }
@@ -98,7 +98,7 @@
 		$tmpl_x->assign("nbmessages", $res["nb"]);
 
 		// Gestion des forums
-		if (GetDroit("ModifForum"))
+		if (GetDroit("ModifClasseur"))
 		  {
 				$tmpl_x->parse("corps.nomforum.editforum");
 		  }

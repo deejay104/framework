@@ -71,6 +71,8 @@ function GetDroit($droit)
 
 	if (trim($droit)=="")
 	  { return true; }
+	else if (trim($droit)=="ALL")
+	  { return true; }
 	else if ((isset($myuser->role[$droit])) && ($myuser->role[$droit]))
 	  { return true; }
 	else if ((isset($myuser->groupe["SYS"])) && ($myuser->groupe["SYS"]))

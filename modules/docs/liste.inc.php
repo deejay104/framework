@@ -35,7 +35,7 @@
 	  $query = "SELECT fil"." AS fil, uid_creat"." AS uid_creat, uid_maj"." AS uid_maj ";
 	  $query.= "FROM ".$MyOpt["tbl"]."_forums"." WHERE id"."=$opt";
 	  $res=$sql->QueryRow($query);
-	  if ((($uid==$res["uid_creat"]) || ($uid==$res["uid_maj"]) || (GetDroit("ADM"))) && ($res["fil"]>0))
+	  if ((($uid==$res["uid_creat"]) || ($uid==$res["uid_maj"]) || (GetDroit("SupprimeMessage"))) && ($res["fil"]>0))
 	    {
 				$query = "UPDATE ".$MyOpt["tbl"]."_forums SET fil=".$res["fil"]." WHERE fil=$opt";
 				$sql->Update($query);
@@ -90,9 +90,9 @@
 
 	// Boutons de réponse à un message
 	if ((GetDroit($res["droit"])) && ($critere==""))
-	  {
+	{
 			$tmpl_x->parse("infos.ecrire");
-	  }
+	}
 
 
 // ---- Affiche la liste des messages
