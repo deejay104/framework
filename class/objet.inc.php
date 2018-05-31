@@ -64,6 +64,7 @@ class objet_core
 
 	}
 
+
 	# Load object informations
 	function load($id)
 	{
@@ -155,7 +156,6 @@ class objet_core
 
 		else
 		  { $ret=$txt; }
-
 
 		$mycond=$this->GetDroit($key);
 		// Si on pas le droit de modif alors on repasse en lecture
@@ -415,7 +415,10 @@ class objet_core
 
 		if ( (!is_numeric($key)) && ("($vv)"!="(**none**)") && ($ret==false))
 		{
-			$this->data[$key]=$vv;
+			if ($this->GetDroit($key))
+			{
+				$this->data[$key]=$vv;
+			}
 			return "";
 		}
 		else if ($ret==true)
@@ -438,11 +441,11 @@ class objet_core
 		foreach($this->data as $k=>$v)
 		{
 			// if ( ((isset($this->droit[$key])) && (GetDroit($this->droit[$key]))) || (!isset($this->droit[$key])) || ($this->droit[$key]=="") )
-			if ($this->GetDroit($k))
-			{
+			// if ($this->GetDroit($k))
+			// {
 				$vv=$this->Valid($k,$v,true);
 				$td[$k]=$vv;
-			}
+			// }
 		}
 		$td["uid_maj"]=$gl_uid;
 		$td["dte_maj"]=now();

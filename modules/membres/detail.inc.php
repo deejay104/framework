@@ -139,6 +139,13 @@
 		$msg_erreur.=$usr->SaveDroits($form_droits);
 
 	}
+	if (($fonc=="Enregistrer") && ($id>0) && (GetDroit("ModifUserGroupe")) && ($usr->data["groupe"]!=""))
+	{
+		$msg_erreur.=$usr->AddGroupe($usr->data["groupe"]);
+	}
+
+ 
+
 	// Sauvegarde les données utilisateurs
 	if (($fonc=="Enregistrer") && ($id>0) && (GetDroit("ModifUserDonnees")) && (is_array($form_donnees)))
 	{

@@ -64,7 +64,6 @@ class user_core extends objet_core
 		$this->data["aff_msg"]="0";
 		$this->data["dte_login"]="0000-00-00 00:00:00";
 
-
 		// Données utilisateurs
 		$this->donnees=array();
 
@@ -76,7 +75,7 @@ class user_core extends objet_core
 		
 		// print_r($this);
 	}
-
+	
 	// Charge les données utilisateurs
 	function load($id)
 	{
@@ -383,6 +382,7 @@ class user_core extends objet_core
 		return "";
 	}
 
+	
 	function Valid($key,$v,$ret=false)
 	{
 		$v=stripslashes(parent::Valid($key,$v,true));
@@ -478,8 +478,15 @@ class user_core extends objet_core
 		
 		if (($grp!="") && (($grp!="SYS") || (($grp=="SYS") && (GetDroit("SYS")))))
 		{	
-			$query ="INSERT INTO ".$this->tbl."_droits SET groupe='".trim($grp)."',uid='".$this->id."',uid_creat='".$gl_uid."',dte_creat='".now()."'";
-			$sql->Insert($query);
+
+			$query ="SELECT id FROM ".$this->tbl."_droits WHERE uid='".$this->id."' AND groupe='".$grp."'";
+			$res=$sql->QueryRow($query);
+	
+			if ($res["id"]==0)
+			{
+				$query ="INSERT INTO ".$this->tbl."_droits SET groupe='".$grp."',uid='".$this->id."',uid_creat='".$gl_uid."',dte_creat='".now()."'";
+				$sql->Insert($query);
+			}
 		}
 	}
 
