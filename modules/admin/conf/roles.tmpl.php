@@ -28,6 +28,7 @@ $tabRoles["ModifClasseur"]="Modification d'un classeur dans le module document";
 $tabRoles["AccesDocuments"]="Accès au module de documents";
 $tabRoles["AccesDocument"]="Accès au détail d'un document";
 $tabRoles["VisuDocument"]="Visualisation de tous les documents";
+$tabRoles["SupprimeDocument"]="Autorisation de supprimer tous les documents";
 $tabRoles["ModifMessage"]="Modification d'un message dans le module document";
 
 
@@ -40,10 +41,9 @@ $tabRoles["AccesMesInformations"]="Accès à la page de modification de ses inform
 $tabRoles["CreeUser"]="Créer un nouveau membre";
 
 $tabRoles["ModifUser"]="Ouvre la modification des informations des utilisateurs";
-$tabRoles["ModifUserInfos"]="Modification des informations générales d'un utilisateur";
-$tabRoles["ModifUserSauve"]="Sauvegarder la fiche d'un utilisateurs";
-$tabRoles["ModifUserDonnees"]="Modification des données complémentaires des utilisateurs";
 $tabRoles["ModifUserAll"]="Modification de toutes les entrées d'un utilisateur";
+$tabRoles["ModifUserInfos"]="Modification des informations générales d'un utilisateur";
+$tabRoles["ModifUserDonnees"]="Modification des données complémentaires des utilisateurs";
 $tabRoles["ModifUserPassword"]="Modifier les mots de passe des utilisateurs";
 $tabRoles["ModifUserDroits"]="Modifier les droits des utilisateurs";
 $tabRoles["ModifUserVirtuel"]="Modifier le champs utilisateur virtuel";

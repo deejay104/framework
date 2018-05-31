@@ -22,23 +22,28 @@
 	session_start();
 
 	if ((isset($_SESSION['uid'])) && ($_SESSION['uid']>0))
-	  { $uid = $_SESSION['uid']; }
+	  { $gl_uid = $_SESSION['uid']; }
 	else
 	  { header("HTTP/1.0 401 Unauthorized"); exit; }
 
 // ---- Variables
-	if ($_REQUEST["id"]!="")
-	  {
+	if ((is_numeric($_REQUEST["id"])) && ($_REQUEST["id"]>0))
+	{
 		$id=$_REQUEST["id"];
-	  }
+	}
 	else
-	  {
-		echo "Incorrect filename."; exit;
-	  }
+	{
+		$ret=array();
+		$ret["result"]="id incorrect";
+		echo json_encode($ret);
+		exit;
+	}
 
 	if ($mysqluser=="")
 	{
-		echo "Fichier de configuration introuvable","Il manque le fichier de configuration 'config/config.inc.php'.";
+		$ret=array();
+		$ret["result"]="Fichier de configuration introuvable";
+		echo json_encode($ret);
 		exit;
 	}
 
@@ -60,8 +65,10 @@
 // ---- Delete document
 	if ( (isset($_REQUEST["fonc"])) && ($_REQUEST["fonc"]=="delete") )
 	{
-		$doc->delete();
-		echo "<script>opener.location.reload(); window.close();</script>";
+		$ret=array();
+		$ret["result"]=$doc->delete();
+		echo json_encode($ret);
+		// echo "<script>opener.location.reload(); window.close();</script>";
 		exit;		
 	}
 

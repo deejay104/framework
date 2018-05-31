@@ -73,6 +73,8 @@ $tabTmpl=Array
 		"actif" => Array("Type" => "enum('oui','non')", "Default" => "oui", "Index"=>1),
 		"uid_creat" => Array("Type" => "int(10) unsigned","Default" => 0, ),
 		"dte_creat" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
+		"uid_maj" => Array("Type" => "int(10) unsigned","Default" => 0, ),
+		"dte_maj" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
 	),
 	"droits" => Array
 	(

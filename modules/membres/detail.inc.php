@@ -63,7 +63,7 @@
 		$affrub="index";
 	}
 
-	if (($fonc=="Enregistrer") && ((GetMyId($id)) || (GetDroit("ModifUserSauve"))) && (!isset($_SESSION['tab_checkpost'][$checktime])))
+	if (($fonc=="Enregistrer") && ((GetMyId($id)) || (GetDroit("ModifUser"))) && (!isset($_SESSION['tab_checkpost'][$checktime])))
 	{
 		// Sauvegarde les données
 		if (count($form_data)>0)
@@ -109,6 +109,7 @@
 		// Sauvegarde des échéances
 		if (is_array($form_echeance))
 		{
+
 			foreach($form_echeance as $i=>$d)
 			{
 				$dte = new echeance_core($i,$sql);
@@ -252,7 +253,7 @@
 		// Affiche les documents
 		$lstdoc=ListDocument($sql,$id,"document");
 
-		if (($typeaff=="form") && ((GetMyId($id)) || (GetDroit("ModifUserDocument"))))
+		if (($typeaff=="form") && ((GetMyId($id)) || (GetDroit("ModifUserDocument")) || (GetDroit("ModifUserAll"))))
 		{
 			$doc = new document_core(0,$sql);
 			$doc->editmode="form";

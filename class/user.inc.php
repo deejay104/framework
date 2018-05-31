@@ -30,9 +30,9 @@ class user_core extends objet_core
 		"dte_login"=>"ModifUserDteLogin",
 		"groupe"=>"ModifUserGroupe",
 		"virtuel"=>"ModifUserVirtuel",
-		"initiales"=>array("owner","ModifUserInfos"),
-		"mail"=>array("owner","ModifUserInfos"),
-		"notification"=>array("owner","ModifUserInfos"),
+		"initiales"=>array("ownerid","ModifUserInfos"),
+		"mail"=>array("ownerid","ModifUserInfos"),
+		"notification"=>array("ownerid","ModifUserInfos"),
 	);
 
 	// protected $tabList=array(
@@ -140,12 +140,15 @@ class user_core extends objet_core
 			$mycond=true;
 		}
 
-		if (($role=="owner") && (GetMyId($this->id)))
-		{
-			$mycond=true;
-		} 
-	  
 		return $mycond;
+	}
+
+	function TstDroit($role)
+	{
+		$this->LoadRoles();
+		if ((isset($this->role[$role])) && ($this->role[$role]))
+		  { return true; }
+		return false;
 	}
 
 	// Charge les données complémentaires

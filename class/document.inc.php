@@ -60,7 +60,7 @@ class document_core{
 		{
 			$this->id=0;
 			$this->filename="";
-			$this->droit="ALL";
+			$this->droit="";
 		}
 	}
 
@@ -165,23 +165,22 @@ class document_core{
 		$sql=$this->sql;
 		$ret="";
 
-		if ( ($this->uid==$gl_uid) || (GetDroit("ADM")) || ($myuser->role[$this->droit]) )
+		if ( ($this->uid==$gl_uid) || (GetDroit("SupprimeDocument")) || ((isset($myuser->groupe[$this->droit])) && ($myuser->groupe[$this->droit])) )
 		{
 			if (file_exists($this->filepath."/".$this->filename))
 			{
 				if (unlink($this->filepath."/".$this->filename))
-				  {
+				{
 				  	$ret.="Fichier supprimé";
-				  }
+				}
 			}
-
 			
 			if (!file_exists($this->filepath."/".$this->filename))
-			  {
-				$query="UPDATE ".$this->tbl."_document SET actif='non' WHERE id='".$this->id."'";
-				$sql->Update($query);
-			  }
+			{
+				$sql->Edit("document",$this->tbl."_document",$this->id,array("actif"=>'non', "uid_maj"=>$gl_uid, "dte_maj"=>now()));
+			}
 		}
+		return $ret;
 	}
 
 	function Affiche()
@@ -220,13 +219,13 @@ class document_core{
 		  { $icon="file"; }
 
 
-		$txt ="";
 		if ($this->editmode=="form")
 		{
 		  	$txt="<input name=\"form_adddocument\" type=\"file\" size=\"60\" />";
 		}
 		else
 		{
+			$txt ="<div id='doc_".$this->id."'>";
 			if (file_exists($this->filepath."/".$this->filename))
 			{
 					$fsize=CalcSize(filesize($this->filepath."/".$this->filename));
@@ -239,9 +238,11 @@ class document_core{
 
 			// Si mode édition
 			if ($this->editmode=="edit")
-			  {
-				$txt.=" <a href=\"#\" OnClick=\"var win=window.open('doc.php?id=".$this->id."&fonc=delete','scrollbars=no,resizable=no,width=10'); return false;\" class='imgDelete'><img src='".$corefolder."/static/images/icn16_supprimer.png'></a>";
+			{
+				// $txt.=" <a href=\"#\" OnClick=\"var win=window.open('doc.php?id=".$this->id."&fonc=delete','scrollbars=no,resizable=no,width=10'); return false;\" class='imgDelete'><img src='".$corefolder."/static/images/icn16_supprimer.png'></a>";
+				$txt.=" <a href=\"#\" OnClick=\"$(function() { $.ajax({url:'doc.php?id=".$this->id."&fonc=delete'}); document.getElementById('doc_".$this->id."').style.visibility='hidden'; })\" class='imgDelete'><img src='".$corefolder."/static/images/icn16_supprimer.png'></a>";
 			}
+			$txt.="</div>";
 		}
 
 		return $txt;
@@ -472,13 +473,18 @@ function ListDocument($sql,$id,$type)
 	$sql->Query($query);
 	$lstdoc=array();
 	for($i=0; $i<$sql->rows; $i++)
-	  {
+	{
 		$sql->GetRow($i);
-		if ( ($gl_uid==$sql->data["uid"]) || (($sql->data["droit"]!="") && ((isset($myuser->role[$sql->data["droit"]])) && ($myuser->role[$sql->data["droit"]])) ) || ($sql->data["droit"]=="ALL") || (GetDroit("VisuDocument")) )
+		if ( 
+			($gl_uid==$sql->data["uid"]) 
+			|| (($sql->data["droit"]!="") && (isset($myuser->groupe[$sql->data["droit"]])) && ($myuser->groupe[$sql->data["droit"]]))
+			|| ($sql->data["droit"]=="ALL") 
+			|| (GetDroit("VisuDocument"))
+		)
 		{
 			$lstdoc[$i]=$sql->data["id"];
 		}
-	  }
+	}
 
 	return $lstdoc;
   }

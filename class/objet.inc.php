@@ -489,12 +489,25 @@ class objet_core
 	function CheckDroit($role)
 	{
 		$mycond=false;
+		// On test si on a le role autorisé
 		if (GetDroit($role))
 		{
 			$mycond=true;
 		} 
 
+		// On teste si l'id de l'objet est le notre
+		if (($role=="ownerid") && (GetMyId($this->id)))
+		{
+			$mycond=true;
+		} 
+		// On teste si l'id de creation est le notre
+		if (($role=="creatid") && (GetMyId($this->uid_creat)))
+		{
+			$mycond=true;
+		} 
+		
 		// Si l'utilisateur a le droit de tout modifier alors on force
+		// Pas dit que cette partie soit nécessaire
 		if (GetDroit("SYS"))
 		  { $mycond=true; }
 	  
