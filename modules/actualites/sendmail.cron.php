@@ -35,7 +35,8 @@
 		$from["mail"]=$auth->data["mail"];
 		$from["name"]=$auth->fullname;
 
-		$txt=nl2br(htmlentities(utf8_encode($d["message"])));
+		// $txt=nl2br(htmlentities(utf8_encode($d["message"])));
+		$txt=nl2br(htmlentities($d["message"],ENT_HTML5,"ISO-8859-1"));
 		$txt.="<br /><br />-Email envoyé à partir du site ".$MyOpt["site_title"]."-";
 
 		// Envoie du message aux membres

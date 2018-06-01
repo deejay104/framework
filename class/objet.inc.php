@@ -533,6 +533,10 @@ class objet_core
 		}
 	}
 	
+	function LastUdate()
+	{
+		return DisplayDate($this->dte_maj);
+	}
 } # End of class
 
 function ListeObjets($sql,$table,$champs=array(),$crit=array())

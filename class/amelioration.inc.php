@@ -252,7 +252,7 @@ class amelioration_class extends objet_core
 			$tabList=json_decode($data,true);
 
 			$lst=array();
-			if (count($tabList["lst"])>0)
+			if ((isset($tabList["lst"])) && (count($tabList["lst"])>0))
 			{
 				foreach($tabList["lst"] as $k=>$v)
 				{

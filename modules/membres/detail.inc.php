@@ -45,12 +45,6 @@
 	else
 	  { $usr = new user_core(0,$sql,false); }
 
- // ---- Affiche le menu
-	$aff_menu="";
-	require_once("modules/".$mod."/menu.inc.php");
-	$tmpl_x->assign("aff_menu",$aff_menu);
-
-
 // ---- Sauvegarde les infos
 	if (($fonc=="Enregistrer") && (($id=="") || ($id==0)) && ((GetDroit("CreeUser"))) && (!isset($_SESSION['tab_checkpost'][$checktime])))
 	{
@@ -75,6 +69,10 @@
 		}
 
 		$usr->Save();
+		if ($id==0)
+		{
+			$id=$pb->id;
+		}
 		$msg_confirmation.="Vos données ont été enregistrées.<BR>";
 
 		// Sauvegarde la photo
@@ -95,8 +93,6 @@
 		  	$doc->droit="ALL";
 		  	$msg_erreur.= $doc->Save($id,$_FILES["form_photo"]);
 			$doc->Resize(200,240);
-
-			//$msg_erreur.=$usr->SavePicture($form_photo["name"],$form_photo["tmp_name"],$form_photo["type"]);
 		}
 
 		// Sauvegarde un document
@@ -171,6 +167,12 @@
 		$usr->Active();
 	  }
 
+// ---- Affiche le menu
+	$aff_menu="";
+	require_once("modules/".$mod."/menu.inc.php");
+	$tmpl_x->assign("aff_menu",$aff_menu);
+
+
 // ---- Modifie les infos
 	if (($fonc=="modifier") && ((GetMyId($id)) || (GetDroit("ModifUser"))))
 	  {
@@ -204,7 +206,7 @@
 		$usr->LoadDonneesComp();
 
 		$tmpl_x->assign("id", $id);
-		$tmpl_x->assign("info_maj", $usrmaj->prenom." ".$usrmaj->nom." le ".sql2date($usr->dtemaj));
+		$tmpl_x->assign("info_maj", $usrmaj->aff("fullname")." ".$usr->LastUdate());
 
 		$typeaff="form";
 	  }
