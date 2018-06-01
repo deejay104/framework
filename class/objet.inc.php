@@ -28,6 +28,7 @@ Type:
 	uppercase
 	lowercase
 	email
+	tel
 	text
 	bool
 	enum
@@ -52,11 +53,6 @@ class objet_core
 		$this->uid_maj=$gl_uid;
 		$this->dte_maj=date("Y-m-d H:i:s");
 
-		$this->data["dte_maj"]=$this->dte_maj;
-
-		$this->type["dte_creat"]="datetime";
-		$this->type["dte_maj"]="datetime";
-		
 		if ($id>0)
 		{
 			$this->load($id);
@@ -135,6 +131,10 @@ class objet_core
 		{
 			$ret=strtolower($txt);
 		}
+		else if ($type=="tel")
+		{
+			$ret=$txt;
+		}
 		else if ($type=="duration")
 		{
 			$ret=AffTemps($txt,"no");
@@ -158,25 +158,7 @@ class objet_core
 		  { $ret=$txt; }
 
 		$mycond=$this->GetDroit($key);
-		// Si on pas le droit de modif alors on repasse en lecture
-		// if ((isset($this->droit[$key])) && ($this->droit[$key]!="") && (!GetDroit($this->droit[$key])) )
-		// {
-			// $mycond=false;
-		// }
-		// if ((isset($this->droit[$key])) && ($this->droit[$key]=="owner") && (GetMyId($this->uid_creat)))
-		// {
-			// $mycond=true;
-		// }
 
-		// Si l'utilisateur a le droit de tout modifier alors on force
-		// if (GetDroit("SYS"))
-		  // { $mycond=true; }
-
-		// Champs en lecture seule
-		// if (($key=="id") || ($key=="uid_maj") || ($key=="dte_maj"))
-		  // { $mycond=false; }
-	  
-		// Si on a pas le droit on repasse en visu
 		if (!$mycond)
 		{
 			$render="html";
@@ -276,6 +258,11 @@ class objet_core
 			else if ($type=="email")
 			{
 				$ret="<A href=\"mailto:".strtolower($ret)."\">".strtolower($ret)."</A>";
+				$link=false;
+			}
+			else if ($type=="tel")
+			{
+				$ret=AffTelephone($ret)."</A>";
 				$link=false;
 			}
 			else if (($type=="enum") && (is_array($this->tabList[$key])))

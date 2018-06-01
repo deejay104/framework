@@ -133,7 +133,7 @@ class amelioration_class extends objet_core
 			curl_setopt_array( $ch, $options );
 			$data = curl_exec($ch); 
 			curl_close($ch); 
-			
+
 			$tabList=json_decode($data,true);
 			if ($this->id==0)
 			{
@@ -146,7 +146,7 @@ class amelioration_class extends objet_core
 		}
 	}
 	
-	function aff($key,$typeaff="html",$formname="form_data")
+	function aff($key,$typeaff="html",$formname="form_data",&$render="")
 	{
 		$ret=parent::aff($key,$typeaff,$formname,$render);
 
