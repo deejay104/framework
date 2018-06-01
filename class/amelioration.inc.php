@@ -146,7 +146,7 @@ class amelioration_class extends objet_core
 		}
 	}
 	
-	function aff($key,$typeaff="html",$formname="form_data")
+	function aff($key,$typeaff="html",$formname="form_data",&$render="")
 	{
 		$ret=parent::aff($key,$typeaff,$formname,$render);
 

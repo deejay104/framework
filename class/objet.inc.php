@@ -312,6 +312,11 @@ class objet_core
 	{
 		global $MyOpt;
 
+		if (!isset($this->data[$key]))
+		{
+			return "";
+		}
+
 		if (!isset($this->type[$key]))
 		{
 			$type="";
@@ -323,7 +328,7 @@ class objet_core
 
 		$ret=strtolower($this->data[$key]);
 
-		if ($this->type[$key]=="text")
+		if ((isset($this->type[$key])) && ($this->type[$key]=="text"))
 		{
 			$ret=nl2br(htmlentities($ret,ENT_HTML5,"ISO-8859-1"));
 		}
