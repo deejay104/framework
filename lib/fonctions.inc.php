@@ -51,7 +51,6 @@ function checkVar($var,$type)
 	{
 		$v=$_REQUEST[$var];
 	}
-	
 	if ($type=="numeric")
 	{
 		if (is_numeric($v))
@@ -61,6 +60,32 @@ function checkVar($var,$type)
 		else
 		{
 			return 0;
+		}
+	}
+	else if ($type=="varchar")
+	{
+		return substr($v,0,255);
+	}
+	else if ($type=="date")
+	{
+		if (preg_match("/[0-9]{4}-[0-9]{2}-[0-9]{2}/",$v))
+		{
+			return $v;
+		}
+		else
+		{
+			return "0000-00-00";
+		}
+	}
+	else if ($type=="array")
+	{
+		if (is_array($v))
+		{
+			return $v;
+		}
+		else
+		{
+			return array();
 		}
 	}
 }
@@ -656,10 +681,14 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 	$search="<tr><th></th>";
 
   	foreach($tabTitre as $name=>$v)
-	  {
+	{
+		if (!isset($v["align"]))
+		{
+			$v["align"]="center";
+		}
 		if ($name==$order)
 		{
-			$ret.="<th width='".$v["width"]."'".(((isset($v["align"])) && ($v["align"]!="")) ? " align='".$v["align"]."'" : "").">";
+			$ret.="<th width='".$v["width"]."'".(($v["align"]!="") ? " align='".$v["align"]."'" : "").">";
 			$ret.="<b><a href='$page&order=$name&trie=".(($trie=="d") ? "i" : "d").(($url!="") ? "&$url" : "")."&ts=0".$ls."'>".$v["aff"]."</a></b>";
 		  	$ret.=" <img src='".$corefolder."/static/images/sens_$trie.gif' border=0>";
 			$sub.="<th align='".$v["align"]."'>".((isset($v["sub"])) ? $v["sub"] : "")."</th>";
@@ -675,7 +704,7 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 		}
 		else
 		{
-			$ret.="<th width='".$v["width"]."'".(((isset($v["align"])) && ($v["align"]!="")) ? " align='".$v["align"]."'" : "").">";
+			$ret.="<th width='".$v["width"]."'".(($v["align"]!="") ? " align='".$v["align"]."'" : "").">";
 			$ret.="<b><a href='$page&order=$name&trie=d".(($url!="") ? "&$url" : "")."&ts=0".$ls."'>".$v["aff"]."</a></b>";
 			$sub.="<th align='".$v["align"]."'>".((isset($v["sub"])) ? $v["sub"] : "")."</th>";
 			$subb.="<th align='".$v["align"]."'>".((isset($v["bottom"])) ? $v["bottom"] : "")."</th>";
@@ -719,7 +748,7 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 		  { 
 //			if (($ii>=$start) && ($ii<$start+$limit))
 //			  {
-				$col = abs($col-110);
+				// $col = abs($col-110);
 				// $ret.="<tr onmouseover=\"setPointer(this, 'over', '#".$myColor[$col]."', '#".$myColor[$col+5]."', '#FF0000')\" onmouseout=\"setPointer(this, 'out', '#".$myColor[$col]."', '#".$myColor[$col+5]."', '#FF0000')\">";
 				$ret.="<tr>";
 				// $ret.="<td bgcolor=\"#".$myColor[$col]."\">&nbsp;</td>";

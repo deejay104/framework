@@ -102,7 +102,7 @@
 
 	$pb->Render("form",$typeaff);
 	$tmpl_x->assign("form_numid",$pb->aff("id"));
-	$tmpl_x->assign("form_dte_maj",DisplayDate($pb->dte_maj));
+	$tmpl_x->assign("form_dte_maj",$pb->LastUpdate());
 
 	$lstdoc=ListDocument($sql,$pb->uid_creat,"avatar");
 

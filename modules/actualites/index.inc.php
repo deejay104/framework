@@ -78,12 +78,6 @@
 			$id=0;
 		}
 
-// ---- Affichages du menu
-	foreach($MyOpt["menu"] as $menu=>$droit) {
-		if ((($droit=="") || (GetDroit($droit))) && ($droit!="-"))
-		  { $tmpl_x->parse("corps.menu_".$menu); }
-	}
-
 
 // ---- Informations personnelles
 

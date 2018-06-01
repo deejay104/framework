@@ -192,7 +192,7 @@
 		$tmpl_x->assign("id", $id);
 
 		$usrmaj = new user_core($usr->uid_maj,$sql);
-		$tmpl_x->assign("info_maj", $usrmaj->fullname." le ".sql2date($usr->data["dte_maj"]));
+		$tmpl_x->assign("info_maj", $usrmaj->aff("fullname")." ".$usrmaj->LastUpdate());
 		$tmpl_x->assign("info_connect", sql2date($usr->data["dte_login"]));
 	
 	  }
@@ -206,7 +206,7 @@
 		$usr->LoadDonneesComp();
 
 		$tmpl_x->assign("id", $id);
-		$tmpl_x->assign("info_maj", $usrmaj->aff("fullname")." ".$usr->LastUdate());
+		$tmpl_x->assign("info_maj", $usrmaj->aff("fullname")." ".$usr->LastUpdate());
 
 		$typeaff="form";
 	  }

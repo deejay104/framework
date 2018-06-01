@@ -52,11 +52,6 @@
 
 	eval($e);
 
-// ---- Nettoyage des variables
-	if (!isset($fonc))
-	{
-		$fonc="";
-	}
 
 // ---- Vérifie la variable $mod
 	if (!isset($mod))
@@ -66,36 +61,38 @@
 	if (trim($mod)=="")
 	  { $mod = "default"; }
 
+// ---- Charge la config  
+	
+	require ("lib/fonctions.inc.php");
+
+// ---- Nettoyage des variables
+	$fonc=checkVar("fonc","varchar");
+
 // ---- Gestion des droits
 	session_start();
  
 	if ($fonc=="logout")
 	  { include "login.php"; exit; }
 	else if ((isset($_SESSION['uid'])) && ($_SESSION['uid']>0))
-	  { $uid = $_SESSION['uid']; }
+	  { $gl_uid = $_SESSION['uid']; }
 	else
 	  { include "login.php"; exit; }
 
 // ---- Défini les variables globales
 	$prof="";
 	$gl_mode="html";
-	$gl_uid=$uid;
+	$uid=$gl_uid;
 
 	if (!isset($appfolder))
 	{
 		$appfolder="..";
 	}
 
-// ---- Vérifie la langue
-	$lang="fr";
-
-// ---- Charge la config  
-	
-	require ("lib/fonctions.inc.php");
-
 	if ($MyOpt["timezone"]!="")
 	  { date_default_timezone_set($MyOpt["timezone"]); }
 
+	$lang="fr";
+  
 // ---- Gestion des thèmes
 
 // Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_2 like Mac OS X; fr-fr) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8H7 Safari/6533.18.5
@@ -181,6 +178,14 @@
 	}
 	$tmpl="$tmpl.htm";
 	$tmpl_prg = new XTemplate (MyRep($tmpl,"default"));
+	$tmpl_prg->assign("style_url", GenereStyle(($theme=="phone") ? "phone" : "default"));
+
+	if ($fonc=="imprimer")
+	{
+		$tmpl_prg = new XTemplate (MyRep("print.htm","default"));
+		$tmpl_prg->assign("style_url", GenereStyle("print"));
+	}
+
 
 // ---- Maj du template
 	$tmpl_prg->assign("uid", $uid);
@@ -190,7 +195,6 @@
 	$tmpl_prg->assign("corefolder", $corefolder);
 	$tmpl_prg->assign("gl_uid", $gl_uid);
 
-	$tmpl_prg->assign("style_url", GenereStyle(($theme=="phone") ? "phone" : "default"));
 	if (file_exists($appfolder."/custom/".$MyOpt["site_logo"]))
 	{
 		$tmpl_prg->assign("site_logo", "custom/".$MyOpt["site_logo"]);

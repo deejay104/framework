@@ -84,19 +84,17 @@ class user_core extends objet_core
 		$this->id=$id;
 		$this->prenom=($this->data["prenom"]!="") ? ucwords($this->data["prenom"]) : "";
 		$this->nom=($this->data["nom"]!="") ? strtoupper($this->data["nom"]) : "";
-		// $this->actif=$this->data["actif"];
 		$this->virtuel=$this->data["virtuel"];
 		$this->mail=strtolower($this->data["mail"]);
-
 		$this->fullname=AffFullName($this->prenom,$this->nom);
 		$this->data["droits"]="";
 
 		$sql=$this->sql;
-
-		$query = "SELECT password FROM ".$this->tbl."_utilisateurs WHERE id='".$this->id."'";
+		$query = "SELECT actif,password FROM ".$this->tbl."_utilisateurs WHERE id='".$this->id."'";
 		$res=$sql->QueryRow($query);
 		$this->password=$res["password"];
-		
+		$this->actif=$res["actif"];
+	
 		// Charge les droits
 		$query = "SELECT groupe FROM ".$this->tbl."_droits WHERE uid='".$this->id."' ORDER BY groupe";
 		$sql->Query($query);
@@ -261,9 +259,32 @@ class user_core extends objet_core
 					$ret="Aucun";
 				}
 			}
+			else if ($key=="nom")
+			{
+				if ($this->actif!="oui")
+				{
+					$ret="<a href='index.php?mod=membres&rub=detail&id=".$this->id."'><s>".strtoupper($this->data[$key])."</s></a>";
+				}
+
+			}
+			else if ($key=="prenom")
+			{
+				if ($this->actif!="oui")
+				{
+					$ret="<a href='index.php?mod=membres&rub=detail&id=".$this->id."'><s>".ucwords($this->data[$key])."</s></a>";
+				}
+
+			}
 			else if ($key=="fullname")
 			{
-				$ret="<a href='index.php?mod=membres&rub=detail&id=".$this->id."'>".$this->fullname."</a>";
+				if ($this->actif!="oui")
+				{
+					$ret="<a href='index.php?mod=membres&rub=detail&id=".$this->id."'><s>".$this->fullname."</s></a>";
+				}
+				else
+				{
+					$ret="<a href='index.php?mod=membres&rub=detail&id=".$this->id."'>".$this->fullname."</a>";
+				}
 			}
 		}
 		return $ret;

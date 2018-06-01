@@ -97,19 +97,6 @@ $MyOptTmpl["devise"]="€";
 $MyOptHelp["devise"]="Devise";
 
 
-// Dénini les droits d'accès aux rubriques
-// [vide] : Visible par tous
-// x : Visible pour tous, y compris invité
-// - : Masqué
-// [Role] : Affiché que pour le role
-$MyOptHelp["menu"]["accueil"]="Affichage des menus du site. [vide]: Visible par tous, - : Masqué, [Role] : Affiché uniquement pour le role correspondant";
-
-$MyOptTmpl["menu"]["accueil"]="";
-$MyOptTmpl["menu"]["membres"]="AccesMembres";
-$MyOptTmpl["menu"]["docs"]="";
-$MyOptTmpl["menu"]["mesinfos"]="";
-$MyOptTmpl["menu"]["configuration"]="AccesConfiguration";
-
 // Timestamp pour le cache de la feuille de style
 $MyOptHelp["styletime"]="Timestamp pour le cache de la feuille de style. Cette valeur sera re-écrite lors de l'enregistrement";
 $MyOptTmpl["styletime"]=time();

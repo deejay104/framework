@@ -21,16 +21,19 @@
 
 <?
 	require_once ("class/document.inc.php");
+
 // ---- Charge le template
 	$tmpl_x = new XTemplate (MyRep("liste.htm"));
 	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 	
 // ---- Vérifie les variables
-	if (!is_numeric($fid))
-	  { $fid=0; }
+	$critere=checkVar("critere","varchar");
+  	$opt=checkVar("opt","numeric");
+  	$fid=checkVar("fid","numeric");
 
-	// Test si l'on doit supprimer un message
-	if (is_numeric($opt) && ($opt >0))
+  
+// ---- Test si l'on doit supprimer un message
+	if ((is_numeric($opt)) && ($opt >0))
 	{
 	  $query = "SELECT fil"." AS fil, uid_creat"." AS uid_creat, uid_maj"." AS uid_maj ";
 	  $query.= "FROM ".$MyOpt["tbl"]."_forums"." WHERE id"."=$opt";
@@ -46,7 +49,7 @@
 	    }
 	}
 
-	// On marque tous les messages de ce forum comme lu
+// ---- On marque tous les messages de ce forum comme lu
 	if ($fonc=='marquer')
 	  {
 		$query = "SELECT forum.id AS mid, forum.fid AS fid ";

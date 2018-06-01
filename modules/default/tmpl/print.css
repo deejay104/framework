@@ -110,7 +110,6 @@ img { color: #FFFFFF; border: 0px; }
     #responsive-navigation { display: none; }
     #main-content { width: 100%; left: 0px; }
     #main-sidebar { display: none; }
-    .pagetitle { display: none; height: 0px; }
 }
 
 .formulaire input { width:155px; } /* Overlapped by responsive */
@@ -132,22 +131,13 @@ img { color: #FFFFFF; border: 0px; }
 
 /* **** Haut de page **** */
 
-.logo { margin: 0px 0; background-color: #{TitleBackgroundNormal}; padding: 0px 0px; text-align: center; display: block; min-height: 95px}
-.logo a { color: white; }
-.logo a h1 { text-transform: uppercase; font-size: 25px; margin: 0; font-weight: 800; }
-.logo span { color: #bee3f6; font-size: 13px; }
+.logo { }
+.headbox { }
+.head { }
 
-.headbox { display: inline-block; width: 100%; }
-.head { padding: 0px; background-color: #{TitleBackgroundNormal}; width: 100%; height: 60px; }
-
-.icone { padding-left:30px; display: inline-block; float: left; clear: right; padding-top:10px; }
-.pagetitle { padding-left:90px; padding-top:25px; text-transform: uppercase; font-size: 25px; color: white; }
-.pagetitle p { float: left; padding-right: 5px; margin-top: 0px; margin-bottom: 10px; display: inline-block; }
-.pagetitle a { height:36px; border: 1px solid #{TitleBackgroundHover}; background-color: #{TitleBackgroundHover}; font-size: 14px; text-transform: none; padding: 10px; border-radius: 5px; }
-.pagetitle a:hover { background-color: #{TitleBackgroundNormal}; border-radius: 8px; border: 1px solid #{TitleBackgroundHover}; color: #ffffff;  }
-.pagetitle img { vertical-align:middle; margin-right: 5px; }
-
-.pagemenu { background-color: #{FormulaireBackgroundNormal}; height: 20px; width: 100%; padding-top:0px; margin-bottom: 30px;  margin-top: -10px; }
+.icone { }
+.pagetitle { display: none; visibility: hidden; height:0px; border: 1px solid #ff;}
+.pagemenu {	visibility: hidden; height: 0px; }
 
 .pageTitleSelected { background-color: #{TitleBackgroundNormal}!important; border: 1px solid #076983!important; color: #ffffff!important; box-shadow: 2px 2px #{TitleBackgroundHover}; }
 
@@ -283,7 +273,7 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 }
 
 
-/* **** Actualités **** */
+/* **** ActualitÃ©s **** */
 
 .cadreinfos { display: none; left:60%; width:40%; float:right; }
 .actualites { width: 100%; float:left;  }
