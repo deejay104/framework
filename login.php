@@ -39,7 +39,7 @@
 	require ("class/mysql.inc.php");
 
 // ---- Charge les variables
-	require ("lib/fonctions.inc.php");
+	require_once("lib/fonctions.inc.php");
 
 	if ($MyOpt["timezone"]!="")
 	  { date_default_timezone_set($MyOpt["timezone"]); }

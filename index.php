@@ -61,8 +61,7 @@
 	if (trim($mod)=="")
 	  { $mod = "default"; }
 
-// ---- Charge la config  
-	
+// ---- Charge les bibliothèques
 	require ("lib/fonctions.inc.php");
 
 // ---- Nettoyage des variables
