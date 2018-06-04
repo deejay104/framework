@@ -39,7 +39,7 @@ function MyRep($file,$mymod="")
   	  { return ""; }
   }
 
-function checkVar($var,$type)
+function checkVar($var,$type,$len=256)
 {
 	global $_REQUEST;
 	
@@ -64,7 +64,7 @@ function checkVar($var,$type)
 	}
 	else if ($type=="varchar")
 	{
-		return substr($v,0,255);
+		return substr($v,0,$len);
 	}
 	else if ($type=="date")
 	{
@@ -539,6 +539,10 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 		
 				foreach($tabTitre as $name=>$v)
 				  {
+					if (!isset($val[$name]["val"]))
+					{
+						$val[$name]["val"]="";
+					}
 					if ((!isset($val[$name]["aff"])) || ($val[$name]["aff"]==""))
 					{
 						$val[$name]["aff"]=$val[$name]["val"];

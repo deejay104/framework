@@ -16,26 +16,30 @@
 </div>
 
 
+<style>
+.arrow:after { border: 1px solid black; }
+
+</style>
 
 <script type="text/javascript">
 $(function() {
 
-   $(document).tooltip({
- 			hide: { duration:0 },
- 			show: { duration:0 },
-      position: {
-        my: "center bottom-5",
-        at: "center top",
-        using: function( position, feedback ) {
-          $( this ).css( position );
-          $( "<div>" )
-            .addClass( "arrow" )
-            .addClass( feedback.vertical )
-            .addClass( feedback.horizontal )
-            .appendTo( this );
-        }
-      }
-    });
+	$(document).tooltip({
+		hide: { duration:0 },
+		show: { duration:0 },
+		position: {
+			my: "center bottom-5",
+			at: "center top-8",
+			using: function( position, feedback ) {
+				$( this ).css( position );
+				$( "<div>" )
+				.addClass( "arrow" )
+				.addClass( feedback.vertical )
+				.addClass( feedback.horizontal )
+				.appendTo( this );
+			}
+		}
+	});
 
     $( "#DropAllow" ).sortable({
 		connectWith: "ul",
@@ -111,7 +115,6 @@ $(function() {
 	}
 
 </script>
-
 
 <form name="form_route" method="post" action="index.php" enctype="multipart/form-data">
 <input type="hidden" name="mod" value="admin">

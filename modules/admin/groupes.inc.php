@@ -26,13 +26,17 @@
 ?>
 
 <?
+// ---- Vérifie le droit d'accès
+	if (!GetDroit("AccesConfigGroupes")) { FatalError("Accès non autorisé (AccesConfigGroupes)"); }
+
 // ---- Charge le template
 	$tmpl_x = new XTemplate (MyRep("groupes.htm"));
 	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 	$tmpl_x->assign("form_checktime",$_SESSION['checkpost']);
 
-// ---- Vérifie le droit d'accès
-	if (!GetDroit("AccesConfigGroupes")) { FatalError("Accès non autorisé (AccesConfigGroupes)"); }
+// ---- Vérifie les variables
+	$order=checkVar("order","varchar");
+	$trie=checkVar("trie","varchar");
 
 // ---- Affiche le menu
 	$aff_menu="";

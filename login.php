@@ -55,7 +55,7 @@
 	{	
 		$theme=$_SESSION['mytheme'];
 	}
-	else if ($_SESSION['mytheme']=="")
+	else if ((!isset($_SESSION['mytheme'])) || ($_SESSION['mytheme']==""))
 	{
 		if ((preg_match("/CPU iPhone OS/",$_SERVER["HTTP_USER_AGENT"])) ||
 			(preg_match("/Linux; U; Android/",$_SERVER["HTTP_USER_AGENT"])) ||

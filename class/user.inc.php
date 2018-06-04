@@ -289,7 +289,21 @@ class user_core extends objet_core
 		}
 		return $ret;
 	}
-	
+
+	function val($key)
+	{
+		global $MyOpt;
+
+		$ret=parent::val($key);
+
+		if ($key=="fullname")
+		{
+			$ret=$this->fullname;
+		}
+		
+		return $ret;
+	}
+
 	// Affiche les données complémentaires
 	function AffDonneesComp($i,$render="html")
 	{

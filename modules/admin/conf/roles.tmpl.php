@@ -35,6 +35,7 @@ $tabRoles["ModifMessage"]="Modification d'un message dans le module document";
 // ---- Users
 $tabRoles["AccesMembre"]="Accès au détail d'un membre";
 $tabRoles["AccesMembres"]="Accès à la liste des membres";
+$tabRoles["AccesMembresVirtuel"]="Accès à la liste des membres virtuels";
 $tabRoles["AccesMesInformations"]="Accès à la page de modification de ses informations";
 
 

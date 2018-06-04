@@ -526,13 +526,16 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 
 
 /* **** ToolTip **** */
-.ui-tooltip-content { padding: 0px; font-size: 10px; line-height:12px; }
+.ui-widget { font-size: 12px; }
+.ui-menu-item { padding-top: 1px; padding-bottom: 1px; }
+
+.ui-tooltip-content { padding: 0px; font-size: 12px; line-height:16px; }
 
 .ui-tooltip, .settings:after { border: 1px solid white; }
 .ui-tooltip {
-	padding: 10px 20px;
-	color: white;
-	border-radius: 10px;
+	padding: 10px;
+	color: black;
+	border-radius: 5px;
 	box-shadow: 0 0 1px black;
 }
 
@@ -543,7 +546,7 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 	position: absolute;
 	left: 50%;
 	margin-left: -35px;
-	bottom: -16px;
+	bottom: -18px;
 	font-size: 12px; 
 }
 
@@ -558,7 +561,6 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 
 .arrow:after {
 	background-color: #{FormulaireBackgroundNormal};
-	border: 1px solid white;
 	content: "";
 	position: absolute;
 	left: 20px;
@@ -572,8 +574,8 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 }
 
 .arrow.top:after {
-bottom: -20px;
-top: auto;
+	bottom: -20px;
+	top: auto;
 }
 
   
@@ -585,6 +587,7 @@ top: auto;
 
 .dropDisable { width: 620px; }
 .dropDisable li { margin: 1px; float: left; }
+
 
  
 <!-- END: main -->

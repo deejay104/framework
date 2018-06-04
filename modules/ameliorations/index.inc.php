@@ -23,6 +23,10 @@
 	require_once ("class/amelioration.inc.php");
 	if (!GetDroit("AccesAmeliorations")) { FatalError("Accès non autorisé (AccesAmeliorations)"); }
 
+// ---- Vérifie les variables
+	$order=checkVar("order","varchar");
+	$trie=checkVar("trie","varchar");
+	
 // ---- Charge le template
 	$tmpl_x = new XTemplate (MyRep("index.htm"));
 	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);

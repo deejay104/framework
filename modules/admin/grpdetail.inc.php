@@ -26,14 +26,19 @@
 ?>
 
 <?
+// ---- Vérifie le droit d'accès
+	if (!GetDroit("AccesConfigGroupes")) { FatalError("Accès non autorisé (AccesConfigGroupes)"); }
+
 // ---- Charge le template
 	$tmpl_x = new XTemplate (MyRep("grpdetail.htm"));
 	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 	$tmpl_x->assign("form_checktime",$_SESSION['checkpost']);
 
-// ---- Vérifie le droit d'accès
-	if (!GetDroit("AccesConfigGroupes")) { FatalError("Accès non autorisé (AccesConfigGroupes)"); }
+// ---- Vérifie les variables
+	$sup=checkVar("sup","numeric");
+	$search=checkVar("search","varchar");
 
+// ---- Charge les roles
 	$tabRoles=array();
 	require_once("modules/".$mod."/conf/roles.tmpl.php");
 	if (file_exists($appfolder."/modules/".$mod."/conf/roles.tmpl.php"))
@@ -158,7 +163,7 @@
 
 		$tmpl_x->assign("aff_couleur","");
 		if ($search!="")
-	  {
+		{
 			if ( (preg_match("/".$search."/i",$r)) || (preg_match("/".$search."/i",$h)) )
 			{
 				$tmpl_x->assign("aff_couleur","adminRouge");

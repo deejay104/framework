@@ -74,9 +74,6 @@
 
 
 // ---- Initialisation des variables
-	$tmpl_x->assign("color",$color);
-	$tmpl_x->assign("color2",$color2);
-
 	$tmpl_x->assign("fid", $fid);
 	$tmpl_x->assign("mid", $mid);
 	$tmpl_x->assign("idmsg", $res["id"]);

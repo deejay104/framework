@@ -152,7 +152,7 @@ class echeance_core
 			for($i=0; $i<$sql->rows; $i++)
 			{
 				$sql->GetRow($i);
-				if ( (GetDroit($sql->data["droit"])) && ($tabEcheance[$sql->data["id"]]=="") )
+				if ( (GetDroit($sql->data["droit"])) && ((!isset($tabEcheance[$sql->data["id"]])) || ($tabEcheance[$sql->data["id"]]=="")) )
 				{
 					$ret.="<option value='".$sql->data["id"]."'>".$sql->data["description"]."</option>";
 					$n=$n+1;

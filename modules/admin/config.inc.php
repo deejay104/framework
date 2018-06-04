@@ -66,7 +66,7 @@
 				$tmpl_x->assign("param_var2", $var);
 				$tmpl_x->assign("param_txt", (isset($MyOpt[$nom][$var])) ? $MyOpt[$nom][$var] : $dd);
 				$tmpl_x->assign("param_default", ($dd=="") ? "<i>-vide-</i>" : $dd);
-				$tmpl_x->assign("param_help", $MyOptHelp[$nom][$var]);
+				$tmpl_x->assign("param_help", (isset($MyOptHelp[$nom][$var])) ? $MyOptHelp[$nom][$var] : "");
 
 				$tmpl_x->parse("corps.lst_param");
 
