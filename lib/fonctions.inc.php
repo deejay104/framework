@@ -72,6 +72,10 @@ function checkVar($var,$type,$len=256)
 		{
 			return $v;
 		}
+		else if (preg_match("/[0-9]{2}\/[0-9]{2}\/[0-9]{4}/",$v))
+		{
+			return $v;
+		}
 		else
 		{
 			return "0000-00-00";
