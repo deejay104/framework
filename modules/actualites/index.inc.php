@@ -48,53 +48,54 @@
 
 		if ($form_message!=$txtnewmsg)
 		{
+			$td=array(
+				"titre"=>addslashes(strip_tags($form_titre)),
+				"message"=>addslashes(strip_tags($form_message)),
+				"uid_maj"=>$gl_uid,
+				"dte_maj"=>now()
+				);		
 			if ($id>0)
 			{
-				$query="SELECT titre,message FROM `".$MyOpt["tbl"]."_actualites` WHERE id='$id'";
+				$query="SELECT uid_creat FROM `".$MyOpt["tbl"]."_actualites` WHERE id='$id'";
 				$res = $sql->QueryRow($query);
 
-				if ( (GetDroit("ModifActualite")) || ( ($uid==$res["uid_creat"]) && (time()-strtotime($d["dte_creat"])<3600) ) )
+				if ( (GetDroit("ModifActualite")) || ( ($gl_uid==$res["uid_creat"]) && (time()-strtotime($d["dte_creat"])<3600) ) )
 				{
-					$query="UPDATE ".$MyOpt["tbl"]."_actualites SET titre='".addslashes(strip_tags($form_titre))."',message='".addslashes(strip_tags($form_message))."',uid_modif='$uid',dte_modif='".now()."' WHERE id='$id'";
-					$sql->Update($query);
+					$sql->Edit("actualites",$MyOpt["tbl"]."_actualites",$id,$td);
 				}
 			}
 			else
 			{
-				$query="INSERT INTO ".$MyOpt["tbl"]."_actualites (titre,message,uid_creat,dte_creat,uid_modif,dte_modif) VALUES ('".addslashes(strip_tags($form_titre))."','".addslashes(strip_tags($form_message))."','$uid','".now()."','$uid','".now()."')";
-				$id=$sql->Insert($query);
+				$td["uid_creat"]=$gl_uid;
+				$td["dte_creat"]=now();	
+				$sql->Edit("actualites",$MyOpt["tbl"]."_actualites",0,$td);
 			}
-			// $tmpl_x->assign("aff_id", $id);
-			// $tmpl_x->parse("corps.aff_sendmail");
 			$id=0;
 		}
 	}
 
 // ---- Supprime le post
-	if ( ($fonc=="supprimer") && ($id>0) )
-	  {
-			$query="DELETE FROM ".$MyOpt["tbl"]."_actualites WHERE id='$id'";
-			$sql->Delete($query);
-			$id=0;
-		}
-
-
-// ---- Informations personnelles
+	if ( ($fonc=="supprimer") && (GetDroit("SupprimeActualite")) && ($id>0) )
+	{
+		$td=array("actif"=>"non","uid_maj"=>$gl_uid,"dte_maj"=>now());
+		$sql->Edit("actualites",$MyOpt["tbl"]."_actualites",$id,$td);
+		$id=0;
+	}
 
 
 // ---- Affiche les échéances
-		$lstdte=ListEcheance($sql,$gl_uid);
-		  	
-		if (is_array($lstdte))
-		{
-			foreach($lstdte as $i=>$did)
-			  {
-				$dte = new echeance_core($did,$sql,$gl_uid);
-				$dte->editmode="html";
-				$tmpl_x->assign("form_echeance",$dte->Affiche());
-				$tmpl_x->parse("corps.lst_echeance");
-			  }
-		}
+	$lstdte=ListEcheance($sql,$gl_uid);
+		
+	if (is_array($lstdte))
+	{
+		foreach($lstdte as $i=>$did)
+		  {
+			$dte = new echeance_core($did,$sql,$gl_uid);
+			$dte->editmode="html";
+			$tmpl_x->assign("form_echeance",$dte->Affiche());
+			$tmpl_x->parse("corps.lst_echeance");
+		  }
+	}
 
 // ---- Derniers message des forums
 
@@ -143,10 +144,10 @@
 	$sql->Query($query);
 	$news=array();
 	for($i=0; $i<$sql->rows; $i++)
-	  { 
-			$sql->GetRow($i);
-			$news[$i]=$sql->data;
-	  }
+	{ 
+		$sql->GetRow($i);
+		$news[$i]=$sql->data;
+	}
 
 	$tmpl_x->assign("msg_lastid", (isset($sql->data["id"])) ? $sql->data["id"] : "0" );	
 
@@ -157,14 +158,14 @@
 
 		// $txt=nl2br(htmlentities($d["message"],ENT_HTML5,"ISO-8859-1"));
 		$txt=nl2br($d["message"]);
-		$txt=preg_replace("/((http|https|ftp):\/\/[^ |<]*)/si","<a href='$1' target='_blank'>$1</a>",$txt);
+		$txt=preg_replace("/((http|https|ftp):\/\/[^ \n\r<]*)/si","<a href='$1' target='_blank'>$1</a>",$txt);
 		$txt=preg_replace("/ (www\.[^ |\/]*)/si","<a href='http://$1' target='_blank'>$1</a>",$txt);
 
 		$tmpl_x->assign("msg_id", $d["id"]);	
 		$tmpl_x->assign("msg_titre", $d["titre"]);	
 		$tmpl_x->assign("msg_message", $txt);	
 		$tmpl_x->assign("msg_autheur", $resusr->Aff("fullname"));	
-		$tmpl_x->assign("msg_date", DisplayDate($d["dte_creat"]));	
+		$tmpl_x->assign("msg_date", DisplayDate($d["dte_creat"]));
 
 		$lstdoc=ListDocument($sql,$d["uid_creat"],"avatar");
 
@@ -185,7 +186,7 @@
 		{
 			$tmpl_x->parse("corps.aff_message.icn_supprimer");
 		}
-		if ( (($uid==$d["uid_creat"]) && (time()-strtotime($d["dte_creat"])<3600)) || (GetDroit("ModifActualite")) )
+		if ( (($gl_uid==$d["uid_creat"]) && (time()-strtotime($d["dte_creat"])<3600)) || (GetDroit("ModifActualite")) )
 		{
 			$tmpl_x->parse("corps.aff_message.icn_modifier");
 		}

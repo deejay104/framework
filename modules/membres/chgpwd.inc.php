@@ -55,7 +55,7 @@
 				// ENVOIE DU MDP PAR MAIL (+LOGIN)
 				// ---- Récupère l'adresse email de l'émetteur
 				$from=$myuser->data["mail"];
-				SendMailFromFile($from,$usr->data["mail"],"","[".$MyOpt["site_title"]."] : Changement de votre mot de passe",array("username"=>$usr->fullname,"initiales"=>$usr->data["initiales"]),"chgpwd");
+				SendMailFromFile($from,$usr->data["mail"],"","[".$MyOpt["site_title"]."] : Changement de votre mot de passe",array("username"=>$usr->fullname,"initiales"=>$usr->data["initiales"],"url"=>$MyOpt["host"]),"chgpwd");
 			
 				$msg_confirmation.="Votre mot de passe a été mis à jour.<br />";
 			}

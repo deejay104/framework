@@ -70,7 +70,7 @@
 					$tabvar["type"]="est échue depuis le";
 					$tabvar["date"]=sql2date($dte->Val());
 					
-					SendMailFromFile($mailpre,$usr->data["mail"],$tabPre,"[".$MyOpt["site_title"]."] : ".$dte->description." échue",$tabvar,"echeances");
+					SendMailFromFile($mailpre,$usr->data["mail"],$tabPre,"[".$MyOpt["site_title"]."] : ".$dte->description." échue",$tabvar,"echeance_nok");
 				}
 				else if (date_diff_txt($dte->Val(),date("Y-m-d"))>-$delai*24*3600)
 				{
@@ -78,10 +78,10 @@
 
 					$tabvar=array();
 					$tabvar["description"]=$dte->description;
-					$tabvar["type"]="est échue depuis le";
+					$tabvar["type"]="expire le";
 					$tabvar["date"]=sql2date($dte->Val());
 					
-					SendMailFromFile($mailpre,$usr->data["mail"],$tabPre,"[".$MyOpt["site_title"]."] : ".$dte->description." arrive à échéance le ".sql2date($dte->Val()),$tabvar,"echeances");
+					SendMailFromFile($mailpre,$usr->data["mail"],$tabPre,"[".$MyOpt["site_title"]."] : ".$dte->description." arrive à échéance le ".sql2date($dte->Val()),$tabvar,"echeance_ok");
 				}
 				if (!$ret)
 				{

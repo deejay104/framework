@@ -11,8 +11,8 @@ $tabTmpl=Array
 		"actif" => Array("Type" => "enum('oui','non')", "Default" => "oui", "Index"=>1),
 		"uid_creat" => Array("Type" => "int(10) unsigned", "Index" => "1", ),
 		"dte_creat" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
-		"uid_modif" => Array("Type" => "int(11)", ),
-		"dte_modif" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
+		"uid_maj" => Array("Type" => "int(11)", ),
+		"dte_maj" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
 	),
 	"ameliorations" => Array
 	(
@@ -168,6 +168,18 @@ $tabTmpl=Array
 		"username" => Array("Type" => "varchar(100)", ),
 		"dte_maj" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00", ),
 		"header" => Array("Type" => "varchar(200)", ),
+	),
+	"mailtmpl" => Array
+	(
+		"id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
+		"nom" => Array("Type" => "varchar(12)","Index"=>"1"),
+		"titre" => Array("Type" => "varchar(50)"),
+		"corps" => Array("Type" => "text"),
+		"balise" => Array("Type" => "varchar(100)"),
+		"uid_creat" => Array("Type" => "int(10) unsigned", "Default" => "0"),
+		"dte_creat" => Array("Type" => "datetime", "Default" => "0000-00-00"),
+		"uid_maj" => Array("Type" => "int(10) unsigned", "Default" => "0", ),
+		"dte_maj" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00", ),
 	),
 	"roles" => Array
 	(

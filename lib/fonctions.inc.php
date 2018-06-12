@@ -258,44 +258,59 @@ function CalcDate($dte, $n)
 
 
   
-function SendMailFromFile($from,$to,$tabcc,$subject,$tabvar,$file)
-{ global $mod,$appfolder,$MyOpt;
+function SendMailFromFile($from,$to,$tabcc,$subject="",$tabvar,$name,$files="")
+{ global $sql,$mod,$appfolder,$MyOpt;
 
-	if (file_exists($appfolder."/custom/".$file.".mail.txt"))
-	{
-		$tmail=file($appfolder."/custom/".$file.".mail.txt");
-	}
-	else if (file_exists($appfolder."/modules/".$mod."/".$file.".mail.txt"))
-	{
-		$tmail=file($appfolder."/modules/".$mod."/".$file.".mail.txt");
-	}
-	else if (file_exists("modules/".$mod."/".$file.".mail.txt"))
-	{
-		$tmail=file("modules/".$mod."/".$file.".mail.txt");
-	}
-	else
-	{
-		echo "file not found";
-		return false;
-	}
+// *********************************************
+// A remplacer par une lecture depuis la BDD
+	// if (file_exists($appfolder."/custom/".$file.".mail.txt"))
+	// {
+		// $tmail=file($appfolder."/custom/".$file.".mail.txt");
+	// }
+	// else if (file_exists($appfolder."/modules/".$mod."/".$file.".mail.txt"))
+	// {
+		// $tmail=file($appfolder."/modules/".$mod."/".$file.".mail.txt");
+	// }
+	// else if (file_exists("modules/".$mod."/".$file.".mail.txt"))
+	// {
+		// $tmail=file("modules/".$mod."/".$file.".mail.txt");
+	// }
+	// else
+	// {
+		// echo "file not found";
+		// return false;
+	// }
+		
+	// $mail = '';
+	// foreach($tmail as $ligne)
+	// {
+		// $mail.=$ligne;
+	// }
 
-	$mail = '';
-	foreach($tmail as $ligne)
-	{
-		$mail.=$ligne;
-	}
+	// $mail=nl2br($mail);
 
-	$mail=nl2br($mail);
+// *********************************************
+	$q="SELECT * FROM ".$MyOpt["tbl"]."_mailtmpl WHERE nom='".$name."'";
+	$res=$sql->QueryRow($q);
+
+	$mail=nl2br($res["corps"]);
 	foreach($tabvar as $p=>$d)
 	{
 		$mail=str_replace("{".$p."}",$d,$mail);
 	}
+	$mail.="<br /><br />-Email envoyé à partir du site ".$MyOpt["site_title"]."-";
 
-	// $mail=str_replace("{url}",substr($_SERVER["HTTP_REFERER"],0,strrpos($_SERVER["HTTP_REFERER"],"/")),$mail);
-	// $mail=str_replace("{url}",$MyOpt["host"],$mail);
+	if ($res["subject"]!="")
+	{
+		$subject=$res["subject"];
+	}
+
+	if ($subject=="")
+	{
+		$subject="Notification";
+	}
 	
-	MyMail($from,$to,$tabcc,$subject,$mail,"","");
-
+	return MyMail($from,$to,$tabcc,$subject,$mail,"",$files);
 }
   
 function MyMail($from,$to,$tabcc,$subject,$message,$headers="",$files="")

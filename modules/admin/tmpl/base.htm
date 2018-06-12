@@ -77,11 +77,46 @@ function ReIndex()
 	})
 
 }
+
+function ReloadEmails(init)
+{
+	document.getElementById("form_emails").style.backgroundColor = "";
+	document.getElementById("form_emails").innerHTML = "En cours...";
+
+	$(function() {
+		$.ajax({
+			url:'api.php?mod=admin&rub=emails&fonc='+init,
+			type: 'html',
+			dataType: 'JSON',
+			success: function(response)
+			{
+				console.log(response);
+
+				if (response.result=="OK")
+				{
+					document.getElementById("form_emails").style.backgroundColor = "#BBFFAA";
+				}
+				else
+				{
+					document.getElementById("form_emails").style.backgroundColor = "#FFBBAA";
+				}
+				document.getElementById("form_emails").innerHTML = response.data;
+			},
+			error : function(response)
+			{
+				document.getElementById("form_emails").style.backgroundColor = "#FFBBAA";
+				document.getElementById("form_emails").innerHTML = response;
+			}
+		});
+	})
+
+}
+
 </script>
 
 <table class="tableauAff">
 	<tr>
-		<th width=200>Test</th>
+		<th width=250>Test</th>
 		<th width=150>Action</th>
 		<th width=500>Résultat</th>
 	</tr>
@@ -94,6 +129,16 @@ function ReIndex()
 		<td>Suppression des Index</td>
 		<td><input type="submit" value="Re-Index" OnClick="ReIndex();"></td>
 		<td><div id="form_reindex"style="padding:4px;"></div>
+	</tr>
+	<tr>
+		<td>Mise à jour des templates d'emails</td>
+		<td><input type="submit" value="Update Emails" OnClick="ReloadEmails('');"></td>
+		<td><div id="form_emails"style="padding:4px;"></div>
+	</tr>
+	<tr>
+		<td>Réinitialise les templates d'emails</td>
+		<td><input type="submit" value="Reset Emails" OnClick="ReloadEmails('init');"></td>
+		<td><div id=""style="padding:4px;"></div>
 	</tr>
 </table>
 <!-- END: corps -->
