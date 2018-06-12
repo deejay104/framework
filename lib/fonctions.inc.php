@@ -174,7 +174,7 @@ function CalcTemps($tps,$short=true)
 	{
 		$t=$m[1]*60+$m[2];
 	}
-	else if (preg_match("/^([0-9][0-9]):([0-9][0-9])$/",$tps,$m))
+	else if (preg_match("/^([0-9]?[0-9]):([0-9][0-9])$/",$tps,$m))
 	{
 		$t=$m[1]*60+$m[2];
 	}
@@ -261,35 +261,6 @@ function CalcDate($dte, $n)
 function SendMailFromFile($from,$to,$tabcc,$subject="",$tabvar,$name,$files="")
 { global $sql,$mod,$appfolder,$MyOpt;
 
-// *********************************************
-// A remplacer par une lecture depuis la BDD
-	// if (file_exists($appfolder."/custom/".$file.".mail.txt"))
-	// {
-		// $tmail=file($appfolder."/custom/".$file.".mail.txt");
-	// }
-	// else if (file_exists($appfolder."/modules/".$mod."/".$file.".mail.txt"))
-	// {
-		// $tmail=file($appfolder."/modules/".$mod."/".$file.".mail.txt");
-	// }
-	// else if (file_exists("modules/".$mod."/".$file.".mail.txt"))
-	// {
-		// $tmail=file("modules/".$mod."/".$file.".mail.txt");
-	// }
-	// else
-	// {
-		// echo "file not found";
-		// return false;
-	// }
-		
-	// $mail = '';
-	// foreach($tmail as $ligne)
-	// {
-		// $mail.=$ligne;
-	// }
-
-	// $mail=nl2br($mail);
-
-// *********************************************
 	$q="SELECT * FROM ".$MyOpt["tbl"]."_mailtmpl WHERE nom='".$name."'";
 	$res=$sql->QueryRow($q);
 

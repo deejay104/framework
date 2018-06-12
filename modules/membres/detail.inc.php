@@ -71,7 +71,7 @@
 		$usr->Save();
 		if ($id==0)
 		{
-			$id=$pb->id;
+			$id=$usr->id;
 		}
 		$msg_confirmation.="Vos données ont été enregistrées.<BR>";
 
