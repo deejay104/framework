@@ -174,7 +174,7 @@ function CalcTemps($tps,$short=true)
 	{
 		$t=$m[1]*60+$m[2];
 	}
-	else if (preg_match("/^([0-9][0-9]):([0-9][0-9])$/",$tps,$m))
+	else if (preg_match("/^([0-9]?[0-9]):([0-9][0-9])$/",$tps,$m))
 	{
 		$t=$m[1]*60+$m[2];
 	}
