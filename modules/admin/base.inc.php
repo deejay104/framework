@@ -28,7 +28,7 @@
 <?
 // ---- Charge le template
 	$tmpl_x = new XTemplate (MyRep("base.htm"));
-	$tmpl_x->assign("path_module","$module/$mod");
+	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 
 
 // ---- Vérifie le droit d'accès

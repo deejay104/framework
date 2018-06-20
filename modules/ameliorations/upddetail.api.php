@@ -14,7 +14,7 @@
 	$msg_erreur="";
 	$msg_confirmation="";
 
-	$pb = new amelioration_class($id,$sql);
+	$pb = new amelioration_core($id,$sql);
 
 	$data=json_decode(file_get_contents('php://input'), true);
 

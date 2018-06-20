@@ -1,7 +1,7 @@
 <?
 // ---- Charge le template
 	$tmpl_x = new XTemplate (MyRep("echeances.htm"));
-	$tmpl_x->assign("path_module","$module/$mod");
+	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 
 // ---- Vérifie le droit d'accès
 	if (!GetDroit("AccesConfigEcheances")) { FatalError("Accès non autorisé (AccesConfigEcheances)"); }
