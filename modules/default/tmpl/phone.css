@@ -398,5 +398,11 @@ input[type=submit] { -webkit-appearance: none; -moz-appearance: none; appearance
 		width: 90%;
 		padding: 0 10px;
 	}
+
+
+/* **** ToolTip **** */
+.ui-widget { font-size: 12px; }
+.ui-menu-item { padding-top: 1px; padding-bottom: 1px; }
+
 	
 <!-- END: main -->

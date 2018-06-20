@@ -35,7 +35,7 @@
 	$msg_confirmation="";
 	if (($fonc=="Enregistrer") && (!isset($_SESSION['tab_checkpost'][$checktime])))
 	{
-		$pb=new amelioration_class($id,$sql);
+		$pb=new amelioration_core($id,$sql);
 		if (count($form_data)>0)
 		{
 			foreach($form_data as $k=>$v)
@@ -56,7 +56,7 @@
 // ---- Supprimer
 	if (($fonc=="supprimer") && ($id>0) && (GetDroit("SupprimeAmelioration")))
 	{
-		$pb=new amelioration_class($id,$sql);
+		$pb=new amelioration_core($id,$sql);
 		$pb->Delete();
 		$mod="ameliorations";
 		$affrub="index";
@@ -65,7 +65,7 @@
 // ---- Sauver une réponse
 	if (($fonc=="Poster") && ($id>0) && (GetDroit("CreeAmeliorationCommentaire")) && ($form_desc!="") && ($form_desc!=$newmsg) && (!isset($_SESSION['tab_checkpost'][$checktime])))
 	{
-		$pb=new amelioration_class($id,$sql);
+		$pb=new amelioration_core($id,$sql);
 		$pb->AddCommentaire($form_desc);
 		$_SESSION['tab_checkpost'][$checktime]=$checktime;
 	}
@@ -98,7 +98,7 @@
 
 // ---- Charge le problème
 
-	$pb = new amelioration_class($id,$sql);
+	$pb = new amelioration_core($id,$sql);
 
 	$pb->Render("form",$typeaff);
 	$tmpl_x->assign("form_numid",$pb->aff("id"));

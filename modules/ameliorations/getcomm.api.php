@@ -14,7 +14,7 @@
 
 	if ($id>0)
 	{
-		$pb = new amelioration_class($id,$sql);
+		$pb = new amelioration_core($id,$sql);
 		$lst=$pb->ListeCommentaire();
 
 		foreach($lst as $i=>$d)

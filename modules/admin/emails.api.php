@@ -51,7 +51,7 @@ Cordialement"
 	);
 // *****************************************************************
 
-	if (file_exists($appfolder."/modules/admin/emails.inc.php"));
+	if (file_exists($appfolder."/modules/admin/emails.inc.php"))
 	{
 		require_once($appfolder."/modules/admin/emails.inc.php");
 	}
