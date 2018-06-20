@@ -69,7 +69,7 @@ $tabRoles["CreeAmelioration"]="Créer une fiche d'amélioration";
 $tabRoles["CreeAmeliorationCommentaire"]="Créer une réponse à une amélioration";
 $tabRoles["ModifAmelioration"]="Modifier une fiche d'amélioration";
 $tabRoles["ModifAmeliorationStatus"]="Modifier le status d'une amélioration";
-$tabRoles["SupprimeAmelioration"]="Supprimer un membre";
+$tabRoles["SupprimeAmelioration"]="Supprimer une amélioration";
 
 // ---- Echéances
 $tabRoles["AccesConfigEcheances"]="Accès à la gestion des échéances";
