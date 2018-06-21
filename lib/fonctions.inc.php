@@ -570,8 +570,7 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 		$lstpage="";
 		$ii=1;
   	  	$t=0;
-		$nbp=10;
-
+		$nbp=20;
 		for($i=0; $i<$nbtot; $i=$i+$limit)
 		  {
 		  	if (($i<=$start) && ($i>$start-$limit))
@@ -680,6 +679,12 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 		{
 			$v["align"]="center";
 		}
+		
+		if (!isset($v["width"]))
+		{
+			$v["width"]=1;
+		}
+		
 		if ($name==$order)
 		{
 			$ret.="<th width='".$v["width"]."'".(($v["align"]!="") ? " align='".$v["align"]."'" : "").">";
@@ -692,9 +697,9 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 		else if ($v["aff"]=="<line>")
 		{
 			$ret.="<th style='width:".$v["width"]."px; border-right: ".$v["width"]."px solid black; '>";
-			$sub.="<th style='border-left: 1px solid black;'></th>";
-			$subb.="<th style='border-left: 1px solid black;'></th>";
-			$search.="<th style='border-left: 1px solid black;'></th>";
+			$sub.="<th style='border-right: 1px solid black;'></th>";
+			$subb.="<th style='border-right: 1px solid black;'></th>";
+			$search.="<th style='border-right: 1px solid black;'></th>";
 		}
 		else
 		{
@@ -702,7 +707,7 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 			$ret.="<b><a href='$page&order=$name&trie=d".(($url!="") ? "&$url" : "")."&ts=0".$ls."'>".$v["aff"]."</a></b>";
 			$sub.="<th align='".$v["align"]."'>".((isset($v["sub"])) ? $v["sub"] : "")."</th>";
 			$subb.="<th align='".$v["align"]."'>".((isset($v["bottom"])) ? $v["bottom"] : "")."</th>";
-			$search.="<th><input type='text' style='width:".$v["width"]."px;' name='tabsearch[".$name."]' value='".((isset($tabsearch[$name])) ? $tabsearch[$name] : '')."'></th>";
+			$search.="<th><input type='text' style='width:".($v["width"]-5)."px;' name='tabsearch[".$name."]' value='".((isset($tabsearch[$name])) ? $tabsearch[$name] : '')."'></th>";
 		}
 		if (isset($v["sub"]))
 		{
@@ -778,7 +783,7 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 		$lstpage="";
 		$ii=1;
   	  	$t=0;
-		$nbp=10;
+		$nbp=20;
 		
 		for($i=0; $i<$nbtot; $i=$i+$limit)
 		  {
