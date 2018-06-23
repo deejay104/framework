@@ -241,14 +241,15 @@
 	}
 
 
-	$tabMenu["configuration"]["icone"]=$corefolder."/static/modules/admin/img/icn32_titre.png";
-	$tabMenu["configuration"]["nom"]="Configuration";
-	$tabMenu["configuration"]["droit"]="AccesConfiguration";
-	$tabMenu["configuration"]["url"]="mod=admin";
 	$tabMenu["amelioration"]["icone"]=$corefolder."/static/modules/ameliorations/img/icn32_titre.png";
 	$tabMenu["amelioration"]["nom"]="Améliorations";
 	$tabMenu["amelioration"]["droit"]="AccesAmeliorations";
 	$tabMenu["amelioration"]["url"]="mod=ameliorations";
+
+	$tabMenu["configuration"]["icone"]=$corefolder."/static/modules/admin/img/icn32_titre.png";
+	$tabMenu["configuration"]["nom"]="Configuration";
+	$tabMenu["configuration"]["droit"]="AccesConfiguration";
+	$tabMenu["configuration"]["url"]="mod=admin";
 
 	$tabMenuPhone["amelioration"]["icone"]=$corefolder."/static/modules/ameliorations/img/icn48_titre.png";
 	$tabMenuPhone["amelioration"]["nom"]="";
