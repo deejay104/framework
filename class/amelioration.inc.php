@@ -19,7 +19,7 @@
 */
 
 
-class amelioration_class extends objet_core
+class amelioration_core extends objet_core
 {
 	protected $table="ameliorations";
 	protected $mod="ameliorations";

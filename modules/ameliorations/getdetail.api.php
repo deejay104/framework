@@ -14,7 +14,7 @@
 
 	if ($id>0)
 	{
-		$pb = new amelioration_class($id,$sql);
+		$pb = new amelioration_core($id,$sql);
 
 		$res["id"]=$id;
 		$res["uid_creat"]=$pb->data["uid_dist"];

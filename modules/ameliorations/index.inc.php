@@ -61,7 +61,7 @@
 	$tabValeur=array();
 	foreach($lst as $i=>$d)
 	{
-		$pb = new amelioration_class($i,$sql);
+		$pb = new amelioration_core($i,$sql);
 
 		$tabValeur[$i]["id"]["val"]=$pb->id;
 		$tabValeur[$i]["id"]["aff"]=$pb->aff("id");

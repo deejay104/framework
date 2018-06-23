@@ -20,7 +20,7 @@ error_log(print_r($data,true));
 		$txt=utf8_decode($data["description"]);
 		$uid=$data["uid_dist"];
 
-		$pb = new amelioration_class($id,$sql);
+		$pb = new amelioration_core($id,$sql);
 		$pb->AddCommentaire($txt,$uid);
 		$res["result"]="OK";
 	}
