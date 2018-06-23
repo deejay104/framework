@@ -51,6 +51,9 @@ $tabRoles["ModifUserVirtuel"]="Modifier le champs utilisateur virtuel";
 $tabRoles["ModifUserGroupe"]="Modifier le groupe principal d'un utilisateur";
 $tabRoles["ModifUserDocument"]="Modifier les documents d'un utilisateur";
 
+$tabRoles["SupprimeUtilDonnees"]="Supprime une entrée de données utilisateur";
+$tabRoles["ModifUtilDonnees"]="Modifier une entrée de données utilisateur";
+
 
 $tabRoles["DesactiveUser"]="Désactiver un membre";
 $tabRoles["Desactive"]="Désactiver une ressource (avion)";
