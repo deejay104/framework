@@ -51,6 +51,9 @@ $tabRoles["ModifUserVirtuel"]="Modifier le champs utilisateur virtuel";
 $tabRoles["ModifUserGroupe"]="Modifier le groupe principal d'un utilisateur";
 $tabRoles["ModifUserDocument"]="Modifier les documents d'un utilisateur";
 
+$tabRoles["SupprimeUtilDonnees"]="Supprime une entrée de données utilisateur";
+$tabRoles["ModifUtilDonnees"]="Modifier une entrée de données utilisateur";
+
 
 $tabRoles["DesactiveUser"]="Désactiver un membre";
 $tabRoles["Desactive"]="Désactiver une ressource (avion)";
@@ -69,7 +72,7 @@ $tabRoles["CreeAmelioration"]="Créer une fiche d'amélioration";
 $tabRoles["CreeAmeliorationCommentaire"]="Créer une réponse à une amélioration";
 $tabRoles["ModifAmelioration"]="Modifier une fiche d'amélioration";
 $tabRoles["ModifAmeliorationStatus"]="Modifier le status d'une amélioration";
-$tabRoles["SupprimeAmelioration"]="Supprimer une amélioration";
+$tabRoles["SupprimeAmelioration"]="Supprimer un membre";
 
 // ---- Echéances
 $tabRoles["AccesConfigEcheances"]="Accès à la gestion des échéances";
