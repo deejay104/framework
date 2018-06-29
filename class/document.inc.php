@@ -88,14 +88,12 @@ class document_core{
 	}
 
 
-	function Save($id,$data)
+	function Save($id,$name,$tmpname)
 	{ global $gl_uid;
 		$sql=$this->sql;
 
 		$ret="";
 		
-		$name=$data["name"];
-
 		$myext=GetExtension($name);
 		if (strlen($name)>100)
 		{
@@ -115,15 +113,16 @@ class document_core{
 
 		$this->uid=$id;
 		$this->filename=$mypath."/".$myname.".".$myext;
-		if (!move_uploaded_file($data["tmp_name"],$this->filepath."/".$this->filename))
-		  {
+
+		if (!move_uploaded_file($tmpname,$this->filepath."/".$this->filename))
+		{
 		  	$ret.="Erreur de chargement du fichier<br/>";
-		  }
+		}
 		else
-		  {
+		{
 		  	$query="UPDATE ".$this->tbl."_document SET filename='".$this->filename."' WHERE id='".$this->id."'";
 			$sql->Update($query);
-		  }
+		}
 
 		return $ret;
 	}
@@ -221,11 +220,25 @@ class document_core{
 
 		if ($this->editmode=="form")
 		{
-		  	$txt="<input name=\"form_adddocument\" type=\"file\" size=\"60\" />";
+			$txt ="<p>";
+			$txt.="<div id='doc_0'></div>";
+			$txt.="</p>";
+
+			$txt.="<script>";
+			$txt.="function AddDocument(i) {";
+
+			$txt.="var r=\"<input name='form_adddocument[\"+i+\"]' type='file' size='60' OnChange='AddDocument(\"+(i+1)+\");'/>\";\n";
+			$txt.="r=r+\"<div id='doc_\"+(i+1)+\"'></div>\";\n";
+			$txt.="var d=document.getElementById('doc_'+i);\n";
+			$txt.="d.innerHTML=r;\n";
+			$txt.="}\n";
+			
+			$txt.="AddDocument(0);\n";
+			$txt.="</script>";
 		}
 		else
 		{
-			$txt ="<div id='doc_".$this->id."'>";
+			$txt ="<p><div id='doc_".$this->id."'>";
 			if (file_exists($this->filepath."/".$this->filename))
 			{
 					$fsize=CalcSize(filesize($this->filepath."/".$this->filename));
@@ -240,9 +253,9 @@ class document_core{
 			if ($this->editmode=="edit")
 			{
 				// $txt.=" <a href=\"#\" OnClick=\"var win=window.open('doc.php?id=".$this->id."&fonc=delete','scrollbars=no,resizable=no,width=10'); return false;\" class='imgDelete'><img src='".$corefolder."/static/images/icn16_supprimer.png'></a>";
-				$txt.=" <a href=\"#\" OnClick=\"$(function() { $.ajax({url:'doc.php?id=".$this->id."&fonc=delete'}); document.getElementById('doc_".$this->id."').style.visibility='hidden'; })\" class='imgDelete'><img src='".$corefolder."/static/images/icn16_supprimer.png'></a>";
+				$txt.=" <a href=\"#\" OnClick=\"$(function() { $.ajax({url:'doc.php?id=".$this->id."&fonc=delete'}); document.getElementById('doc_".$this->id."').style.visibility='hidden'; document.getElementById('doc_".$this->id."').style.height='0'; })\" class='imgDelete'><img src='".$corefolder."/static/images/icn16_supprimer.png'></a>";
 			}
-			$txt.="</div>";
+			$txt.="</div></p>";
 		}
 
 		return $txt;

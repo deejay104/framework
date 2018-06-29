@@ -131,8 +131,16 @@ class echeance_core
 		{
 			$sql=$this->sql;
 			$n=0;
-			$ret.="<img src='static/images/icn16_vide.png' style='vertical-align:middle; border: 0px;  height: 16px; width: 16px;'>&nbsp;";
-			$ret.="<select name='form_echeance_type'>";
+
+			$ret.="<p>";
+			$ret.="<div id='echeance_0'></div>";
+			$ret.="</p>";
+
+			$ret.="<script>";
+			$ret.="function AddEcheance(i) {";
+
+			$ret.="var r=\"<img src='static/images/icn16_vide.png' style='vertical-align:middle; border: 0px;  height: 16px; width: 16px;'>&nbsp;\";\n";
+			$ret.="r=r+\"<select name='form_echeance_type[a\"+i+\"]' OnChange=''>\";\n";
 
 			$tabEcheance=array();
 			$query="SELECT echeance.typeid,echeancetype.multi FROM ".$MyOpt["tbl"]."_echeance AS echeance LEFT JOIN ".$MyOpt["tbl"]."_echeancetype AS echeancetype ON echeance.typeid=echeancetype.id WHERE echeance.uid='".$this->uid."' and actif='oui'";
@@ -154,13 +162,21 @@ class echeance_core
 				$sql->GetRow($i);
 				if ( (GetDroit($sql->data["droit"])) && ((!isset($tabEcheance[$sql->data["id"]])) || ($tabEcheance[$sql->data["id"]]=="")) )
 				{
-					$ret.="<option value='".$sql->data["id"]."'>".$sql->data["description"]."</option>";
+					$ret.="r=r+\"<option value='".$sql->data["id"]."'>".$sql->data["description"]."</option>\";\n";
 					$n=$n+1;
 				}
 			}
-			$ret.="</select>&nbsp;";
+			$ret.="r=r+\"</select>&nbsp;\";\n";
+
+			$ret.="r=r+\"<input name='form_echeance[a\"+i+\"]' value='' type='date' style='width: 140px;' OnChange='AddEcheance(\"+(i+1)+\");'><div id='echeance_\"+(i+1)+\"'></div>\";\n";
+			$ret.="var d=document.getElementById('echeance_'+i);\n";
+			$ret.="d.innerHTML=r;\n";
+				
+			$ret.="}\n";
 			
-			$ret.="<input name='form_echeance[".$this->id."]' id='form_echeance".$this->id."' value='".$this->dte_echeance."' type='date' style='width: 140px;'>";
+			$ret.="AddEcheance(0);\n";
+			$ret.="</script>";
+
 			if ($n==0)
 			{
 				$ret="";
@@ -168,11 +184,13 @@ class echeance_core
 		}
 		else if ( ($this->editmode=="edit") && (GetDroit($this->droit)) )
 		{
-			$ret ="<div id='aff_echeance".$this->id."'>";
+			$ret ="<p>";
+			$ret.="<div id='aff_echeance".$this->id."'>";
 			$ret.="<img src='static/images/icn16_vide.png' style='vertical-align:middle; border: 0px;  height: 16px; width: 16px;'>&nbsp;";
 			$ret.="Echéance ".$this->description." le <input name='form_echeance[".$this->id."]' id='form_echeance".$this->id."' value='".$this->dte_echeance."' type='date' style='width: 165px;'>&nbsp;";
 			$ret.="<a href=\"#\" OnClick=\"document.getElementById('form_echeance".$this->id."').value=''; document.getElementById('aff_echeance".$this->id."').style.display='none';\" class='imgDelete'><img src='static/images/icn16_supprimer.png'></a>";
 			$ret.="</div>";
+			$ret.="</p>";
 		}
 		else if ($type=="val")
 		{
@@ -180,8 +198,10 @@ class echeance_core
 		}
 		else
 		{
-			$ret ="<img src='static/images/icn16_".TestDate($this->dte_echeance).".png' style='vertical-align:middle; border: 0px;  height: 16px; width: 16px;'>&nbsp;";
+			$ret ="<p>";
+			$ret.="<img src='static/images/icn16_".TestDate($this->dte_echeance).".png' style='vertical-align:middle; border: 0px;  height: 16px; width: 16px;'>&nbsp;";
 			$ret.="Echéance ".$this->description." le ".AffDate($this->dte_echeance);
+			$ret.="</p>";
 		}
 		return $ret;
 	}
