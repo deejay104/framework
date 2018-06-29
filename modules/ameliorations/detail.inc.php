@@ -155,6 +155,11 @@
 		$tmpl_x->parse("corps.aff_commentaire");
 	}
 	
+	if ($id>0)
+	{
+		$tmpl_x->parse("corps.aff_commentaire_vide");
+	}
+	
 // ---- Messages
 	if ($msg_erreur!="")
 	{

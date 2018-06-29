@@ -11,6 +11,9 @@
 	require_once("modules/".$mod."/menu.inc.php");
 	$tmpl_x->assign("aff_menu",$aff_menu);
 
+// ---- Variables
+	$fonc=checkVar("fonc","varchar");
+	
 // ---- Sauvegarde
 	if (($fonc=="Enregistrer") && (GetDroit("ModifUtilDonnees")))
 	{
@@ -27,12 +30,11 @@
 	}
 	
 // ---- Supprime
-	if (($fonc=="delete") && (GetDroit("ModifUtilDonnees")))
+	if (($fonc=="delete") && (GetDroit("SupprimeUtilDonnees")))
 	{
 		if ($id>0)
 		{
-			$q="UPDATE ".$MyOpt["tbl"]."_utildonneesdef SET actif='non', type='".$form_type[$id]."' WHERE id='".$id."'";
-			$sql->Update($q);
+			$sql->Edit("user",$MyOpt["tbl"]."_utildonneesdef",$id,array("actif"=>"non"));			
 		}
 	}
 
