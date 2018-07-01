@@ -77,7 +77,7 @@
 
 		// Sauvegarde la photo
 		$form_photo=$_FILES["form_photo"];
-		if ($form_photo["name"]!="")
+		if ($form_photo["name"][0]!="")
 		{
 			$lstdoc=ListDocument($sql,$id,"avatar");
 		  	
@@ -91,27 +91,32 @@
 			}
 		  	$doc = new document_core(0,$sql,"avatar");
 		  	$doc->droit="ALL";
-		  	$msg_erreur.= $doc->Save($id,$_FILES["form_photo"]);
+		  	$msg_erreur.=$doc->Save($id,$_FILES["form_photo"]["name"],$_FILES["form_photo"]["tmp_name"]);
 			$doc->Resize(200,240);
 		}
 
 		// Sauvegarde un document
-		if ($_FILES["form_adddocument"]["name"]!="")
+		if (is_array($_FILES["form_adddocument"]["name"]))
 		{
-		  	$doc = new document_core(0,$sql);
-		  	$doc->Save($id,$_FILES["form_adddocument"]);
+			foreach($_FILES["form_adddocument"]["name"] as $i=>$n)
+			{
+				if ($n!="")
+				{
+					$doc = new document_core(0,$sql);
+					$doc->Save($id,$_FILES["form_adddocument"]["name"][$i],$_FILES["form_adddocument"]["tmp_name"][$i]);
+				}
+			}
 		}
 
 		// Sauvegarde des échéances
 		if (is_array($form_echeance))
 		{
-
 			foreach($form_echeance as $i=>$d)
 			{
 				$dte = new echeance_core($i,$sql);
-				if ($i==0)
+				if ((!is_numeric($i)) || ($i==0))
 				{
-					$dte->typeid=$form_echeance_type;
+					$dte->typeid=$form_echeance_type[$i];
 					$dte->uid=$id;
 				}
 				if (($d!='') && ($d!='0000-00-00'))
