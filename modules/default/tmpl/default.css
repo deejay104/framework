@@ -295,11 +295,11 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 @media print {
 }
 
-.encadreInfos { min-width: 300px; border: 1px solid #{BorderBlack}; border-radius: 5px; padding: 0px 0px 10px 0px; margin-bottom:10px; }
+.encadreInfos { min-width: 300px; border: 1px solid #{FormulaireBackgroundNormal}; border-radius: 5px; padding: 0px 0px 10px 0px; margin-bottom:10px; }
 .encadreInfos label { display: inline-block; width: 60%; text-align: left; vertical-align: top; padding-left: 20px; }
 .encadreInfos span { display: inline-block; text-align: left; vertical-align: top; }
 .encadreInfos p { line-height: 16px; margin: 5px 10px 0px 10px;  }
-.encadreTitre { background-color: #{FormulaireBackgroundNormal}; padding: 10px 10px 30px 10px; font-size:18px; height:26px; margin-bottom: 10px; border-radius: 5px 5px 0px 0px; }
+.encadreTitre { background-color: #{FormulaireBackgroundLight}; padding: 10px 10px 30px 10px; font-size:18px; height:26px; margin-bottom: 10px; border-radius: 4px 4px 0px 0px; }
 
 .encadreInfos input[type=text] { width: 100%; min-width: 150px; margin-top:4px; font-size:14px; }
 

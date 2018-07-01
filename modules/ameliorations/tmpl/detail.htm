@@ -47,18 +47,6 @@
 
 	<p class="lastupdate">Dernière mise à  jour : {form_usr_maj} {form_dte_maj}</p>
 
-
-	<div style='margin-left:72px; width:80%;'>
-	<div class="formulaire">
-	<p><label>Numéro</label>{form_numid}</p>
-	<p><label>Status</label>{form_status}</p>
-	<p><label>Version</label>{form_version}</p>
-	<p><label>Module</label>{form_module}</p>
-	</div>
-	</div>
-	<br />
-
-
 	<div class='actualitesBloc'>
 		<div class="actualitesPhoto" >
 			<img src="{form_avatar}" alt="">
@@ -70,19 +58,17 @@
 					<p>{form_titre}</p>
 					<span>par {form_usr_maj}, {form_dte_maj}</span>
 				</div>
-				<div class="actualitesIcones">
-					<!-- BEGIN: icn_modifier -->
-					<a href="index.php?mod=actualites&fonc=editer&id={msg_id}" class='imgDelete'><img src="{path_module}/img/icn16_editer.png" /></a>
-					<!-- END: icn_modifier -->
-					<!-- BEGIN: icn_supprimer -->
-					<a href="#" class='imgDelete' OnClick="ConfirmeClick('index.php?mod=actualites&fonc=supprimer&id={msg_id}#id{msg_idprev}','Souhaitez-vous supprimer cette actualité ?');"><img src="{path_module}/img/icn16_supprimer.png" /></a>
-					<!-- END: icn_supprimer -->
-				</div>
 			</div>
-			<div class="actualitesTexte">
-				{form_description}
+			<div class='formulaire' style='border: 0px; padding-left:30px;'>
+			<p><label>Numéro</label>{form_numid}</p>
+			<p><label>Status</label>{form_status}</p>
+			<p><label>Version</label>{form_version}</p>
+			<p><label>Module</label>{form_module}</p>
 			</div>
 		</div>
+	</div>
+	<div style='margin-left:72px; width:80%;'>
+			{form_description}
 	</div>
 
 

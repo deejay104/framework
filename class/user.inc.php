@@ -581,7 +581,7 @@ function ListActiveUsers($sql,$order="",$tabtype,$virtuel="non")
 			$s=",";
 		}
 		
-		$query.=", (SELECT COUNT(*) FROM ".$MyOpt["tbl"]."_droits AS droits LEFT JOIN ".$MyOpt["tbl"]."_roles AS roles ON droits.groupe=roles.groupe WHERE roles.role IN (".$type.") AND droits.uid=usr.id) AS nb ";
+		$query.=", (SELECT COUNT(*) FROM ".$MyOpt["tbl"]."_droits AS droits LEFT JOIN ".$MyOpt["tbl"]."_roles AS roles ON droits.groupe=roles.groupe OR roles.groupe='ALL' WHERE roles.role IN (".$type.") AND droits.uid=usr.id) AS nb ";
 	}
 
 	$query.="FROM ".$MyOpt["tbl"]."_utilisateurs AS usr ";

@@ -283,7 +283,7 @@ function SendMailFromFile($from,$to,$tabcc,$subject="",$tabvar,$name,$files="")
 	
 	return MyMail($from,$to,$tabcc,$subject,$mail,"",$files);
 }
-  
+
 function MyMail($from,$to,$tabcc,$subject,$message,$headers="",$files="")
 { global $MyOpt;
 
@@ -295,7 +295,7 @@ function MyMail($from,$to,$tabcc,$subject,$message,$headers="",$files="")
 	}
 	else
 	{
-		if ($from=="") { $from = ini_get("sendmail_from"); }
+		if ($from=="") { $from = $MyOpt["from_email"]; }
 
 		preg_match("/^([^@]*)@([^$]*)$/",$from,$t);
 		$me=$t[0];
