@@ -220,9 +220,7 @@ class document_core{
 
 		if ($this->editmode=="form")
 		{
-			$txt ="<p>";
-			$txt.="<div id='doc_0'></div>";
-			$txt.="</p>";
+			$txt ="<div id='doc_0' style='padding-top:2px; padding-bottom:10px;'></div>";
 
 			$txt.="<script>";
 			$txt.="function AddDocument(i) {";
@@ -238,7 +236,7 @@ class document_core{
 		}
 		else
 		{
-			$txt ="<p><div id='doc_".$this->id."'>";
+			$txt ="<div id='doc_".$this->id."' style='padding-top:2px;' OnMouseOver='document.getElementById(\"doc_del_".$this->id."\").style.visibility=\"visible\";' OnMouseOut='document.getElementById(\"doc_del_".$this->id."\").style.visibility=\"hidden\";'>";
 			if (file_exists($this->filepath."/".$this->filename))
 			{
 					$fsize=CalcSize(filesize($this->filepath."/".$this->filename));
@@ -253,9 +251,9 @@ class document_core{
 			if ($this->editmode=="edit")
 			{
 				// $txt.=" <a href=\"#\" OnClick=\"var win=window.open('doc.php?id=".$this->id."&fonc=delete','scrollbars=no,resizable=no,width=10'); return false;\" class='imgDelete'><img src='".$corefolder."/static/images/icn16_supprimer.png'></a>";
-				$txt.=" <a href=\"#\" OnClick=\"$(function() { $.ajax({url:'doc.php?id=".$this->id."&fonc=delete'}); document.getElementById('doc_".$this->id."').style.visibility='hidden'; document.getElementById('doc_".$this->id."').style.height='0'; })\" class='imgDelete'><img src='".$corefolder."/static/images/icn16_supprimer.png'></a>";
+				$txt.=" <a href=\"#\" OnClick=\"$(function() { $.ajax({url:'doc.php?id=".$this->id."&fonc=delete'}); document.getElementById('doc_".$this->id."').style.visibility='hidden'; document.getElementById('doc_".$this->id."').style.height='0'; })\" class='imgDelete'><img  id='doc_del_".$this->id."' src='".$corefolder."/static/images/icn16_supprimer.png' style='visibility:hidden;'></a>";
 			}
-			$txt.="</div></p>";
+			$txt.="</div>";
 		}
 
 		return $txt;

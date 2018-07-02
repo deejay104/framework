@@ -486,6 +486,10 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 .tableauBas td { background-color: #{FormulaireBackgroundNormal}; border-top: 1px solid black; height: 20px; font-weight: bold; }
 
 /* **** Comptes **** */
+.tableauCompte { background-color: #{FormulaireBackgroundNormal}; border-bottom:1px solid #{FormulaireBackgroundNormal}; }
+.tableauCompte tr { border-bottom:1px dashed #{FormulaireBackgroundNormal}; height:25px; }
+
+/* **** Comptes **** */
 .soldeCompte { padding-top: 5px; border: 1px solid #000000; border-radius: 4px; display: inline-block; position:relative; width:350px; height: 30px; text-align: center;}
 
 /* **** FullCalendar **** */
@@ -515,9 +519,6 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 
 	.calendarDesc { width: 150px; background-color:#{FormulaireBackgroundNormal}; border: 1px solid black; border-radius: 4px; line-height: 16px; font-size:12px; padding:5px;}
 	
-/* **** Comptes **** */
-.tableauCompte { border-bottom:1px solid #{FormulaireBackgroundNormal}; }
-.tableauCompte tr { border-bottom:1px dashed #{FormulaireBackgroundNormal}; height:25px; }
 
 /* **** Admin **** */
 .fieldAdmin { width:90px; display:inline-block; border: 1px solid #000000; height: 26px; line-height: 26px; margin-top:2px; margin-bottom: 2px; }

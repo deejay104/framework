@@ -94,13 +94,13 @@
 			<img src="{msg_avatar}" alt="">
 		</div>
 		<div class="actualitesMessage">
-			<div class="actualitesTitre">
+			<div class="actualitesTitre" OnMouseOver="document.getElementById('icone_{msg_id}').style.display='block';" OnMouseOut="document.getElementById('icone_{msg_id}').style.display='none';">
 				<div class="actualitesTitreMsg">
 					<a name="id{msg_id}"></a>
 					<p>{msg_titre}</p>
 					<span>par {msg_autheur}, {msg_date}</span>
 				</div>
-				<div class="actualitesIcones">
+				<div id="icone_{msg_id}" class="actualitesIcones" style='display:none;'>
 					<!-- BEGIN: icn_modifier -->
 					<a href="index.php?mod=actualites&fonc=editer&id={msg_id}" class='imgDelete'><img src="{path_module}/img/icn16_editer.png" /></a>
 					<!-- END: icn_modifier -->
