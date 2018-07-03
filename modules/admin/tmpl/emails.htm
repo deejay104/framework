@@ -1,0 +1,154 @@
+<!-- BEGIN: icone -->
+	<img src="{path_module}/img/icn48_titre.png" alt="" border=0 />
+<!-- END: icone -->
+
+<!-- BEGIN: infos -->
+{aff_menu}
+<!-- END: infos -->
+
+
+<!-- BEGIN: corps -->
+<script>
+$( function() {
+    var dialog, form,
+ 
+    // From http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#e-mail-state-%28type=email%29
+    timeRegex = /^(([0-9])+)?([:h])?([0-9])+$/i,
+
+	form_titre = $( "#form_titre" ),
+	form_corps = $("#form_corps"),
+	allFields = $( [] ).add( form_titre ).add( form_corps ),
+
+	tips = $( ".validateTips" );
+ 
+    function updateTips( t ) {
+      tips
+        .text( t )
+        .addClass( "ui-state-highlight" );
+		setTimeout(function() {
+			tips.removeClass( "ui-state-highlight", 1500 );
+		}, 500 );
+    }
+ 
+    function checkLength( o, n, min, max ) {
+      if ( o.val().length > max || o.val().length < min ) {
+        o.addClass( "ui-state-error" );
+        updateTips( "Length of " + n + " must be between " +
+          min + " and " + max + "." );
+        return false;
+      } else {
+        return true;
+      }
+    }
+ 
+    function checkRegexp( o, regexp, n ) {
+      if ( !( regexp.test( o.val() ) ) ) {
+        o.addClass( "ui-state-error" );
+        updateTips( n );
+        return false;
+      } else {
+        return true;
+      }
+    }
+ 
+    function editMail() {
+		var valid = true;
+		allFields.removeClass( "ui-state-error" );
+
+		if ( valid ) {
+			dialog.dialog( "close" );
+
+			var id=document.getElementById('form_id').value;
+			console.log("edit "+id);
+			data = {};
+			data["titre"]=document.getElementById('form_titre').value;
+			data["corps"]=document.getElementById('form_corps').value;
+
+			$.ajax({
+				url:'api.php?mod=admin&rub=updemail&fonc=post&id='+id,
+				type: 'POST',
+				data: data,
+				dataType: 'JSON',
+				success: function(response)
+				{
+					if (response.result=="OK")
+					{
+						console.log("ok");
+						document.getElementById('msgbox').innerHTML="<div id='msgbox_"+id+"' class='msgbox-std msgbox-ok'>Le template a été enregistré</div>";
+					}
+					else
+					{
+						console.log("nok");
+						document.getElementById('msgbox').innerHTML="<div class='msgbox-std msgbox-error'>Erreur lors de la sauvegarde ("+response.result+")</div>";
+					}
+				},
+				error : function(response)
+				{
+				}
+			});
+		}
+		return valid;
+    }
+
+	function loadMail(id) {
+		$.ajax({
+			type: 'GET',
+			url: 'api.php?mod=admin&rub=updemail&fonc=get&id='+id,
+			dataType: 'JSON',
+
+			success: function(response) {
+				document.getElementById('form_id').value=response.id;
+				document.getElementById('form_balise').innerHTML=response.balise;
+				document.getElementById('form_titre').value=response.titre;
+				document.getElementById('form_corps').value=response.corps;
+			},
+			error: function(response) {
+				console.log("error");
+				console.log(response);
+			}
+		});   
+	}
+	
+    dialog = $( "#dialog-form" ).dialog({
+      autoOpen: false,
+      height: 400,
+      width: 800,
+	  top: 10,
+      modal: true,
+      buttons: {
+        "Enregistrer": editMail,
+        Cancel: function() {
+          dialog.dialog( "close" );
+        }
+      },
+      close: function() {
+        <!-- form[ 0 ].reset(); -->
+        allFields.removeClass( "ui-state-error" );
+      }
+    });
+ 
+    form = dialog.find( "form" ).on( "submit", function( event ) {
+      event.preventDefault();
+      editMail();
+    });
+ 
+<!-- BEGIN: lst_edit -->
+	$( "#edit_{lst_id}" ).on( "click", function() {
+		loadMail({lst_id});
+		dialog.dialog( "open" );
+    });
+<!-- END: lst_edit -->
+});
+</script>
+
+<div id="dialog-form" title="Ajouter un vol" class="formulaire" style="display:none;">
+	<input id="form_id" type="hidden" value="">
+	<p><label>Balises</label><span id='form_balise'></span></p>
+	<p><label>Titre</label><input id="form_titre" value=""></p>
+	<textarea id="form_corps" style="height:200px;"></textarea>
+	<input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+</div>
+	
+<br />
+{aff_tableau}
+<!-- END: corps -->

@@ -10,6 +10,7 @@ $tabRoles["AccesConfigVar"]="Accès à la page de configuration des variables";
 $tabRoles["AccesConfigGroupes"]="Accès à la page de configuration des groupes";
 $tabRoles["AccesConfigDonneesUser"]="Accès à la page de configuration des données utilisateurs personnalisées";
 $tabRoles["AccesConfigCrontab"]="Accès à la page de gestion des taches planifiées";
+$tabRoles["AccesConfigEmails"]="Accès à la page de gestion des template d'emails";
 
 $tabRoles["ModifGroupe"]="Modification d'un groupe (roles et informations)";
 $tabRoles["ModifActualite"]="Modifier une actualite";

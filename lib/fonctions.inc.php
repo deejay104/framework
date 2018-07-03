@@ -433,7 +433,7 @@ function SendMail($From,$To,$Cc,$Subject,$Text,$Html,$AttmFiles)
 */
 
 
-function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",$start=0,$limit="",$nbline=0)
+function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",$start=0,$limit="",$nbline=0,$showicon="")
   {global $mod,$rub,$corefolder;
 	$ret ="\n<table class='tableauAff'>\n";
 
@@ -522,13 +522,18 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 		{ 
 			if (($ii>=$start) && ($ii<$start+$limit))
 			{
-				$ret.="<tr >";
+				$ret.="<tr";
+				if ($showicon!="")
+				{
+					$ret.=" OnMouseOver=\"document.getElementById('".$showicon."_".$val["id"]["val"]."').style.display='block';\" OnMouseOut=\"document.getElementById('".$showicon."_".$val["id"]["val"]."').style.display='none';\"";
+				}
+				$ret.=">";
 				// $ret.="<tr onmouseover=\"setPointer(this, 'over', '#".$myColor[$col]."', '#".$myColor[$col+5]."', '#FF0000')\" onmouseout=\"setPointer(this, 'out', '#".$myColor[$col]."', '#".$myColor[$col+5]."', '#FF0000')\">";
 				// $ret.="<td bgcolor=\"#".$myColor[$col]."\">&nbsp;</td>";
 				$ret.="<td>&nbsp;</td>";
 		
 				foreach($tabTitre as $name=>$v)
-				  {
+				{
 					if (!isset($val[$name]["val"]))
 					{
 						$val[$name]["val"]="";

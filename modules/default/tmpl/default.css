@@ -204,7 +204,7 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 
 
 /* **** Message d'erreur **** */
-@-webkit-keyframes msgbox {
+@-webkit-keyframes msgbox-std {
   0% {
     opacity: 1;
   }
@@ -214,7 +214,7 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 	display: none;
   }
 }
-@keyframes msgbox {
+@keyframes msgbox-std {
   0% {
     opacity: 1;
   }
@@ -234,12 +234,7 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 	color: #000000; 
 	font-weight: normal;
 	text-decoration: none;
-	-webkit-animation: msgbox 1.0s forwards;
-	-webkit-animation-iteration-count: 1;
-	-webkit-animation-delay: 5s;
-	animation: msgbox 1.0s forwards;
-	animation-iteration-count: 1;
-	animation-delay: 5s;
+
 }
 
 .msgbox-std {
@@ -250,7 +245,12 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 	padding-right: 20px;
 	padding-bottom: 10px;
 	margin-bottom: 4px;
-
+	-webkit-animation: msgbox-std 1.0s forwards;
+	-webkit-animation-iteration-count: 1;
+	-webkit-animation-delay: 5s;
+	animation: msgbox-std 1.0s forwards;
+	animation-iteration-count: 1;
+	animation-delay: 5s;
 }
 
 .msgbox-ok { background-color: #{msgboxBackgroundOk}; }
