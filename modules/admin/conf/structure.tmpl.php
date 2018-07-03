@@ -24,6 +24,7 @@ $tabTmpl=Array
 		"module"=>Array("Type"=>"varchar(10)","Index" => "1"),
 		"actif"=>Array("Type"=>"enum('oui','non')", "Default" => "oui", "Index" => "1",),
 		"uid_dist" => Array("Type" => "int(10) unsigned", "Default" => "0"),
+		"mail_dist" => Array("Type" => "varchar(104)"),
 		"uid_creat" => Array("Type" => "int(10) unsigned", "Default" => "0"),
 		"dte_creat" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
 		"uid_maj" => Array("Type" => "int(10) unsigned", "Default" => "0", ),

@@ -3,6 +3,9 @@
 	if ((!isset($token)) || ($token==""))
 	  { header("HTTP/1.0 401 Unauthorized"); exit; }
 
+ // ---- Vérifie les paramètres
+	$fonc=checkVar("fonc","varchar");
+
 // ---- 
 	$ret=array();
 	$ret["result"]="OK";
@@ -15,45 +18,13 @@
 
 	$tabMails=array();
 
-// *****************************************************************
-	$tabMails["echeance"]=Array
-	(
-		"titre"=>"",
-		"balise"=>"description,type,date",
-		"mail"=>
-"Cher(e) ami(e) pilote,
-
-L'échéance {description} {type} {date}.
-
-Je t'invite à faire le nécessaire pour la renouveler sans oublier de m'envoyer une copie pour mise à jour de ton profil sur le site.
-
-A bientôt au club
-
-Le Président"
-	);
-// *****************************************************************
-
-// *****************************************************************
-	$tabMails["chgpwd"]=Array
-	(
-		"titre"=>"Changement de votre mot de passe",
-		"balise"=>"username,initiales,url",
-		"mail"=>
-"Bonjour,
-
-Votre mot de passe a été modifié :
-Utilisateur : {username}
-Initiales : {initiales}
-
-Rendez-vous sur {url} pour vous connecter.
-
-Cordialement"
-	);
-// *****************************************************************
-
-	if (file_exists($appfolder."/modules/admin/emails.inc.php"))
+	if (file_exists("modules/admin/conf/emails.tmpl.php"))
 	{
-		require_once($appfolder."/modules/admin/emails.inc.php");
+		require_once("modules/admin/conf/emails.tmpl.php");
+	}
+	if (file_exists($appfolder."/modules/admin/conf/emails.tmpl.php"))
+	{
+		require_once($appfolder."/modules/admin/conf/emails.tmpl.php");
 	}
 
 // *****************************************************************

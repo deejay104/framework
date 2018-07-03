@@ -204,7 +204,7 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 
 
 /* **** Message d'erreur **** */
-@-webkit-keyframes msgbox {
+@-webkit-keyframes msgbox-std {
   0% {
     opacity: 1;
   }
@@ -214,7 +214,7 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 	display: none;
   }
 }
-@keyframes msgbox {
+@keyframes msgbox-std {
   0% {
     opacity: 1;
   }
@@ -234,12 +234,7 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 	color: #000000; 
 	font-weight: normal;
 	text-decoration: none;
-	-webkit-animation: msgbox 1.0s forwards;
-	-webkit-animation-iteration-count: 1;
-	-webkit-animation-delay: 5s;
-	animation: msgbox 1.0s forwards;
-	animation-iteration-count: 1;
-	animation-delay: 5s;
+
 }
 
 .msgbox-std {
@@ -250,7 +245,12 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 	padding-right: 20px;
 	padding-bottom: 10px;
 	margin-bottom: 4px;
-
+	-webkit-animation: msgbox-std 1.0s forwards;
+	-webkit-animation-iteration-count: 1;
+	-webkit-animation-delay: 5s;
+	animation: msgbox-std 1.0s forwards;
+	animation-iteration-count: 1;
+	animation-delay: 5s;
 }
 
 .msgbox-ok { background-color: #{msgboxBackgroundOk}; }
@@ -295,11 +295,11 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 @media print {
 }
 
-.encadreInfos { min-width: 300px; border: 1px solid #{BorderBlack}; border-radius: 5px; padding: 0px 0px 10px 0px; margin-bottom:10px; }
+.encadreInfos { min-width: 300px; border: 1px solid #{FormulaireBackgroundNormal}; border-radius: 5px; padding: 0px 0px 10px 0px; margin-bottom:10px; }
 .encadreInfos label { display: inline-block; width: 60%; text-align: left; vertical-align: top; padding-left: 20px; }
 .encadreInfos span { display: inline-block; text-align: left; vertical-align: top; }
 .encadreInfos p { line-height: 16px; margin: 5px 10px 0px 10px;  }
-.encadreTitre { background-color: #{FormulaireBackgroundNormal}; padding: 10px 10px 30px 10px; font-size:18px; height:26px; margin-bottom: 10px; border-radius: 5px 5px 0px 0px; }
+.encadreTitre { background-color: #{FormulaireBackgroundLight}; padding: 10px 10px 30px 10px; font-size:18px; height:26px; margin-bottom: 10px; border-radius: 4px 4px 0px 0px; }
 
 .encadreInfos input[type=text] { width: 100%; min-width: 150px; margin-top:4px; font-size:14px; }
 
@@ -486,6 +486,10 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 .tableauBas td { background-color: #{FormulaireBackgroundNormal}; border-top: 1px solid black; height: 20px; font-weight: bold; }
 
 /* **** Comptes **** */
+.tableauCompte { background-color: #{FormulaireBackgroundNormal}; border-bottom:1px solid #{FormulaireBackgroundNormal}; }
+.tableauCompte tr { border-bottom:1px dashed #{FormulaireBackgroundNormal}; height:25px; }
+
+/* **** Comptes **** */
 .soldeCompte { padding-top: 5px; border: 1px solid #000000; border-radius: 4px; display: inline-block; position:relative; width:350px; height: 30px; text-align: center;}
 
 /* **** FullCalendar **** */
@@ -515,9 +519,6 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 
 	.calendarDesc { width: 150px; background-color:#{FormulaireBackgroundNormal}; border: 1px solid black; border-radius: 4px; line-height: 16px; font-size:12px; padding:5px;}
 	
-/* **** Comptes **** */
-.tableauCompte { border-bottom:1px solid #{FormulaireBackgroundNormal}; }
-.tableauCompte tr { border-bottom:1px dashed #{FormulaireBackgroundNormal}; height:25px; }
 
 /* **** Admin **** */
 .fieldAdmin { width:90px; display:inline-block; border: 1px solid #000000; height: 26px; line-height: 26px; margin-top:2px; margin-bottom: 2px; }

@@ -10,6 +10,7 @@ $tabRoles["AccesConfigVar"]="Accès à la page de configuration des variables";
 $tabRoles["AccesConfigGroupes"]="Accès à la page de configuration des groupes";
 $tabRoles["AccesConfigDonneesUser"]="Accès à la page de configuration des données utilisateurs personnalisées";
 $tabRoles["AccesConfigCrontab"]="Accès à la page de gestion des taches planifiées";
+$tabRoles["AccesConfigEmails"]="Accès à la page de gestion des template d'emails";
 
 $tabRoles["ModifGroupe"]="Modification d'un groupe (roles et informations)";
 $tabRoles["ModifActualite"]="Modifier une actualite";
@@ -73,6 +74,8 @@ $tabRoles["CreeAmeliorationCommentaire"]="Créer une réponse à une amélioration";
 $tabRoles["ModifAmelioration"]="Modifier une fiche d'amélioration";
 $tabRoles["ModifAmeliorationStatus"]="Modifier le status d'une amélioration";
 $tabRoles["SupprimeAmelioration"]="Supprimer un membre";
+$tabRoles["NotifAmelioration"]="Membre à notifier lors de la modification d'une amélioration";
+
 
 // ---- Echéances
 $tabRoles["AccesConfigEcheances"]="Accès à la gestion des échéances";

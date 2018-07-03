@@ -35,6 +35,10 @@
 	if (GetDroit("AccesConfigCrontab"))
 	{
 		$tmpl_menu->parse("infos.crontab");
+	}	
+	if (GetDroit("AccesConfigEmails"))
+	{
+		$tmpl_menu->parse("infos.emails");
 	}
 
 // ---- Affiche le menu	

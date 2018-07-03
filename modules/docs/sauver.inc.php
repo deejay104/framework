@@ -95,17 +95,25 @@
 	
 			if ($error=="")
 			{
-				$lstfiles=array();
-				if ($_FILES["form_adddocument"]["name"]!="")
-				  {
-					$doc = new document_core(0,$sql,"forum");
-	
-					$query="SELECT droit_r FROM ".$MyOpt["tbl"]."_forums WHERE id=$fid";
-					$res=$sql->QueryRow($query);
-	
-					$doc->droit=($res["droit_r"]=="") ? "ALL" : $res["droit_r"];
-					$doc->Save($mid,$_FILES["form_adddocument"]);
-				  }
+				// Sauvegarde les documents
+				if (is_array($_FILES["form_adddocument"]["name"]))
+				{
+					foreach($_FILES["form_adddocument"]["name"] as $i=>$n)
+					{
+						if ($n!="")
+						{
+							$doc = new document_core(0,$sql,"forum");
+			
+							$query="SELECT droit_r FROM ".$MyOpt["tbl"]."_forums WHERE id=$fid";
+							$res=$sql->QueryRow($query);
+			
+							$doc->droit=($res["droit_r"]=="") ? "ALL" : $res["droit_r"];
+							$doc->Save($mid,$_FILES["form_adddocument"]["name"][$i],$_FILES["form_adddocument"]["tmp_name"][$i]);
+
+						}
+					}
+				}
+
 	
 				// S'il y a du mailing pour les utilisateurs
 				if (is_array($mailtype))

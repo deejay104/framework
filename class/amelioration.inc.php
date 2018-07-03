@@ -44,11 +44,13 @@ class amelioration_core extends objet_core
 		$this->data["status"]="1new";
 		$this->data["module"]="";
 		$this->data["uid_dist"]=$gl_uid;
-
-		parent::__construct($id,$sql);
 		
+		$tmpusr = new user_core($gl_uid,$sql,false,false);
+		$this->data["mail_dist"]=$tmpusr->data["mail"];
+
+		parent::__construct($id,$sql);		
+
 		$this->usr_maj = new user_core($this->uid_maj,$sql,false,false);
-		// print_r($this);
 	}
 
 	function load($id)
@@ -143,6 +145,17 @@ class amelioration_core extends objet_core
 		else
 		{
 			parent::save();
+
+			$lst=ListActiveUsers($this->sql,"",array("NotifAmelioration"),"non");
+
+			foreach($lst as $i=>$id)
+			{
+				$usr = new user_core($id,$this->sql,false,true);
+				if ($usr->data["mail"]!="")
+				{
+					MyMail($MyOpt["from_email"],$usr->data["mail"],array(),"[Amélioration] ".$this->data["titre"],$this->data["description"]."<br><br><a href='".$MyOpt["host"]."/index.php?mod=ameliorations&rub=detail&id=".$this->id."'>-Détail-</a>");
+				}
+			}
 		}
 	}
 	
@@ -218,6 +231,23 @@ class amelioration_core extends objet_core
 			$td["dte_maj"]=$td["dte_creat"];
 			$sql=$this->sql;
 			$sql->Edit("ameliorations",$this->tbl."_ameliore_com",0,$td);
+
+			if ($this->data["mail_dist"]!="")
+			{
+				MyMail($MyOpt["from_email"],$this->data["mail_dist"],array(),"[Amélioration] ".$this->data["titre"],$txt."<br><br><a href='".$MyOpt["host"]."/index.php?mod=ameliorations&rub=detail&id=".$this->id."'>-Détail-</a>");
+			}
+
+			$lst=ListActiveUsers($this->sql,"",array("NotifAmelioration"),"non");
+
+			foreach($lst as $i=>$id)
+			{
+				$usr = new user_core($id,$this->sql,false,true);
+				if ($usr->data["mail"]!="")
+				{
+					MyMail($MyOpt["from_email"],$usr->data["mail"],array(),"[Amélioration] ".$this->data["titre"],$txt."<br><br><a href='".$MyOpt["host"]."/index.php?mod=ameliorations&rub=detail&id=".$this->id."'>-Détail-</a>");
+				}
+			}
+			
 		}
 	}
 	
