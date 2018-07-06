@@ -139,32 +139,32 @@ function myPrint($txt)
 
 // Affiche un temps en minute en heures/minutes
 function AffTemps($tps,$short="yes") {
-	$th=floor($tps/60);
-	$tm=$tps-$th*60;
+	$th=floor(abs($tps)/60);
+	$tm=abs($tps)-$th*60;
 	$tm=substr("00",0,2-strlen($tm)).$tm;
 
 	if (($th>0) && ($short=="full"))
 	{
 		if ($th>24)
 		{
-			$td=floor($tps/(24*60));
-			$th=floor(($tps-$td*24*60)/60);
+			$td=floor(abs($tps)/(24*60));
+			$th=floor((abs($tps)-$td*24*60)/60);
 			$tm=$tps-$td*24*60-$th*60;
 
 			$th=substr("00",0,2-strlen($th)).$th;
 			$tm=substr("00",0,2-strlen($tm)).$tm;
 
-			return $td."j ".$th."h ".$tm;
+			return (($tps<0) ? "-" : "").$td."j ".$th."h ".$tm;
 		}
 		else
 		{
-			return $th."h ".$tm;
+			return (($tps<0) ? "-" : "").$th."h ".$tm;
 		}
 	}
 	else if (($th>0) || ($short=="no"))
-	  { return $th."h ".$tm; }
+	  { return (($tps<0) ? "-" : "").$th."h ".$tm; }
 	else
-	  { return $tm."min"; }
+	  { return (($tps<0) ? "-" : "").$tm."min"; }
 }
 
 // Transforme un temps en minute
