@@ -32,6 +32,7 @@ Type:
 	text
 	bool
 	enum
+	price
 */
 
 // Class Utilisateur
@@ -96,8 +97,6 @@ class objet_core
 		{
 			$render=$typeaff;
 		}
-		
-
 
 		$ret="";
 		$len=0;
@@ -210,8 +209,12 @@ class objet_core
 			}
 			else if ($type=="tel")
 			{
-				$ret=AffTelephone($txt)."</A>";
+				$ret=AffTelephone($txt);
 				$link=false;
+			}
+			else if ($type=="price")
+			{
+				$ret=AffMontant($txt);
 			}
 			else if (($type=="enum") && (is_array($this->tabList[$key])))
 			{
@@ -308,6 +311,17 @@ class objet_core
 				$ret=$txt;
 			}
 			$type="number";
+		}
+		else if ($type=="price")
+		{
+			if (!is_numeric($txt))
+			{
+				$ret=0;
+			}
+			else
+			{
+				$ret=$txt;
+			}
 		}
 		// else if ((isset($this->type[$key])) && ($this->type[$key]=="text"))
 		// {
