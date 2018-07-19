@@ -47,7 +47,7 @@ input[type=checkbox]:checked { background: #{FormulaireBackgroundNormal}; border
 input[type=checkbox]:after { content: " "; padding-left: 6px; }
 input[type=checkbox]:checked:after { content: "x"; }
 
-input[type=submit] { -webkit-appearance: none; -moz-appearance: none; appearance: none; font-size: 20px; background-color: #{FormulaireBackgroundNormal}; border: 1px solid #{MenuBackgroundNormal}; width: 170px; height: 36px;	}
+input[type=submit] { -webkit-appearance: none; -moz-appearance: none; appearance: none; font-size: 20px; background-color: #{FormulaireBackgroundNormal}; border: 1px solid #{FormulaireBackgroundDark}; width: 170px; height: 36px;	}
 
 
 /* **** Haut de page **** */
@@ -59,7 +59,9 @@ input[type=submit] { -webkit-appearance: none; -moz-appearance: none; appearance
 .pagetitle img {  vertical-align:middle; }
 
 .pagetitle a { position:relative; top:-20px; display: inline-block; height:48px; background-color: #{TitleBackgroundHover}; font-size: 0px; text-transform: none; padding: 10px; border-radius: 5px; margin: 0px; }
-.pagetitle a:hover { background-color: #{MenuBackgroundHover}; }
+.pagetitle a:hover { background-color: #{TitleBackgroundButton}; }
+
+.pageTitleSelected { background-color: #{TitleBackgroundButton}!important; }
 
 .navigation { margin-top: 60px; margin-bottom: 0px; background-color: #{FormulaireBackgroundNormal};  display: inline-block; width:100%; font-size: 0px; }
 .navigation p { margin-left:10px; margin-bottom: 0px; background-color: #{MenuBackgroundNormal}; width:40px; height:40px; float:left; text-align: center; border-radius: 20px; padding: 0px; }

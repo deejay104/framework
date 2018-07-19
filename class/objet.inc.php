@@ -461,8 +461,8 @@ class objet_core
 		$td=array();
 		foreach($this->data as $k=>$v)
 		{
-			// if ( ((isset($this->droit[$key])) && (GetDroit($this->droit[$key]))) || (!isset($this->droit[$key])) || ($this->droit[$key]=="") )
-			// if ($this->GetDroit($k))
+			// A réactiver après test
+			// if ( ((isset($this->droit[$k])) && (GetDroit($this->droit[$k]))) || (!isset($this->droit[$k])) || ($this->droit[$k]=="") )
 			// {
 				$vv=$this->Valid($k,$v,true);
 				$td[$k]=$vv;
@@ -472,6 +472,7 @@ class objet_core
 		$td["dte_maj"]=now();
 
 		$sql->Edit($this->table,$this->tbl."_".$this->table,$this->id,$td);
+		return $sql->a_rows;
 	}
 
 	function GetDroit($key)
@@ -560,6 +561,20 @@ class objet_core
 		{
 			$tmpl_x->assign($form."_".$k,$this->aff($k,$render));
 		}
+	}
+
+	function AffTableLine($tab)
+	{
+		$tabLine=array();
+		foreach($tab as $i=>$v)
+		{
+			if (isset($this->data[$v]))
+			{
+				$tabLine[$v]["val"]=$this->val($v);
+				$tabLine[$v]["aff"]=$this->aff($v);
+			}
+		}
+		return $tabLine;
 	}
 	
 	function LastUpdate()

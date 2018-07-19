@@ -110,9 +110,9 @@
 		$tabValeur[$i]["description"]["val"]=$sql->data["description"];
 		$tabValeur[$i]["schedule"]["val"]=$sql->data["schedule"];
 		$tabValeur[$i]["schedule"]["aff"]="<div id='schedule_".$sql->data["id"]."' class='fieldAdmin'><a id='schedule_".$sql->data["id"]."_a' onClick='SwitchEdit(\"schedule\",".$sql->data["id"].")'>".AffTemps($sql->data["schedule"],"full")."</a></div>";
-		$tabValeur[$i]["lastrun"]["val"]=$sql->data["lastrun"];
+		$tabValeur[$i]["lastrun"]["val"]=sql2date($sql->data["lastrun"]);
 		$tabValeur[$i]["nextrun"]["val"]=sql2date($sql->data["nextrun"]);
-		$tabValeur[$i]["resultat"]["val"]=sql2date($sql->data["txtretour"]);
+		$tabValeur[$i]["resultat"]["val"]=$sql->data["txtretour"];
 		$tabValeur[$i]["actif"]["val"]=$sql->data["actif"];
 		$tabValeur[$i]["actif"]["aff"]="<div id='actif_".$sql->data["id"]."' class='fieldAdmin'><a id='actif_".$sql->data["id"]."_val' onClick='SwitchOn(\"actif\",".$sql->data["id"].")'>".$sql->data["actif"]."</a></div>";
 		$tabValeur[$i]["action"]["val"]="Démarrer";

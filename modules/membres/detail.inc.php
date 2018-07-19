@@ -287,28 +287,33 @@
 		}
 
 		// Echéances
-		$lstdte=ListEcheance($sql,$id);
+		if ($MyOpt["module"]["echeances"]=="on")
+		{
+			$lstdte=ListEcheance($sql,$id);
 
-		if ((is_numeric($id)) && ($id>0))
-		{ 
-			if ($typeaff=="form")
-			{
-				$dte = new echeance_core(0,$sql,$id);
-				$dte->editmode="form";
-				$tmpl_x->assign("form_echeance",$dte->Affiche());
-				$tmpl_x->parse("corps.lst_echeance");
-			}
-				
-			if (is_array($lstdte))
-			{
-				foreach($lstdte as $i=>$did)
+			if ((is_numeric($id)) && ($id>0))
+			{ 
+				if ($typeaff=="form")
 				{
-					$dte = new echeance_core($did,$sql,$id);
-					$dte->editmode=($typeaff=="form") ? "edit" : "html";
+					$dte = new echeance_core(0,$sql,$id);
+					$dte->editmode="form";
 					$tmpl_x->assign("form_echeance",$dte->Affiche());
-					$tmpl_x->parse("corps.lst_echeance");
+					$tmpl_x->parse("corps.aff_echeances.lst_echeance");
+				}
+					
+				if (is_array($lstdte))
+				{
+					foreach($lstdte as $i=>$did)
+					{
+						$dte = new echeance_core($did,$sql,$id);
+						$dte->editmode=($typeaff=="form") ? "edit" : "html";
+						$tmpl_x->assign("form_echeance",$dte->Affiche());
+						$tmpl_x->parse("corps.aff_echeances.lst_echeance");
+					}
 				}
 			}
+			
+			$tmpl_x->parse("corps.aff_echeances");			
 		}
 			
 		// Affiche les données utilisateurs
@@ -317,9 +322,9 @@
 			foreach($usr->donnees as $i=>$d)
 			{
 				$tmpl_x->assign("form_donnees",$usr->AffDonneesComp($i,$typeaff));
-				$tmpl_x->parse("corps.aff_donnees.lst_donnees");
+				$tmpl_x->parse("corps.aff_donnees.aff_donnees_util.lst_donnees");
 			}
-			$tmpl_x->parse("corps.aff_donnees");
+			$tmpl_x->parse("corps.aff_donnees.aff_donnees_util");
 		}
 	}
 
@@ -333,12 +338,19 @@
 		
 		if ($left!="")
 		{
-				$tmpl_x->assign("aff_data_left",$left);
+			$tmpl_x->assign("aff_data_left",$left);
+			$tmpl_x->parse("corps.aff_donnees.aff_donnees_left");
 		}
 		if ($right!="")
 		{
-				$tmpl_x->assign("aff_data_right",$right);
+			$tmpl_x->assign("aff_data_right",$right);
 		}
+	}
+
+// ---- Affiche le bloc de données		
+	if (($left!='') || (count($usr->donnees)>0))
+	{
+		$tmpl_x->parse("corps.aff_donnees");
 	}
 	
 // ---- Messages
