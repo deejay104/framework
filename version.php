@@ -1,4 +1,4 @@
 <?
-$core_version = "18";
+$core_version = "19";
 
 ?>

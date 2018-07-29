@@ -16,6 +16,10 @@ $MyOptHelp["tbl"]="Prefixe des tables dans la base de données";
 $MyOptTmpl["maintenance"]="off";
 $MyOptHelp["maintenance"]="Mettre le site en maintenance (on=site en maintenance, off=site accessible)";
 
+// Debug
+$MyOptTmpl["debug"]="off";
+$MyOptHelp["debug"]="Affiche des informations de debuggage, notament les requetes MySQL";
+
 // path
 $MyOptTmpl["mydir"]=htmlentities(preg_replace("/[a-z]*\.php/","",$_SERVER["SCRIPT_FILENAME"]));
 $MyOptHelp["mydir"]="Chemin de l'installation. Utilisé pour l'exécution des scripts";

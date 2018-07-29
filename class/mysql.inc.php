@@ -158,18 +158,18 @@ class mysql_core{
 
 	# MySQL error message function
 	function mysql_ErrorMsg($msg,$show=true){
-		global $resume;
-		# Get out of html constraints so we can see the message
-		$text="</ul></ul></ul></dl></dl></dl></ol></ol></ol>\n";
-		$text="</table></table></table></script></script></script>\n";
-	
+		global $MyOpt,$resume;	
 		# Display the error message
-		$text ="<font color=\"#ff0000\">Error: $msg :";
-		$text .= "</font><BR>\n";
+		$text ="<font color=\"#ff0000\">Error: MySQL</font><BR>\n";
 		if ($show)
 		{
 			echo "$text";
-	
+			
+			if ($MyOpt["debug"]=="on")
+			{
+				echo "<font color=\"#ff0000\">".$msg."</font><BR>\n";
+				error_log("MySQL error : ".$msg);
+			}
 			if ($resume==false)
 			{
 				exit;
@@ -177,6 +177,10 @@ class mysql_core{
 		}
 		else
 		{
+			if ($MyOpt["debug"]=="on")
+			{
+				error_log("MySQL error : ".$msg);
+			}
 			return "NOK";
 		}
 	}
