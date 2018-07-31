@@ -16,6 +16,10 @@ $MyOptHelp["tbl"]="Prefixe des tables dans la base de données";
 $MyOptTmpl["maintenance"]="off";
 $MyOptHelp["maintenance"]="Mettre le site en maintenance (on=site en maintenance, off=site accessible)";
 
+// Debug
+$MyOptTmpl["debug"]="off";
+$MyOptHelp["debug"]="Affiche des informations de debuggage, notament les requetes MySQL";
+
 // path
 $MyOptTmpl["mydir"]=htmlentities(preg_replace("/[a-z]*\.php/","",$_SERVER["SCRIPT_FILENAME"]));
 $MyOptHelp["mydir"]="Chemin de l'installation. Utilisé pour l'exécution des scripts";
@@ -91,6 +95,13 @@ $MyOptHelp["amelioration"]["pwd"]="Mot de passe de l'API pour la centralisation 
 // Modules
 $MyOptTmpl["module"]["actualites"]="on";
 $MyOptHelp["module"]["actualites"]="Active le module d'actualités (on=Activé)";
+$MyOptTmpl["module"]["documents"]="on";
+$MyOptHelp["module"]["documents"]="Active le module de gestion des documents (on=Activé)";
+$MyOptTmpl["module"]["echeances"]="on";
+$MyOptHelp["module"]["echeances"]="Active le module des échéances (on=Activé)";
+$MyOptTmpl["module"]["ameliorations"]="on";
+$MyOptHelp["module"]["ameliorations"]="Active le module de gestion des améliorations (on=Activé)";
+
 
 // Unité
 $MyOptTmpl["devise"]="€";
@@ -106,8 +117,10 @@ $MyOptTmpl["styleColor"]["MenuBackgroundNormal"]="888e91";
 $MyOptTmpl["styleColor"]["MenuBackgroundHover"]="585e61";
 $MyOptTmpl["styleColor"]["TitleBackgroundNormal"]="38a9e3";
 $MyOptTmpl["styleColor"]["TitleBackgroundHover"]="1799c3";
+$MyOptTmpl["styleColor"]["TitleBackgroundButton"]="38a9e3";
 $MyOptTmpl["styleColor"]["FormulaireBackgroundNormal"]="e8e8e8";
 $MyOptTmpl["styleColor"]["FormulaireBackgroundLight"]="f5f5f5";
+$MyOptTmpl["styleColor"]["FormulaireBackgroundDark"]="888e91";
 $MyOptTmpl["styleColor"]["msgboxBackgroundOk"]="bbffaa";
 $MyOptTmpl["styleColor"]["msgboxBackgroundWarning"]="ffe49c";
 $MyOptTmpl["styleColor"]["msgboxBackgroundError"]="ffbbaa";

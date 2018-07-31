@@ -10,13 +10,14 @@
 /* Title Hover:  */
 :root {
 --MenuBackgroundNormal:#{MenuBackgroundNormal};
-
 --MenuBackgroundHover:#{MenuBackgroundHover};
 --TitleBackgroundNormal:#{TitleBackgroundNormal};
+--TitleBackgroundButton:#{TitleBackgroundButton};
 --TitleBackgroundHover:#{TitleBackgroundHover};
 
 --FormulaireBackgroundNormal:#{FormulaireBackgroundNormal};
 --FormulaireBackgroundLight:#{FormulaireBackgroundLight};
+--FormulaireBackgroundDark:#{FormulaireBackgroundDark};
 
 --msgboxBackgroundOk: #{msgboxBackgroundOk};
 --msgboxBackgroundWarning: #{msgboxBackgroundWarning};
@@ -65,7 +66,7 @@ input[type=tel] { border: 1px solid #888888; line-height: 16px; padding: 2px 5px
 input[type=email] { border: 1px solid #888888; line-height: 16px; padding: 2px 5px 2px 5px; }
 input[type=number] { border: 1px solid #888888; line-height: 16px; padding: 2px 5px 2px 5px; width:80px; }
 input[type=date] { border: 1px solid #888888; line-height: 16px; padding: 2px 5px 2px 5px; width:155px; }
-input[type=submit] { height: 36px; padding:5px 15px 5px 15px;  background:#{FormulaireBackgroundNormal}; border: 1px solid #{MenuBackgroundNormal}; cursor:pointer; border-radius: 5px; }
+input[type=submit] { height: 36px; padding:5px 15px 5px 15px;  background:#{FormulaireBackgroundNormal}; border: 1px solid #{FormulaireBackgroundDark}; cursor:pointer; border-radius: 5px; }
 input[type=submit]:hover { background:#{FormulaireBackgroundLight}; }
 input[type=radio] { -webkit-appearance: radio; vertical-align: sub; }
 input[type=file] { height:30px; background-color: #ffffff; border: 0px; }
@@ -141,15 +142,16 @@ img { color: #FFFFFF; border: 0px; }
 .head { padding: 0px; background-color: #{TitleBackgroundNormal}; width: 100%; height: 60px; }
 
 .icone { padding-left:30px; display: inline-block; float: left; clear: right; padding-top:10px; }
+
 .pagetitle { padding-left:90px; padding-top:25px; text-transform: uppercase; font-size: 25px; color: white; }
 .pagetitle p { float: left; padding-right: 5px; margin-top: 0px; margin-bottom: 10px; display: inline-block; }
 .pagetitle a { height:36px; border: 1px solid #{TitleBackgroundHover}; background-color: #{TitleBackgroundHover}; font-size: 14px; text-transform: none; padding: 10px; border-radius: 5px; }
-.pagetitle a:hover { background-color: #{TitleBackgroundNormal}; border-radius: 8px; border: 1px solid #{TitleBackgroundHover}; color: #ffffff;  }
+.pagetitle a:hover { background-color: #{TitleBackgroundButton}; border-radius: 8px; border: 1px solid #{TitleBackgroundHover}; color: #ffffff;  }
 .pagetitle img { vertical-align:middle; margin-right: 5px; }
 
 .pagemenu { background-color: #{FormulaireBackgroundNormal}; height: 20px; width: 100%; padding-top:0px; margin-bottom: 30px;  margin-top: -10px; }
 
-.pageTitleSelected { background-color: #{TitleBackgroundNormal}!important; border: 1px solid #076983!important; color: #ffffff!important; box-shadow: 2px 2px #{TitleBackgroundHover}; }
+.pageTitleSelected { background-color: #{TitleBackgroundButton}!important; border: 1px solid #076983!important; color: #ffffff!important; box-shadow: 2px 2px #{TitleBackgroundHover}; }
 
 /* **** Corps de la page **** */
 .main { /* display of the text area */
@@ -226,7 +228,7 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 }
 
 .msgbox {
-	position: absolute;
+	position:fixed;
 	top: 10px;
 	right:10px;
 	width: 480px;

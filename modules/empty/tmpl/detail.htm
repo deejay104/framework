@@ -1,0 +1,46 @@
+<!-- BEGIN: icone -->
+	<img src="{path_module}/img/icn48_titre.png" alt="" border=0 />
+<!-- END: icone -->
+
+<!-- BEGIN: infos -->
+{aff_menu}
+	<p><A href="index.php?mod=projets"><IMG src="{path_module}/img/icn32_retour.png" alt="">Liste</A></p>
+<!-- BEGIN: ajouter -->
+	<p><A href="index.php?mod=projets&rub=detail&id=0"><IMG src="{path_module}/img/icn32_ajouter.png" alt="">Ajouter</A></p>
+<!-- END: ajouter -->
+<!-- BEGIN: modifier -->
+	<p><A href="index.php?mod=projets&rub=detail&id={form_id}&fonc=modifier"><IMG src="{path_module}/img/icn32_modifier.png" alt="">Modifier</A></p>
+<!-- END: modifier -->
+<!-- BEGIN: supprimer -->
+	<p><A href="index.php?mod=projets&rub=detail&id={form_id}&fonc=supprimer"><IMG src="{path_module}/img/icn32_supprimer.png" alt="">Supprimer</A></p>
+<!-- END: supprimer -->
+
+<!-- END: infos -->
+
+
+<!-- BEGIN: corps -->
+
+<FORM name="form_detail" method="post" action="index.php" enctype="multipart/form-data">
+	<INPUT type="hidden" name="mod" value="projets">
+	<INPUT type="hidden" name="rub" value="detail">
+	<INPUT type="hidden" name="id" value="{form_id}">
+	<INPUT type="hidden" name="checktime" value="{form_checktime}">
+
+	<p class="lastupdate">Dernière mise à  jour : {form_usr_maj} {form_dte_maj}</p>
+
+	<div class='formulaire'>
+		<p><label>Nom</label>{form_name}</p>
+	</div>
+
+
+<!-- BEGIN: submit -->
+	<div class="formulaireSubmit" style="padding-left:55px;">
+		<input type="submit" name="fonc" id="enregistrer" value="Enregistrer">
+		<input type="submit" name="fonc" id="annuler" value="Annuler">
+	</div>
+<!-- END: submit -->
+
+</form>
+<br />
+
+<!-- END: corps -->

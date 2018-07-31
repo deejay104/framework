@@ -223,9 +223,9 @@ class BiffWriter extends BiffBase
     function xlsWriteText($row, $col, $value, $col_width = 0, $cell_picture = 0, $cell_font = 0, $cell_alignment = ALIGN_GENERAL, $cell_status = 0)  
     { 
         $this->check_bounds($row, $col, 'line '. __line__ .' xlsWriteText'); 
-        if (!is_string($value)) {  
-            trigger_error('xlsWriteText 3. parameter must be string!', E_USER_ERROR);  
-        } 
+        // if (!is_string($value)) {  
+            // trigger_error('xlsWriteText 3. parameter must be string!', E_USER_ERROR);  
+        // } 
         if (strlen($value) > MAX_TEXT_CHARS) {  
             trigger_error($ref .MAX_TEXT_CHARS. ' chars max', E_USER_ERROR);  
         } 
@@ -855,4 +855,6 @@ class BiffBase {
 
 
 } // end of class 
+
+
 ?>

@@ -264,22 +264,22 @@ function SendMailFromFile($from,$to,$tabcc,$subject="",$tabvar,$name,$files="")
 	$q="SELECT * FROM ".$MyOpt["tbl"]."_mailtmpl WHERE nom='".$name."'";
 	$res=$sql->QueryRow($q);
 
-	$mail=nl2br($res["corps"]);
-	foreach($tabvar as $p=>$d)
+	if ($res["titre"]!="")
 	{
-		$mail=str_replace("{".$p."}",$d,$mail);
-	}
-	$mail.="<br /><br />-Email envoyé à partir du site ".$MyOpt["site_title"]."-";
-
-	if ($res["subject"]!="")
-	{
-		$subject=$res["subject"];
+		$subject=$res["titre"];
 	}
 
 	if ($subject=="")
 	{
 		$subject="Notification";
 	}
+
+	$mail=nl2br($res["corps"]);
+	foreach($tabvar as $p=>$d)
+	{
+		$mail=str_replace("{".$p."}",$d,$mail);
+	}
+	$mail.="<br /><br />-Email envoyé à partir du site ".$MyOpt["site_title"]."-";
 	
 	return MyMail($from,$to,$tabcc,$subject,$mail,"",$files);
 }
@@ -546,8 +546,9 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 					{
 						$val[$name]["align"]="left";
 					}
-					if ($val[$name]["val"]=="<line>")
+					if ("*".$val[$name]["val"]=="*<line>")
 					{
+						// echo "'".$val[$name]["val"]."'";
 						$ret.="<td style='border-left: 1px solid black;'></td>";
 					}
 					else

@@ -24,7 +24,7 @@
 	{
 		$tmpl_menu->parse("infos.groupes");
 	}
-	if (GetDroit("AccesConfigEcheances"))
+	if ((GetDroit("AccesConfigEcheances")) && ($MyOpt["module"]["echeances"]=="on"))
 	{
 		$tmpl_menu->parse("infos.echeances");
 	}
