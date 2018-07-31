@@ -77,7 +77,7 @@
 
 		// Sauvegarde la photo
 		$form_photo=$_FILES["form_photo"];
-		if ($form_photo["name"][0]!="")
+		if ((isset($form_photo["name"][0])) && ($form_photo["name"][0]!=""))
 		{
 			$lstdoc=ListDocument($sql,$id,"avatar");
 		  	

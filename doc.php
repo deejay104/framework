@@ -26,6 +26,9 @@
 	else
 	  { header("HTTP/1.0 401 Unauthorized"); exit; }
 
+// ---- Fonctions communes  
+   	require ("lib/fonctions.inc.php");
+
 // ---- Variables
 	if ((is_numeric($_REQUEST["id"])) && ($_REQUEST["id"]>0))
 	{
@@ -47,7 +50,8 @@
 		exit;
 	}
 
-  	require ("lib/fonctions.inc.php");
+	$mode=checkVar("mode","varchar");
+	
 
 // ---- Se connecte à  la base MySQL
 	require ("class/mysql.inc.php");
@@ -56,7 +60,7 @@
 // ---- Charge les informations de l'utilisateur connecté
 	require ("class/objet.inc.php");
 	require ("class/user.inc.php");
-	$myuser = new user_core($uid,$sql,true);
+	$myuser = new user_core($gl_uid,$sql,true);
 
 // ---- Charge le document
 	require ("class/document.inc.php");
@@ -84,7 +88,7 @@
 	}
 	else
 	{
-		$doc->Download($_REQUEST["mode"]);
+		$doc->Download($mode);
 	}
 
 ?>

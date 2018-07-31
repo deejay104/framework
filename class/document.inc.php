@@ -196,6 +196,8 @@ class document_core{
 		  { $icon="powerpoint"; }
 		else if ($myext=="jpg")
 		  { $icon="image"; }
+		else if ($myext=="jpeg")
+		  { $icon="image"; }
 		else if ($myext=="gif")
 		  { $icon="image"; }
 		else if ($myext=="png")

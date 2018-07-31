@@ -548,7 +548,7 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 					}
 					if ("*".$val[$name]["val"]=="*<line>")
 					{
-						echo "'".$val[$name]["val"]."'";
+						// echo "'".$val[$name]["val"]."'";
 						$ret.="<td style='border-left: 1px solid black;'></td>";
 					}
 					else

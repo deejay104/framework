@@ -105,6 +105,11 @@ class user_core extends objet_core
 			$this->groupe[$sql->data["groupe"]]=true;
 		}
 
+		if (!isset($this->groupe["SYS"]))
+		{
+			$this->groupe["SYS"]=false;
+		}
+		
 		// Charge les roles
 		if ($this->me)
 		{
@@ -187,7 +192,7 @@ class user_core extends objet_core
 				}
 				if (GetDroit("SYS"))
 				{
-					$ret.="<input type='checkbox' name='form_droits[SYS]' ".(($this->groupe["SYS"]>0) ? "checked" : "")." value='SYS' /> Super Administrateur (SYS)<br />";
+					$ret.="<input type='checkbox' name='form_droits[SYS]' ".(($this->groupe["SYS"]) ? "checked" : "")." value='SYS' /> Super Administrateur (SYS)<br />";
 				}
 				$ret="<span>".$ret."</span>";
 			}
@@ -367,6 +372,11 @@ class user_core extends objet_core
 				$tabgrp[$sql->data["groupe"]]["old"]=0;
 			}
 		}
+
+		$tabgrp["SYS"]["bd"]=0;
+		$tabgrp["SYS"]["new"]=0;
+		$tabgrp["SYS"]["old"]=0;
+
 		
 		// Charge les nouvelles valeurs
 		if (is_array($tabDroits))
