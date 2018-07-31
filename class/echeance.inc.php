@@ -103,7 +103,7 @@ class echeance_core
 	function Create()
 	{
 		$sql=$this->sql;
-		$this->id=$sql->Edit("echeance",$this->tbl."_echeance",0,array("uid_create"=>$this->myuid, "dte_create"=>now(), "uid_maj"=>$this->myuid, "dte_maj"=>now()));		
+		$this->id=$sql->Edit("echeance",$this->tbl."_echeance",0,array("uid_creat"=>$this->myuid, "dte_creat"=>now(), "uid_maj"=>$this->myuid, "dte_maj"=>now()));		
 	}
 
 	function Delete()
