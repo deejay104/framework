@@ -26,7 +26,7 @@
 	{
 		$mydir=".";
 	}
-	echo "MyDir: '".$mydir."'\n";
+	echo "MyDir: '".$mydir."' (".date("Y-m-d H:i:s").")\n";
 	chdir($mydir);
 
 	$appfolder="..";
