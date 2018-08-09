@@ -36,6 +36,8 @@
 		$from["name"]=$auth->fullname;
 
 		$txt=nl2br($d["message"]);
+		$txt=preg_replace("/((http|https|ftp):\/\/[^ \n\r<]*)/si","<a href='$1' target='_blank'>$1</a>",$txt);
+		$txt=preg_replace("/ (www\.[^ |\/]*)/si","<a href='http://$1' target='_blank'>$1</a>",$txt);
 		$txt.="<br /><br />-Email envoyé à partir du site ".$MyOpt["site_title"]."-";
 
 		// Envoie du message aux membres

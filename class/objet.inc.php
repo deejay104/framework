@@ -350,6 +350,12 @@ class objet_core
 
 	  return $ret;
 	}
+
+	function url()
+	{
+		global $MyOpt;
+		return $MyOpt["host"]."/index.php?mod=".$this->mod."&rub=".$this->rub."&id=".$this->id;
+	}
 	
 	function Create()
 	{

@@ -258,12 +258,20 @@ function CalcDate($dte, $n)
 
 
   
-function SendMailFromFile($from,$to,$tabcc,$subject="",$tabvar,$name,$files="")
-{ global $sql,$mod,$appfolder,$MyOpt;
+function SendMailFromFile($from,$to,$tabcc,$subject="",$tabvar,$name,$files="",$dest="mail")
+{ global $sql,$mod,$appfolder,$MyOpt,$gl_uid;
 
 	$q="SELECT * FROM ".$MyOpt["tbl"]."_mailtmpl WHERE nom='".$name."'";
 	$res=$sql->QueryRow($q);
 
+	if ($res["id"]>0)
+	{
+	}
+	else
+	{
+		return false;
+	}
+	
 	if ($res["titre"]!="")
 	{
 		$subject=$res["titre"];
@@ -274,14 +282,34 @@ function SendMailFromFile($from,$to,$tabcc,$subject="",$tabvar,$name,$files="")
 		$subject="Notification";
 	}
 
-	$mail=nl2br($res["corps"]);
+	$mail=$res["corps"];
 	foreach($tabvar as $p=>$d)
 	{
 		$mail=str_replace("{".$p."}",$d,$mail);
 	}
-	$mail.="<br /><br />-Email envoyé à partir du site ".$MyOpt["site_title"]."-";
 	
-	return MyMail($from,$to,$tabcc,$subject,$mail,"",$files);
+	if ($dest=="actualite")
+	{
+		$t=array(
+			"titre"=>addslashes($subject),
+			"message"=>addslashes($mail),
+			"mail" =>"non",
+			"uid_creat"=>$gl_uid,
+			"dte_creat"=>now(),
+			"uid_maj"=>$gl_uid,
+			"dte_maj"=>now(),
+		);
+
+		$sql->Edit("actualites",$MyOpt["tbl"]."_actualites",0,$t);
+
+		return true;
+	}
+	else
+	{
+		$mail.="\n\n-Email envoyé à partir du site ".$MyOpt["site_title"]."-";
+		$mail=nl2br($mail);
+		return MyMail($from,$to,$tabcc,$subject,$mail,"",$files);
+	}
 }
 
 function MyMail($from,$to,$tabcc,$subject,$message,$headers="",$files="")
