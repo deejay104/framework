@@ -110,6 +110,10 @@ class objet_core
 		{
 			$render="html";
 		}
+		if (($this->nomodif[$key]=="yes") && ($this->id>0))
+		{
+			$render="html";
+		}
  	
 		if ($render=="form")
 		{
