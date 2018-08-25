@@ -110,7 +110,7 @@ class objet_core
 		{
 			$render="html";
 		}
-		if (($this->nomodif[$key]=="yes") && ($this->id>0))
+		if ((isset($this->nomodif[$key])) && ($this->nomodif[$key]=="yes") && ($this->id>0))
 		{
 			$render="html";
 		}
