@@ -31,8 +31,9 @@
 	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 
 
+	
 // ---- Vérifie le droit d'accès
-	if (!GetDroit("AccesConfiguration")) { FatalError("Accès non autorisé (AccesConfiguration)"); }
+	if (!GetDroit("AccesConfigBase")) { FatalError("Accès non autorisé (AccesConfigBase)"); }
 
 // ---- Affiche le menu
 	$aff_menu="";

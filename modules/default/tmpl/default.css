@@ -236,7 +236,7 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 	color: #000000; 
 	font-weight: normal;
 	text-decoration: none;
-
+	line-height: 18px;
 }
 
 .msgbox-std {

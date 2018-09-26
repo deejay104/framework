@@ -112,7 +112,98 @@ function ReloadEmails(init)
 
 }
 
+function ExportConf()
+{
+
+	<!-- uriContent = "data:plain/text;filename=filename.txt," + encodeURIComponent('api.php?mod=admin&rub=exportconf');		   -->
+<!-- console.log(uriContent); -->
+	<!-- document.getElementById('download').src = uriContent; -->
+	<!-- newWindow=window.open(uriContent, 'filename.txt'); -->
+	
+	    var link = document.createElement("a");
+    link.download = "config.json";
+    link.href = 'api.php?mod=admin&rub=exportconf';
+    link.click();
+}
+
+function ImportConf()
+{
+	var valid = true;
+
+	if (document.getElementById('form_file').value=="")
+	{
+		document.getElementById('msgbox').innerHTML="<div class='msgbox-std msgbox-error'>Aucun fichier n'a été sélectionné</div>";
+		valid = false;
+	}
+	
+	if ( valid ) {
+		importDialog.dialog( "close" );
+
+		var form = document.getElementById('formdata');
+		var formData = new FormData(form);
+
+		$.ajax({
+			url:'api.php?mod=admin&rub=importconf',
+			type: 'POST',
+			data: formData,
+			dataType: 'JSON',
+			processData: false,
+			contentType: false,
+			success: function(response)
+			{
+				if (response.result=="OK")
+				{
+					console.log("ok");
+					<!-- document.getElementById('msgbox').innerHTML="<div id='msgbox_"+id+"' class='msgbox-std msgbox-ok'>Les informations ont été enregistrées</div>"; -->
+					<!-- document.location="index.php"; -->
+				}
+				else
+				{
+					console.log("nok");
+					<!-- document.getElementById('msgbox').innerHTML="<div class='msgbox-std msgbox-error'>Erreur lors de la sauvegarde ("+response.result+")</div>"; -->
+				}
+			},
+			error : function(response)
+			{
+			}
+		});
+	}
+	return valid;
+}
+
+function uploadConfig()
+{
+}
+
+
+$(function() {
+	importDialog = $( "#import-form" ).dialog({
+      autoOpen: false,
+      height: 220,
+      width: 420,
+	  top: 10,
+      modal: true,
+      buttons: {
+        "Importer": ImportConf,
+        Cancel: function() {
+          importDialog.dialog( "close" );
+        }
+      },
+    });
+})
+
 </script>
+
+<div id="import-form" title="Importer la configuration" class="formulaire" style="display:none;">
+<form id="formdata">
+	<input id="import_id" name="import_id" type="hidden" value="">
+	<input type="file" id="form_file" name="form_file" style='width:390px!important; border: 0px;'>
+	<input type="checkbox"> Importer la configuration<br />
+	<input type="checkbox"> Importer les groupes<br />
+	<input type="submit" tabindex="-1" value="Enregistrer" style="position:absolute; top:-1000px">
+</form>
+</div>
+
 
 <table class="tableauAff">
 	<tr>
@@ -122,23 +213,36 @@ function ReloadEmails(init)
 	</tr>
 	<tr>
 		<td>Mise à jour</td>
-		<td><input type="submit" value="Mettre à jour" OnClick="Update();"></td>
+		<td><input type="submit" value="Mettre à jour" OnClick="Update();" style="width:200px;"></td>
 		<td><div id="form_update" style="padding:4px;"></div>
 	</tr>
 	<tr>
 		<td>Suppression des Index</td>
-		<td><input type="submit" value="Re-Index" OnClick="ReIndex();"></td>
+		<td><input type="submit" value="Re-Index" OnClick="ReIndex();" style="width:200px;"></td>
 		<td><div id="form_reindex" style="padding:4px;"></div>
 	</tr>
 	<tr>
 		<td>Mise à jour des templates d'emails</td>
-		<td><input type="submit" value="Update Emails" OnClick="ReloadEmails('');"></td>
+		<td><input type="submit" value="Update Emails" OnClick="ReloadEmails('');" style="width:200px;"></td>
 		<td><div id="form_emails" style="padding:4px;"></div>
 	</tr>
 	<tr>
 		<td>Réinitialise les templates d'emails</td>
-		<td><input type="submit" value="Reset Emails" OnClick="ReloadEmails('init');"></td>
+		<td><input type="submit" value="Reset Emails" OnClick="ReloadEmails('init');" style="width:200px;"></td>
+		<td><div id=""style=" padding:4px;"></div>
+	</tr>
+	<tr>
+		<td>Sauvegarde configuration</td>
+		<td><input type="submit" value="Exporter" OnClick="ExportConf();" style="width:200px;"></td>
+		<td><div id=""style=" padding:4px;"></div>
+	</tr>
+	<tr>
+		<td>Importer configuration</td>
+		<td><input type="submit" value="Importer" OnClick="importDialog.dialog('open');" style="width:200px;"></td>
 		<td><div id=""style=" padding:4px;"></div>
 	</tr>
 </table>
+
+<iframe id="download" style="display:none;"></iframe>
+
 <!-- END: corps -->

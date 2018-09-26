@@ -43,6 +43,7 @@
 	if ($fonc=="Enregistrer")
 	{
 		$MyOptTab=$_REQUEST["MyOptTab"];
+
 		$ret=GenereVariables($MyOptTab);
 		// $tmpl_x->assign("msg_ret", $ret);
 		// $tmpl_x->parse("corps.msgok");

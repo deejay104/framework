@@ -7,6 +7,8 @@
 $tabRoles["AccesExport"]="Accès à la page des exports";
 $tabRoles["AccesConfiguration"]="Accès au module de configuration";
 $tabRoles["AccesConfigVar"]="Accès à la page de configuration des variables";
+$tabRoles["AccesConfigBase"]="Accès à la page de configuration des variables";
+$tabRoles["AccesConfigExport"]="Autorise l'import/Export de la configuration";
 $tabRoles["AccesConfigGroupes"]="Accès à la page de configuration des groupes";
 $tabRoles["AccesConfigDonneesUser"]="Accès à la page de configuration des données utilisateurs personnalisées";
 $tabRoles["AccesConfigCrontab"]="Accès à la page de gestion des taches planifiées";
@@ -21,7 +23,6 @@ $tabRoles["CreeGroupe"]="Créer un nouveau groupe";
 $tabRoles["SupprimeActualite"]="Suppression d'une actualite";
 $tabRoles["SupprimeMessage"]="Supprimer un message dans le module document";
 $tabRoles["SupprimeGroupe"]="Supprimer un groupe";
-
 
 // ---- Documents
 $tabRoles["CreeClasseur"]="Créer un nouveau classeur dans le module document";
