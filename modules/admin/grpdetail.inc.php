@@ -37,6 +37,11 @@
 // ---- Vérifie les variables
 	$sup=checkVar("sup","numeric");
 	$search=checkVar("search","varchar");
+	$grp=checkVar("grp","varchar",3);
+
+	$form_grp=checkVar("form_grp","varchar");
+	$form_desc=checkVar("form_desc","varchar");
+	$form_princ=checkVar("form_princ","varchar");
 
 // ---- Charge les roles
 	$tabRoles=array();

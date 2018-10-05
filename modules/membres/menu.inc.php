@@ -1,10 +1,19 @@
 <?
 // ---- Charge le template
-  	$tmpl_menu = new XTemplate("modules/membres/tmpl/menu.htm");
+  	// $tmpl_menu = new XTemplate("modules/membres/tmpl/menu.htm");
+  	$tmpl_menu = LoadTemplate("menu");
 	$tmpl_menu->assign("path_module",$corefolder."/".$module."/".$mod);
 
 // ---- Sélectionne le menu courant
-	if (($rub=="detail") && ($fonc=="modifier"))
+	if (($rub=="detail") && ($fonc=="modifier") && ($id>0))
+	{
+		$tmpl_menu->assign("class_".$rub,"class='pageTitleSelected'");
+	}
+	else if (($rub=="detail") && ($id==0))
+	{
+		$tmpl_menu->assign("class_add","class='pageTitleSelected'");
+	}
+	else if ($rub!="detail")
 	{
 		$tmpl_menu->assign("class_".$rub,"class='pageTitleSelected'");
 	}

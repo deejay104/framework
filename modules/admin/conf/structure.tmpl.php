@@ -218,6 +218,7 @@ $tabTmpl=Array
 		"groupe" => Array("Type" => "varchar(5)", "Default"=>"ALL"),
 		"actif" => Array("Type" => "enum('oui','non','off')", "Default" => "oui", "Index" => "1", ),
 		"virtuel" => Array("Type" => "enum('oui','non')", "Default" => "non", "Index" => "1", ),
+		"language" => Array("Type" => "enum('fr','en')", "Default" => "fr" ),
 		"aff_msg" => Array("Type" => "tinyint(3) unsigned", "Default" => "0", ),
 		"dte_login" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
 		"uid_creat" => Array("Type" => "int(10) unsigned", "Default" => "0"),

@@ -22,7 +22,7 @@ class user_core extends objet_core
 	protected $mod="membres";
 	protected $rub="detail";
 
-	protected $type=array("prenom"=>"ucword","nom"=>"uppercase","initiales"=>"uppercase","mail"=>"email","commentaire"=>"text","notification"=>"bool","virtuel"=>"bool","groupe"=>"uppercase","aff_jour"=>"date","dte_login"=>"datetime");
+	protected $type=array("prenom"=>"ucword","nom"=>"uppercase","initiales"=>"uppercase","mail"=>"email","commentaire"=>"text","notification"=>"bool","virtuel"=>"bool","groupe"=>"uppercase","aff_jour"=>"date","dte_login"=>"datetime","language"=>"enum");
 	protected $droit=array(
 		"prenom"=>"ModifUserInfos",
 		"nom"=>"ModifUserInfos",
@@ -35,11 +35,28 @@ class user_core extends objet_core
 		"notification"=>array("ownerid","ModifUserInfos"),
 	);
 
-	// protected $tabList=array(
-		// "status"=>array('1new'=>'Nouveau','2sched'=>'Prochaine version','3inprg'=>'En cours','4test'=>'En test','5close'=>'Publié'),
-		// "module"=>array("core"=>"Framework","user"=>"Utilisateur","admin"=>"Administration","docs"=>"Documents","custom"=>"Autre")
-	// );
+	protected $tabList=array(
+		"language"=>array(
+			"fr"=>array('fr'=>"Français",'en'=>'Anglais'),
+			"en"=>array('fr'=>"French",'en'=>'English'),
+		)
+	);
 
+	protected $tabLang=array(
+		"err_nickname"=>array(
+			"fr"=>"Les initiales choisies existent déjà !",
+			"en"=>"This nickname already exists",
+		),
+		"err_mail"=>array(
+			"fr"=>"Le mail choisi existe déjà !",
+			"en"=>"This email already exists",
+		),
+		"err_name"=>array(
+			"fr"=>"Le nom est vide",
+			"en"=>"Name is mandatory",
+		)
+	);
+	
 	# Constructor
 	function __construct($id=0,$sql,$me=false)
 	{
@@ -60,6 +77,7 @@ class user_core extends objet_core
 		$this->data["notification"]="oui";
 		$this->data["commentaire"]="";
 		$this->data["virtuel"]="non";
+		$this->data["language"]="fr";
 		$this->data["groupe"]="";
 		$this->data["aff_msg"]="0";
 		$this->data["dte_login"]="0000-00-00 00:00:00";
@@ -427,9 +445,10 @@ class user_core extends objet_core
 		return "";
 	}
 
-	
+
+			
 	function Valid($key,$v,$ret=false)
-	{
+	{ global $lang;
 		$v=stripslashes(parent::Valid($key,$v,true));
 
 		if ($key=="initiales")
@@ -448,7 +467,7 @@ class user_core extends objet_core
 			$res = $sql->QueryRow($query);
 			if (($res["nb"]>0) && ($ret==false) && ($v!=""))
 			{
-				return "Les initiales choisies existent déjà !";
+				return $this->tabLang["err_nickname"][$lang];
 			}
 			else if ($res["nb"]>0)
 			{
@@ -467,7 +486,7 @@ class user_core extends objet_core
 			$res = $sql->QueryRow($query);
 			if (($res["nb"]>0) && ($ret==false) && ($v!=""))
 			{
-				return "Le mail choisi existe déjà !";
+				return $this->tabLang["err_mail"][$lang];
 			}
 			else if ($res["nb"]>0)
 			{
@@ -487,7 +506,7 @@ class user_core extends objet_core
 		{
 		  	if ($v=="")
 		  	  {
-		  	  	return "Le nom est vide.<br />";
+		  	  	return $this->tabLang["err_name"][$lang];
 			  }
 			$vv=strtolower($v);
 		}
@@ -568,7 +587,7 @@ class user_core extends objet_core
 // *********************************************************************************************************
 
 
-function ListActiveUsers($sql,$order="",$tabtype,$virtuel="non")
+function ListActiveUsers($sql,$order="",$tabtype=array(),$virtuel="non")
 {
 	global $MyOpt;
  

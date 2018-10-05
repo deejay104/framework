@@ -12,7 +12,9 @@
 	$tmpl_x->assign("aff_menu",$aff_menu);
 
 // ---- Variables
-	$fonc=checkVar("fonc","varchar");
+	$id=checkVar("id","numeric");
+	$form_nom=checkVar("form_nom","array");
+	$form_type=checkVar("form_type","array");
 	
 // ---- Sauvegarde
 	if (($fonc=="Enregistrer") && (GetDroit("ModifUtilDonnees")))

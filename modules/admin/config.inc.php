@@ -42,7 +42,7 @@
 // ---- Enregistre le fichier des variables
 	if ($fonc=="Enregistrer")
 	{
-		$MyOptTab=$_REQUEST["MyOptTab"];
+		$MyOptTab=checkVar("MyOptTab","array");
 
 		$ret=GenereVariables($MyOptTab);
 		// $tmpl_x->assign("msg_ret", $ret);

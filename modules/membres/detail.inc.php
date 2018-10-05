@@ -20,9 +20,6 @@
 ?>
 
 <?
-	if (!is_numeric($id))
-      { $id=0; }
-
 	if ( (!GetDroit("AccesMembre")) && (!GetMyId($id)) )
 	  { FatalError("Accès non autorisé (AccesMembre)"); }
 
@@ -30,12 +27,16 @@
 	require_once ("class/echeance.inc.php");
 
 // ---- Charge le template
-	$tmpl_x = new XTemplate (MyRep("detail.htm"));
 	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 
 	
 // ---- Initialisation des variables
 	$tmpl_x->assign("form_checktime",$_SESSION['checkpost']);
+
+	$id=checkVar("id","numeric");
+	$form_data=checkVar("form_data","array");
+	$form_droits=checkVar("form_droits","array");
+	$form_donnees=checkVar("form_donnees","array");
 
 	$msg_erreur="";
 	$msg_confirmation="";
@@ -46,25 +47,26 @@
 	  { $usr = new user_core(0,$sql,false); }
 
 // ---- Sauvegarde les infos
-	if (($fonc=="Enregistrer") && (($id=="") || ($id==0)) && ((GetDroit("CreeUser"))) && (!isset($_SESSION['tab_checkpost'][$checktime])))
+	if (($fonc==$tabLang["lang_save"]) && (($id=="") || ($id==0)) && ((GetDroit("CreeUser"))) && (!isset($_SESSION['tab_checkpost'][$checktime])))
 	{
 		$usr->Create();
 		$id=$usr->id;
 	}
-	else if (($fonc=="Enregistrer") && ($id=="") && (isset($_SESSION['tab_checkpost'][$checktime])))
+	else if (($fonc==$tabLang["lang_save"]) && ($id=="") && (isset($_SESSION['tab_checkpost'][$checktime])))
 	{
 		$mod="membres";
 		$affrub="index";
 	}
 
-	if (($fonc=="Enregistrer") && ((GetMyId($id)) || (GetDroit("ModifUser"))) && (!isset($_SESSION['tab_checkpost'][$checktime])))
+	if (($fonc==$tabLang["lang_save"]) && ((GetMyId($id)) || (GetDroit("ModifUser"))) && (!isset($_SESSION['tab_checkpost'][$checktime])))
 	{
 		// Sauvegarde les données
 		if (count($form_data)>0)
 		{
 			foreach($form_data as $k=>$v)
 		  	{
-		  		$msg_erreur.=$usr->Valid($k,$v);
+		  		$err=$usr->Valid($k,$v);
+				affInformation($err,"error");
 		  	}
 		}
 
@@ -73,7 +75,7 @@
 		{
 			$id=$usr->id;
 		}
-		$msg_confirmation.="Vos données ont été enregistrées.<BR>";
+		$msg_confirmation.=$tabLang["lang_datasaved"].".<BR>";
 
 		// Sauvegarde la photo
 		$form_photo=$_FILES["form_photo"];
@@ -91,8 +93,10 @@
 			}
 		  	$doc = new document_core(0,$sql,"avatar");
 		  	$doc->droit="ALL";
-		  	$msg_erreur.=$doc->Save($id,$_FILES["form_photo"]["name"],$_FILES["form_photo"]["tmp_name"]);
+		  	$err=$doc->Save($id,$_FILES["form_photo"]["name"],$_FILES["form_photo"]["tmp_name"]);
 			$doc->Resize(200,240);
+
+			affInformation($err,"error");
 		}
 
 		// Sauvegarde un document
@@ -109,7 +113,7 @@
 		}
 
 		// Sauvegarde des échéances
-		if (is_array($form_echeance))
+		if ((isset($form_echeance)) && (is_array($form_echeance)))
 		{
 			foreach($form_echeance as $i=>$d)
 			{
@@ -125,7 +129,7 @@
 					$dte->Save();
 				}
 				else
-				{
+				{!!
 					$dte->Delete();
 				}
 			}
@@ -137,12 +141,13 @@
 	// Sauvegarde les droits
 	if (($fonc=="Enregistrer") && ($id>0) && (GetDroit("ModifUserDroits")) && (is_array($form_droits)))
 	{
-		$msg_erreur.=$usr->SaveDroits($form_droits);
-
+		$err=$usr->SaveDroits($form_droits);
+		affInformation($err,"error");
 	}
 	if (($fonc=="Enregistrer") && ($id>0) && (GetDroit("ModifUserGroupe")) && ($usr->data["groupe"]!=""))
 	{
-		$msg_erreur.=$usr->AddGroupe($usr->data["groupe"]);
+		$err=$usr->AddGroupe($usr->data["groupe"]);
+		affInformation($err,"error");
 	}
 
  
@@ -151,7 +156,8 @@
 	if (($fonc=="Enregistrer") && ($id>0) && (GetDroit("ModifUserDonnees")) && (is_array($form_donnees)))
 	{
 		$usr->LoadDonneesComp();
-		$msg_erreur.=$usr->SaveDonneesComp($form_donnees);
+		$err=$usr->SaveDonneesComp($form_donnees);
+		affInformation($err,"error");
 	}
 
 // ---- Supprimer l'utilisateur
@@ -197,9 +203,8 @@
 		$tmpl_x->assign("id", $id);
 
 		$usrmaj = new user_core($usr->uid_maj,$sql);
-		$tmpl_x->assign("info_maj", $usrmaj->aff("fullname")." ".$usrmaj->LastUpdate());
+		$tmpl_x->assign("info_maj", $usrmaj->aff("fullname")." ".$usr->LastUpdate());
 		$tmpl_x->assign("info_connect", sql2date($usr->data["dte_login"]));
-	
 	  }
 	else if (GetDroit("CreeUser"))
 	  {
@@ -348,7 +353,7 @@
 	}
 
 // ---- Affiche le bloc de données		
-	if (($left!='') || (count($usr->donnees)>0))
+	if (((isset($left)) && ($left!='')) || (count($usr->donnees)>0))
 	{
 		$tmpl_x->parse("corps.aff_donnees");
 	}

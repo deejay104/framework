@@ -68,24 +68,24 @@
 			<div class="loginAuthLogo">
 				<ul>
 					<li><img src="{corefolder}/static/images/icn64_login.png"></li>
-				  <li><h1>Authentification</h1></li>
+				  <li><h1>{core_authenticate}</h1></li>
 				</ul>
 			</div>
 		</div>
 			
 		<div class="loginAuthDesc">
-				Merci d'entrer votre adresse mail ou vos initiales ainsi 
-				que votre mot de passe.<br />
+				
+				{core_authtxt}<br />
 				<font color=red><B>{errmsg}</b></font>
 		</div>
 
 		<div class="loginIdent">
-			<p><label for="login">Utilisateur</label> <input name="username" value="{username}" id="login" maxlength=256></p>
-			<p><label for="pwd">Mot de passe</label> <input name="mypassword" value="" type=password id="pwd" maxlength=256 /></p>
+			<p><label for="login">{core_user}</label> <input name="username" value="{username}" id="login" maxlength=256></p>
+			<p><label for="pwd">{core_password}</label> <input name="mypassword" value="" type=password id="pwd" maxlength=256 /></p>
 		</div>
 
 		<div id="loginSubmit" class="loginSubmit">
-			<input type="submit" id="fonc" name="fonc" value="Connecter">
+			<input type="submit" id="fonc" name="fonc" value="{core_connect}">
 		</div>
 	</div>
 
@@ -94,7 +94,7 @@
 			document.getElementById("loginSubmit").style.visibility="hidden";
 		</script>
 		<div id='configdb' style='border: 1px solid #000000; margin-top: 70px; padding: 4px; '>
-		Vous devez creer le fichier de connexion à la base de données.
+		{login_noconfig}.
 		</div>
 <!-- END: configdb -->
 <!-- BEGIN: createdb -->
@@ -102,7 +102,7 @@
 		<script type="text/javascript" src="{corefolder}/external/jquery/jquery-ui.min.js"></script>
 
 		<div id='createdb' style='width: 450px; border: 1px solid #000000; margin-left:10px; margin-top: 60px; margin-bottom:40px; padding: 4px;'>
-		Mise à jour de l'installation...
+		{login_update}...
 		</div>
 		
 		<script>

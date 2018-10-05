@@ -11,9 +11,9 @@ function GetModule($mod)
 	  { return false; }
   }
 
-function MyRep($file,$mymod="")
+function MyRep($file,$mymod="",$custom=true)
 {
-	global $mod, $theme,$appfolder;
+	global $mod,$theme,$appfolder;
 	
 	if ($mymod=="")
 	{
@@ -23,25 +23,36 @@ function MyRep($file,$mymod="")
   	$myfile=substr($file,0,strrpos($file,"."));
 	$myext=substr($file,strrpos($file,".")+1,strlen($file)-strrpos($file,".")-1);
 
-  	if ((file_exists($appfolder."/modules/$mymod/tmpl/$myfile.$theme.$myext")) && ($mymod!=""))
-  	  { return $appfolder."/modules/$mymod/tmpl/$myfile.$theme.$myext"; }
-	else if ((file_exists($appfolder."/modules/$mymod/tmpl/$file")) && ($mymod!=""))
-  	  { return $appfolder."/modules/$mymod/tmpl/$file"; }
-	else if ((file_exists($appfolder."/modules/$mymod/$file")) && ($mymod!=""))
-  	  { return $appfolder."/modules/$mymod/$file"; }
-  	else if ((file_exists("modules/$mymod/tmpl/$myfile.$theme.$myext")) && ($mymod!=""))
+	if ($custom)
+	{
+		if ((file_exists($appfolder."/modules/$mymod/tmpl/$myfile.$theme.$myext")) && ($mymod!=""))
+		  { return $appfolder."/modules/$mymod/tmpl/$myfile.$theme.$myext"; }
+		else if ((file_exists($appfolder."/modules/$mymod/tmpl/$file")) && ($mymod!=""))
+		  { return $appfolder."/modules/$mymod/tmpl/$file"; }
+		else if ((file_exists($appfolder."/modules/$mymod/$file")) && ($mymod!=""))
+		  { return $appfolder."/modules/$mymod/$file"; }
+		else if ((file_exists($appfolder."/modules/$mymod/lang/$file")) && ($mymod!=""))
+		  { return $appfolder."/modules/$mymod/lang/$file"; }
+	}
+
+	if ((file_exists("modules/$mymod/tmpl/$myfile.$theme.$myext")) && ($mymod!=""))
   	  { return "modules/$mymod/tmpl/$myfile.$theme.$myext"; }
 	else if ((file_exists("modules/$mymod/tmpl/$file")) && ($mymod!=""))
   	  { return "modules/$mymod/tmpl/$file"; }
 	else if ((file_exists("modules/$mymod/$file")) && ($mymod!=""))
   	  { return "modules/$mymod/$file"; }
-  	else
+	else if ((file_exists("modules/$mymod/lang/$file")) && ($mymod!=""))
+  	  { return "modules/$mymod/lang/$file"; }
+
+	else
   	  { return ""; }
   }
 
 function checkVar($var,$type,$len=256)
 {
-	global $_REQUEST;
+	global $_REQUEST,$tabPost;
+
+	$tabPost[$var]="ok";
 	
 	if (!isset($_REQUEST[$var]))
 	{
@@ -51,6 +62,7 @@ function checkVar($var,$type,$len=256)
 	{
 		$v=$_REQUEST[$var];
 	}
+
 	if ($type=="numeric")
 	{
 		if (is_numeric($v))
@@ -136,6 +148,24 @@ function myPrint($txt)
 }
 
 
+// Charge un template
+function LoadTemplate($tmpl,$mymod="")
+{ global $tabLang;
+	$t=MyRep($tmpl.".htm",$mymod);
+	if (!file_exists($t))
+	{
+		$t=MyRep("empty.htm","default");
+	}
+
+	$tmpl = new XTemplate ($t);
+
+	foreach ($tabLang as $key=>$val)
+	{
+		$tmpl->assign($key, $val);
+	}
+
+	return $tmpl;
+}
 
 // Affiche un temps en minute en heures/minutes
 function AffTemps($tps,$short="yes") {
@@ -1064,7 +1094,7 @@ function ConvertColor2RGB($col,$add=0)
 
 // Affiche une date
 function DisplayDate($dte)
-{
+{ global $tabLang;
 	$d=time()-strtotime($dte);
 	$mid=time()-strtotime(date("Y-m-d 23:59:59",time()-3600*24));
 
@@ -1074,43 +1104,43 @@ function DisplayDate($dte)
 
 	if (($s<60) && ($m==0) && ($h==0))
 	  {
-			return "il y a ".$s." secondes";
+			return $tabLang["core_since"].$s." ".$tabLang["core_seconds"].$tabLang["core_ago"];
 	  }
 	else if (($m<2) && ($h==0))
 	  {
-			return "il y a 1 minute";
+			return $tabLang["core_since"]."1 ".$tabLang["core_minute"].$tabLang["core_ago"];
 	  }
 	else if (($m<60) && ($h==0))
 	  {
-			return "il y a ".$m." minutes";
+			return $tabLang["core_since"].$m." ".$tabLang["core_minutes"].$tabLang["core_ago"];
 	  }
 	else if (($h<2) && ($m==0))
 	  {
-			return "il y a  1 heure";
+			return $tabLang["core_since"]."1 ".$tabLang["core_hour"].$tabLang["core_ago"];
 	  }
 	else if (($h<2) && ($m<2))
 	  {
-			return "il y a  1 heure"." et 1 minute";
+			return $tabLang["core_since"]."1 ".$tabLang["core_hour"]." et 1 ".$tabLang["core_minute"].$tabLang["core_ago"];
 	  }
 	else if ($h<2)
 	  {
-			return "il y a  1 heure"." et ".$m." minutes";
+			return $tabLang["core_since"]."1 ".$tabLang["core_hour"]." et ".$m." ".$tabLang["core_minutes"].$tabLang["core_ago"];
 	  }
 	else if (($d<$mid) && ($h<2))
 	  {
-			return "il y a  1 heure et ".$m." minutes";
+			return $tabLang["core_since"]."1 ".$tabLang["core_hour"]." et ".$m." ".$tabLang["core_minutes"].$tabLang["core_ago"];
 	  }
 	else if ($d<$mid)
 	  {
-			return "il y a ".$h." heures et ".$m." minutes";
+			return $tabLang["core_since"].$h." ".$tabLang["core_hourss"]." ".$tabLang["core_and"]." ".$m." ".$tabLang["core_minutes"].$tabLang["core_ago"];
 	  }
 	else if (($d<$mid+3600*34) && ($d>$mid))
 	  {
-			return "hier à ".sql2time($dte,"no");
+			return $tabLang["core_yesterday"]." ".sql2time($dte,"no");
 	  }
 	else
 	  {
-			return "le ".sql2date($dte,"jour")." à ".sql2time($dte,"no");
+			return $tabLang["core_the"]." ".sql2date($dte,"jour")." ".$tabLang["core_at"]." ".sql2time($dte,"no");
 	  }	
 
 
@@ -1293,10 +1323,13 @@ function getCompassDirection( $bearing )
 function affInformation($txt,$res)
 {
 	global $tmpl_prg;
-	
-	$tmpl_prg->assign("msg_infos", $txt);
-	$tmpl_prg->assign("msg_class", $res);
-	$tmpl_prg->parse("main.aff_infos");
+
+	if ($txt!="")
+	{
+		$tmpl_prg->assign("msg_infos", $txt);
+		$tmpl_prg->assign("msg_class", $res);
+		$tmpl_prg->parse("main.aff_infos");
+	}
 }
 
 function GenereStyle($name)

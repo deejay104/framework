@@ -11,38 +11,36 @@
 	  { $uid = $_SESSION['uid']; }
 
 // ---- Récupère les variables transmises
-	$rub="";
-	$username="";
-	$password="";
-	$myid=0;
-	$fonc="";
-	if (isset($_REQUEST['rub']))
-	  { $rub=$_REQUEST["rub"]; }
-	$username=$_REQUEST["username"];
-	$password=$_REQUEST["password"];
-	$myid=$_REQUEST["myid"];
-	$fonc=$_REQUEST["fonc"];
-	
-	if ($_REQUEST["varlogin"]!="")
-	{
-		$var=$_REQUEST["varlogin"];
-	}
-	else
+	$rub=checkVar("rub","varchar");
+	$fonc=checkVar("fonc","varchar");
+	$username=checkVar("username","varchar");
+	$password=checkVar("password","varchar");
+	$myid=checkVar("myid","numeric");
+
+	$var=checkVar("varlogin","varchar");
+	if ($var=="")
 	{
 	  	$var=$_SERVER["REQUEST_URI"];
 	}
 
 	$var=preg_replace("/\/login.php/","",$var);
 
-// ---- Charge les prérequis
-	require ("class/xtpl.inc.php");
-	require ("class/mysql.inc.php");
+
+// ---- Force la timezone
+	if ($MyOpt["timezone"]!="")
+	  { date_default_timezone_set($MyOpt["timezone"]); }
 
 // ---- Charge les variables
 	require_once("lib/fonctions.inc.php");
 
-	if ($MyOpt["timezone"]!="")
-	  { date_default_timezone_set($MyOpt["timezone"]); }
+// ---- Charge le fichier de langue
+	$lang="fr";
+	$tabLang=array();
+	require (MyRep("lang.".$lang.".php","default",false));
+ 
+// ---- Charge les prérequis
+	require ("class/xtpl.inc.php");
+	require ("class/mysql.inc.php");
 
 // ---- Gestion des thèmes
 	$theme="";
@@ -77,7 +75,7 @@
 	$ok=0;
 	$errmsg="";
 
-	if (($fonc == "Connecter") && ($mysqluser!="") && ($MyOpt["tbl"]!=""))
+	if (($fonc == $tabLang["core_connect"]) && ($mysqluser!="") && ($MyOpt["tbl"]!=""))
 	{
 		if ($password=="") { $password="nok"; }
 		$username=strtolower($username);
@@ -118,7 +116,7 @@
 
 // ---- Charge les templates
 	$module="modules";
-	$tmpl_prg = new XTemplate (MyRep("login.htm","default"));
+	$tmpl_prg = LoadTemplate("login","default");
 
 	if ($tmpl_prg->text("main.unsecure")=="")
 	  { $tmpl_prg->parse("main.secure"); }
@@ -130,7 +128,7 @@
 	$tmpl_prg->assign("myid", $myid);
 	$tmpl_prg->assign("var", $var);
 	$tmpl_prg->assign("errmsg", $errmsg);
-	$tmpl_prg->assign("version", $version."-".$core_version.(($MyOpt["maintenance"]=="on") ? " - MAINTENANCE ACTIVE" : ""));
+	$tmpl_prg->assign("version", $version."-".$core_version.(($MyOpt["maintenance"]=="on") ? " - ".ucwords($tabLang["core_maintenance"]) : ""));
 	$tmpl_prg->assign("site_title", $MyOpt["site_title"]);
 	$tmpl_prg->assign("corefolder", $corefolder);
 
@@ -171,8 +169,5 @@
 	$tmpl_prg->parse("main");
 	echo $tmpl_prg->text("main");
 
-
-// ---- Décharge les variables postées
-	eval ("foreach( \$_".$_SERVER["REQUEST_METHOD"]." as \$key=>\$value) { unset (\$_".$_SERVER['REQUEST_METHOD']."[\$key]); eval(\"\$_SESSION[\$key];\"); }");
 
 ?>

@@ -19,6 +19,11 @@
 */
 ?>
 <?php
+	if ($MyOpt["debug"]=="on")
+	{
+		$starttime=microtime();
+	}
+
 
 // ---- Header de la page
 	// Date du passé
@@ -52,18 +57,36 @@
 
 	eval($e);
 
+	if (!isset($MyOpt))
+	{
+		$MyOpt=array();
+	}
 
-// ---- Vérifie la variable $mod
-	if (!isset($mod))
-	  { $mod="default"; }
-	if (!preg_match("/^[a-z0-9_]*$/",$mod))
-	  { $mod = "default"; }
-	if (trim($mod)=="")
-	  { $mod = "default"; }
+	$tabPost=array();
+
+// ---- Force la timezone
+	if ($MyOpt["timezone"]!="")
+	  { date_default_timezone_set($MyOpt["timezone"]); }
 
 // ---- Charge les bibliothèques
 	require ("lib/fonctions.inc.php");
 
+
+	
+// ---- Vérifie la variable $mod
+	$mod=checkVar("mod","varchar");
+	if (trim($mod)=="")
+	  { $mod = "default"; }
+	if (!preg_match("/^[a-z0-9_]*$/",$mod))
+	  { $mod = "default"; }
+
+// ---- Vérifie la variable $rub
+	$rub=checkVar("rub","varchar");
+	if (trim($rub)=="")
+	  { $rub = "index"; }
+	if (!preg_match("/^[a-z0-9_]*$/",$rub))
+	  { $rub = "index"; }
+  
 // ---- Nettoyage des variables
 	$fonc=checkVar("fonc","varchar");
 
@@ -87,10 +110,6 @@
 		$appfolder="..";
 	}
 
-	if ($MyOpt["timezone"]!="")
-	  { date_default_timezone_set($MyOpt["timezone"]); }
-
-	$lang="fr";
   
 // ---- Gestion des thèmes
 
@@ -100,7 +119,8 @@
 // Mozilla/5.0 (iPad; U; CPU OS 4_3_3 like Mac OS X; en-us) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8J3 Safari/6533.18.5
 
 	$theme="";
-	if ( (isset($_REQUEST["settheme"])) && ($_REQUEST["settheme"]!="") )
+	$settheme=checkVar("settheme","varchar");
+	if ($settheme!="")
 	{	
 		$themes["default"]="";
 		$themes["phone"]="phone";
@@ -148,35 +168,29 @@
 	$res_user=$myuser->data;
 	$token=$uid;
 
+// ---- Charge le fichier de langue
+	$lang=checkVar("lang","varchar");
+	if ($lang=="")
+	{
+		$lang=$myuser->val("language");
+	}
+	$tabLang=array();
+	require (MyRep("lang.".$lang.".php","default",false));
+
+// ---- Maintenance	
 	if (($MyOpt["maintenance"]=="on") && (!GetDroit("SYS")))
 	{
-	  	echo "Ce site est en maintenance.<br/>";
-	  	echo "Merci de retenter votre connexion dans quelques instant.<br/>";
+	  	echo $tabLang["core_maintenancetxt"];
 	  	exit;
 	}	  	
 
 
-// ---- Vérifie la variable $rub
-	if (!isset($rub))
-	{
-		$rub="index";
-	}
-	if (!preg_match("/^[a-z0-9_]*$/",$rub))
-	{
-		$rub = "index";
-	}
-	if (trim($rub)=="")
-	{
-		$rub = "index";
-	}
+
 	
 // ---- Template par default
-	if ( (!isset($tmpl)) || (!preg_match("/[a-z]+/i",$tmpl)) )
-	{
-		$tmpl="default";
-	}
-	$tmpl="$tmpl.htm";
-	$tmpl_prg = new XTemplate (MyRep($tmpl,"default"));
+	$tmpl="default";
+	$tmpl_prg = LoadTemplate($tmpl,"default");
+
 	$tmpl_prg->assign("style_url", GenereStyle(($theme=="phone") ? "phone" : "default"));
 
 	if ($fonc=="imprimer")
@@ -189,7 +203,6 @@
 // ---- Maj du template
 	$tmpl_prg->assign("uid", $uid);
 	$tmpl_prg->assign("username", $myuser->fullname);
-	$tmpl_prg->assign("version", $version."-".$core_version.(($MyOpt["maintenance"]=="on") ? " - MAINTENANCE ACTIVE" : ""));
 	$tmpl_prg->assign("site_title", $MyOpt["site_title"]);
 	$tmpl_prg->assign("corefolder", $corefolder);
 	$tmpl_prg->assign("gl_uid", $gl_uid);
@@ -204,6 +217,7 @@
 	}
 
 // ---- Flag pour ne pouvoir poster qu'une seule fois les mêmes infos
+	$checktime=checkVar("checktime","numeric");
 	if (!isset($_SESSION["checkpost"]))
 	{
 		$_SESSION["checkpost"]=1;
@@ -237,6 +251,10 @@
 	require("modules/default/menu.inc.php");
 	if (file_exists($appfolder."/modules/default/menu.inc.php"))
 	{
+		if (MyRep("lang.".$lang.".php","default")!="")
+		{
+			require (MyRep("lang.".$lang.".php","default"));
+		}
 		require($appfolder."/modules/default/menu.inc.php");
 	}
 
@@ -244,7 +262,7 @@
 	if ($MyOpt["module"]["ameliorations"]=="on")
 	{
 		$tabMenu["amelioration"]["icone"]=$corefolder."/static/modules/ameliorations/img/icn32_titre.png";
-		$tabMenu["amelioration"]["nom"]="Améliorations";
+		$tabMenu["amelioration"]["nom"]=$tabLang["core_improve"];
 		$tabMenu["amelioration"]["droit"]="AccesAmeliorations";
 		$tabMenu["amelioration"]["url"]="mod=ameliorations";
 		$tabMenuPhone["amelioration"]["icone"]=$corefolder."/static/modules/ameliorations/img/icn48_titre.png";
@@ -254,7 +272,7 @@
 	}
 
 	$tabMenu["configuration"]["icone"]=$corefolder."/static/modules/admin/img/icn32_titre.png";
-	$tabMenu["configuration"]["nom"]="Configuration";
+	$tabMenu["configuration"]["nom"]=$tabLang["core_configure"];
 	$tabMenu["configuration"]["droit"]="AccesConfiguration";
 	$tabMenu["configuration"]["url"]="mod=admin";
 
@@ -289,16 +307,27 @@
 		$infos="";
 		$icone="";
 		$corps="";
+		
+		// Charge le fichier de langue du module
+		$l=MyRep("lang.".$lang.".php");
+		if ($l!="")
+		{
+			require ($l);
+		}
 
+		// Charge le template
+		$tmpl_x = LoadTemplate($affrub);
+		
 		// Charge la rubrique
-		if (MyRep("$affrub.inc.php")!="")
+		$r=MyRep($affrub.".inc.php");
+		if ($r!="")
 		{
 			$rub=$affrub;
-			require(MyRep("$affrub.inc.php"));
+			require($r);
 		}
 		else
 		{
-			FatalError("Fichier introuvable","Fichier : $affrub.inc.php");
+			FatalError($tabLang["core_filenotfound"],ucwords($tabLang["core_file"])." : $affrub.inc.php");
 		}
 		
 		if (($affrub==$oldrub) && ($mod==$oldmod))
@@ -319,6 +348,15 @@
 		affInformation(nl2br(htmlentities(utf8_decode($gl_myprint_txt),ENT_COMPAT,'ISO-8859-1')),"warning");
 	}
 
+// ---- Calcul du temps d'affichage
+	$t="";
+	if ($MyOpt["debug"]=="on")
+	{
+		$time=round((microtime()-$starttime)*1000,1);
+		$t=" (".$time."ms)";
+	}
+	$tmpl_prg->assign("version", $version."-".$core_version.(($MyOpt["maintenance"]=="on") ? " - ".ucwords($tabLang["core_maintenance"]) : "").$t);
+
 // ---- Affiche la page
 	$tmpl_prg->parse("main");
 	echo $tmpl_prg->text("main");
@@ -326,8 +364,20 @@
 // ---- Ferme la connexion à la base de données	  
     $sql->closedb();
 
-// ---- Décharge les variables postées
-//	eval ("foreach( \$_".$_SERVER["REQUEST_METHOD"]." as \$key=>\$value) { unset (\$_".$_SERVER['REQUEST_METHOD']."[\$key]);  }");
-
-
+// ---- Debug: Show unitialized variables
+	if ($MyOpt["debug"]=="on")
+	{
+		$txt="";
+		foreach($_REQUEST as $k=>$v)
+		{
+			if (!isset($tabPost[$k]))
+			{
+				$txt.=$k."<br/>";
+			}
+		}
+		if ($txt!="")
+		{
+			echo "<div style='border:1px solid #000000; background-color:#ffcccc; padding:10px; position:fixed; right:20px; top:20px; display: inline-block;'>".$txt."</div>";
+		}
+	}
 ?>

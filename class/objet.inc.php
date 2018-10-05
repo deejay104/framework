@@ -38,6 +38,18 @@ Type:
 // Class Utilisateur
 class objet_core
 {
+	protected $tabLang=array();
+	protected $tabLangObject=array(
+		"yes"=>array(
+			"fr"=>"Oui",
+			"en"=>"Yes",
+		),
+		"no"=>array(
+			"fr"=>"Non",
+			"en"=>"No",
+		)
+	);
+	
 	# Constructor	
 	function __construct($id=0,$sql)
 	{
@@ -55,6 +67,9 @@ class objet_core
 		$this->uid_maj=$gl_uid;
 		$this->dte_maj=date("Y-m-d H:i:s");
 
+		$this->tabLang=array_merge($this->tabLang,$this->tabLangObject);
+
+			
 		if ($id>0)
 		{
 			$this->load($id);
@@ -91,7 +106,7 @@ class objet_core
 	# Show object informations
 	function aff($key,$typeaff="html",$formname="form_data",&$render="")
 	{
-		global $MyOpt;
+		global $MyOpt,$lang;
 
 		if ($render=="")
 		{
@@ -114,7 +129,6 @@ class objet_core
 		{
 			$render="html";
 		}
- 	
 		if ($render=="form")
 		{
 			if ($type=="text")
@@ -123,20 +137,20 @@ class objet_core
 			}
 			else if ($type=="bool")
 		  	{
-				$ret ="<input id='".$key."' type='radio' name=\"".$formname."[$key]\" value='oui' ".(($txt=="oui") ? "checked='checked'" : "")."> Oui";
-				$ret.="<input id='".$key."' type='radio' name=\"".$formname."[$key]\" value='non' ".(($txt=="non") ? "checked='checked'" : "")."> Non";
+				$ret ="<input id='".$key."' type='radio' name=\"".$formname."[$key]\" value='oui' ".(($txt=="oui") ? "checked='checked'" : "")."> ".$this->tabLang["yes"][$lang];
+				$ret.="<input id='".$key."' type='radio' name=\"".$formname."[$key]\" value='non' ".(($txt=="non") ? "checked='checked'" : "")."> ".$this->tabLang["no"][$lang];
 			}
-			else if (($type=="enum") && (is_array($this->tabList[$key])))
+			else if (($type=="enum") && (is_array($this->tabList[$key][$lang])))
 			{
 		  	  	$ret ="<select id='".$key."'  name=\"".$formname."[$key]\">";
-				foreach($this->tabList[$key] as $k=>$v)
+				foreach($this->tabList[$key][$lang] as $k=>$v)
 				{
-					$ret.="<option value=\"".$k."\" ".(($txt==$k) ? "selected" : "").">".$this->tabList[$key][$k]."</option>";
+					$ret.="<option value=\"".$k."\" ".(($txt==$k) ? "selected" : "").">".$this->tabList[$key][$lang][$k]."</option>";
 				}
 		  	  	$ret.="</select>";
 
 			}
-			else if (($type=="multi") && (is_array($this->tabList[$key])))
+			else if (($type=="multi") && (is_array($this->tabList[$key][$lang])))
 			{
 				$t=explode(",",$txt);
 				$tt=array();
@@ -146,9 +160,9 @@ class objet_core
 				}
 
 				$ret="<span>";
-				foreach($this->tabList[$key] as $k=>$v)
+				foreach($this->tabList[$key][$lang] as $k=>$v)
 				{
-					$ret.="<input type='checkbox' name='".$formname."[".$key."][".$k."]' value='".$k."' ".(($tt[$k]=="on") ? "checked" : "")."> ".$this->tabList[$key][$k]."<br />";
+					$ret.="<input type='checkbox' name='".$formname."[".$key."][".$k."]' value='".$k."' ".(($tt[$k]=="on") ? "checked" : "")."> ".$this->tabList[$key][$lang][$k]."<br />";
 				}
 				$ret.="</span>";
 			}
@@ -220,21 +234,21 @@ class objet_core
 			{
 				$ret=AffMontant($txt);
 			}
-			else if (($type=="enum") && (is_array($this->tabList[$key])))
+			else if (($type=="enum") && (is_array($this->tabList[$key][$lang])))
 			{
-				$ret=$this->tabList[$key][$txt];
+				$ret=$this->tabList[$key][$lang][$txt];
 			}
 			else if ($type=="bool")
 		  	{
-				$ret=($txt=='oui') ? "Oui" : "Non";
+				$ret=($txt=='oui') ? $this->tabLang["yes"][$lang] : $this->tabLang["no"][$lang];
 			}
-			else if (($type=="multi") && (is_array($this->tabList[$key])))
+			else if (($type=="multi") && (is_array($this->tabList[$key][$lang])))
 			{
 				$t=explode(",",$txt);
 				$tt=array();
 				foreach($t as $i=>$v)
 				{
-					$tt[]=$this->tabList[$key][$v];
+					$tt[]=$this->tabList[$key][$lang][$v];
 				}
 				$ret=implode(",",$tt);
 			}

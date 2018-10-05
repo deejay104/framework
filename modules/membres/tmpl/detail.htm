@@ -13,10 +13,10 @@
 <INPUT type="hidden" name="id" value="{id}">
 <INPUT type="hidden" name="checktime" value="{form_checktime}">
 
-<p class="lastupdate">Dernière mise à jour : {info_maj}<br />Dernière connexion : {info_connect}</p>
+<p class="lastupdate">{lang_lastupdate} : {info_maj}<br />{lang_lastconnection} : {info_connect}</p>
 
 
-<div class="formulaireTitre">Informations</div>
+<div class="formulaireTitre">{lang_informations}</div>
 
 <table width='100%'>
 	<tr>
@@ -28,37 +28,40 @@
 		<td>
 			<div class="formulaire" style='width:100%; min-height:240px; padding-left: 20px;'>
 				<p>
-					<label for="prenom">Prénom</label>{form_prenom}
+					<label for="prenom">{lang_firstname}</label>{form_prenom}
 				</p>
 				<p>
-					<label for="nom">Nom</label>{form_nom}
+					<label for="nom">{lang_name}</label>{form_nom}
 				</p>
 	
 				<p>
-					<label for="initiales">Initiales</label>{form_initiales}
+					<label for="initiales">{lang_nickname}</label>{form_initiales}
 				</p>
 				<p>
-					<label for="mail">Mail</label>{form_mail}
+					<label for="mail">{lang_email}</label>{form_mail}
 				</p>
 				<!-- BEGIN: virtuel -->
 				<p>
-					<label>Utilisateur virtuel</label>{form_virtuel}
+					<label>{lang_virtual}</label>{form_virtuel}
 				</p>
 				<!-- END: virtuel -->
 				
 				<p>
-					<label>Notifications par mail</label>{form_notification}
+					<label>{lang_notification}</label>{form_notification}
 				</p>
 				<p>
-					<label>Groupe principal</label>{form_groupe}
+					<label>{lang_maingroup}</label>{form_groupe}
+				</p>
+				<p>
+					<label>{lang_language}</label>{form_language}
 				</p>
 
 				<!-- BEGIN: photos -->
 				<p>
-					<label>Photo</label><INPUT name="form_photo" type="file" size=60><br />
+					<label>{lang_picture}</label><INPUT name="form_photo" type="file" size=60><br />
 				</p>
-				<p><label></label>Sélectionner ci-dessus la photo voulue.</p>
-				<p><label></label>Celle-ci sera transférée sur le serveur et remplacera la photo existante.</p>
+				<p><label></label>{lang_selectpicture}</p>
+				<p><label></label>{lang_selectpicture2}</p>
 				<!-- END: photos -->
 			</div>
 		</td>
@@ -69,13 +72,13 @@
 <table width='100%'>
 <tr>
 	<td width='50%' valign="top" style='padding: 5px;'>
-		<div class="formulaireTitre">Commentaires</div>
+		<div class="formulaireTitre">{lang_comments}</div>
 		<div>
 			{form_commentaire}
 		</div>
 
 		<!-- BEGIN: aff_donnees -->
-		<div class="formulaireTitre">Données</div>
+		<div class="formulaireTitre">{lang_data}</div>
 		<!-- BEGIN: aff_donnees_left -->
 		<div class="formulaire" style='padding-left: 20px;'>
 		{aff_data_left}
@@ -94,7 +97,7 @@
 	</td>
 	<td width='50%' valign="top" style='padding: 5px;'>
 		{aff_data_right}
-		<div class="formulaireTitre">Documents</div>
+		<div class="formulaireTitre">{lang_documents}</div>
 		<div class="formulaire" style="padding-left: 20px; padding-bottom: 2px;">
 			<!-- BEGIN: lst_document -->
 			{form_document}
@@ -102,7 +105,7 @@
 		</div>
 
 		<!-- BEGIN: aff_echeances -->
-		<div class="formulaireTitre">Echéances</div>
+		<div class="formulaireTitre">{lang_deadline}</div>
 		<div class="formulaire" style="padding-left: 20px;">
 			<!-- BEGIN: lst_echeance -->
 			{form_echeance}
@@ -112,7 +115,7 @@
 
 		
 		<!-- BEGIN: droits -->
-		<div class="formulaireTitre">Droits</div>
+		<div class="formulaireTitre">{lang_rights}</div>
 		<div  class="formulaire" style="padding-left: 20px;">
 			{form_droits}
 		</div>
@@ -125,8 +128,8 @@
 
 <!-- BEGIN: submit -->
 <div class="formulaireSubmit">
-	<input type="submit" name="fonc" id="enregistrer" value="Enregistrer">
-	<input type="submit" name="fonc" id="annuler" value="Annuler">
+	<input type="submit" name="fonc" id="enregistrer" value="{lang_save}">
+	<input type="submit" name="fonc" id="annuler" value="{lang_cancel}">
 </div>
 <!-- END: submit -->
 

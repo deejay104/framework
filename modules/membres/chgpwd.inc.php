@@ -22,11 +22,14 @@
 
 <?
 // ---- Charge le template
-	$tmpl_x = new XTemplate (MyRep("chgpwd.htm"));
 	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 	$tmpl_x->assign("corefolder", $corefolder);
 
 // ---- Initialisation des variables
+	$id=checkVar("id","numeric");
+	$form_newmdp=checkVar("form_newmdp","varchar");
+	$form_oldmdp=checkVar("form_oldmdp","varchar");
+
 	$tmpl_x->assign("form_checktime",$_SESSION['checkpost']);
 
 	$msg_erreur="";
@@ -78,6 +81,10 @@
 	{
 		$affrub="detail";
 	}
+// ---- Affiche le menu
+	$aff_menu="";
+	require_once("modules/".$mod."/menu.inc.php");
+	$tmpl_x->assign("aff_menu",$aff_menu);
 	  
 // ---- Affiche les infos
 	if ((is_numeric($id)) && ($id>0))

@@ -67,23 +67,22 @@
 				<div class="loginAuthTitre">
 					<p>
 						<label><img src="{corefolder}/static/images/icn64_login.png"></label>
-					  Authentification
+						{core_authenticate}
 					</p>
 				</div>
 			</div>
 	
 			<div class="loginAuthDesc">
-					Merci d'entrer votre adresse mail ou vos initiales ainsi 
-					que votre mot de passe.<br />
+					{core_authtxt}<br />
 					<font color=red><B>{errmsg}</b></font>
 			</div>
 				
 			<div class="loginIdent">
-				<p><label for="login">Utilisateur</label> <input name="username" value="{username}" id="login" maxlength=256></p>
-				<p><label for="pwd">Mot de passe</label> <input name="mypassword" value="" type=password id="pwd" maxlength=256 /></p>
+				<p><label for="login">{core_user}</label> <input name="username" value="{username}" id="login" maxlength=256></p>
+				<p><label for="pwd">{core_password}</label> <input name="mypassword" value="" type=password id="pwd" maxlength=256 /></p>
 			</div>
 			<div class="loginSubmit">
-				<input type="submit" id="fonc" name="fonc" value="Connecter">
+				<input type="submit" id="fonc" name="fonc" value="{core_connect}">
 			</div>
 		</div>
 	

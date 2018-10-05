@@ -29,9 +29,15 @@ class amelioration_core extends objet_core
 	protected $type=array("titre"=>"varchar","description"=>"text","status"=>"enum","module"=>"enum");
 	
 	protected $tabList=array(
-			"status"=>array('1new'=>'Nouveau','2sched'=>'Prochaine version','3inprg'=>'En cours','4test'=>'En test','5close'=>'Publié'),
-			"module"=>array("core"=>"Framework","user"=>"Utilisateur","admin"=>"Administration","docs"=>"Documents","custom"=>"Autre")
-			);
+		"status"=>array(
+			"fr"=>array('1new'=>'Nouveau','2sched'=>'Prochaine version','3inprg'=>'En cours','4test'=>'En test','5close'=>'Publié'),
+			"en"=>array('1new'=>'New','2sched'=>'Next release','3inprg'=>'In progress','4test'=>'Testing','5close'=>'Released'),
+		),
+		"module"=>array(
+			"fr"=>array("core"=>"Framework","user"=>"Utilisateur","admin"=>"Administration","docs"=>"Documents","custom"=>"Autre"),
+			"en"=>array("core"=>"Framework","user"=>"User","admin"=>"Administration","docs"=>"Documents","custom"=>"Other")
+		)
+	);
 
 	# Constructor
 	function __construct($id=0,$sql)

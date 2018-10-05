@@ -2,22 +2,7 @@
 	<img src="{path_module}/img/icn48_login.png" alt="" border=0 />
 <!-- END: icone -->
 <!-- BEGIN: infos -->
-<p><A href="index.php?mod=membres"><IMG src="{path_module}/img/icn32_retour.png" border=0 alt="">Liste</A></p>
-<!-- BEGIN: ajout -->
-<p><A href="index.php?mod=membres&rub=detail&id="><IMG src="{path_module}/img/icn32_ajouter.png" border=0 alt="">&nbsp;Ajouter</A></p>
-<!-- END: ajout -->
-<!-- BEGIN: modification -->
-<p><A href="index.php?mod=membres&rub=detail&id={id}&fonc=modifier"><IMG src="{path_module}/img/icn32_editer.png" border=0 alt="">&nbsp;Modifier</A></p>
-<!-- END: modification -->
-<!-- BEGIN: password -->
-<p><A href="index.php?mod=membres&rub=chgpwd&id={id}"><img src="{path_module}/img/icn32_password.png" border=0 alt="" width=32 height=32 />&nbsp;Changer son mot de passe</A></p>
-<!-- END: password -->
-<!-- BEGIN: desactive -->
-<p><A href="#" OnClick="ConfirmeClick('index.php?mod=membres&rub=detail&id={id}&fonc=desactive','Voulez-vous désactiver cette utilisateur ?');"><IMG src="{path_module}/img/icn32_desactive.png" border=0 alt="">&nbsp;Désactiver</A></p>
-<!-- END: desactive -->
-<!-- BEGIN: suppression -->
-<p><A href="#" OnClick="ConfirmeClick('index.php?mod=membres&rub=detail&id={id}&fonc=delete','Voulez-vous supprimer cette utilisateur ?');"><IMG src="{path_module}/img/icn32_supprimer.png" border=0 alt="">&nbsp;Supprimer</A></p>
-<!-- END: suppression -->
+	{aff_menu}
 <!-- END: infos -->
 
 
@@ -75,22 +60,21 @@
 
 
 
-<div class="formulaireTitre">Changement de mot de passe</div>
+<div class="formulaireTitre">{lang_changepassword}</div>
 
 
 <div class="formulaire" style='padding-left: 20px;'>
-
 <!-- BEGIN: neverset -->
-	<p>Le mot de passe n'a jamais été défini.</p>
+	<p>{lang_passwordneverset}.</p>
 	<br/>
 <!-- END: neverset -->
 
 <!-- BEGIN: oldpwd -->
-		<p><label>Ancien mot de passe</label><INPUT type="password" id="my_form_mdp0" name="my_form_mdp0"></p>
+		<p><label>{lang_lastpwd}</label><INPUT type="password" id="my_form_mdp0" name="my_form_mdp0"></p>
 		<br />
 <!-- END: oldpwd -->
-		<p><label>Nouveau mot de passe</label><INPUT type="password" id="my_form_mdp1" name="my_form_mdp1"></p>
-		<p><label>Confirmation</label><INPUT type="password" id="my_form_mdp2" name="my_form_mdp2"></p>
+		<p><label>{lang_newpwd}</label><INPUT type="password" id="my_form_mdp1" name="my_form_mdp1"></p>
+		<p><label>{lang_confirmpwd}</label><INPUT type="password" id="my_form_mdp2" name="my_form_mdp2"></p>
 
 <!-- BEGIN: oldpwdadm -->
 	<INPUT type="hidden"  id="my_form_mdp0" name="my_form_mdp0">
@@ -98,7 +82,8 @@
 	<INPUT type="hidden" id="form_oldmdp" name="form_oldmdp">
 	<INPUT type="hidden" id="form_newmdp" name="form_newmdp">
 	<INPUT type="hidden" name="fonc" value="Enregistrer">
-	<BR><INPUT type="submit" name="fonc2" value="Enregistrer" OnClick="return cryptData();"> <INPUT type="submit" name="fonc" value="Annuler">
+	<BR><INPUT type="submit" name="fonc2" value="{lang_save}" OnClick="return cryptData();"> <INPUT type="submit" name="fonc" value="{lang_cancel}">
+</div>
 </FORM>
 
 <!-- END: corps -->

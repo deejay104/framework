@@ -20,14 +20,14 @@
 		</p>
 		<div class="responsive-menu">
 			<p class="responsive-menulink">
-	   		<a href="index.php"><img src="{corefolder}/static/modules/actualites/img/icn32_titre.png" /> Accueil</a>
+	   		<a href="index.php"><img src="{corefolder}/static/modules/actualites/img/icn32_titre.png" /> {core_home}</a>
 <!-- BEGIN: menu_lst_sm -->
      		<a href="index.php?{menu_url}"><img src="{menu_icone}" /> {menu_nom}</a>
 <!-- END: menu_lst_sm -->
 
-	   		<a href="index.php?fonc=logout"><img src="{corefolder}/static/images/icn32_logout.png" /> Se déconnecter</A><br />
+	   		<a href="index.php?fonc=logout"><img src="{corefolder}/static/images/icn32_logout.png" /> {core_logout}</A><br />
 			</p>
-			<p style="text-align:center;" class="responsive-menulink"><a href="index.php?settheme=phone" style="width:100%; color:white;">-Affichage smartphone-</a></p>
+			<p style="text-align:center;" class="responsive-menulink"><a href="index.php?settheme=phone" style="width:100%; color:white;">-{core_showmobile}-</a></p>
 		</div> <!-- /.main_menu -->
 	</div> <!-- /responsive_navigation -->
 
@@ -38,12 +38,12 @@
 
 		<div class="navigation">
 			<ul class="main-menu">
-     		<li><a href="index.php"><img src="{corefolder}/static/modules/actualites/img/icn32_titre.png" /> Accueil</a></li>
+     		<li><a href="index.php"><img src="{corefolder}/static/modules/actualites/img/icn32_titre.png" /> {core_home}</a></li>
 <!-- BEGIN: menu_lst -->
      		<li><a href="index.php?{menu_url}"><img src="{menu_icone}" /> {menu_nom}</a></li>
 <!-- END: menu_lst -->
 
-     		<li><a href="index.php?fonc=logout"><img src="{corefolder}/static/images/icn32_logout.png" /> Se déconnecter</A></li>
+     		<li><a href="index.php?fonc=logout"><img src="{corefolder}/static/images/icn32_logout.png" /> {core_logout}</A></li>
 			</ul> <!-- /.main_menu -->
 		</div> <!-- /.navigation -->
 	</div> <!-- /#main-sidebar -->
@@ -67,7 +67,7 @@
 	</div>
 
   <div class='footer'>
-    <div class='lastmod'>{username}&nbsp;-&nbsp;Version {version}&nbsp;&nbsp;</div>
+    <div class='lastmod'>{username}&nbsp;-&nbsp;{core_version} {version}&nbsp;&nbsp;</div>
   </div>
 <!--/PageFooterFmt-->
 

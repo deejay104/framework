@@ -23,13 +23,11 @@
 	require_once ("class/document.inc.php");
 	if (!GetDroit("AccesMembres")) { FatalError("Accès non autorisé (AccesMembres)"); }
 
-// ---- Charge le template
-	$tmpl_x = new XTemplate (MyRep("index.htm"));
-	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
-
 // ---- Valide les variables
 	$aff=checkVar("aff","varchar");
 
+	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
+	
 // ---- Trombino
 	if ($fonc=="trombi")
 	{
@@ -112,13 +110,13 @@
 		else
 		{
 			$tabTitre=array();
-			$tabTitre["prenom"]["aff"]="Prénom";
+			$tabTitre["prenom"]["aff"]=$tabLang["lang_firstname"];
 			$tabTitre["prenom"]["width"]=($theme!="phone") ? 150 : 120;
-			$tabTitre["nom"]["aff"]="Nom";
+			$tabTitre["nom"]["aff"]=$tabLang["lang_name"];
 			$tabTitre["nom"]["width"]=($theme!="phone") ? 200 : 180;
-			$tabTitre["mail"]["aff"]="Mail";
+			$tabTitre["mail"]["aff"]=$tabLang["lang_email"];
 			$tabTitre["mail"]["width"]=280;
-			$tabTitre["groupe"]["aff"]="Groupe";
+			$tabTitre["groupe"]["aff"]=$tabLang["lang_group"];
 			$tabTitre["groupe"]["width"]=150;
 
 			$tabValeur=array();

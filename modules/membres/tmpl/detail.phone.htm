@@ -14,15 +14,7 @@
 <INPUT type="hidden" name="id" value="{id}">
 <INPUT type="hidden" name="checktime" value="{form_checktime}">
 
-<p class="lastupdate">Dernière mise à jour : {info_maj}</p>
-<!-- BEGIN: mod_aviation_detail -->
-<div class="formulaire">
-<p>Solde du compte pilote : {solde}<br />
-Nombre d'heure de vol : {nbheurevol}<br />
-(dont {nbheuresan} depuis le début de l'année et {nbheuresderan} dans les 12 derniers mois précédant la prorogation).</p>
-</div>
-<!-- END: mod_aviation_detail -->
-
+<p class="lastupdate">{lang_lastupdate} : {info_maj}</p>
 
 <!-- BEGIN: msgerror -->
 <div class="msgerror">{msg_erreur}</div>
@@ -33,47 +25,47 @@ Nombre d'heure de vol : {nbheurevol}<br />
 
 {aff_data_right}
 
-<div class="formulaireTitre">Informations</div>
+<div class="formulaireTitre">{lang_informations}</div>
 <div class="formulaire">
 	<p>
-		<label for="prenom">Prénom :</label>{form_prenom}
+		<label for="prenom">{lang_firstname} :</label>{form_prenom}
 	</p>
 	<p>
-		<label for="nom">Nom :</label>{form_nom}
+		<label for="nom">{lang_name} :</label>{form_nom}
 	</p>
 
 	<p>
-		<label for="initiales">Initiales :</label>{form_initiales}
+		<label for="initiales">{lang_nickname} :</label>{form_initiales}
 	</p>
 	<p>
-		<label for="mail">Mail :</label>{form_mail}
+		<label for="mail">{lang_email} :</label>{form_mail}
 	</p>
 	<!-- BEGIN: virtuel -->
 	<p>
-		<label>Utilisateur virtuel</label>{form_virtuel}
+		<label>{lang_virtual}</label>{form_virtuel}
 	</p>
 	<!-- END: virtuel -->
 	<p>
-		<label>Notifications</label>{form_notification}
+		<label>{lang_notification}</label>{form_notification}
 	</p>
 	<p>
-		<label>Groupe principal</label>{form_groupe}
+		<label>{lang_maingroup}</label>{form_groupe}
 	</p>	
 </div>
 
 <!-- BEGIN: photos -->
-<div class="formulaireTitre">Photos</div>
+<div class="formulaireTitre">{lang_picture}</div>
 <div class="formulaire" style="padding-left:10px;">
 	<p>
-		Sélectionner ci-dessous la photo voulue. Celle-ci sera transférée sur le 
-		serveur et remplacera la photo existante.
+		{lang_selectpicture}
+		{lang_selectpicture2}
 	</p>
    <p><INPUT name="form_photo" type="file" style="width: 400px;"></p>
 </div>
 <!-- END: photos -->
 
 
-<div class="formulaireTitre">Documents</div>
+<div class="formulaireTitre">{lang_documents}</div>
 
 <div class="formulaire" style="padding-left: 20px;">
 	<!-- BEGIN: lst_document -->
@@ -82,7 +74,7 @@ Nombre d'heure de vol : {nbheurevol}<br />
 </div>
 
 <!-- BEGIN: aff_echeances -->
-<div class="formulaireTitre">Echéances</div>
+<div class="formulaireTitre">{lang_deadline}</div>
 <div class="formulaire" style="padding-left: 10px;">
 	<!-- BEGIN: lst_echeance -->
 	{form_echeance}
@@ -90,7 +82,7 @@ Nombre d'heure de vol : {nbheurevol}<br />
 </div>
 <!-- END: aff_echeances -->
 
-<div class="formulaireTitre">Données</div>
+<div class="formulaireTitre">{lang_data}</div>
 <div class="formulaire" >
 {aff_data_left}
 <!-- BEGIN: aff_donnees -->
@@ -102,18 +94,15 @@ Nombre d'heure de vol : {nbheurevol}<br />
 <!-- END: aff_donnees -->
 </div>
 
-<div class="formulaireTitre">Commentaires</div>
+<div class="formulaireTitre">{lang_comments}</div>
 <div class="formulaire" style="padding-left: 20px;">
 	{form_commentaire}
 </div>
 
 <!-- BEGIN: droits -->
-<div class="formulaireTitre">Droits</div>
-<div class="formulaire">
-	<p>
-		<label for="droits">Droits</label>
+<div class="formulaireTitre">{lang_rights}</div>
+<div class="formulaire" style="padding-left: 20px;">
 		<span>{form_droits}</span>
-	</p>
 </div>
 <!-- END: droits -->
 
