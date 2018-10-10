@@ -34,7 +34,7 @@
 	require_once("lib/fonctions.inc.php");
 
 // ---- Charge le fichier de langue
-	if ($MyOpt["DefaultLanguage"]!="")
+	if ((isset($MyOpt["DefaultLanguage"])) && ($MyOpt["DefaultLanguage"]!=""))
 	{
 		$lang=$MyOpt["DefaultLanguage"];
 	}

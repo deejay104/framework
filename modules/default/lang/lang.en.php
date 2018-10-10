@@ -43,6 +43,7 @@
 	$tabLang["lang_submit"]="Submit";
 	$tabLang["lang_save"]="Save";
 	$tabLang["lang_cancel"]="Cancel";
+	$tabLang["lang_add"]="Add";
 
 	$tabLang["lang_day"]="Day";
 	$tabLang["lang_week"]="Week";

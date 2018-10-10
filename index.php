@@ -174,7 +174,7 @@
 	{
 		$lang=$myuser->val("language");
 	}
-	else if ($MyOpt["DefaultLanguage"]!="")
+	else if ((isset($MyOpt["DefaultLanguage"])) && ($MyOpt["DefaultLanguage"]!=""))
 	{
 		$lang=$MyOpt["DefaultLanguage"];
 	}
@@ -193,8 +193,6 @@
 	}	  	
 
 
-
-	
 // ---- Template par default
 	$tmpl="default";
 	$tmpl_prg = LoadTemplate($tmpl,"default");

@@ -42,6 +42,7 @@
 	$tabLang["lang_submit"]="Soumettre";
 	$tabLang["lang_save"]="Enregistrer";
 	$tabLang["lang_cancel"]="Annuler";
+	$tabLang["lang_add"]="Ajouter";
 
 	$tabLang["lang_day"]="Jour";
 	$tabLang["lang_week"]="Semaine";
