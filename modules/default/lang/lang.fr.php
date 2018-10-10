@@ -43,9 +43,20 @@
 	$tabLang["lang_save"]="Enregistrer";
 	$tabLang["lang_cancel"]="Annuler";
 	$tabLang["lang_add"]="Ajouter";
+	$tabLang["lang_modify"]="Modifier";
+	$tabLang["lang_enable"]="Activer";
+	$tabLang["lang_disable"]="Désactiver";
+	$tabLang["lang_delete"]="Supprimer";
+	$tabLang["lang_list"]="Liste";
+	$tabLang["lang_lastupdate"]="Dernière mise à jour";
+	$tabLang["lang_lastconnection"]="Dernière connection";
 
+	$tabLang["lang_date"]="Date";
 	$tabLang["lang_day"]="Jour";
 	$tabLang["lang_week"]="Semaine";
 	$tabLang["lang_name"]="Nom";
+
+	$tabLang["lang_datasaved"]="Vos données ont été enregistrées.";
+	$tabLang["lang_dataerror"]="Erreur lors de la sauvegarde";
 
 ?>

@@ -12,7 +12,7 @@
 function Update()
 {
 	document.getElementById("form_update").style.backgroundColor = "";
-	document.getElementById("form_update").innerHTML = "En cours...";
+	document.getElementById("form_update").innerHTML = "{lang_processing}...";
 
 	$(function() {
 		$.ajax({
@@ -207,38 +207,31 @@ $(function() {
 
 <table class="tableauAff">
 	<tr>
-		<th width=250>Test</th>
-		<th width=150>Action</th>
-		<th width=500>Résultat</th>
+		<th width=250>{lang_action}</th>
+		<th width=600>{lang_result}</th>
 	</tr>
 	<tr>
-		<td>Mise à jour</td>
-		<td><input type="submit" value="Mettre à jour" OnClick="Update();" style="width:200px;"></td>
+		<td><input type="submit" value="{lang_update}" OnClick="Update();" style="width:240px;"></td>
 		<td><div id="form_update" style="padding:4px;"></div>
 	</tr>
 	<tr>
-		<td>Suppression des Index</td>
-		<td><input type="submit" value="Re-Index" OnClick="ReIndex();" style="width:200px;"></td>
+		<td><input type="submit" value="{lang_reindex}" OnClick="ReIndex();" style="width:240px;"></td>
 		<td><div id="form_reindex" style="padding:4px;"></div>
 	</tr>
 	<tr>
-		<td>Mise à jour des templates d'emails</td>
-		<td><input type="submit" value="Update Emails" OnClick="ReloadEmails('');" style="width:200px;"></td>
+		<td><input type="submit" value="{lang_updateemailtmpl}" OnClick="ReloadEmails('');" style="width:240px;"></td>
 		<td><div id="form_emails" style="padding:4px;"></div>
 	</tr>
 	<tr>
-		<td>Réinitialise les templates d'emails</td>
-		<td><input type="submit" value="Reset Emails" OnClick="ReloadEmails('init');" style="width:200px;"></td>
+		<td><input type="submit" value="{lang_resetemailtmpl}" OnClick="ReloadEmails('init');" style="width:240px;"></td>
 		<td><div id=""style=" padding:4px;"></div>
 	</tr>
 	<tr>
-		<td>Sauvegarde configuration</td>
-		<td><input type="submit" value="Exporter" OnClick="ExportConf();" style="width:200px;"></td>
+		<td><input type="submit" value="{lang_exportconfig}" OnClick="ExportConf();" style="width:240px;"></td>
 		<td><div id=""style=" padding:4px;"></div>
 	</tr>
 	<tr>
-		<td>Importer configuration</td>
-		<td><input type="submit" value="Importer" OnClick="importDialog.dialog('open');" style="width:200px;"></td>
+		<td><input type="submit" value="{lang_importconfig}" OnClick="importDialog.dialog('open');" style="width:240px;"></td>
 		<td><div id=""style=" padding:4px;"></div>
 	</tr>
 </table>

@@ -581,6 +581,7 @@ class objet_core
 		{
 			$tmpl_x->assign($form."_usr_maj",$this->usr_maj->aff("fullname"));
 		}
+		$tmpl_x->assign($form."_dte_maj",DisplayDate($this->dte_maj));
 		foreach($this->data as $k=>$v)
 		{
 			$tmpl_x->assign($form."_".$k,$this->aff($k,$render));

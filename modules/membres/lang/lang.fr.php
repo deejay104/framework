@@ -1,9 +1,9 @@
 <?
-	$tabLang["lang_list"]="Liste";
+	// $tabLang["lang_list"]="Liste";
 	$tabLang["lang_pictures"]="Trombinoscope";
 	$tabLang["lang_normal"]="Normaux";
 	$tabLang["lang_virtuals"]="Virtuels";
-	$tabLang["lang_add"]="Ajouter";
+	// $tabLang["lang_add"]="Ajouter";
 	
 	
 	$tabLang["lang_firstname"]="Prénom";
@@ -11,17 +11,17 @@
 	$tabLang["lang_email"]="Mail";
 	$tabLang["lang_group"]="Groupe";
 	
-	$tabLang["lang_modify"]="Modifier";
+	// $tabLang["lang_modify"]="Modifier";
 	$tabLang["lang_changepwd"]="Changer mot de passe";
-	$tabLang["lang_disable"]="Désactiver";
-	$tabLang["lang_enable"]="Activer";
-	$tabLang["lang_delete"]="Supprimer";
+	// $tabLang["lang_disable"]="Désactiver";
+	// $tabLang["lang_enable"]="Activer";
+	// $tabLang["lang_delete"]="Supprimer";
 	$tabLang["lang_disablewarn"]="Voulez-vous désactiver cet utilisateur";
 	$tabLang["lang_enablewarn"]="Voulez-vous réactiver cet utilisateur";
 	$tabLang["lang_deletewarn"]="Voulez-vous supprimer cet utilisateur";
 
-	$tabLang["lang_lastupdate"]="Dernière mise à jour";
-	$tabLang["lang_lastconnection"]="Dernière connexion";
+	// $tabLang["lang_lastupdate"]="Dernière mise à jour";
+	// $tabLang["lang_lastconnection"]="Dernière connexion";
 
 	$tabLang["lang_informations"]="Informations";
 	$tabLang["lang_nickname"]="Initiales";
@@ -43,8 +43,6 @@
 
 	$tabLang["lang_save"]="Sauver";
 	$tabLang["lang_cancel"]="Annuler";
-
-	$tabLang["lang_datasaved"]="Vos données ont été enregistrées";
 	
 	$tabLang["lang_changepassword"]="Changement de mot de passe";
 	$tabLang["lang_passwordneverset"]="Le mot de passe n'a jamais été défini";

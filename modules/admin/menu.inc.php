@@ -4,12 +4,11 @@
 	  { header("HTTP/1.0 401 Unauthorized"); exit; }
 
 // ---- Charge le template
-  	$tmpl_menu = new XTemplate("modules/admin/tmpl/menu.htm");
+  	$tmpl_menu = LoadTemplate("menu","",false);
 	$tmpl_menu->assign("path_module",$corefolder."/".$module."/".$mod);
 
 // ---- Sélectionne le menu courant
 	$tmpl_menu->assign("class_".$rub,"class='pageTitleSelected'");
-
 	
 // ---- Affiche les menus
 	if (GetDroit("AccesConfigVar"))

@@ -315,6 +315,11 @@
 		$corps="";
 		
 		// Charge le fichier de langue du module
+		$l=MyRep("lang.".$lang.".php","",false);
+		if ($l!="")
+		{
+			require ($l);
+		}
 		$l=MyRep("lang.".$lang.".php");
 		if ($l!="")
 		{

@@ -149,9 +149,9 @@ function myPrint($txt)
 
 
 // Charge un template
-function LoadTemplate($tmpl,$mymod="")
+function LoadTemplate($tmpl,$mymod="",$custom=true)
 { global $tabLang;
-	$t=MyRep($tmpl.".htm",$mymod);
+	$t=MyRep($tmpl.".htm",$mymod,$custom);
 	if (!file_exists($t))
 	{
 		$t=MyRep("empty.htm","default");

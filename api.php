@@ -97,23 +97,50 @@
 	$module="modules";
 	$gl_mode="api";
 
+// ---- Charge le fichier de langue
+	if ($myuser->val("language")!="")
+	{
+		$lang=$myuser->val("language");
+	}
+	else if ((isset($MyOpt["DefaultLanguage"])) && ($MyOpt["DefaultLanguage"]!=""))
+	{
+		$lang=$MyOpt["DefaultLanguage"];
+	}
+	else
+	{
+		$lang="fr";
+	}
+	$tabLang=array();
+	require ("modules/default/lang/lang.".$lang.".php");
+
 // ---- Vérifie la variable $mod
-	$mod=$_REQUEST["mod"];
-	if (!preg_match("/^[a-z0-9_]*$/",$mod))
-	  { $mod = ""; }
+	$mod=checkVar("mod","varchar");
 	if (trim($mod)=="")
-	  { $mod = ""; }
+	  { $mod = "default"; }
+	if (!preg_match("/^[a-z0-9_]*$/",$mod))
+	  { $mod = "default"; }
 
 // ---- Vérifie la variable $rub
-	$rub=$_REQUEST["rub"];
-	if (!preg_match("/^[a-z0-9_]*$/",$rub))
-	  { $rub = ""; }
+	$rub=checkVar("rub","varchar");
 	if (trim($rub)=="")
-	  { $rub = ""; }
+	  { $rub = "index"; }
+	if (!preg_match("/^[a-z0-9_]*$/",$rub))
+	  { $rub = "index"; }
 
 // ---- Charge la page
 	if (($mod!="") && ($rub!=""))
 	{
+		// Charge le fichier de langue du module
+		if (file_exists("modules/".$mod."/lang/lang.".$lang.".php"))
+		{
+			require ("modules/".$mod."/lang/lang.".$lang.".php");
+		}
+		if (file_exists($appfolder."/modules/".$mod."/lang/lang.".$lang.".php"))
+		{
+			require ($appfolder."/modules/".$mod."/lang/lang.".$lang.".php");
+		}
+
+		// Charge le script
 		if (file_exists($appfolder."/modules/".$mod."/".$rub.".api.php"))
 		{
 			require($appfolder."/modules/".$mod."/".$rub.".api.php");

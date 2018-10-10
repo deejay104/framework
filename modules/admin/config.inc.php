@@ -21,7 +21,7 @@
 
 <?
 // ---- Charge le template
-	$tmpl_x = new XTemplate (MyRep("config.htm"));
+	$tmpl_x = LoadTemplate("config");
 	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 
 // ---- Charge les variables par défault

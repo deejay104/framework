@@ -75,7 +75,6 @@
 		{
 			$id=$usr->id;
 		}
-		$msg_confirmation.=$tabLang["lang_datasaved"].".<BR>";
 
 		// Sauvegarde la photo
 		$form_photo=$_FILES["form_photo"];
@@ -135,25 +134,24 @@
 			}
 		}
 
+		affInformation($tabLang["lang_datasaved"],"ok");
 		$_SESSION['tab_checkpost'][$checktime]=$checktime;		
 	}
 
 	// Sauvegarde les droits
-	if (($fonc=="Enregistrer") && ($id>0) && (GetDroit("ModifUserDroits")) && (is_array($form_droits)))
+	if (($fonc==$tabLang["lang_save"]) && ($id>0) && (GetDroit("ModifUserDroits")) && (is_array($form_droits)))
 	{
 		$err=$usr->SaveDroits($form_droits);
 		affInformation($err,"error");
 	}
-	if (($fonc=="Enregistrer") && ($id>0) && (GetDroit("ModifUserGroupe")) && ($usr->data["groupe"]!=""))
+	if (($fonc==$tabLang["lang_save"]) && ($id>0) && (GetDroit("ModifUserGroupe")) && ($usr->data["groupe"]!=""))
 	{
 		$err=$usr->AddGroupe($usr->data["groupe"]);
 		affInformation($err,"error");
 	}
 
- 
-
 	// Sauvegarde les données utilisateurs
-	if (($fonc=="Enregistrer") && ($id>0) && (GetDroit("ModifUserDonnees")) && (is_array($form_donnees)))
+	if (($fonc==$tabLang["lang_save"]) && ($id>0) && (GetDroit("ModifUserDonnees")) && (is_array($form_donnees)))
 	{
 		$usr->LoadDonneesComp();
 		$err=$usr->SaveDonneesComp($form_donnees);

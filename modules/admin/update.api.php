@@ -18,7 +18,7 @@ function AjoutLog($txt)
 // ---- Vérification des variables
 	require ("modules/$mod/conf/variables.tmpl.php");
 
-	$ret["data"].=AjoutLog("Vérification de la présence des variables");
+	$ret["data"].=AjoutLog($tabLang["lang_checkvar"]);
 
 	$nb=0;
 	$MyOptTab=array();
@@ -78,7 +78,7 @@ function AjoutLog($txt)
 	}
 	
 // ---- Charge la structure des tables de la version_compare
-	$ret["data"].=AjoutLog("Vérification de la base de données");
+	$ret["data"].=AjoutLog($tabLang["lang_checkdb"]);
 	require ("modules/admin/conf/structure.tmpl.php");
 
 	if (file_exists("../modules/admin/conf/structure.tmpl.php"))
@@ -177,11 +177,11 @@ function AjoutLog($txt)
 			if ($res==-1)
 			{
 				$ret["result"]="NOK";
-				$ret["data"].=AjoutLog(" ! Erreur création ".$MyOpt["tbl"]."_".$tab);	
+				$ret["data"].=AjoutLog(" ! ".$tabLang["lang_errorcreate"]." ".$MyOpt["tbl"]."_".$tab);	
 			}
 			else
 			{
-				$ret["data"].=AjoutLog(" - Création table ".$MyOpt["tbl"]."_".$tab);
+				$ret["data"].=AjoutLog(" - ".$tabLang["lang_createtable"]." ".$MyOpt["tbl"]."_".$tab);
 				$tabProd[$MyOpt["tbl"]."_".$tab]["id"]["Type"]=(isset($fields["id"]["Type"])) ? $fields["id"]["Type"] : "int(10) UNSIGNED NOT NULL AUTO_INCREMENT";
 				$tabProd[$MyOpt["tbl"]."_".$tab]["id"]["Index"]="PRIMARY";
 			}
@@ -200,11 +200,11 @@ function AjoutLog($txt)
 					if ($res==-1)
 					{
 						$ret["result"]="NOK";
-						$ret["data"].=AjoutLog(" ! Erreur création ".$MyOpt["tbl"]."_".$tab.":".$field);	
+						$ret["data"].=AjoutLog(" ! ".$tabLang["lang_errorcreate"]." ".$MyOpt["tbl"]."_".$tab.":".$field);	
 					}
 					else
 					{
-						$ret["data"].=AjoutLog(" - Création ".$MyOpt["tbl"]."_".$tab.":".$field." -> ".$tabTmpl[$tab][$field]["Type"]);
+						$ret["data"].=AjoutLog(" - ".$tabLang["lang_create"]." ".$MyOpt["tbl"]."_".$tab.":".$field." -> ".$tabTmpl[$tab][$field]["Type"]);
 					}
 				}
 				// Le champ n'a pas le bon type
@@ -215,11 +215,11 @@ function AjoutLog($txt)
 					if ($res==-1)
 					{
 						$ret["result"]="NOK";
-						$ret["data"].=AjoutLog(" ! Erreur modification ".$MyOpt["tbl"]."_".$tab.":".$field);	
+						$ret["data"].=AjoutLog(" ! ".$tabLang["lang_errormodify"]." ".$MyOpt["tbl"]."_".$tab.":".$field);	
 					}
 					else
 					{
-						$ret["data"].=AjoutLog(" - Modification ".$MyOpt["tbl"]."_".$tab.":".$field." -> ".$tabTmpl[$tab][$field]["Type"]);
+						$ret["data"].=AjoutLog(" - ".$tabLang["lang_modify"]." ".$MyOpt["tbl"]."_".$tab.":".$field." -> ".$tabTmpl[$tab][$field]["Type"]);
 					}
 				}
 
@@ -231,11 +231,11 @@ function AjoutLog($txt)
 					if ($res==-1)
 					{
 						$ret["result"]="NOK";
-						$ret["data"].=AjoutLog(" ! Erreur création Index ".$MyOpt["tbl"]."_".$tab.":".$field);	
+						$ret["data"].=AjoutLog(" ! ".$tabLang["lang_errorcreateindex"]." ".$MyOpt["tbl"]."_".$tab.":".$field);	
 					}
 					else
 					{
-						$ret["data"].=AjoutLog(" - Création Index ".$MyOpt["tbl"]."_".$tab.":".$field);
+						$ret["data"].=AjoutLog(" - ".$tabLang["lang_createindex"]." ".$MyOpt["tbl"]."_".$tab.":".$field);
 					}
 				}
 			}
@@ -243,7 +243,7 @@ function AjoutLog($txt)
 	}
 
 // ---- Applique les patchs
-	$ret["data"].=AjoutLog("Application des patchs framework");
+	$ret["data"].=AjoutLog($tabLang["lang_patchcore"]);
 
 	$tabPatch=array();
 	$q="SELECT * FROM ".$MyOpt["tbl"]."_config WHERE param='core'";
@@ -274,13 +274,13 @@ function AjoutLog($txt)
 			}
 			else
 			{
-				$ret["data"].=AjoutLog(" ! Erreur patch ".$p[1]);
+				$ret["data"].=AjoutLog(" ! ".$tabLang["lang_errorpatch"]." ".$p[1]);
 			}
 		}
 	}
 
 // ---- Applique les patchs custom
-	$ret["data"].=AjoutLog("Application des patchs");
+	$ret["data"].=AjoutLog($tabLang["lang_patch"]);
 
 	$tabPatch=array();
 	$q="SELECT * FROM ".$MyOpt["tbl"]."_config WHERE param='patch'";
@@ -311,7 +311,7 @@ function AjoutLog($txt)
 			}
 			else
 			{
-				$ret["data"].=AjoutLog(" ! Erreur patch ".$p[1]);
+				$ret["data"].=AjoutLog(" ! ".$tabLang["lang_errorpatch"]." ".$p[1]);
 			}
 		}
 	}
