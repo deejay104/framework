@@ -34,7 +34,14 @@
 	require_once("lib/fonctions.inc.php");
 
 // ---- Charge le fichier de langue
-	$lang="fr";
+	if ($MyOpt["DefaultLanguage"]!="")
+	{
+		$lang=$MyOpt["DefaultLanguage"];
+	}
+	else
+	{
+		$lang="fr";
+	}
 	$tabLang=array();
 	require (MyRep("lang.".$lang.".php","default",false));
  

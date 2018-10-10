@@ -170,9 +170,17 @@
 
 // ---- Charge le fichier de langue
 	$lang=checkVar("lang","varchar");
-	if ($lang=="")
+	if (($lang=="") && ($myuser->val("language")!=""))
 	{
 		$lang=$myuser->val("language");
+	}
+	else if ($MyOpt["DefaultLanguage"]!="")
+	{
+		$lang=$MyOpt["DefaultLanguage"];
+	}
+	else
+	{
+		$lang="fr";
 	}
 	$tabLang=array();
 	require (MyRep("lang.".$lang.".php","default",false));

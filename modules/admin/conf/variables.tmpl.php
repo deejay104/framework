@@ -24,6 +24,10 @@ $MyOptHelp["debug"]="Affiche des informations de debuggage, notament les requete
 $MyOptTmpl["mydir"]=htmlentities(preg_replace("/[a-z]*\.php/","",$_SERVER["SCRIPT_FILENAME"]));
 $MyOptHelp["mydir"]="Chemin de l'installation. Utilisé pour l'exécution des scripts";
 
+// Language
+$MyOptTmpl["DefaultLanguage"]="fr";
+$MyOptHelp["DefaultLanguage"]="Langue par défault du site";
+
 // Timezone
 $MyOptTmpl["timezone"]=date_default_timezone_get();
 $MyOptHelp["timezone"]="Sélectionner la timezone locale (Europe/Paris)";
