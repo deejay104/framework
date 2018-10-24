@@ -36,5 +36,21 @@ $tabLang["lang_patchcore"]="Apply core patches";
 $tabLang["lang_patch"]="Apply patches";
 $tabLang["lang_errorpatch"]="Patch failed";
 
+$tabLang["lang_code"]="Code";
+
+$tabLang["lang_allow"]="Allow";
+$tabLang["Refuser"]="Deny";
+$tabLang["lang_txtsearch"]="Search";
+$tabLang["lang_grpmembers"]="Members of this group";
+
+$tabLang["lang_description"]="Description";
+$tabLang["lang_calendar"]="Booking";
+$tabLang["lang_right"]="Right";
+$tabLang["lang_multi"]="Multi";
+$tabLang["lang_notif"]="Notif";
+$tabLang["lang_delay"]="Delay";
+
+$tabLang["lang_lastexec"]="Dernière éxécution";
+$tabLang["lang_nextexec"]="Prochaine éxécution";
 
 ?>

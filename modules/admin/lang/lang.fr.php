@@ -36,6 +36,18 @@ $tabLang["lang_patchcore"]="Application des patchs framework";
 $tabLang["lang_patch"]="Application des patchs";
 $tabLang["lang_errorpatch"]="Erreur lors de l'application du patch";
 
+$tabLang["lang_code"]="Code";
 
+$tabLang["lang_allow"]="Autoriser";
+$tabLang["Refuser"]="Refuser";
+$tabLang["lang_txtsearch"]="Texte à rechercher";
+$tabLang["lang_grpmembers"]="Utilisateurs dans ce groupe";
+
+$tabLang["lang_description"]="Description";
+$tabLang["lang_calendar"]="Réservation";
+$tabLang["lang_right"]="Droit";
+$tabLang["lang_multi"]="Multi";
+$tabLang["lang_notif"]="Notif";
+$tabLang["lang_delay"]="Délai";
 
 ?>

@@ -32,6 +32,7 @@ Type:
 	text
 	bool
 	enum
+	radio
 	price
 */
 
@@ -150,6 +151,25 @@ class objet_core
 		  	  	$ret.="</select>";
 
 			}
+			else if (($type=="enum") && (is_array($this->tabList[$key])))
+			{
+		  	  	$ret ="<select id='".$key."'  name=\"".$formname."[$key]\">";
+				foreach($this->tabList[$key] as $k=>$v)
+				{
+					$ret.="<option value=\"".$k."\" ".(($txt==$k) ? "selected" : "").">".$this->tabList[$key][$k]."</option>";
+				}
+		  	  	$ret.="</select>";
+
+			}
+			else if (($type=="radio") && (is_array($this->tabList[$key][$lang])))
+			{
+		  	  	$ret ="";
+				foreach($this->tabList[$key][$lang] as $k=>$v)
+				{
+					$ret.="<input type='radio' name=\"".$formname."[$key]\" value=\"".$k."\" ".(($txt==$k) ? "checked='checked'" : "").">".$this->tabList[$key][$lang][$k];
+				}
+
+			}
 			else if (($type=="multi") && (is_array($this->tabList[$key][$lang])))
 			{
 				$t=explode(",",$txt);
@@ -163,6 +183,22 @@ class objet_core
 				foreach($this->tabList[$key][$lang] as $k=>$v)
 				{
 					$ret.="<input type='checkbox' name='".$formname."[".$key."][".$k."]' value='".$k."' ".(($tt[$k]=="on") ? "checked" : "")."> ".$this->tabList[$key][$lang][$k]."<br />";
+				}
+				$ret.="</span>";
+			}
+			else if (($type=="multi") && (is_array($this->tabList[$key])))
+			{
+				$t=explode(",",$txt);
+				$tt=array();
+				foreach($t as $i=>$v)
+				{
+					$tt[$v]="on";
+				}
+
+				$ret="<span>";
+				foreach($this->tabList[$key] as $k=>$v)
+				{
+					$ret.="<input type='checkbox' name='".$formname."[".$key."][".$k."]' value='".$k."' ".(($tt[$k]=="on") ? "checked" : "")."> ".$this->tabList[$key][$k]."<br />";
 				}
 				$ret.="</span>";
 			}
@@ -235,6 +271,15 @@ class objet_core
 				$ret=AffMontant($txt);
 			}
 			else if (($type=="enum") && (is_array($this->tabList[$key][$lang])))
+			{
+				$ret=$this->tabList[$key][$lang][$txt];
+			}
+			// Pour compatibilité ascendente
+			else if (($type=="enum") && (is_array($this->tabList[$key])))
+			{
+				$ret=$this->tabList[$key][$txt];
+			}
+			else if (($type=="radio") && (is_array($this->tabList[$key][$lang])))
 			{
 				$ret=$this->tabList[$key][$lang][$txt];
 			}
@@ -606,6 +651,22 @@ class objet_core
 	{
 		return DisplayDate($this->dte_maj);
 	}
+	
+	function sign($t)
+	{
+		$s="";
+		foreach($t as $i=>$k)
+		{		
+			$s.="_";
+			
+			if (isset($this->data[$k]))
+			{
+				$s.=$this->data[$k];
+			}
+		}
+		return md5($s);
+	}
+	
 } # End of class
 
 function ListeObjets($sql,$table,$champs=array(),$crit=array())

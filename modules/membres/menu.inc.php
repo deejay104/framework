@@ -1,7 +1,7 @@
 <?
 // ---- Charge le template
   	// $tmpl_menu = new XTemplate("modules/membres/tmpl/menu.htm");
-  	$tmpl_menu = LoadTemplate("menu");
+  	$tmpl_menu = LoadTemplate("menu",$mod,false);
 	$tmpl_menu->assign("path_module",$corefolder."/".$module."/".$mod);
 
 // ---- Sélectionne le menu courant

@@ -1,14 +1,11 @@
 <?
 // ---------------------------------------------------------------------------------------------
-//   Navigation
+//   Gestion des groupes
 //     ($Author: miniroot $)
 // ---------------------------------------------------------------------------------------------
 //   Variables  : 
 // ---------------------------------------------------------------------------------------------
 /*
-    SoceIt v2.0
-    Copyright (C) 2016 Matthieu Isorez
-
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
@@ -27,10 +24,10 @@
 
 <?
 // ---- Vérifie le droit d'accès
-	if (!GetDroit("AccesConfigGroupes")) { FatalError("Accès non autorisé (AccesConfigGroupes)"); }
+	if (!GetDroit("AccesConfigGroupes")) { FatalError($tabLang["lang_accessdenied"]." (AccesConfigGroupes)"); }
 
 // ---- Charge le template
-	$tmpl_x = new XTemplate (MyRep("groupes.htm"));
+	$tmpl_x = LoadTemplate("groupes");
 	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 	$tmpl_x->assign("form_checktime",$_SESSION['checkpost']);
 
@@ -45,9 +42,9 @@
 
 // ---- Liste les groupes
 	$tabTitre=array();
-	$tabTitre["groupe"]["aff"]="Groupe";
+	$tabTitre["groupe"]["aff"]=$tabLang["lang_group"];
 	$tabTitre["groupe"]["width"]=250;
-	$tabTitre["description"]["aff"]="Description";
+	$tabTitre["description"]["aff"]=$tabLang["lang_description"];
 	$tabTitre["description"]["width"]=400;
 
 	$query="SELECT groupe,description FROM ".$MyOpt["tbl"]."_groupe ORDER BY groupe";

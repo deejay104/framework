@@ -38,18 +38,30 @@
 
 	$tabLang["login_noconfig"]="Vous devez creer le fichier de connexion à la base de données";
 	$tabLang["login_update"]="Mise à jour de l'installation";	
+
+	$tabLang["lang_accessdenied"]="Accès non autorisé";
 	
+	$tabLang["lang_yes"]="Oui";
+	$tabLang["lang_no"]="Non";
+	$tabLang["lang_new"]="Nouveau";
 	$tabLang["lang_submit"]="Soumettre";
 	$tabLang["lang_save"]="Enregistrer";
 	$tabLang["lang_cancel"]="Annuler";
 	$tabLang["lang_add"]="Ajouter";
+	$tabLang["lang_copy"]="Copier";
 	$tabLang["lang_modify"]="Modifier";
+	$tabLang["lang_active"]="Active";
 	$tabLang["lang_enable"]="Activer";
 	$tabLang["lang_disable"]="Désactiver";
 	$tabLang["lang_delete"]="Supprimer";
 	$tabLang["lang_list"]="Liste";
 	$tabLang["lang_lastupdate"]="Dernière mise à jour";
 	$tabLang["lang_lastconnection"]="Dernière connection";
+	$tabLang["lang_group"]="Groupe";
+	$tabLang["lang_description"]="Description";
+	$tabLang["lang_main"]="Principal";
+	$tabLang["lang_type"]="Type";
+	$tabLang["lang_schedule"]="Schedule";
 
 	$tabLang["lang_date"]="Date";
 	$tabLang["lang_day"]="Jour";

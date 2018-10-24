@@ -475,7 +475,7 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 
 /* **** Tableau **** */
 .tableauAff { border-bottom: 1px solid #{FormulaireBackgroundNormal}; }
-.tableauAff th { background-color: #{FormulaireBackgroundNormal}; height: 30px; border-bottom: 1px solid #{FormulaireBackgroundNormal}; }
+.tableauAff th { background-color: #{FormulaireBackgroundNormal}; height: 30px; border-bottom: 1px solid #{FormulaireBackgroundNormal}; text-align:left; }
 .tableauAff tr { border-bottom: 1px dashed #{FormulaireBackgroundNormal}; height: 25px; }
 .tableauAff tr:nth-child(even) { background-color: #f8f8f8; }
 .tableauAff tr:hover { background-color: #{LineBackgroundHover}!important; }

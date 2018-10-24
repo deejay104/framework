@@ -6,8 +6,6 @@
 //   Variables  : 
 // ---------------------------------------------------------------------------------------------
 /*
-    SoceIt v2.0
-    Copyright (C) 2016 Matthieu Isorez
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,12 +25,14 @@
 
 <?
 // ---- Charge le template
-	$tmpl_x = new XTemplate (MyRep("crontab.htm"));
+	$tmpl_x = LoadTemplate("crontab");
 	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 
 // ---- Vérifie le droit d'accès
-	if (!GetDroit("AccesConfigCrontab")) { FatalError("Accès non autorisé (AccesConfigCrontab)"); }
+	if (!GetDroit("AccesConfigCrontab")) { FatalError($tabLang["lang_accessdenied"]." (AccesConfigCrontab)"); }
 
+	$id=checkVar("id","numeric");
+	
 // ---- Affiche le menu
 	$aff_menu="";
 	require_once("modules/".$mod."/menu.inc.php");
@@ -81,19 +81,19 @@
 // ---- Entete du tableau
 
 	$tabTitre=array();
-	$tabTitre["description"]["aff"]="Description";
+	$tabTitre["description"]["aff"]=$tabLang["lang_description"];
 	$tabTitre["description"]["width"]=400;
-	$tabTitre["schedule"]["aff"]="Schedule";
+	$tabTitre["schedule"]["aff"]=$tabLang["lang_schedule"];
 	$tabTitre["schedule"]["width"]=100;
-	$tabTitre["lastrun"]["aff"]="Dernière exécution";
+	$tabTitre["lastrun"]["aff"]=$tabLang["lang_lastexec"];
 	$tabTitre["lastrun"]["width"]=200;
-	$tabTitre["nextrun"]["aff"]="Prochaine exécution";
+	$tabTitre["nextrun"]["aff"]=$tabLang["lang_nextexec"];
 	$tabTitre["nextrun"]["width"]=200;
-	$tabTitre["resultat"]["aff"]="Résultat";
+	$tabTitre["resultat"]["aff"]=$tabLang["lang_result"];
 	$tabTitre["resultat"]["width"]=100;
-	$tabTitre["actif"]["aff"]="Actif";
+	$tabTitre["actif"]["aff"]=$tabLang["lang_active"];
 	$tabTitre["actif"]["width"]=100;
-	$tabTitre["action"]["aff"]="Action";
+	$tabTitre["action"]["aff"]=$tabLang["lang_action"];
 	$tabTitre["action"]["width"]=100;
 
 

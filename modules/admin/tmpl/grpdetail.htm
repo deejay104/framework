@@ -9,10 +9,10 @@
 
 <!-- BEGIN: corps -->
 <div class="pagetitle pagemenu">
-	<p><A href="index.php?mod=admin&rub=groupes"><IMG src="{path_module}/img/icn32_retour.png" border=0 alt="">Liste</A></p>
-	<p><A href="index.php?mod=admin&rub=grpdetail"><IMG src="{path_module}/img/icn32_groupeadd.png" border=0 alt="">Nouveau</A></p>
-	<p><A href="index.php?mod=admin&rub=grpdetail&grp={form_grp}&fonc=copier"><IMG src="{path_module}/img/icn32_groupecopy.png" border=0 alt="">Copier</A></p>
-	<p><A href="#" OnClick="ConfirmeClick('index.php?mod=admin&rub=grpdetail&grp={form_grp}&fonc=supprimer','Souhaitez-vous supprimer ce groupe ?');"><IMG src="{path_module}/img/icn32_groupesup.png" border=0 alt="">Supprimer</A></p>
+	<p><A href="index.php?mod=admin&rub=groupes"><IMG src="{path_module}/img/icn32_retour.png" border=0 alt="">{lang_list}</A></p>
+	<p><A href="index.php?mod=admin&rub=grpdetail"><IMG src="{path_module}/img/icn32_groupeadd.png" border=0 alt="">{lang_new}</A></p>
+	<p><A href="index.php?mod=admin&rub=grpdetail&grp={form_grp}&fonc=copier"><IMG src="{path_module}/img/icn32_groupecopy.png" border=0 alt="">{lang_copy}</A></p>
+	<p><A href="#" OnClick="ConfirmeClick('index.php?mod=admin&rub=grpdetail&grp={form_grp}&fonc=supprimer','Souhaitez-vous supprimer ce groupe ?');"><IMG src="{path_module}/img/icn32_groupesup.png" border=0 alt="">{lang_delete}</A></p>
 </div>
 
 
@@ -126,10 +126,10 @@ $(function() {
 <input type="hidden" name="checktime" value="{form_checktime}">
 
 <div class="formulaire">
-	<p><label>Code</label><input name="form_grp" value="{form_grp}" style="width:100px;"></p>
-	<p><label>Description</label><input name="form_desc" value="{form_desc}" style="width:500px;"></p>
-	<p><label>Principal</label><input type="radio" name="form_princ" value="oui" {form_princ_oui}>Oui <input type="radio" name="form_princ" value="non" {form_princ_non}> Non</p>
-	<input type="submit" name="fonc" value="Enregistrer">
+	<p><label>{lang_code}</label><input name="form_grp" value="{form_grp}" style="width:100px;"></p>
+	<p><label>{lang_description}</label><input name="form_desc" value="{form_desc}" style="width:500px;"></p>
+	<p><label>{lang_main}</label><input type="radio" name="form_princ" value="oui" {form_princ_oui}>{lang_yes} <input type="radio" name="form_princ" value="non" {form_princ_non}> {lang_no}</p>
+	<input type="submit" name="fonc" value="{lang_save}">
 </div>
 
 </form>
@@ -144,28 +144,28 @@ $(function() {
 	</style>
 
 <ul id="DropAllow" class="dropBox">
-Autoriser :<br/>
+{lang_allow} :<br/>
 <!-- BEGIN: lst_roles_oui -->
 		<li id="id_{aff_role}" class="ui-state-default" title="{aff_help}">{aff_role}</li>
 <!-- END: lst_roles_oui -->
 </ul>
 
 <ul id="DropDeny" class="dropBox">
-Refuser :<br />
+{lang_deny} :<br />
 <!-- BEGIN: lst_roles_non -->
 		<li id="id_{aff_role}" class="ui-state-default" title="{aff_help}">{aff_role}</li>
 <!-- END: lst_roles_non -->
 </ul>
 
 <ul id="DropDisable" class="dropBox dropDisable">
-	<p><input type="text" id="search" value="Texte à rechercher"  OnClick="ClearText(event,'Texte à rechercher');"  OnKeyPress="CapturePost(event);" style="color:#bbbbbb;"></p>
+	<p><input type="text" id="search" value="{lang_txtsearch}"  OnClick="ClearText(event,'{lang_txtsearch}');"  OnKeyPress="CapturePost(event);" style="color:#bbbbbb;"></p>
 <!-- BEGIN: lst_roles_nok -->
 		<li id="id_{aff_role}" class="ui-state-default {aff_couleur}" title="{aff_help}">{aff_role}</li>
 <!-- END: lst_roles_nok -->
 </ul>
 
 <div class="dropBox">
-<p>Utilisateurs dans ce groupe</p>
+<p>{lang_grpmembers}</p>
 <!-- BEGIN: lst_user -->
 <p>{aff_user}
 <!-- BEGIN: aff_sup -->

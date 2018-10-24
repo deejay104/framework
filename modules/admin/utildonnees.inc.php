@@ -1,10 +1,10 @@
 <?
 // ---- Charge le template
-	$tmpl_x = new XTemplate (MyRep("utildonnees.htm"));
+	$tmpl_x = LoadTemplate("utildonnees");
 	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 
 // ---- Vérifie le droit d'accès
-	if (!GetDroit("AccesConfigDonneesUser")) { FatalError("Accès non autorisé (AccesConfigDonneesUser)"); }
+	if (!GetDroit("AccesConfigDonneesUser")) { FatalError($tabLang["lang_accessdenied"]." (AccesConfigDonneesUser)"); }
 
 // ---- Affiche le menu
 	$aff_menu="";
@@ -17,7 +17,7 @@
 	$form_type=checkVar("form_type","array");
 	
 // ---- Sauvegarde
-	if (($fonc=="Enregistrer") && (GetDroit("ModifUtilDonnees")))
+	if (($fonc==$tabLang["lang_save"]) && (GetDroit("ModifUtilDonnees")))
 	{
 		if (is_array($form_nom))
 		{

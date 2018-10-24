@@ -38,18 +38,33 @@
 
 	$tabLang["login_noconfig"]="Connection file to database is missing";
 	$tabLang["login_update"]="Initialization";
+
+	$tabLang["lang_accessdenied"]="Access denied";
 	
+	$tabLang["lang_yes"]="Yes";
+	$tabLang["lang_no"]="No";
+	$tabLang["lang_new"]="New";
 	$tabLang["lang_submit"]="Submit";
 	$tabLang["lang_save"]="Save";
 	$tabLang["lang_cancel"]="Cancel";
 	$tabLang["lang_add"]="Add";
+	$tabLang["lang_copy"]="Copy";
 	$tabLang["lang_modify"]="Modify";
+	$tabLang["lang_active"]="Active";
 	$tabLang["lang_enable"]="Enable";
 	$tabLang["lang_disable"]="Disable";
 	$tabLang["lang_delete"]="Delete";
 	$tabLang["lang_list"]="List";
 	$tabLang["lang_lastupdate"]="Last update";
 	$tabLang["lang_lastconnection"]="Last connection";
+	$tabLang["lang_group"]="Group";
+	$tabLang["lang_description"]="Description";
+	$tabLang["lang_main"]="Main";
+	$tabLang["lang_type"]="Type";
+	$tabLang["lang_text"]="Texte";
+	$tabLang["lang_number"]="Number";
+	$tabLang["lang_phone"]="Phone";
+	$tabLang["lang_schedule"]="Schedule";
 
 	$tabLang["lang_date"]="Date";
 	$tabLang["lang_day"]="Day";

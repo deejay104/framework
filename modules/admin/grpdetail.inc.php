@@ -6,8 +6,6 @@
 //   Variables  : 
 // ---------------------------------------------------------------------------------------------
 /*
-    SoceIt v2.0
-    Copyright (C) 2016 Matthieu Isorez
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,10 +25,10 @@
 
 <?
 // ---- Vérifie le droit d'accès
-	if (!GetDroit("AccesConfigGroupes")) { FatalError("Accès non autorisé (AccesConfigGroupes)"); }
+	if (!GetDroit("AccesConfigGroupes")) { FatalError($tabLang["lang_accessdenied"]." (AccesConfigGroupes)"); }
 
 // ---- Charge le template
-	$tmpl_x = new XTemplate (MyRep("grpdetail.htm"));
+	$tmpl_x = LoadTemplate("grpdetail");
 	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 	$tmpl_x->assign("form_checktime",$_SESSION['checkpost']);
 
@@ -57,14 +55,14 @@
 	$tmpl_x->assign("aff_menu",$aff_menu);
 
 // ---- Enregistre le groupe
-	if (($grp=="") && ($fonc=="Enregistrer") && (GetDroit("CreeGroupe")) && (!isset($_SESSION['tab_checkpost'][$checktime])))
+	if (($grp=="") && ($fonc==$tabLang["lang_save"]) && (GetDroit("CreeGroupe")) && (!isset($_SESSION['tab_checkpost'][$checktime])))
 	{
 		$q="INSERT INTO ".$MyOpt["tbl"]."_groupe SET groupe='$form_grp',description='$form_desc',principale='$form_princ'";
 		$sql->Insert($q);
 		$grp=$form_grp;
 		$_SESSION['tab_checkpost'][$checktime]=$checktime;
 	}
-	else if (($grp!="") && ($fonc=="Enregistrer") && (GetDroit("ModifGroupe")) && (!isset($_SESSION['tab_checkpost'][$checktime])))
+	else if (($grp!="") && ($fonc==$tabLang["lang_save"]) && (GetDroit("ModifGroupe")) && (!isset($_SESSION['tab_checkpost'][$checktime])))
 	{
 		$q="UPDATE ".$MyOpt["tbl"]."_groupe SET groupe='$form_grp',description='$form_desc',principale='$form_princ' WHERE groupe='$grp'";
 		$sql->Update($q);

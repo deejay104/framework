@@ -1,10 +1,10 @@
 <?
 // ---- Charge le template
-	$tmpl_x = new XTemplate (MyRep("echeances.htm"));
+	$tmpl_x = LoadTemplate ("echeances");
 	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 
 // ---- Vérifie le droit d'accès
-	if (!GetDroit("AccesConfigEcheances")) { FatalError("Accès non autorisé (AccesConfigEcheances)"); }
+	if (!GetDroit("AccesConfigEcheances")) { FatalError($tabLang["lang_accessdenied"]." (AccesConfigEcheances)"); }
 
 // ---- Affiche le menu
 	$aff_menu="";

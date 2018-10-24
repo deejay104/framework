@@ -21,13 +21,13 @@
 
 <?
 	require_once ("class/document.inc.php");
-	if (!GetDroit("AccesMembres")) { FatalError("Accès non autorisé (AccesMembres)"); }
+	if (!GetDroit("AccesMembres")) { FatalError($tabLang["lang_accessdenied"]." (AccesMembres)"); }
 
 // ---- Valide les variables
 	$aff=checkVar("aff","varchar");
 
 	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
-	
+
 // ---- Trombino
 	if ($fonc=="trombi")
 	{
