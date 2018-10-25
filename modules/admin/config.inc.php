@@ -40,10 +40,10 @@
 	$tmpl_x->assign("aff_menu",$aff_menu);
 
 // ---- Enregistre le fichier des variables
-	if ($fonc=="Enregistrer")
+	if ($fonc==$tabLang["lang_save"])
 	{
 		$MyOptTab=checkVar("MyOptTab","array");
-
+		
 		$ret=GenereVariables($MyOptTab);
 		// $tmpl_x->assign("msg_ret", $ret);
 		// $tmpl_x->parse("corps.msgok");

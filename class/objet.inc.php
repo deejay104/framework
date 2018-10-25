@@ -270,7 +270,7 @@ class objet_core
 			{
 				$ret=AffMontant($txt);
 			}
-			else if (($type=="enum") && (is_array($this->tabList[$key][$lang])))
+			else if (($type=="enum") && (isset($this->tabList[$key][$lang])) && (is_array($this->tabList[$key][$lang])))
 			{
 				$ret=$this->tabList[$key][$lang][$txt];
 			}
