@@ -39,7 +39,7 @@ $tabLang["lang_errorpatch"]="Patch failed";
 $tabLang["lang_code"]="Code";
 
 $tabLang["lang_allow"]="Allow";
-$tabLang["Refuser"]="Deny";
+$tabLang["lang_deny"]="Deny";
 $tabLang["lang_txtsearch"]="Search";
 $tabLang["lang_grpmembers"]="Members of this group";
 

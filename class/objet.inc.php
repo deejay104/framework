@@ -138,10 +138,10 @@ class objet_core
 			}
 			else if ($type=="bool")
 		  	{
-				$ret ="<input id='".$key."' type='radio' name=\"".$formname."[$key]\" value='oui' ".(($txt=="oui") ? "checked='checked'" : "")."> ".$this->tabLang["yes"][$lang];
-				$ret.="<input id='".$key."' type='radio' name=\"".$formname."[$key]\" value='non' ".(($txt=="non") ? "checked='checked'" : "")."> ".$this->tabLang["no"][$lang];
+				$ret ="<input id='".$key."' type='radio' name=\"".$formname."[$key]\" value='oui' ".(($txt=="oui") ? "checked" : "")."> ".$this->tabLang["yes"][$lang];
+				$ret.="<input id='".$key."' type='radio' name=\"".$formname."[$key]\" value='non' ".(($txt=="non") ? "checked" : "")."> ".$this->tabLang["no"][$lang];
 			}
-			else if (($type=="enum") && (is_array($this->tabList[$key][$lang])))
+			else if (($type=="enum") && (isset($this->tabList[$key][$lang])) && (is_array($this->tabList[$key][$lang])))
 			{
 		  	  	$ret ="<select id='".$key."'  name=\"".$formname."[$key]\">";
 				foreach($this->tabList[$key][$lang] as $k=>$v)
@@ -166,7 +166,7 @@ class objet_core
 		  	  	$ret ="";
 				foreach($this->tabList[$key][$lang] as $k=>$v)
 				{
-					$ret.="<input type='radio' name=\"".$formname."[$key]\" value=\"".$k."\" ".(($txt==$k) ? "checked='checked'" : "").">".$this->tabList[$key][$lang][$k];
+					$ret.="<input type='radio' name=\"".$formname."[$key]\" value=\"".$k."\" ".(($txt==$k) ? "checked" : "").">".$this->tabList[$key][$lang][$k];
 				}
 
 			}
@@ -275,7 +275,7 @@ class objet_core
 				$ret=$this->tabList[$key][$lang][$txt];
 			}
 			// Pour compatibilité ascendente
-			else if (($type=="enum") && (is_array($this->tabList[$key])))
+			else if (($type=="enum") && (isset($this->tabList[$key])) && (is_array($this->tabList[$key])))
 			{
 				$ret=$this->tabList[$key][$txt];
 			}

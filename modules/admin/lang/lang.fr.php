@@ -39,7 +39,7 @@ $tabLang["lang_errorpatch"]="Erreur lors de l'application du patch";
 $tabLang["lang_code"]="Code";
 
 $tabLang["lang_allow"]="Autoriser";
-$tabLang["Refuser"]="Refuser";
+$tabLang["lang_deny"]="Refuser";
 $tabLang["lang_txtsearch"]="Texte à rechercher";
 $tabLang["lang_grpmembers"]="Utilisateurs dans ce groupe";
 
