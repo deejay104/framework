@@ -6,7 +6,9 @@
 //   Variables  : 
 // ---------------------------------------------------------------------------------------------
 
-	session_start();
+	if (session_status() == PHP_SESSION_NONE) {
+		session_start();
+	}
 	if (isset($_SESSION['uid']))
 	  { $uid = $_SESSION['uid']; }
 
@@ -125,8 +127,8 @@
 	$module="modules";
 	$tmpl_prg = LoadTemplate("login","default");
 
-	if ($tmpl_prg->text("main.unsecure")=="")
-	  { $tmpl_prg->parse("main.secure"); }
+	// if ($tmpl_prg->text("main.unsecure")=="")
+	$tmpl_prg->parse("main.secure");
 
 // ---- Calcul de l'id
 	$myid=md5(session_id());
