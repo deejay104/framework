@@ -37,6 +37,8 @@
 	$form_data=checkVar("form_data","array");
 	$form_droits=checkVar("form_droits","array");
 	$form_donnees=checkVar("form_donnees","array");
+	$form_echeance=CheckVar("form_echeance","array");
+	$form_echeance_type=CheckVar("form_echeance_type","array");
 
 	$msg_erreur="";
 	$msg_confirmation="";
