@@ -77,6 +77,11 @@ function checkVar($var,$type,$len=256)
 	else if ($type=="varchar")
 	{
 		return substr($v,0,$len);
+	}	
+	else if ($type=="token")
+	{
+		$v=preg_replace("/[^a-z0-9]*/","",$v);
+		return substr($v,0,$len);
 	}
 	else if ($type=="date")
 	{
