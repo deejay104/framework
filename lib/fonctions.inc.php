@@ -221,6 +221,10 @@ function CalcTemps($tps,$short=true)
 	{
 		$t=$m[1]*60*24+$m[2]*60+$m[3];
 	}
+	else if (preg_match("/^([0-9]*?[0-9])h$/",$tps,$m))
+	{
+		$t=$m[1]*60;
+	}
 	else if (is_numeric($tps))
 	{
 		$t=$tps;
