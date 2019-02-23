@@ -34,11 +34,14 @@ Type:
 	enum
 	radio
 	price
+	varchar
+	multi
 */
 
 // Class Utilisateur
 class objet_core
 {
+	protected $type=array();
 	protected $tabLang=array();
 	protected $tabLangObject=array(
 		"yes"=>array(
@@ -70,7 +73,30 @@ class objet_core
 
 		$this->tabLang=array_merge($this->tabLang,$this->tabLangObject);
 
-			
+		if ((isset($this->fields)) && (is_array($this->fields)))
+		{
+			foreach($this->fields as $key=>$field)
+			{
+				$this->type[$key]=$field["type"];
+				if (isset($field["default"]))
+				{
+					$this->data[$key]=$field["default"];
+				}
+				else if ($field["type"]=="number")
+				{
+					$this->data[$key]=0;
+				}
+				else if ($field["type"]=="date")
+				{
+					$this->data[$key]="0000-00-00";
+				}
+				else
+				{
+					$this->data[$key]="";
+				}
+			}
+		}
+	
 		if ($id>0)
 		{
 			$this->load($id);
@@ -120,9 +146,13 @@ class objet_core
 		$txt=$this->val($key);
 		$mycond=$this->GetDroit($key);
 
-		$type=(isset($this->type[$key]))? $this->type[$key] : "";
+		$type=(isset($this->type[$key])) ? $this->type[$key] : "";
 
 		if (!$mycond)
+		{
+			$render="html";
+		}
+		if ((isset($this->droit[$key])) && ($this->droit[$key]=="[readonly]"))
 		{
 			$render="html";
 		}
@@ -665,6 +695,127 @@ class objet_core
 			}
 		}
 		return md5($s);
+	}
+	
+	function genSqlTab(&$tab)
+	{
+	// "navpoints" => Array
+	// (
+		// "nom" => Array("Type" => "varchar(20)", "Index" => "1", ),
+		// "description" => Array("Type" => "varchar(200)", ),
+		// "lat" => Array("Type" => "varchar(10)", ),
+		// "lon" => Array("Type" => "varchar(10)", ),
+		// "icone" => Array("Type" => "varchar(20)", ),
+	// ),
+
+		$tabobj=array();
+		if ((isset($this->fields)) && (is_array($this->fields)))
+		{
+			foreach($this->fields as $key=>$field)
+			{
+				$tabobj[$key]=array();
+				if ($field["type"]=="number")
+				{
+					$tabobj[$key]["Type"]="int(10) unsigned";
+					$tabobj[$key]["Default"]="0";
+				}
+				else if ($field["type"]=="date")
+				{
+					$tabobj[$key]["Type"]="date";
+					$tabobj[$key]["Default"]="0000-00-00";
+				}
+				else if ($field["type"]=="datetime")
+				{
+					$tabobj[$key]["Type"]="datetime";
+					$tabobj[$key]["Default"]="0000-00-00 00:00:00";
+				}
+				else if ($field["type"]=="duration")
+				{
+					$tabobj[$key]["Type"]="int(10) unsigned";
+					$tabobj[$key]["Default"]="0";
+				}
+				// else if ($field["type"]=="ucword")
+				// {
+				// }
+				// else if ($field["type"]=="uppercase")
+				// {
+				// }
+				// else if ($field["type"]=="lowercase")
+				// {
+				// }
+				else if ($field["type"]=="email")
+				{
+					$tabobj[$key]["Type"]="varchar(104)";
+				}
+				else if ($field["type"]=="tel")
+				{
+					$tabobj[$key]["Type"]="varchar(20)";
+				}
+				else if ($field["type"]=="text")
+				{
+					$tabobj[$key]["Type"]="text";
+				}
+				else if ($field["type"]=="bool")
+				{
+					$tabobj[$key]["Type"]="enum('oui','non')";
+					$tabobj[$key]["Default"]="non";
+				}
+				else if (($field["type"]=="enum") || ($field["type"]=="radio"))
+				{
+					if (isset($this->tabList[$key]))
+					{
+						if (is_array($this->tabList[$key]["fr"]))
+						{
+							$t=$this->tabList[$key]["fr"];
+						}
+						else
+						{
+							$t=$this->tabList[$key];
+						}
+
+						$l="";
+						$s="";
+						foreach($t as $k=>$v)
+						{
+							$l.=$s."'".$k."'";
+							$s=",";
+						}
+						
+						if (isset($field["default"]))
+						{
+							$tabobj[$key]["Type"]="enum(".$l.")";
+						}
+						else
+						{
+							$tabobj[$key]["Type"]="enum('',".$l.")";
+							$tabobj[$key]["Default"]="";
+						}
+					}
+				}
+				// else if ($field["type"]=="multi")
+				// {
+				// }
+				else if ($field["type"]=="price")
+				{
+					$tabobj[$key]["Type"]="decimal(10,2)";
+					$tabobj[$key]["Default"]="0.00";
+				}
+				else
+				{
+					$tabobj[$key]["Type"]="varchar(".( ( (isset($field["len"])) && ($field["len"]>0) ) ? $field["len"] : "50").")";
+				}
+
+				if (isset($field["default"]))
+				{
+					$tabobj[$key]["Default"]=$field["default"];
+				}
+				if (isset($field["index"]))
+				{
+					$tabobj[$key]["Index"]=1;
+				}
+			}
+		}
+		$tab[$this->table]=$tabobj;
 	}
 	
 } # End of class

@@ -109,6 +109,10 @@ function checkVar($var,$type,$len=256)
 			return array();
 		}
 	}
+	else if ($type=="text")
+	{
+		return strip_tags($v);
+	}
 }
   
 function GetDroit($droit)

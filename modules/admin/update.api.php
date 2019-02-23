@@ -215,7 +215,7 @@ function AjoutLog($txt)
 					if ($res==-1)
 					{
 						$ret["result"]="NOK";
-						$ret["data"].=AjoutLog(" ! ".$tabLang["lang_errormodify"]." ".$MyOpt["tbl"]."_".$tab.":".$field);	
+						$ret["data"].=AjoutLog(" ! ".$tabLang["lang_errormodify"]." ".$MyOpt["tbl"]."_".$tab.":".$field." (".$q.")");	
 					}
 					else
 					{

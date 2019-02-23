@@ -22,7 +22,20 @@ class user_core extends objet_core
 	protected $mod="membres";
 	protected $rub="detail";
 
-	protected $type=array("prenom"=>"ucword","nom"=>"uppercase","initiales"=>"uppercase","mail"=>"email","commentaire"=>"text","notification"=>"bool","virtuel"=>"bool","groupe"=>"uppercase","aff_jour"=>"date","dte_login"=>"datetime","language"=>"enum");
+	protected $type=array(
+		"prenom"=>"ucword",
+		"nom"=>"uppercase",
+		"initiales"=>"uppercase",
+		"mail"=>"email",
+		"commentaire"=>"text",
+		"notification"=>"bool",
+		"virtuel"=>"bool",
+		"groupe"=>"uppercase",
+		"aff_jour"=>"date",
+		"dte_login"=>"datetime",
+		"language"=>"enum"
+	);
+
 	protected $droit=array(
 		"prenom"=>"ModifUserInfos",
 		"nom"=>"ModifUserInfos",
