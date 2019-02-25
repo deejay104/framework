@@ -60,7 +60,7 @@ select { height: 24px; font-size: inherit; font-family: inherit; }
 textarea { width:100%; font-size: inherit; font-family: inherit; margin-bottom: 5px; }
 option { -webkit-appearance: none; -moz-appearance: none; appearance: none; font-size: inherit; font-family: inherit; }
 
-input {	border: 1px solid #888888; padding: 2px 2px 2px 2px; height: 24px; -webkit-appearance: none; -moz-appearance: none; appearance: none; font-size: inherit; font-family: inherit; }
+input {	border: 1px solid #888888; border-radius:3px; padding: 2px 2px 2px 2px; height: 24px; -webkit-appearance: none; -moz-appearance: none; appearance: none; font-size: inherit; font-family: inherit; }
 input:not([type]) { border: 1px solid #888888; line-height: 16px; padding: 2px 5px 2px 5px; }
 input[type=tel] { border: 1px solid #888888; line-height: 16px; padding: 2px 5px 2px 5px; }
 input[type=email] { border: 1px solid #888888; line-height: 16px; padding: 2px 5px 2px 5px; }
@@ -530,10 +530,9 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 
 /* **** ToolTip **** */
 .ui-widget { font-size: 12px; }
-.ui-menu-item { padding-top: 1px; padding-bottom: 1px; }
+.ui-menu-item { padding-top: 1px; padding-bottom: 1px; font-size: 14px; line-height: 18px; }
 
 .ui-tooltip-content { padding: 0px; font-size: 12px; line-height:16px; }
-
 .ui-tooltip, .settings:after { border: 1px solid white; }
 .ui-tooltip {
 	padding: 5px;
