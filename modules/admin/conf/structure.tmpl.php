@@ -14,22 +14,6 @@ $tabTmpl=Array
 		"uid_maj" => Array("Type" => "int(11)", ),
 		"dte_maj" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
 	),
-	"ameliorations" => Array
-	(
-		"id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
-		"titre"=>Array("Type"=>"varchar(100)"),
-		"description"=>Array("Type"=>"text"),
-		"version"=>Array("Type"=>"varchar(10)"),
-		"status"=>Array("Type"=>"varchar(10)","Index" => "1"),
-		"module"=>Array("Type"=>"varchar(10)","Index" => "1"),
-		"actif"=>Array("Type"=>"enum('oui','non')", "Default" => "oui", "Index" => "1",),
-		"uid_dist" => Array("Type" => "int(10) unsigned", "Default" => "0"),
-		"mail_dist" => Array("Type" => "varchar(104)"),
-		"uid_creat" => Array("Type" => "int(10) unsigned", "Default" => "0"),
-		"dte_creat" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
-		"uid_maj" => Array("Type" => "int(10) unsigned", "Default" => "0", ),
-		"dte_maj" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00", ),
-	),
 	"ameliore_com" => Array
 	(
 		"id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
@@ -229,6 +213,26 @@ $tabTmpl=Array
 
 );
 
+	// "ameliorations" => Array
+	// (
+		// "id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
+		// "titre"=>Array("Type"=>"varchar(100)"),
+		// "description"=>Array("Type"=>"text"),
+		// "version"=>Array("Type"=>"varchar(10)"),
+		// "status"=>Array("Type"=>"varchar(10)","Index" => "1"),
+		// "module"=>Array("Type"=>"varchar(10)","Index" => "1"),
+		// "actif"=>Array("Type"=>"enum('oui','non')", "Default" => "oui", "Index" => "1",),
+		// "uid_dist" => Array("Type" => "int(10) unsigned", "Default" => "0"),
+		// "mail_dist" => Array("Type" => "varchar(104)"),
+		// "uid_creat" => Array("Type" => "int(10) unsigned", "Default" => "0"),
+		// "dte_creat" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
+		// "uid_maj" => Array("Type" => "int(10) unsigned", "Default" => "0", ),
+		// "dte_maj" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00", ),
+	// ),
+	
+	require_once ("class/amelioration.inc.php");
+	$obj=new amelioration_core(0,$sql);
+	$obj->genSqlTab($tabCustom);
 
 
 ?>

@@ -26,12 +26,29 @@ class amelioration_core extends objet_core
 	protected $rub="detail";
 
 	protected $droit=array("status"=>"ModifAmeliorationStatus");
-	protected $type=array("titre"=>"varchar","description"=>"text","status"=>"enum","module"=>"enum");
+	// protected $type=array("titre"=>"varchar","description"=>"text","status"=>"enum","module"=>"enum");
+
+	protected $fields=array
+	(
+		"titre"=>Array("type"=>"varchar","len"=>100),
+		"description"=>Array("type"=>"text"),
+		"version"=>Array("type"=>"varchar","len"=>10),
+		"status"=>Array("type"=>"enum","index" => "1"),
+		"module"=>Array("type"=>"varchar","len"=>10,"index" => "1"),
+		"actif"=>Array("type"=>"bool", "default" => "oui", "index" => "1",),
+		"uid_dist" => Array("type" => "number"),
+		"mail_dist" => Array("type" => "varchar","len"=>104),
+		"uid_creat" => Array("type" => "number"),
+		"dte_creat" => Array("type" => "datetime"),
+		"uid_maj" => Array("type" => "number"),
+		"dte_maj" => Array("type" => "datetime"),
+	);
+
 	
 	protected $tabList=array(
 		"status"=>array(
-			"fr"=>array('1new'=>'Nouveau','2sched'=>'Prochaine version','3inprg'=>'En cours','4test'=>'En test','5close'=>'Publié'),
-			"en"=>array('1new'=>'New','2sched'=>'Next release','3inprg'=>'In progress','4test'=>'Testing','5close'=>'Released'),
+			"fr"=>array('1new'=>'Nouveau','2sched'=>'Prochaine version','3inprg'=>'En cours','4test'=>'En test','5close'=>'Publié','6duplicate'=>'Doublon','7cancel'=>'Annulé'),
+			"en"=>array('1new'=>'New','2sched'=>'Next release','3inprg'=>'In progress','4test'=>'Testing','5close'=>'Released','6duplicate'=>'Duplicate','7cancel'=>'Canceled'),
 		),
 		"module"=>array(
 			"fr"=>array("core"=>"Framework","user"=>"Utilisateur","admin"=>"Administration","docs"=>"Documents","custom"=>"Autre"),

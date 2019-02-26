@@ -776,7 +776,7 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 		  	$ret.=" <img src='".$corefolder."/static/images/sens_$trie.gif' border=0>";
 			$sub.="<th align='".$v["align"]."'>".((isset($v["sub"])) ? $v["sub"] : "")."</th>";
 			$subb.="<th align='".$v["align"]."'>".((isset($v["bottom"])) ? $v["bottom"] : "")."</th>";
-			$search.="<th><input type='text' style='width:".$v["width"]."px;' name='tabsearch[".$name."]' value='".((isset($tabsearch[$name])) ? $tabsearch[$name] : '')."'></th>";
+			$search.="<th><input type='text' style='width:".$v["width"]."px;' name='tabsearch[".$name."]' value='".((isset($tabsearch[$name])) ? $tabsearch[$name] : '')."' OnChange='document.getElementById(\"form_tableau\").submit();'></th>";
 		}
 		else if ($v["aff"]=="<line>")
 		{
@@ -798,7 +798,7 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 			}
 			$sub.="<th align='".$v["align"]."'>".((isset($v["sub"])) ? $v["sub"] : "")."</th>";
 			$subb.="<th align='".$v["align"]."'>".((isset($v["bottom"])) ? $v["bottom"] : "")."</th>";
-			$search.="<th><input type='text' style='width:".($v["width"]-5)."px;' name='tabsearch[".$name."]' value='".((isset($tabsearch[$name])) ? $tabsearch[$name] : '')."'></th>";
+			$search.="<th><input type='text' style='width:".($v["width"]-5)."px;' name='tabsearch[".$name."]' value='".((isset($tabsearch[$name])) ? $tabsearch[$name] : '')."' OnChange='document.getElementById(\"form_tableau\").submit();'></th>";
 		}
 		if (isset($v["sub"]))
 		{
