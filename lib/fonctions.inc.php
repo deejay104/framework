@@ -711,10 +711,9 @@ function TrieValInv ($a, $b)
 
 */
 
-function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url="",$start=0,$limit=0,$nbline=0,$affsearch=false,$sort=true)
+function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url="",$start=0,$limit=0,$nbline=0,$affsearch=false,$sort=true,$showicon="")
 {
 	global $mod,$rub,$tabsearch,$corefolder;
-
 	$ls="";
 	if (is_array($tabsearch))
 	{
@@ -840,10 +839,17 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 //			  {
 				// $col = abs($col-110);
 				// $ret.="<tr onmouseover=\"setPointer(this, 'over', '#".$myColor[$col]."', '#".$myColor[$col+5]."', '#FF0000')\" onmouseout=\"setPointer(this, 'out', '#".$myColor[$col]."', '#".$myColor[$col+5]."', '#FF0000')\">";
-				$ret.="<tr>";
+				// $ret.="<tr>";
 				// $ret.="<td bgcolor=\"#".$myColor[$col]."\">&nbsp;</td>";
+				$ret.="<tr";
+				if ($showicon!="")
+				{
+					$ret.=" OnMouseOver=\"document.getElementById('".$showicon."_".$val["id"]["val"]."').style.display='block';\" OnMouseOut=\"document.getElementById('".$showicon."_".$val["id"]["val"]."').style.display='none';\"";
+				}
+				$ret.=">";
+
 				$ret.="<td>&nbsp;</td>";
-		
+
 				foreach($tabTitre as $name=>$v)
 				  {
 					if ($val[$name]["val"]=="<line>")

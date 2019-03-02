@@ -200,7 +200,7 @@ class objet_core
 				}
 
 			}
-			else if (($type=="multi") && (is_array($this->tabList[$key][$lang])))
+			else if (($type=="multi") && (isset($this->tabList[$key][$lang])) && (is_array($this->tabList[$key][$lang])))
 			{
 				$t=explode(",",$txt);
 				$tt=array();
@@ -228,7 +228,7 @@ class objet_core
 				$ret="<span>";
 				foreach($this->tabList[$key] as $k=>$v)
 				{
-					$ret.="<input type='checkbox' name='".$formname."[".$key."][".$k."]' value='".$k."' ".(($tt[$k]=="on") ? "checked" : "")."> ".$this->tabList[$key][$k]."<br />";
+					$ret.="<input type='checkbox' name='".$formname."[".$key."][".$k."]' value='".$k."' ".(((isset($tt[$k])) && ($tt[$k]=="on")) ? "checked" : "")."> ".$v."<br />";
 				}
 				$ret.="</span>";
 			}

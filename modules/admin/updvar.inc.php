@@ -7,7 +7,6 @@
 	
 	if (GetDroit("ModifUtilDonnees"))
 	{
-error_log(print_r($_POST,true));
 	if (is_array($_POST['id']))
 		{
 				$i = 1;

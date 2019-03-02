@@ -113,7 +113,14 @@ class amelioration_core extends objet_core
 
 			foreach($this->data as $k=>$v)
 			{
-				$this->data[$k]=utf8_decode($tabList["data"][$k]);
+				if (isset($tabList["data"][$k]))
+				{
+					$this->data[$k]=utf8_decode($tabList["data"][$k]);
+				}
+				else
+				{
+					$this->data[$k]="";
+				}
 			}
 		}
 		else
