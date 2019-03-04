@@ -135,6 +135,12 @@ class objet_core
 	{
 		global $MyOpt,$lang;
 
+		if ($key=="dte_creat")
+		{
+			return "<A href=\"index.php?mod=".$this->mod."&rub=".$this->rub."&id=".$this->id."\">".sql2date($this->dte_creat,"jour")."</A>";
+		}
+		
+		
 		if ($render=="")
 		{
 			$render=$typeaff;
