@@ -25,6 +25,8 @@
 	$sql->show=false;
 
 	$gl_uid = 0;
+	$token=($token=="sys") ? "" : $token;
+	
 	if ((isset($_SESSION['uid'])) && ($_SESSION['uid']>0))
 	{
 		$gl_uid = $_SESSION['uid'];
@@ -92,6 +94,10 @@
 	{
 		$myuser = new user_core($gl_uid,$sql,true);
 		$token=$gl_uid;
+	}
+	else if (($gl_uid==0) && ($token=="sys"))
+	{
+		$myuser = new user_core(0,$sql,true);
 	}
 
 	$module="modules";
