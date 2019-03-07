@@ -17,7 +17,11 @@ function AjoutLog($txt)
 
 // ---- Vérification des variables
 	require ("modules/$mod/conf/variables.tmpl.php");
-
+	if (file_exists("../modules/admin/conf/variables.tmpl.php"))
+	{
+		require("../modules/admin/conf/variables.tmpl.php");
+	}
+	
 	$ret["data"].=AjoutLog($tabLang["lang_checkvar"]);
 
 	$nb=0;
