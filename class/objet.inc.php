@@ -187,7 +187,7 @@ class objet_core
 		  	  	$ret.="</select>";
 
 			}
-			else if (($type=="enum") && (is_array($this->tabList[$key])))
+			else if (($type=="enum") && (isset($this->tabList[$key])) && (is_array($this->tabList[$key])))
 			{
 		  	  	$ret ="<select id='".$key."'  name=\"".$formname."[$key]\">";
 				foreach($this->tabList[$key] as $k=>$v)
@@ -218,7 +218,7 @@ class objet_core
 				$ret="<span>";
 				foreach($this->tabList[$key][$lang] as $k=>$v)
 				{
-					$ret.="<input type='checkbox' name='".$formname."[".$key."][".$k."]' value='".$k."' ".(($tt[$k]=="on") ? "checked" : "")."> ".$this->tabList[$key][$lang][$k]."<br />";
+					$ret.="<input type='checkbox' name='".$formname."[".$key."][".$k."]' value='".$k."' ".(((isset($tt[$k])) && ($tt[$k]=="on")) ? "checked" : "")."> ".$this->tabList[$key][$lang][$k]."<br />";
 				}
 				$ret.="</span>";
 			}

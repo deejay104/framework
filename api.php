@@ -25,6 +25,7 @@
 	$sql->show=false;
 
 	$gl_uid = 0;
+	$token=(!isset($token)) ? "" : $token;
 	$token=($token=="sys") ? "" : $token;
 	
 	if ((isset($_SESSION['uid'])) && ($_SESSION['uid']>0))

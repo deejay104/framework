@@ -120,7 +120,7 @@ function ExportConf()
 	<!-- document.getElementById('download').src = uriContent; -->
 	<!-- newWindow=window.open(uriContent, 'filename.txt'); -->
 	
-	    var link = document.createElement("a");
+	var link = document.createElement("a");
     link.download = "config.json";
     link.href = 'api.php?mod=admin&rub=exportconf';
     link.click();
@@ -154,13 +154,15 @@ function ImportConf()
 				if (response.result=="OK")
 				{
 					console.log("ok");
-					<!-- document.getElementById('msgbox').innerHTML="<div id='msgbox_"+id+"' class='msgbox-std msgbox-ok'>Les informations ont été enregistrées</div>"; -->
+					document.getElementById("form_import").innerHTML = response.data;
+					document.getElementById('msgbox').innerHTML="<div id='msgbox_import' class='msgbox-std msgbox-ok'>Import de configuration terminé</div>";
 					<!-- document.location="index.php"; -->
 				}
 				else
 				{
 					console.log("nok");
-					<!-- document.getElementById('msgbox').innerHTML="<div class='msgbox-std msgbox-error'>Erreur lors de la sauvegarde ("+response.result+")</div>"; -->
+					document.getElementById("form_import").innerHTML = response.data;
+					document.getElementById('msgbox').innerHTML="<div class='msgbox-std msgbox-error'>Erreur lors de l'import ("+response.result+")</div>";
 				}
 			},
 			error : function(response)
@@ -198,8 +200,8 @@ $(function() {
 <form id="formdata">
 	<input id="import_id" name="import_id" type="hidden" value="">
 	<input type="file" id="form_file" name="form_file" style='width:390px!important; border: 0px;'>
-	<input type="checkbox"> Importer la configuration<br />
-	<input type="checkbox"> Importer les groupes<br />
+	<input id="importconf" name="importconf" type="checkbox"> Importer la configuration<br />
+	<input id="importconf" name="importgroup" type="checkbox"> Importer les groupes<br />
 	<input type="submit" tabindex="-1" value="Enregistrer" style="position:absolute; top:-1000px">
 </form>
 </div>
@@ -232,7 +234,7 @@ $(function() {
 	</tr>
 	<tr>
 		<td><input type="submit" value="{lang_importconfig}" OnClick="importDialog.dialog('open');" style="width:240px;"></td>
-		<td><div id=""style=" padding:4px;"></div>
+		<td><div id="form_import" style=" padding:4px;"></div>
 	</tr>
 </table>
 

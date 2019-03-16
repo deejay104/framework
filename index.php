@@ -197,8 +197,6 @@
 	$tmpl="default";
 	$tmpl_prg = LoadTemplate($tmpl,"default");
 
-	$tmpl_prg->assign("style_url", GenereStyle(($theme=="phone") ? "phone" : "default"));
-
 	if ($fonc=="imprimer")
 	{
 		$tmpl_prg = new XTemplate (MyRep("print.htm","default"));
@@ -350,6 +348,8 @@
 	
 
 // ---- Affecte les blocs
+	$tmpl_prg->assign("style_url", GenereStyle(($theme=="phone") ? "phone" : "default"));
+
 	$tmpl_prg->assign("icone", $icone);
 	$tmpl_prg->assign("infos", $infos);
 	$tmpl_prg->assign("corps", $corps);

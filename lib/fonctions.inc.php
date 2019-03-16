@@ -772,7 +772,7 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 			{
 				$ret.="<b>".$v["aff"]."</b>";
 			}
-		  	$ret.=" <img src='".$corefolder."/static/images/sens_$trie.gif' border=0>";
+		  	$ret.=" <img src='".$corefolder."/static/images/sens_$trie.gif' border=0><input type='hidden' name='trie' value='".$trie."'><input type='hidden' name='order' value='".$order."'>";
 			$sub.="<th align='".$v["align"]."'>".((isset($v["sub"])) ? $v["sub"] : "")."</th>";
 			$subb.="<th align='".$v["align"]."'>".((isset($v["bottom"])) ? $v["bottom"] : "")."</th>";
 			$search.="<th><input type='text' style='width:".$v["width"]."px;' name='tabsearch[".$name."]' value='".((isset($tabsearch[$name])) ? $tabsearch[$name] : '')."' OnChange='document.getElementById(\"form_tableau\").submit();'></th>";
