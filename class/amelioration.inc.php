@@ -26,7 +26,6 @@ class amelioration_core extends objet_core
 	protected $rub="detail";
 
 	protected $droit=array("status"=>"ModifAmeliorationStatus");
-	// protected $type=array("titre"=>"varchar","description"=>"text","status"=>"enum","module"=>"enum");
 
 	protected $fields=array
 	(
@@ -34,14 +33,10 @@ class amelioration_core extends objet_core
 		"description"=>Array("type"=>"text"),
 		"version"=>Array("type"=>"varchar","len"=>10),
 		"status"=>Array("type"=>"enum","index" => "1"),
-		"module"=>Array("type"=>"varchar","len"=>10,"index" => "1"),
+		"module"=>Array("type"=>"enum","index" => "1"),
 		"actif"=>Array("type"=>"bool", "default" => "oui", "index" => "1",),
 		"uid_dist" => Array("type" => "number"),
 		"mail_dist" => Array("type" => "varchar","len"=>104),
-		"uid_creat" => Array("type" => "number"),
-		"dte_creat" => Array("type" => "datetime"),
-		"uid_maj" => Array("type" => "number"),
-		"dte_maj" => Array("type" => "datetime"),
 	);
 
 	
@@ -61,11 +56,7 @@ class amelioration_core extends objet_core
 	{
 		global $gl_uid;
 		
-		$this->data["titre"]="";
-		$this->data["description"]="";
-		$this->data["version"]="";
 		$this->data["status"]="1new";
-		$this->data["module"]="";
 		$this->data["uid_dist"]=$gl_uid;
 		
 		$tmpusr = new user_core($gl_uid,$sql,false,false);
@@ -183,7 +174,17 @@ class amelioration_core extends objet_core
 				$usr = new user_core($id,$this->sql,false,true);
 				if ($usr->data["mail"]!="")
 				{
-					MyMail($MyOpt["from_email"],$usr->data["mail"],array(),"[Amélioration] ".$this->data["titre"],$this->data["description"]."<br><br><a href='".$MyOpt["host"]."/index.php?mod=ameliorations&rub=detail&id=".$this->id."'>-Détail-</a>");
+					// MyMail($MyOpt["from_email"],$usr->data["mail"],array(),"[Amélioration] ".$this->data["titre"],);
+					// $this->data["description"]."<br><br><a href='".$MyOpt["host"]."/index.php?mod=ameliorations&rub=detail&id=".$this->id."'>-Détail-</a>"
+
+					$tabvar=array();
+					$tabvar["description"]=$this->val("description");
+					$tabvar["status"]=$this->val("status");
+					$tabvar["num"]="#".CompleteTxt($this->id,4,"0");
+					$tabvar["id"]=$this->id;
+					
+					SendMailFromFile($MyOpt["from_email"],$usr->data["mail"],array(),"[Amélioration] ".$this->data["titre"],$tabvar,"echeance_nok");
+
 				}
 			}
 		}

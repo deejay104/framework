@@ -37,4 +37,25 @@ Cordialement"
 // *****************************************************************
 
 
+// *****************************************************************
+	$tabMails["amelioration"]=Array
+	(
+		"titre"=>"",
+		"balise"=>"description,num,status,id,url",
+		"mail"=>
+"
+Notification de mise à jour de l'amélioration {num} :
+Status : {status}
+
+Description :
+{description}
+
+
+<a href='{url}/index.php?mod=ameliorations&rub=detail&id={id}'>-Détail-</a>
+
+"
+	);
+// *****************************************************************
+
+
 ?>

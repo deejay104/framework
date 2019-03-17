@@ -232,7 +232,7 @@ $tabTmpl=Array
 	
 	require_once ("class/amelioration.inc.php");
 	$obj=new amelioration_core(0,$sql);
-	$obj->genSqlTab($tabCustom);
+	$obj->genSqlTab($tabTmpl);
 
 
 ?>
