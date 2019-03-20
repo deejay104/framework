@@ -303,7 +303,6 @@ function CalcDate($dte, $n)
   
 function SendMailFromFile($from,$to,$tabcc,$subject="",$tabvar,$name,$files="",$dest="mail")
 { global $sql,$mod,$appfolder,$MyOpt,$gl_uid;
-
 	$q="SELECT * FROM ".$MyOpt["tbl"]."_mailtmpl WHERE nom='".$name."'";
 	$res=$sql->QueryRow($q);
 
@@ -312,6 +311,7 @@ function SendMailFromFile($from,$to,$tabcc,$subject="",$tabvar,$name,$files="",$
 	}
 	else
 	{
+		error_log("No template found");
 		return false;
 	}
 	
@@ -351,6 +351,7 @@ function SendMailFromFile($from,$to,$tabcc,$subject="",$tabvar,$name,$files="",$
 	{
 		$mail.="\n\n-Email envoyé à partir du site ".$MyOpt["site_title"]."-";
 		$mail=nl2br($mail);
+
 		return MyMail($from,$to,$tabcc,$subject,$mail,"",$files);
 	}
 }

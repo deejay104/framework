@@ -179,12 +179,11 @@ class amelioration_core extends objet_core
 
 					$tabvar=array();
 					$tabvar["description"]=$this->val("description");
-					$tabvar["status"]=$this->val("status");
+					$tabvar["status"]=$this->aff("status");
 					$tabvar["num"]="#".CompleteTxt($this->id,4,"0");
 					$tabvar["id"]=$this->id;
-					
-					SendMailFromFile($MyOpt["from_email"],$usr->data["mail"],array(),"[Amélioration] ".$this->data["titre"],$tabvar,"echeance_nok");
-
+				
+					SendMailFromFile($MyOpt["from_email"],$usr->data["mail"],array(),"[Amélioration] ".$this->data["titre"],$tabvar,"amelioration");
 				}
 			}
 		}
