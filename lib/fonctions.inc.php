@@ -14,7 +14,6 @@ function GetModule($mod)
 function MyRep($file,$mymod="",$custom=true)
 {
 	global $mod,$theme,$appfolder;
-	
 	if ($mymod=="")
 	{
 		$mymod=$mod;

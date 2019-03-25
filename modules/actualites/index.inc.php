@@ -128,12 +128,16 @@
 
 
 // ---- Actualités
-	if ( (!isset($limit)) || (!is_numeric($limit)) || ($limit==0) )
+
+	$limit=checkVar("limit","numeric");
+	if ( ($limit==0) )
 	  { $limit=10; }
 	$tmpl_x->assign("aff_limit", $limit+5);	
 
+	$search=addslashes(checkVar("search","varchar",10));
+
 	$q="";
-	if ((isset($search)) && ($search!=""))
+	if ($search!="")
 	  {
 	  	$q=" AND (titre LIKE '%".$search."%' OR message LIKE '%".$search."%') ";
 			$tmpl_x->assign("aff_search", $search);

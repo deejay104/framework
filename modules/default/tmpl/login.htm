@@ -1,10 +1,14 @@
 <!-- BEGIN: main -->
 <!DOCTYPE html>
 <html>
-  <head>
-  <title>{site_title} - Login</title>
-  <link rel="SHORTCUT ICON" href="{corefolder}/static/images/favicon.png" />
-  <link rel='stylesheet' href='{style_url}' type='text/css' />
+	<head>
+	  <title>{site_title} - Login</title>
+	  <link rel="SHORTCUT ICON" href="{corefolder}/static/images/favicon.png" />
+	  <link rel='stylesheet' href='{style_url}' type='text/css' />
+
+	</head>
+
+<body onload="setFormFocus();">
 
 	<script language="JavaScript" src="{corefolder}/static/js/_md5.js"></script>
 	<script language="javascript">
@@ -15,6 +19,16 @@
 			document.forms[0].username.select();
 		}
 	</script>		
+
+<!-- BEGIN: logout -->
+	<script language="javascript">
+		if (localStorage)
+		{
+			localStorage.setItem("myid","");
+			localStorage.setItem("mytoken","");
+		}
+	</script>
+<!-- END: logout -->
 
 <!-- BEGIN: secure -->
 	<script language="javascript">
@@ -47,10 +61,6 @@
 		}
 	</script>		
 <!-- END: unsecure -->
-
-  </head>
-
-<body onload="setFormFocus();">
 
 
 <form METHOD="post" ACTION="index.php" NAME="FormLogin" OnSubmit="cryptData();">

@@ -24,7 +24,12 @@
 // ---- Charge le template
 	$tmpl_x = new XTemplate (MyRep("editer.htm"));
 	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
-	
+
+// ---- Paramètres
+	$fid=checkVar("fid","numeric");
+	$mid=checkVar("mid","numeric");
+	$fpars=checkVar("fpars","numeric");
+	$fprec=checkVar("fprec","varchar");
 
 // ---- Titre de la page
 

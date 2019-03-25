@@ -27,7 +27,6 @@
 
 	$var=preg_replace("/\/login.php/","",$var);
 
-
 // ---- Force la timezone
 	if ($MyOpt["timezone"]!="")
 	  { date_default_timezone_set($MyOpt["timezone"]); }
@@ -80,6 +79,13 @@
 // ---- Charge le numéro de version
 	require ("version.php");
 
+// ---- Charge les templates
+	$module="modules";
+	$tmpl_prg = LoadTemplate("login","default");
+
+// ---- Connection à la base de données
+	$sql   = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db,$port);
+
 // ---- Test si l'on a validé la page
 	$ok=0;
 	$errmsg="";
@@ -92,7 +98,6 @@
 
 		//preg_match("/^([^ ]*) (.*?)$/",$username,$t);
 
-		$sql   = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db,$port);
 		$query = "SELECT id,prenom,nom,mail,password FROM ".$MyOpt["tbl"]."_utilisateurs WHERE ((mail='$username' AND mail<>'') OR (initiales='$username' AND initiales<>'')) AND actif='oui' AND virtuel='non'";
 
 		$res   = $sql->QueryRow($query);
@@ -103,11 +108,26 @@
 				$sql->Insert($query);
 				$_SESSION['uid']=$res["id"];
 
+				$myid=0;
+				$token="";
+				if ($MyOpt["tokenexpire"]>0)
+				{
+					$token=bin2hex(random_bytes(32));
+
+					$query="INSERT INTO ".$MyOpt["tbl"]."_token SET uid=".$res["id"].", token='".$token."', dte_creat='".now()."', dte_expire='".date("Y-m-d H:i:s",time()+$MyOpt["tokenexpire"]*3600*24)."'";
+					$myid=$sql->Insert($query);
+					$_SESSION['sessid']=$myid;
+				}
+				
 				$query="UPDATE ".$MyOpt["tbl"]."_utilisateurs SET dte_login='".now()."' WHERE id='".$res["id"]."'";
 				$sql->Update($query);
-
 	
-				echo "<HTML><HEAD><SCRIPT language=\"JavaScript\">function go() { document.location=\"$var\"; }</SCRIPT></HEAD><BODY onload=\"go();\"></BODY></HTML>";
+				echo "<html><body>";
+				echo "<script>";
+				echo "if (localStorage) { localStorage.setItem(\"myid\",\"".$myid."\"); localStorage.setItem(\"mytoken\",\"".$token."\"); }";
+				echo "document.location=\"$var\";";
+				echo "</script>";
+				echo "</body></html>";
 				exit;
 
 		}
@@ -118,15 +138,27 @@
 	}
 	else if ($fonc == "logout")
 	{
-		$_SESSION['uid']="";
-		echo "<HTML><HEAD><SCRIPT language=\"JavaScript\">function go() { document.location=\"index.php\"; }</SCRIPT></HEAD><BODY onload=\"go();\"></BODY></HTML>";
+		if ($_SESSION['sessid']>0)
+		{
+			$query="UPDATE ".$MyOpt["tbl"]."_token SET active='non' WHERE id='".$_SESSION['sessid']."'";
+			$sql->Update($query);
+		}
+
+		$_SESSION['uid']=0;
+		$_SESSION['sessid']=0;
+		
+		echo "<html><body>";
+		echo "<script>";
+		echo "if (localStorage) { localStorage.setItem(\"myid\",\"\"); localStorage.setItem(\"mytoken\",\"\"); }";
+		echo "document.location=\"index.php\";";
+		echo "</script>";
+		echo "</body></html>";
 		exit;
+
+		// $tmpl_prg->parse("main.logout");
 	}
 
-// ---- Charge les templates
-	$module="modules";
-	$tmpl_prg = LoadTemplate("login","default");
-
+// ---- 
 	// if ($tmpl_prg->text("main.unsecure")=="")
 	$tmpl_prg->parse("main.secure");
 

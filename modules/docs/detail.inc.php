@@ -26,12 +26,15 @@
 	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 
 // ---- Vérifie les variables
-	if (!is_numeric($fid))
-	  { echo "Erreur dans la variable fid"; exit; }
-	if (!is_numeric($mid))
-	  { echo "Erreur dans la variable mid"; exit; }
 
+	$fid=checkVar("fid","numeric");
+	$mid=checkVar("mid","numeric");
+	$critere=checkVar("critere","varchar");
 
+	if ($mid==0)
+	{
+		$mid=$fpars;
+	}
 
 // ---- On marque le message comme lu
 	if ($gl_uid>0)

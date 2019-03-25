@@ -18,21 +18,56 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-// ---- Autorisation d'accès
+  	require ("lib/fonctions.inc.php");
+
+// ---- Connexion à la base de données
 	session_start();
 	require ("class/mysql.inc.php");
 	$sql = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db,$port);
 	$sql->show=false;
 
+
+// ---- Variables
+	$myid=checkVar("myid","numeric");
+	$mykey=checkVar("mykey","varchar");
+	$mod=checkVar("mod","varchar");
+	$rub=checkVar("rub","varchar");
+
 	$gl_uid = 0;
 	$token=(!isset($token)) ? "" : $token;
 	$token=($token=="sys") ? "" : $token;
+
 	
-	if ((isset($_SESSION['uid'])) && ($_SESSION['uid']>0))
+// ---- Demande d'authentification
+	if ($mykey!="")
+	{
+		$res=array();
+		$res["mykey"]=md5("NOK");
+
+		$query = "SELECT id,uid FROM ".$MyOpt["tbl"]."_token WHERE id='".$myid."' AND active='oui' AND MD5(CONCAT('".md5(session_id())."','-',token))='".$mykey."' AND dte_expire<>'0000-00-00' AND dte_expire>NOW()";
+		$res  = $sql->QueryRow($query);
+		if ($res["id"]>0)
+		{
+			$query="UPDATE ".$MyOpt["tbl"]."_token SET dte_expire='".date("Y-m-d H:i:s",time()+$MyOpt["tokenexpire"]*3600*24)."'";
+			$sql->Update($query);
+
+			$gl_uid=$res["uid"];
+			$_SESSION['uid']=$gl_uid;
+			$_SESSION['sessid']=$myid;
+
+			$res["auth"]="OK";
+			$res["myid"]=$res["id"];
+			$res["mykey"]=md5("OK");
+		}
+
+		echo json_encode($res);
+		exit;
+	}
+	else if ((isset($_SESSION['uid'])) && ($_SESSION['uid']>0))
 	{
 		$gl_uid = $_SESSION['uid'];
 	}
-	else if (($_REQUEST["mod"]=="admin") && ($_REQUEST["rub"]=="update"))
+	else if (($mod=="admin") && ($rub=="update"))
 	{
 		$query = "SELECT * FROM ".$MyOpt["tbl"]."_config";
 		$res  = $sql->QueryRow($query);
@@ -72,7 +107,6 @@
 	header('Content-type: text/html; charset=ISO-8859-1');
 
 // ---- Charge les informations standards
-  	require ("lib/fonctions.inc.php");
 
 	if ($MyOpt["timezone"]!="")
 	  { date_default_timezone_set($MyOpt["timezone"]); }

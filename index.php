@@ -19,11 +19,49 @@
 */
 ?>
 <?php
+	if (!isset($MyOpt))
+	{
+		$MyOpt=array();
+	}
+
 	if ($MyOpt["debug"]=="on")
 	{
 		$starttime=microtime();
 	}
 
+// ---- Charge les bibliothèques
+	require ("lib/fonctions.inc.php");
+
+// ---- Nettoyage des variables
+	$tabPost=array();
+	$fonc=checkVar("fonc","varchar");
+
+// ---- Gestion des droits
+	session_start();
+ 
+	if ($fonc=="logout")
+	{
+		include "login.php";
+		exit;
+	}
+	else if ((isset($_SESSION['uid'])) && ($_SESSION['uid']>0))
+	{
+		$gl_uid = $_SESSION['uid'];
+	}
+	else
+	{
+		if ( ((isset($_SESSION['sessid'])) && ($_SESSION['sessid']==-1)) || ($MyOpt["tokenexpire"]==0) )
+		{
+			include "login.php";
+			exit;
+		}
+		else
+		{
+			$_SESSION['sessid']=-1;
+			include "auth.php";
+			exit;
+		}
+	}
 
 // ---- Header de la page
 	// Date du passé
@@ -57,21 +95,10 @@
 
 	eval($e);
 
-	if (!isset($MyOpt))
-	{
-		$MyOpt=array();
-	}
-
-	$tabPost=array();
 
 // ---- Force la timezone
 	if ($MyOpt["timezone"]!="")
 	  { date_default_timezone_set($MyOpt["timezone"]); }
-
-// ---- Charge les bibliothèques
-	require ("lib/fonctions.inc.php");
-
-
 	
 // ---- Vérifie la variable $mod
 	$mod=checkVar("mod","varchar");
@@ -87,18 +114,7 @@
 	if (!preg_match("/^[a-z0-9_]*$/",$rub))
 	  { $rub = "index"; }
   
-// ---- Nettoyage des variables
-	$fonc=checkVar("fonc","varchar");
 
-// ---- Gestion des droits
-	session_start();
- 
-	if ($fonc=="logout")
-	  { include "login.php"; exit; }
-	else if ((isset($_SESSION['uid'])) && ($_SESSION['uid']>0))
-	  { $gl_uid = $_SESSION['uid']; }
-	else
-	  { include "login.php"; exit; }
 
 // ---- Défini les variables globales
 	$prof="";
@@ -118,7 +134,7 @@
 // Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; XBLWP7; ZuneWP7)
 // Mozilla/5.0 (iPad; U; CPU OS 4_3_3 like Mac OS X; en-us) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8J3 Safari/6533.18.5
 
-	$theme="";
+	$theme=checkVar("theme","varchar",10);
 	$settheme=checkVar("settheme","varchar");
 	if ($settheme!="")
 	{	
@@ -127,6 +143,9 @@
 		
 		$theme=$themes[$_REQUEST["settheme"]];
 		$_SESSION['mytheme']=$theme;
+	}
+	else if ($theme!="")
+	{
 	}
 	else if (isset($_SESSION['mytheme']))
 	{
@@ -194,13 +213,15 @@
 
 
 // ---- Template par default
-	$tmpl="default";
-	$tmpl_prg = LoadTemplate($tmpl,"default");
-
 	if ($fonc=="imprimer")
 	{
 		$tmpl_prg = new XTemplate (MyRep("print.htm","default"));
 		$tmpl_prg->assign("style_url", GenereStyle("print"));
+	}
+	else
+	{
+		$tmpl="default";
+		$tmpl_prg = LoadTemplate($tmpl,"default");
 	}
 
 

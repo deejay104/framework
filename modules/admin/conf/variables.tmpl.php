@@ -41,6 +41,11 @@ $MyOptHelp["host"]="Chemin complet du site. Utilisé pour générer les url statiqu
 $MyOptTmpl["site_title"]="MnMs";
 $MyOptHelp["site_title"]="Titre du site web";
 
+// Temps de validité des tokens
+$MyOptTmpl["tokenexpire"]="0";
+$MyOptHelp["tokenexpire"]="Nombre de jours de validité des sessions par token (0=désactivé)";
+
+
 // email par défault d'envoie des mails
 $MyOptTmpl["from_email"]="noreply@les-mnms.net";
 $MyOptHelp["from_email"]="Email par défault d'envoie des mails";
