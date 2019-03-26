@@ -112,7 +112,8 @@
 				$token="";
 				if ($MyOpt["tokenexpire"]>0)
 				{
-					$token=bin2hex(random_bytes(32));
+					// $token=bin2hex(random_bytes(32));
+					$token=bin2hex(openssl_random_pseudo_bytes(32));
 
 					$query="INSERT INTO ".$MyOpt["tbl"]."_token SET uid=".$res["id"].", token='".$token."', dte_creat='".now()."', dte_expire='".date("Y-m-d H:i:s",time()+$MyOpt["tokenexpire"]*3600*24)."'";
 					$myid=$sql->Insert($query);
