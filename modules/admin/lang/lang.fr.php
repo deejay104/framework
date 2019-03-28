@@ -50,4 +50,7 @@ $tabLang["lang_multi"]="Multi";
 $tabLang["lang_notif"]="Notif";
 $tabLang["lang_delay"]="Délai";
 
+$tabLang["lang_lastexec"]="Dernière exécution";
+$tabLang["lang_nextexec"]="Prochaine exécution";
+
 ?>
