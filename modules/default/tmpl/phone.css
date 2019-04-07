@@ -367,6 +367,9 @@ input[type=submit] { -webkit-appearance: none; -moz-appearance: none; appearance
 
 .formulaireTextarea { padding: 0px 20px 5px 20px; }
 
+.formulaireInformation { display: none; }
+
+
 /* **** Tableau **** */
 .tableauAff { border-bottom: 1px solid #cccccc; }
 .tableauAff th { background-color: #{FormulaireBackgroundNormal}; height: 30px; border-bottom: 1px solid #cccccc; }

@@ -530,15 +530,22 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 	{
 		if (!isset($v["align"]))
 		{
+			$tabTitre[$name]["align"]="center";
 			$v["align"]="center";
 		}
+		if (!isset($v["mobile"]))
+		{
+			$tabTitre[$name]["mobile"]="";
+			$v["mobile"]="";
+		}
+
 		if ($name==$order)
 		{
-			$ret.="<th width='".$v["width"]."'".(($v["align"]!="") ? " align='".$v["align"]."'" : "").">";
+			$ret.="<th width='".$v["width"]."'".(($v["align"]!="") ? " align='".$v["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").">";
 			$ret.="<b><a href='$page&order=$name&trie=".(($trie=="d") ? "i" : "d").(($url!="") ? "&$url" : "")."&ts=0'>".$v["aff"]."</a></b>";
 		  	$ret.=" <img src='".$corefolder."/static/images/sens_$trie.gif' border=0>";
-			$sub.="<th align='".$v["align"]."'>".((isset($v["sub"])) ? $v["sub"] : "")."</th>";
-			$subb.="<th align='".$v["align"]."'>".((isset($v["bottom"])) ? $v["bottom"] : "")."</th>";
+			$sub.="<th align='".$v["align"].(($v["mobile"]=="no") ? " class='noMobile'" :"")."'>".((isset($v["sub"])) ? $v["sub"] : "")."</th>";
+			$subb.="<th align='".$v["align"].(($v["mobile"]=="no") ? " class='noMobile'" :"")."'>".((isset($v["bottom"])) ? $v["bottom"] : "")."</th>";
 		}
 		else if ($v["aff"]=="<line>")
 		{
@@ -546,16 +553,16 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 			{
 				$v["width"]=1;
 			}
-			$ret.="<th style='width:".$v["width"]."px; border-left: 1px solid black;'>";
-			$sub.="<th style='border-left: 1px solid black;'></th>";
-			$subb.="<th style='border-left: 1px solid black;'></th>";
+			$ret.="<th style='width:".$v["width"]."px; border-left: 1px solid black;'".(($v["mobile"]=="no") ? " class='noMobile'" :"").">";
+			$sub.="<th style='border-left: 1px solid black;'".(($v["mobile"]=="no") ? " class='noMobile'" :"")."></th>";
+			$subb.="<th style='border-left: 1px solid black;'".(($v["mobile"]=="no") ? " class='noMobile'" :"")."></th>";
 		}
 		else
 		{
-			$ret.="<th width='".$v["width"]."'".(($v["align"]!="") ? " align='".$v["align"]."'" : "").">";
+			$ret.="<th width='".$v["width"]."'".(($v["align"]!="") ? " align='".$v["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").">";
 			$ret.="<b><a href='$page&order=$name&trie=d".(($url!="") ? "&$url" : "")."&ts=0'>".$v["aff"]."</a></b>";
-			$sub.="<th align='".$v["align"]."'>".((isset($v["sub"])) ? $v["sub"] : "")."</th>";
-			$subb.="<th align='".$v["align"]."'>".((isset($v["bottom"])) ? $v["bottom"] : "")."</th>";
+			$sub.="<th align='".$v["align"].(($v["mobile"]=="no") ? " class='noMobile'" :"")."'>".((isset($v["sub"])) ? $v["sub"] : "")."</th>";
+			$subb.="<th align='".$v["align"].(($v["mobile"]=="no") ? " class='noMobile'" :"")."'>".((isset($v["bottom"])) ? $v["bottom"] : "")."</th>";
 		}
 		if (isset($v["sub"]))
 		{
@@ -620,11 +627,11 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 					if ("*".$val[$name]["val"]=="*<line>")
 					{
 						// echo "'".$val[$name]["val"]."'";
-						$ret.="<td style='border-left: 1px solid black;'></td>";
+						$ret.="<td style='border-left: 1px solid black;'".(($v["mobile"]=="no") ? " class='noMobile'" :"")."></td>";
 					}
 					else
 					{
-						$ret.="<td ".(($val[$name]["align"]!="") ? "align='".$val[$name]["align"]."'" : "").">".$val[$name]["aff"]."</td>";
+						$ret.="<td ".(($val[$name]["align"]!="") ? "align='".$val[$name]["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").">".$val[$name]["aff"]."</td>";
 					}
 				}
 				$ret.="</tr>\n";
@@ -753,17 +760,23 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 	{
 		if (!isset($v["align"]))
 		{
+			$tabTitre[$name]["align"]="center";
 			$v["align"]="center";
 		}
-		
 		if (!isset($v["width"]))
 		{
+			$tabTitre[$name]["width"]=1;
 			$v["width"]=1;
+		}
+		if (!isset($v["mobile"]))
+		{
+			$tabTitre[$name]["mobile"]="";
+			$v["mobile"]="";
 		}
 		
 		if ($name==$order)
 		{
-			$ret.="<th width='".$v["width"]."'".(($v["align"]!="") ? " align='".$v["align"]."'" : "").">";
+			$ret.="<th width='".$v["width"]."'".(($v["align"]!="") ? " align='".$v["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").">";
 			if ($sort)
 			{
 				$ret.="<b><a href='$page&order=$name&trie=".(($trie=="d") ? "i" : "d").(($url!="") ? "&$url" : "")."&ts=0".$ls."'>".$v["aff"]."</a></b>";
@@ -773,9 +786,9 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 				$ret.="<b>".$v["aff"]."</b>";
 			}
 		  	$ret.=" <img src='".$corefolder."/static/images/sens_$trie.gif' border=0><input type='hidden' name='trie' value='".$trie."'><input type='hidden' name='order' value='".$order."'>";
-			$sub.="<th align='".$v["align"]."'>".((isset($v["sub"])) ? $v["sub"] : "")."</th>";
-			$subb.="<th align='".$v["align"]."'>".((isset($v["bottom"])) ? $v["bottom"] : "")."</th>";
-			$search.="<th><input type='text' style='width:".$v["width"]."px;' name='tabsearch[".$name."]' value='".((isset($tabsearch[$name])) ? $tabsearch[$name] : '')."' OnChange='document.getElementById(\"form_tableau\").submit();'></th>";
+			$sub.="<th align='".$v["align"]."'>".((isset($v["sub"])) ? $v["sub"] : "").(($v["mobile"]=="no") ? " class='noMobile'" :"")."</th>";
+			$subb.="<th align='".$v["align"]."'>".((isset($v["bottom"])) ? $v["bottom"] : "").(($v["mobile"]=="no") ? " class='noMobile'" :"")."</th>";
+			$search.="<th><input type='text' style='width:".$v["width"]."px;' name='tabsearch[".$name."]' value='".((isset($tabsearch[$name])) ? $tabsearch[$name] : '').(($v["mobile"]=="no") ? " class='noMobile'" :"")."' OnChange='document.getElementById(\"form_tableau\").submit();'></th>";
 		}
 		else if ($v["aff"]=="<line>")
 		{
@@ -786,7 +799,7 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 		}
 		else
 		{
-			$ret.="<th width='".$v["width"]."'".(($v["align"]!="") ? " align='".$v["align"]."'" : "").">";
+			$ret.="<th width='".$v["width"]."'".(($v["align"]!="") ? " align='".$v["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").">";
 			if ($sort)
 			{
 				$ret.="<b><a href='$page&order=$name&trie=d".(($url!="") ? "&$url" : "")."&ts=0".$ls."'>".$v["aff"]."</a></b>";
@@ -795,9 +808,9 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 			{
 				$ret.="<b>".$v["aff"]."</b>";
 			}
-			$sub.="<th align='".$v["align"]."'>".((isset($v["sub"])) ? $v["sub"] : "")."</th>";
-			$subb.="<th align='".$v["align"]."'>".((isset($v["bottom"])) ? $v["bottom"] : "")."</th>";
-			$search.="<th><input type='text' style='width:".($v["width"]-5)."px;' name='tabsearch[".$name."]' value='".((isset($tabsearch[$name])) ? $tabsearch[$name] : '')."' OnChange='document.getElementById(\"form_tableau\").submit();'></th>";
+			$sub.="<th align='".$v["align"]."'>".((isset($v["sub"])) ? $v["sub"] : "").(($v["mobile"]=="no") ? " class='noMobile'" :"")."</th>";
+			$subb.="<th align='".$v["align"]."'>".((isset($v["bottom"])) ? $v["bottom"] : "").(($v["mobile"]=="no") ? " class='noMobile'" :"")."</th>";
+			$search.="<th><input type='text' style='width:".($v["width"]-5)."px;' name='tabsearch[".$name."]' value='".((isset($tabsearch[$name])) ? $tabsearch[$name] : '').(($v["mobile"]=="no") ? " class='noMobile'" :"")."' OnChange='document.getElementById(\"form_tableau\").submit();'></th>";
 		}
 		if (isset($v["sub"]))
 		{
@@ -858,7 +871,7 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 					  }
 					else
 					  {
-						$ret.="<td ".(((isset($val[$name]["align"])) && ($val[$name]["align"]!="")) ? " align='".$val[$name]["align"]."'" : "").">".(((!isset($val[$name]["aff"])) || ($val[$name]["aff"]=="")) ? $val[$name]["val"] : $val[$name]["aff"])."</td>";
+						$ret.="<td ".(((isset($val[$name]["align"])) && ($val[$name]["align"]!="")) ? " align='".$val[$name]["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").">".(((!isset($val[$name]["aff"])) || ($val[$name]["aff"]=="")) ? $val[$name]["val"] : $val[$name]["aff"])."</td>";
 					  }
 				  }
 				$ret.="</tr>\n";

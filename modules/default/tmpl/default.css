@@ -107,12 +107,22 @@ img { color: #FFFFFF; border: 0px; }
     #main-content { padding-left: 200px;  }
     #main-sidebar { display: block; width: 200px;  z-index: 9000; }
 }
+@media (max-width: 1024px) {
+		body { font-size:16px; }
+}
+
+@media (max-device-width: 714px) {
+	body { font-size:20px; }	
+	.noMobile { display: none!important; visibility: hidden; }
+}
 @media print {
     #responsive-navigation { display: none; }
     #main-content { width: 100%; left: 0px; }
     #main-sidebar { display: none; }
     .pagetitle { display: none; height: 0px; }
 }
+
+
 
 .formulaire input { width:155px; } /* Overlapped by responsive */
 .formulaire input[type=number] { width:50px; }
@@ -461,6 +471,9 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 
 
 .formulaireCadre { border: 1px solid #{FormulaireBackgroundNormal}; padding:5px; min-height:50px; margin-bottom:10px!important; }
+
+
+.formulaireInformation { min-width:300px; width:400px;  margin-left:10px; margin-bottom:10px; border: 1px solid #000000; border-radius: 5px; padding: 15px; background-color:#{FormulaireBackgroundNormal}; }
 
 
 /* **** Boutton de suppression */
