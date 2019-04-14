@@ -1,4 +1,4 @@
-<?
+<?php
 $tabTmpl=Array
 (
 	"actualites" => Array
@@ -29,8 +29,10 @@ $tabTmpl=Array
 	"config" => Array
 	(
 		"id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
-		"param" => Array("Type" => "varchar(20)", ),
-		"value" => Array("Type" => "varchar(20)", ),
+		"param" => Array("Type" => "varchar(20)", "Index"=>1 ),
+		"name1" => Array("Type" => "varchar(30)", "Index"=>1 ),
+		"name2" => Array("Type" => "varchar(30)", "Index"=>1 ),
+		"value" => Array("Type" => "text" ),
 		"dte_creat" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00" ),
 	),
 	"cron" => Array

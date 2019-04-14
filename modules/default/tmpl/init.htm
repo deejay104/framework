@@ -1,0 +1,118 @@
+<!-- BEGIN: main -->
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Init</title>
+</head>
+
+<body>
+
+	<div id='load' class="preloader5">
+		<center>
+		Updating configuration<br />
+		<span></span>
+		<span></span>
+		<span></span>
+		</center>
+	</div>
+
+	<div id='go' class="preloader5" style="visibility:hidden;">
+		<a href="index.php">-Enter-</a>
+	</div>
+	
+	<style>
+		.preloader5 {
+		   display:inline-block;
+		   font-size:14px;
+		   padding:0px;
+		   left:50%;
+		   top:50%;
+		   position: fixed;
+		}
+		.preloader5 span {
+		   vertical-align:middle;
+		   border-radius:100%;
+		   background:#000000;
+		   display:inline-block;
+		   width:10px;
+		   height:10px;
+		   margin:3px 2px;
+		   -webkit-animation:preloader5 0.8s linear infinite alternate;
+		   animation:preloader5 0.8s linear infinite alternate;
+		}
+		.preloader5 span:nth-child(1) {
+		   -webkit-animation-delay:-0.8s;
+		   animation-delay:-0.8s;
+		}
+		.preloader5 span:nth-child(2) {
+		   -webkit-animation-delay:-0.53333s;
+		   animation-delay:-0.53333s;
+		}
+		.preloader5 span:nth-child(3) {
+		   -webkit-animation-delay:-0.26666s;
+		   animation-delay:-0.26666s;
+		}
+		@keyframes preloader5 {
+		   from {transform: scale(0, 0);}
+		   to {transform: scale(1, 1);}
+		}
+		@-webkit-keyframes preloader5 {
+		   from {-webkit-transform: scale(0, 0);}
+		   to {-webkit-transform: scale(1, 1);}
+		}
+	</style>
+
+
+<!-- BEGIN: configdb -->
+		<div id='configdb' style='border: 1px solid #000000; margin-top: 70px; padding: 4px; '>
+		Config file is missing.
+		</div>
+<!-- END: configdb -->
+<!-- BEGIN: createdb -->
+		<script type="text/javascript" src="{corefolder}/external/jquery/jquery.min.js"></script>
+		<script type="text/javascript" src="{corefolder}/external/jquery/jquery-ui.min.js"></script>
+
+		<div id='createdb' style='width: 450px; margin-left:10px; margin-top: 60px; margin-bottom:40px; padding: 4px;'>
+		</div>
+		
+		<script>
+			$(function() {
+				$.ajax({
+					url:'api.php?mod=admin&rub=update',
+					type: 'html',
+					dataType: 'JSON',
+					success: function(response)
+					{
+
+						if (response.result=="OK")
+						{
+							document.getElementById("createdb").style.border = "1px solid #000000;";
+							document.getElementById("createdb").style.backgroundColor = "#BBFFAA";
+							document.getElementById("load").style.visibility="hidden";
+							document.getElementById("go").style.visibility="visible";
+						}
+						else
+						{
+							document.getElementById("createdb").style.border = "1px solid #000000;";
+							document.getElementById("createdb").style.backgroundColor = "#FFBBAA";
+						}
+						document.getElementById("createdb").innerHTML = response.data;
+					},
+					error : function(response)
+					{
+						console.log(response);
+						document.getElementById("createdb").style.border = "1px solid #000000;";
+						document.getElementById("createdb").style.backgroundColor = "#FF8877";
+						document.getElementById("createdb").innerHTML = "Error";
+					}
+				});
+			})
+
+		</script>
+		
+<!-- END: createdb -->
+
+</body>
+</html>
+
+<!-- END: main -->

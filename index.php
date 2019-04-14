@@ -30,6 +30,20 @@
 		error_reporting(E_ALL); 
 		ini_set("display_errors", 1); 
 	}
+	if ($MyOpt["debugtime"]=="on")
+	{
+		$debug=array();
+	}
+	
+	$tabLang=array();
+
+// ---- Ouverture de la session
+	session_start();
+	$gl_uid=0;
+	if ((isset($_SESSION['uid'])) && ($_SESSION['uid']>0))
+	{
+		$gl_uid = $_SESSION['uid'];
+	}
 
 // ---- Charge les bibliothèques
 	require ("lib/fonctions.inc.php");
@@ -38,19 +52,98 @@
 	$tabPost=array();
 	$fonc=checkVar("fonc","varchar");
 
+
+// ---- Charge les objets
+	require ("class/xtpl.inc.php");
+	require ("class/objet.inc.php");
+	require ("class/user.inc.php");
+	require ("class/mysql.inc.php");
+	require ("class/document.inc.php");
+
+// ---- Se connecte à la base MySQL
+	$sql = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db, $port);
+
+// ---- Vérifie si la configuration initiale a été faite
+	$MyOpt["tbl"]=$gl_tbl;
+	if ($gl_uid==0)
+	{
+		// Vérifie si la table config existe
+		$q="SHOW TABLES";
+		$sql->Query($q);
+
+		$ok=0;
+		if ($sql->rows>0)
+		{
+			for($i=0; $i<$sql->rows; $i++)
+			{
+				$sql->GetRow($i);
+				if ($sql->data["Tables_in_".$db]==$MyOpt["tbl"]."_config")
+				{
+					$ok=1;
+				}
+			}
+		}
+
+		if ($ok==0)
+		{
+			$module="modules";
+			$tmpl_prg = LoadTemplate("init","default");
+			$tmpl_prg->assign("corefolder", $corefolder);
+
+			if (($mysqluser=="") || ($gl_tbl==""))
+			{
+				$tmpl_prg->parse("main.configdb");
+			}
+			else
+			{
+				$tmpl_prg->parse("main.createdb");
+			}
+
+			$tmpl_prg->parse("main");
+			echo $tmpl_prg->text("main");
+			exit;
+		}
+
+	}
+
+
+// ---- Charge les variables
+	$q="SELECT value FROM ".$MyOpt["tbl"]."_config WHERE param='variable' AND name1='version'";
+	$res=$sql->QueryRow($q);
+	
+	if ($res["value"]!=$MyOpt["version"])
+	{
+		$MyOpt=array();
+		$MyOpt["tbl"]=$gl_tbl;
+		$q="SELECT * FROM ".$MyOpt["tbl"]."_config WHERE param='variable'";
+		$sql->Query($q);
+		for($i=0; $i<$sql->rows; $i++)
+		{
+			$sql->GetRow($i);
+			if ($sql->data["name2"]=="")
+			{
+				$MyOpt[$sql->data["name1"]]=$sql->data["value"];
+			}
+			else
+			{
+				$MyOpt[$sql->data["name1"]][$sql->data["name2"]]=$sql->data["value"];
+			}
+		}
+		$ret=GenereFichierVariables($MyOpt);
+	}
+
+	if ($MyOpt["debugtime"]=="on")
+	{
+		$debug["init"]=microtime();
+	}
+	
 // ---- Gestion des droits
-	session_start();
- 
 	if ($fonc=="logout")
 	{
 		include "login.php";
 		exit;
 	}
-	else if ((isset($_SESSION['uid'])) && ($_SESSION['uid']>0))
-	{
-		$gl_uid = $_SESSION['uid'];
-	}
-	else
+	if ($gl_uid==0)
 	{
 		if ( ((isset($_SESSION['sessid'])) && ($_SESSION['sessid']==-1)) || ($MyOpt["tokenexpire"]==0) )
 		{
@@ -172,17 +265,6 @@
 // ---- Charge le numéro de version
 	require ("version.php");
 
-// ---- Charge les templates
-	require ("class/xtpl.inc.php");
-
-// ---- Charge les class
-	require ("class/objet.inc.php");
-	require ("class/user.inc.php");
-	require ("class/mysql.inc.php");
-	require ("class/document.inc.php");
-
-// ---- Se connecte à la base MySQL
-	$sql = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db, $port);
 
 // ---- Fonction des informations de l'utilisateur
 	$myuser = new user_core($gl_uid,$sql,true);
@@ -203,7 +285,6 @@
 	{
 		$lang="fr";
 	}
-	$tabLang=array();
 	require (MyRep("lang.".$lang.".php","default",false));
 
 // ---- Maintenance	
@@ -261,6 +342,10 @@
 		$_SESSION["tab_checkpost"][""]="ok";
 	  }
 
+	if ($MyOpt["debugtime"]=="on")
+	{
+		$debug["load"]=microtime();
+	}
 
 // ---- Définition des variables
 	$gl_myprint_txt="";
@@ -322,6 +407,10 @@
 	}
 	
 
+	if ($MyOpt["debugtime"]=="on")
+	{
+		$debug["menu"]=microtime();
+	}
 	
 // ---- Charge la rubrique
 	$affrub=$rub;
@@ -368,6 +457,10 @@
 		}
 	}
 
+	if ($MyOpt["debugtime"]=="on")
+	{
+		$debug["rub"]=microtime();
+	}
 	
 
 // ---- Affecte les blocs
@@ -388,6 +481,10 @@
 	{
 		$time=round((microtime()-$starttime)*1000,1);
 		$t=" (".$time."ms)";
+	}
+	if ($MyOpt["debugtime"]=="on")
+	{
+		$debug["end"]=microtime();
 	}
 	$tmpl_prg->assign("version", $version."-".$core_version.(($MyOpt["maintenance"]=="on") ? " - ".ucwords($tabLang["core_maintenance"]) : "").$t);
 
@@ -413,5 +510,19 @@
 		{
 			echo "<div style='border:1px solid #000000; background-color:#ffcccc; padding:10px; position:fixed; right:20px; top:20px; display: inline-block;'>".$txt."</div>";
 		}
+	}
+
+	if ($MyOpt["debugtime"]=="on")
+	{
+		echo "<div style='border:1px solid #000000; padding:10px; margin: 0px; position:fixed; right:20px; bottom:30px; display: inline-block; font-size:10px;'>";
+		$o=$starttime;
+		foreach($debug as $k=>$t)
+		{
+			$time=round(($t-$o)*1000,1);
+			$o=$t;
+			$total=round(($t-$starttime)*1000,1);
+			echo "<p style='margin:0px; line-height:14px;'>".$k." : ".$time."ms : ".$total."ms</p>";
+		}
+		echo "</div>";
 	}
 ?>

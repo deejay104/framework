@@ -1,4 +1,4 @@
-<?
+<?php
 // ---- Refuse l'accès en direct
 	if ((!isset($token)) || ($token==""))
 	  { header("HTTP/1.0 401 Unauthorized"); exit; }
@@ -10,78 +10,17 @@
 
 	$sql->show=false;
 
+
+	
 function AjoutLog($txt)
 {
 	return utf8_encode(htmlentities($txt,ENT_HTML5,"ISO-8859-1"))."<br />";
 }	
 
-// ---- Vérification des variables
-	require ("modules/$mod/conf/variables.tmpl.php");
-	if (file_exists("../modules/admin/conf/variables.tmpl.php"))
-	{
-		require("../modules/admin/conf/variables.tmpl.php");
-	}
-	
-	$ret["data"].=AjoutLog($tabLang["lang_checkvar"]);
-
-	$nb=0;
-	$MyOptTab=array();
-
-	foreach ($MyOptTmpl as $nom=>$d)
-	{
-		if (is_array($d))
-		{
-			foreach($d as $var=>$dd)
-			{
-				if(!isset($MyOpt[$nom][$var]))
-				{
-					$MyOptTab[$nom][$var]=$dd;
-					$nb=$nb+1;
-					// echo "Ajout : \$MyOpt[\"".$nom."\"][\"".$var."\"]='".$dd."'<br>";
-					$ret["data"].=AjoutLog(" - Ajout : ".$nom.":".$var."='".$dd."'");
-				}
-				else
-				{
-					$MyOptTab[$nom][$var]=$MyOpt[$nom][$var];
-				}
-			}
-		}
-		else
-		{
-			if(!isset($MyOpt[$nom]))
-			{
-				$MyOptTab[$nom]["valeur"]=$d;
-				$nb=$nb+1;
-				// echo "Ajout : \$MyOpt[\"".$nom."\"]='".$d."'<br>";
-				$ret["data"].=AjoutLog(" - Ajout : ".$nom."='".preg_replace("/\//","-",$d)."'");
-			}
-			else
-			{
-				$MyOptTab[$nom]["valeur"]=$MyOpt[$nom];
-			}
-		}
-	}
-
-	if ($nb>0)
-	{
-		// echo $nb." variables ajoutées<br>";
-		$ret["data"].=AjoutLog($nb." variables ajoutées");
-
-		$res=GenereVariables($MyOptTab);
-		$ret["data"].=AjoutLog($res);
-		$MyOpt=UpdateVariables($MyOptTab);
-	}
-
-	if (!file_exists("../config/variables.inc.php"))
-	{
-		error_log("easy-aero variable file does not exist");
-		$ret["result"]="NOK";
-		$ret["data"]=AjoutLog("La création du fichier variables a échouée");
-		echo json_encode($ret);
-		exit;
-	}
 	
 // ---- Charge la structure des tables de la version_compare
+	$MyOpt["tbl"]=$gl_tbl;
+
 	$ret["data"].=AjoutLog($tabLang["lang_checkdb"]);
 	require ("modules/admin/conf/structure.tmpl.php");
 
@@ -171,6 +110,7 @@ function AjoutLog($txt)
                 // )
         // )
 
+
 	foreach($tabTmpl as $tab=>$fields)
 	{
 		// Tester si la table n'existe pas
@@ -213,7 +153,6 @@ function AjoutLog($txt)
 		{
 			foreach($fields as $field=>$d)
 			{
-
 				// Le champ n'existe pas
 				if (!isset($tabProd[$MyOpt["tbl"]."_".$tab][$field]))
 				{
@@ -264,7 +203,74 @@ function AjoutLog($txt)
 		}
 	}
 
+// ---- Vérification des variables
+	require ("modules/$mod/conf/variables.tmpl.php");
+	if (file_exists("../modules/admin/conf/variables.tmpl.php"))
+	{
+		require("../modules/admin/conf/variables.tmpl.php");
+	}
+	
+	$ret["data"].=AjoutLog($tabLang["lang_checkvar"]);
+
+	$nb=0;
+	$MyOptTab=array();
+
+	foreach ($MyOptTmpl as $nom=>$d)
+	{
+		if (is_array($d))
+		{
+			foreach($d as $var=>$dd)
+			{
+				if(!isset($MyOpt[$nom][$var]))
+				{
+					$MyOptTab[$nom][$var]=$dd;
+					$nb=$nb+1;
+					// echo "Ajout : \$MyOpt[\"".$nom."\"][\"".$var."\"]='".$dd."'<br>";
+					$ret["data"].=AjoutLog(" - Ajout : ".$nom.":".$var."='".$dd."'");
+				}
+				else
+				{
+					$MyOptTab[$nom][$var]=$MyOpt[$nom][$var];
+				}
+			}
+		}
+		else
+		{
+			if(!isset($MyOpt[$nom]))
+			{
+				$MyOptTab[$nom]["valeur"]=$d;
+				$nb=$nb+1;
+				$ret["data"].=AjoutLog(" - Ajout : ".$nom."='".preg_replace("/\//","-",$d)."'");
+			}
+			else
+			{
+				$MyOptTab[$nom]["valeur"]=$MyOpt[$nom];
+			}
+		}
+	}
+
+	if ($nb>0)
+	{
+		// echo $nb." variables ajoutées<br>";
+		$ret["data"].=AjoutLog($nb." variables ajoutées");
+
+		$res=GenereVariables($MyOptTab);
+		$ret["data"].=AjoutLog($res);
+		$MyOpt=UpdateVariables($MyOptTab);
+	}
+
+	if (!file_exists("../config/variables.inc.php"))
+	{
+		error_log("easy-aero variable file does not exist");
+		$ret["result"]="NOK";
+		$ret["data"]=AjoutLog("La création du fichier variables a échouée");
+		echo json_encode($ret);
+		exit;
+	}
+
+	
 // ---- Applique les patchs
+	$MyOpt["tbl"]=$gl_tbl;
 	$ret["data"].=AjoutLog($tabLang["lang_patchcore"]);
 
 	$tabPatch=array();

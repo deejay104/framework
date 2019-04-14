@@ -1,4 +1,4 @@
-<?
+<?php
 	$tabLang["yes"]="yes";
 	$tabLang["no"]="no";
 

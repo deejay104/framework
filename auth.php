@@ -16,8 +16,7 @@
 	  	$var=$_SERVER["REQUEST_URI"];
 	}
 
-	$var=preg_replace("/\/login.php/","",$var);
-
+	$var=preg_replace("/\/[a-z]*\.php/","",$var);
 
 // ---- Force la timezone
 	if ($MyOpt["timezone"]!="")
@@ -39,8 +38,8 @@
 	require (MyRep("lang.".$lang.".php","default",false));
  
 // ---- Charge les prérequis
-	require ("class/xtpl.inc.php");
-	require ("class/mysql.inc.php");
+	require_once ("class/xtpl.inc.php");
+	require_once ("class/mysql.inc.php");
 
 	
 // ---- Charge les templates

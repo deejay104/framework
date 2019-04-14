@@ -9,8 +9,6 @@
 	if (session_status() == PHP_SESSION_NONE) {
 		session_start();
 	}
-	if (isset($_SESSION['uid']))
-	  { $uid = $_SESSION['uid']; }
 
 // ---- Récupère les variables transmises
 	$rub=checkVar("rub","varchar");
@@ -47,8 +45,8 @@
 	require (MyRep("lang.".$lang.".php","default",false));
  
 // ---- Charge les prérequis
-	require ("class/xtpl.inc.php");
-	require ("class/mysql.inc.php");
+	require_once ("class/xtpl.inc.php");
+	require_once ("class/mysql.inc.php");
 
 // ---- Gestion des thèmes
 	$theme="";
@@ -185,28 +183,7 @@
 		$tmpl_prg->assign("site_logo", $corefolder."/static/images/logo.png");
 	}
 
-// ---- Test si l'installation est faite
-
-	if ($mysqluser=="")
-	{
-		$tmpl_prg->parse("main.configdb");
-	}
-	else
-	{
-		$sql   = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db,$port);
-		$sql->show=false;
-		$query = "SELECT * FROM ".$MyOpt["tbl"]."_config";
-		$res  = $sql->QueryRow($query);
-		
-		if (!is_array($res))
-		{
-			$tmpl_prg->parse("main.createdb");
-		}
-		else
-		{
-			$tmpl_prg->parse("main.submit");
-		}
-	}
+// ---- Affiche la page
 	
 	$tmpl_prg->parse("main");
 	echo $tmpl_prg->text("main");

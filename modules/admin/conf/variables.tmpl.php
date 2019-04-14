@@ -1,4 +1,4 @@
-<?
+<?php
 // ---------------------------------------------------------------------------------------------
 //   Variables
 // ---------------------------------------------------------------------------------------------
@@ -9,8 +9,16 @@ $MyOptHelp=array();
 $MyOptHelp[""]="";
 
 // Prefixe des tables
-$MyOptTmpl["tbl"]="core";
-$MyOptHelp["tbl"]="Prefixe des tables dans la base de données";
+// $MyOptTmpl["tbl"]="core";
+// $MyOptHelp["tbl"]="Prefixe des tables dans la base de données";
+
+// Timestamp pour le cache de la feuille de style
+// $MyOptHelp["styletime"]="Timestamp pour le cache de la feuille de style. Cette valeur sera re-écrite lors de l'enregistrement";
+// $MyOptTmpl["styletime"]=time();
+
+// Timestamp pour la version du fichier de variable
+$MyOptHelp["version"]="Timestamp pour la version du fichier de variables. Cette valeur sera re-écrite lors de l'enregistrement";
+$MyOptTmpl["version"]=time();
 
 // Site en maintenance
 $MyOptTmpl["maintenance"]="off";
@@ -19,6 +27,10 @@ $MyOptHelp["maintenance"]="Mettre le site en maintenance (on=site en maintenance
 // Debug
 $MyOptTmpl["debug"]="off";
 $MyOptHelp["debug"]="Affiche des informations de debuggage, notament les requetes MySQL";
+
+// Debug
+$MyOptTmpl["debugtime"]="off";
+$MyOptHelp["debugtime"]="Affiche des informations détaillées des temps d'exécution";
 
 // path
 $MyOptTmpl["mydir"]=htmlentities(preg_replace("/[a-z]*\.php/","",$_SERVER["SCRIPT_FILENAME"]));
@@ -115,11 +127,6 @@ $MyOptHelp["module"]["ameliorations"]="Active le module de gestion des améliorat
 // Unité
 $MyOptTmpl["devise"]="€";
 $MyOptHelp["devise"]="Devise";
-
-
-// Timestamp pour le cache de la feuille de style
-$MyOptHelp["styletime"]="Timestamp pour le cache de la feuille de style. Cette valeur sera re-écrite lors de l'enregistrement";
-$MyOptTmpl["styletime"]=time();
 
 // Couleurs pour les feuilles de style
 $MyOptTmpl["styleColor"]["MenuBackgroundNormal"]="888e91";

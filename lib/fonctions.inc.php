@@ -1,4 +1,4 @@
-<?
+<?php
 // ---------------------------------------------------------------------------------------------
 //   Fonctions
 // ---------------------------------------------------------------------------------------------
@@ -1251,12 +1251,76 @@ function AffTelephone($txt)
 // Génère le fichier des variables
 function GenereVariables($tab)
 {
+	global $sql,$gl_tbl;
+
+	$ret="";
+	$conffile="../config/variables.inc.php";
+	if (!file_exists($conffile))
+	{
+		$ret.="Création du fichier";
+	}
+
+	$tab["version"]["valeur"]=time();
+
+	if(is_writable($conffile))
+	{
+		$fd=fopen($conffile,"w");
+		fwrite($fd,"<?php\n");
+		foreach($tab as $nom=>$d)
+		{
+			if (is_array($d))
+			{
+				foreach($d as $var=>$dd)
+				{
+					if ($var=="valeur")
+					{
+						fwrite($fd,"\$MyOpt[\"".$nom."\"]=\"".$dd."\";\n");
+						$name1=$nom;
+						$name2="";
+					}
+					else
+					{
+						fwrite($fd,"\$MyOpt[\"".$nom."\"][\"".$var."\"]=\"".$dd."\";\n");
+						$name1=$nom;
+						$name2=$var;
+					}
+					
+					$query="SELECT id FROM ".$gl_tbl."_config WHERE param='variable' AND name1='".$name1."' AND name2='".$name2."'";
+					$res=$sql->QueryRow($query);
+
+					if ($res["id"]>0)
+					{
+						$query="UPDATE ".$gl_tbl."_config SET value='".addslashes($dd)."', dte_creat='".now()."' WHERE id='".$res["id"]."'";
+						$sql->Update($query);
+					}
+					else
+					{
+						$query="INSERT INTO ".$gl_tbl."_config SET param='variable', name1='".$name1."', name2='".$name2."', value='".addslashes($dd)."', dte_creat='".now()."'";
+						$ret=$sql->Insert($query);
+					}
+				}
+			}
+		}
+	
+		fwrite($fd,"?>\n");
+		fclose($fd);
+		$ret.="Enregistrement effectué";
+	}
+	else
+	{
+		$ret.="Accès refusé. Fichier : ".$conffile;
+	}
+	return $ret;
+}
+
+function GenereFichierVariables($tab)
+{
 	$ret="";
 	$conffile="../config/variables.inc.php";
 	if (!file_exists($conffile))
 		{ $ret.="Création du fichier";}
 
-	$tab["styletime"]["valeur"]=time();
+	$tab["version"]=time();
 	if(is_writable($conffile))
 	{
 		$fd=fopen($conffile,"w");
@@ -1267,15 +1331,12 @@ function GenereVariables($tab)
 			{
 				foreach($d as $var=>$dd)
 				{
-					if ($var=="valeur")
-					{
-						fwrite($fd,"\$MyOpt[\"".$nom."\"]=\"".$dd."\";\n");
-					}
-					else
-					{
-						fwrite($fd,"\$MyOpt[\"".$nom."\"][\"".$var."\"]=\"".$dd."\";\n");
-					}
+					fwrite($fd,"\$MyOpt[\"".$nom."\"][\"".$var."\"]=\"".$dd."\";\n");
 				}
+			}
+			else
+			{
+				fwrite($fd,"\$MyOpt[\"".$nom."\"]=\"".$d."\";\n");
 			}
 		}
 		
@@ -1292,7 +1353,10 @@ function GenereVariables($tab)
 
 function UpdateVariables($tab)
 {
+	global $gl_tbl;
+	
 	$MyOpt=array();
+	$MyOpt["tbl"]=$gl_tbl;
 	foreach($tab as $nom=>$d)
 	{
 		if (is_array($d))
@@ -1382,12 +1446,12 @@ function GenereStyle($name)
 {
 	global $MyOpt,$core_version,$myrev,$corefolder;
 	
-	if (!is_numeric($MyOpt["styletime"]))
+	if (!is_numeric($MyOpt["version"]))
 	{
-		$MyOpt["styletime"]=0;
+		$MyOpt["version"]=0;
 	}
 
-	$sfile="static/cache/style/".$name.".".$MyOpt["styletime"].".".$myrev.".".$core_version.".css";
+	$sfile="static/cache/style/".$name.".".$MyOpt["version"].".".$myrev.".".$core_version.".css";
 	if (file_exists("../".$sfile))
 	{
 		return $sfile;

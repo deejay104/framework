@@ -1,4 +1,4 @@
-<?
+<?php
 /*
     MnMs Framework
     Copyright (C) 2018 Matthieu Isorez
@@ -49,9 +49,26 @@
 		// $tmpl_x->parse("corps.msgok");
 		affInformation($ret,"ok");
 		$MyOpt=UpdateVariables($MyOptTab);
+		$MyOpt["tbl"]=$gl_tbl;
 	}
 
 // ---- Charge les variables
+	$q="SELECT * FROM ".$MyOpt["tbl"]."_config WHERE param='variable'";
+	$sql->Query($q);
+	for($i=0; $i<$sql->rows; $i++)
+	{
+		$sql->GetRow($i);
+		if ($sql->data["name2"]=="")
+		{
+			$MyOpt[$sql->data["name1"]]=$sql->data["value"];
+		}
+		else
+		{
+			$MyOpt[$sql->data["name1"]][$sql->data["name2"]]=$sql->data["value"];
+		}
+	}
+
+// ---- Affiche la liste
 	foreach ($MyOptTmpl as $nom=>$d)
 	{
 		$tmpl_x->assign("param_nom", $nom);

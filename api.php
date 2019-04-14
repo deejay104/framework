@@ -1,4 +1,4 @@
-<?
+<?php
 /*
     MnMs Framework
     Copyright (C) 2018 Matthieu Isorez
@@ -26,8 +26,9 @@
 	$sql = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db,$port);
 	$sql->show=false;
 
-
 // ---- Variables
+	$MyOpt["tbl"]=$gl_tbl;
+
 	$myid=checkVar("myid","numeric");
 	$mykey=checkVar("mykey","varchar");
 	$mod=checkVar("mod","varchar");
