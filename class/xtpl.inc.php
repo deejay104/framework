@@ -72,8 +72,10 @@ function __construct ($file,$mainblock="main") {
 
 function assign ($name,$val="") {
 	if (gettype($name)=="array")
-		while (list($k,$v)=each($name))
+		// while (list($k,$v)=each($name))
+		foreach($name as $k=>$v) {
 			$this->VARS[$k]=$v;
+		}
 	else
 		$this->VARS[$name]=$val;
 }
@@ -93,7 +95,9 @@ function parse ($bname) {
 		$this->set_error ("parse: blockname [$bname] does not exist");
 	preg_match_all("/\{([A-Za-z0-9\._]+?)}/",$this->blocks[$bname],$var_array);
 	$var_array=$var_array[1];
-	while (list($k,$v)=each($var_array)) {
+	// while (list($k,$v)=each($var_array)) {
+	foreach($var_array as $k=>$v)
+	{
 		$sub=explode(".",$v);
 		if ($sub[0]=="_BLOCK_") {
 			unset($sub[0]);
@@ -105,7 +109,8 @@ function parse ($bname) {
 			$copy=str_replace("{".$v."}","$var",$copy);
 		} else {
 			$var=$this->VARS;
-			while(list($k1,$v1)=each($sub))
+			// while(list($k1,$v1)=each($sub))
+			foreach($sub as $k1=>$v1)
 			{
 				if (!isset($var[$v1]))
 				{ $var[$v1]=""; }
@@ -126,8 +131,11 @@ function parse ($bname) {
 	// reset sub-blocks 
 	if ($this->AUTORESET && (!empty($this->sub_blocks[$bname]))) {
 		reset($this->sub_blocks[$bname]);
-		while (list($k,$v)=each($this->sub_blocks[$bname]))
+		// while (list($k,$v)=each($this->sub_blocks[$bname]))
+		foreach($this->sub_blocks[$bname] as $k=>$v)
+		{
 			$this->reset($v);
+		}
 	}
 }
 
@@ -139,9 +147,12 @@ function parse ($bname) {
 function rparse($bname) {
 	if (!empty($this->sub_blocks[$bname])) {
 		reset($this->sub_blocks[$bname]);
-		while (list($k,$v)=each($this->sub_blocks[$bname]))
+		// while (list($k,$v)=each($this->sub_blocks[$bname]))
+		foreach($this->sub_blocks[$bname] as $k=>$v)
+		{
 			if (!empty($v)) 
 				$this->rparse($v,$indent."\t");
+		}
 	}
 	$this->parse($bname);
 }
@@ -238,9 +249,12 @@ function clear_autoreset() {
 */
 
 function scan_globals() {
-	reset($GLOBALS);
-	while (list($k,$v)=each($GLOBALS))
+	// reset($GLOBALS);
+	// while (list($k,$v)=each($GLOBALS))
+	foreach($GLOBALS as $k=>$v)
+	{
 		$GLOB[$k]=$v;
+	}
 	$this->assign("PHP",$GLOB);	/* access global variables as {PHP.HTTP_HOST} in your template! */
 }
 

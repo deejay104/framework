@@ -26,7 +26,9 @@
 
 	if ($MyOpt["debug"]=="on")
 	{
-		$starttime=microtime();
+		// $starttime=microtime();
+		list($usec, $sec) = explode(" ", microtime());
+		$starttime=((float)$usec + (float)$sec);
 		error_reporting(E_ALL); 
 		ini_set("display_errors", 1); 
 	}
@@ -491,7 +493,10 @@
 	$t="";
 	if ($MyOpt["debug"]=="on")
 	{
-		$time=round((microtime()-$starttime)*1000,1);
+		list($usec, $sec) = explode(" ", microtime());
+		$endtime=((float)$usec + (float)$sec);
+
+		$time=round(($endtime-$starttime)*1000,1);
 		$t=" (".$time."ms)";
 	}
 	if ($MyOpt["debugtime"]=="on")
@@ -530,6 +535,9 @@
 		$o=$starttime;
 		foreach($debug as $k=>$t)
 		{
+			list($usec, $sec) = explode(" ", $t);
+			$t=((float)$usec + (float)$sec);
+
 			$time=round(($t-$o)*1000,1);
 			$o=$t;
 			$total=round(($t-$starttime)*1000,1);
