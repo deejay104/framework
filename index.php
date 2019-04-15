@@ -61,6 +61,15 @@
 	require ("class/document.inc.php");
 
 // ---- Se connecte à la base MySQL
+	if (!isset($port))
+	{
+		$port=3306;
+	}
+	if (($mysqluser=="") || ($mysqlpassword=="") || ($hostname=="") || ($db==""))
+	{
+		echo "Configuration file is missing";
+		exit;
+	}
 	$sql = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db, $port);
 
 // ---- Vérifie si la configuration initiale a été faite

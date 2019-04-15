@@ -269,8 +269,11 @@ function maketree($con,$block) {
 	$level=0;
 	$block_names=array();
 	$blocks=array();
-	reset($con2);
-	while(list($k,$v)=each($con2)) {
+	// reset($con2);
+// print_r($con2);
+	// while(list($k,$v)=each($con2))
+	foreach($con2 as $k=>$v)
+	{
 		$patt="($this->block_start_word|$this->block_end_word)\s*(\w+)\s*$this->block_end_delim(.*)";
 		if (preg_match_all("/$patt/ims",$v,$res, PREG_SET_ORDER)) {
 			// $res[0][1] = BEGIN or END
