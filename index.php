@@ -119,31 +119,35 @@
 
 
 // ---- Charge les variables
-	if ($MyOpt["version"]!="")
+	if ( (isset($MyOpt["version"])) && ($MyOpt["version"]!="") )
 	{
 		$q="SELECT value FROM ".$MyOpt["tbl"]."_config WHERE param='variable' AND name1='version'";
 		$res=$sql->QueryRow($q);
-		
-		if ($res["value"]!=$MyOpt["version"])
+	}
+	else
+	{
+		$MyOpt["version"]=0;
+	}
+
+	if ($res["value"]!=$MyOpt["version"])
+	{
+		$MyOpt=array();
+		$MyOpt["tbl"]=$gl_tbl;
+		$q="SELECT * FROM ".$MyOpt["tbl"]."_config WHERE param='variable'";
+		$sql->Query($q);
+		for($i=0; $i<$sql->rows; $i++)
 		{
-			$MyOpt=array();
-			$MyOpt["tbl"]=$gl_tbl;
-			$q="SELECT * FROM ".$MyOpt["tbl"]."_config WHERE param='variable'";
-			$sql->Query($q);
-			for($i=0; $i<$sql->rows; $i++)
+			$sql->GetRow($i);
+			if ($sql->data["name2"]=="")
 			{
-				$sql->GetRow($i);
-				if ($sql->data["name2"]=="")
-				{
-					$MyOpt[$sql->data["name1"]]=$sql->data["value"];
-				}
-				else
-				{
-					$MyOpt[$sql->data["name1"]][$sql->data["name2"]]=$sql->data["value"];
-				}
+				$MyOpt[$sql->data["name1"]]=$sql->data["value"];
 			}
-			$ret=GenereFichierVariables($MyOpt);
+			else
+			{
+				$MyOpt[$sql->data["name1"]][$sql->data["name2"]]=$sql->data["value"];
+			}
 		}
+		$ret=GenereFichierVariables($MyOpt);
 	}
 	
 	if ($MyOpt["debugtime"]=="on")
