@@ -648,36 +648,38 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 	$ret.="</table>\n";
 
 	// Affiche la liste des pages
-	$nbtot=($nbline>0) ? $nbline : count($tabValeur);
-	if ($nbtot>$limit)
-	  {
-		$lstpage="";
-		$ii=1;
-  	  	$t=0;
-		$nbp=20;
-		for($i=0; $i<$nbtot; $i=$i+$limit)
-		  {
-		  	if (($i<=$start) && ($i>$start-$limit))
-		  	  {
-		  	  	$lstpage.="<a href='$page&order=$order".(($trie!="") ? "&trie=$trie" : "").(($url!="") ? "&$url" : "")."&ts=$i'>[$ii]</a> ";
-		  	  	$t=0;
-		  	  }
-			else if ( (($i>$start-$nbp*$limit/2) && ($i<$start+$nbp*$limit/2)) || ($i>$nbtot-$limit) || ($i==0))
-		  	  {
-		  	  	$lstpage.="<a href='$page&order=$order".(($trie!="") ? "&trie=$trie" : "").(($url!="") ? "&$url" : "")."&ts=$i'>$ii</a> ";
-		  	  	$t=0;
-		  	  }
-		  	else if ($t==0)
-		  	  {
-		  	  	$lstpage.=" ... ";
-				$t=1;
-		  	  }
-		  	$ii=$ii+1;
-		  }
+	if (is_array($tabValeur))
+	{
+		$nbtot=($nbline>0) ? $nbline : count($tabValeur);
+		if ($nbtot>$limit)
+		{
+			$lstpage="";
+			$ii=1;
+			$t=0;
+			$nbp=20;
+			for($i=0; $i<$nbtot; $i=$i+$limit)
+			{
+				if (($i<=$start) && ($i>$start-$limit))
+				{
+					$lstpage.="<a href='$page&order=$order".(($trie!="") ? "&trie=$trie" : "").(($url!="") ? "&$url" : "")."&ts=$i'>[$ii]</a> ";
+					$t=0;
+				}
+				else if ( (($i>$start-$nbp*$limit/2) && ($i<$start+$nbp*$limit/2)) || ($i>$nbtot-$limit) || ($i==0))
+				{
+					$lstpage.="<a href='$page&order=$order".(($trie!="") ? "&trie=$trie" : "").(($url!="") ? "&$url" : "")."&ts=$i'>$ii</a> ";
+					$t=0;
+				}
+				else if ($t==0)
+				{
+					$lstpage.=" ... ";
+					$t=1;
+				}
+				$ii=$ii+1;
+			}
 
-		$ret.="Pages : $lstpage<br />\n";
-	  }
-
+			$ret.="Pages : $lstpage<br />\n";
+		}
+	}
 
 	return $ret;
   }
@@ -1178,7 +1180,7 @@ function DisplayDate($dte)
 	  }
 	else if ($d<$mid)
 	  {
-			return $tabLang["core_since"].$h." ".$tabLang["core_hourss"]." ".$tabLang["core_and"]." ".$m." ".$tabLang["core_minutes"].$tabLang["core_ago"];
+			return $tabLang["core_since"].$h." ".$tabLang["core_hours"]." ".$tabLang["core_and"]." ".$m." ".$tabLang["core_minutes"].$tabLang["core_ago"];
 	  }
 	else if (($d<$mid+3600*34) && ($d>$mid))
 	  {

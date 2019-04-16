@@ -13,6 +13,7 @@
 	$tabLang["core_the"]="";
 	$tabLang["core_since"]=", ";
 	$tabLang["core_ago"]=" ago";
+	$tabLang["core_and"]=" and";
 
 	$tabLang["core_filenotfound"]="File not found";
 	$tabLang["core_tmplnotfound"]="Template not found";

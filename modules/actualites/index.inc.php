@@ -34,7 +34,12 @@
 	$tmpl_x->assign("site_title", $MyOpt["site_title"]);
 	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 	$tmpl_x->assign("form_checktime",$_SESSION['checkpost']);
-
+	
+// ---- Variables
+	$id=checkVar("id","numeric");
+	$form_titre=checkVar("form_titre","varchar");
+	$form_message=checkVar("form_message","numeric");
+	
 // ---- Enregistre le post
 	$txtnewmsg="Ecrivez votre message...";
 

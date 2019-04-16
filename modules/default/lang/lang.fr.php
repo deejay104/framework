@@ -13,6 +13,7 @@
 	$tabLang["core_the"]="le ";
 	$tabLang["core_since"]="il y a ";
 	$tabLang["core_ago"]="";
+	$tabLang["core_and"]=" et";
 	
 	$tabLang["core_filenotfound"]="Fichier introuvable";
 	$tabLang["core_tmplnotfound"]="Template introuvable";
