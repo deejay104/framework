@@ -377,7 +377,7 @@ function ListActiveAmeliorations($sql)
 		$tabList=json_decode($data,true);
 
 		$lst=array();
-		if (count($tabList["lst"])>0)
+		if ( (is_array($tabList["lst"])) && (count($tabList["lst"])>0) )
 		{
 			foreach($tabList["lst"] as $k=>$v)
 			{

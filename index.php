@@ -123,13 +123,15 @@
 	{
 		$q="SELECT value FROM ".$MyOpt["tbl"]."_config WHERE param='variable' AND name1='version'";
 		$res=$sql->QueryRow($q);
+		$v=$res["value"];
 	}
 	else
 	{
 		$MyOpt["version"]=0;
+		$v=1;
 	}
 
-	if ($res["value"]!=$MyOpt["version"])
+	if ($v!=$MyOpt["version"])
 	{
 		$MyOpt=array();
 		$MyOpt["tbl"]=$gl_tbl;
