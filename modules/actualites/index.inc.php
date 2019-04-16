@@ -38,14 +38,10 @@
 // ---- Variables
 	$id=checkVar("id","numeric");
 	$form_titre=checkVar("form_titre","varchar");
-	$form_message=checkVar("form_message","numeric");
+	$form_message=checkVar("form_message","varchar");
 	
 // ---- Enregistre le post
 	$txtnewmsg="Ecrivez votre message...";
-
-
-	if ((!isset($id)) || (!is_numeric($id)))
-	  { $id=0; }
 
 	if ( ($fonc=="Poster") && (!isset($_SESSION['tab_checkpost'][$checktime])) )
 	{

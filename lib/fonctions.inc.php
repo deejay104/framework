@@ -1016,9 +1016,10 @@ function UpperFirstLetter($txt)
   }
 
 function FatalError($txt,$msg="")
-  { global $tmpl_prg,$corefolder;
+  { global $tmpl_prg,$corefolder,$theme;
   	if (isset($tmpl_prg))
   	{
+		$tmpl_prg->assign("style_url", GenereStyle(($theme=="phone") ? "phone" : "default"));
 		$tmpl_prg->assign("icone","<IMG src=\"".$corefolder."/static/images/icn48_erreur.png\">");
 		$tmpl_prg->assign("infos","$txt");
 		$tmpl_prg->assign("corps","$msg");

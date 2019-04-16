@@ -67,9 +67,9 @@
 	{
 		$port=3306;
 	}
-	if (($mysqluser=="") || ($mysqlpassword=="") || ($hostname=="") || ($db==""))
+	if (($mysqluser=="") || ($mysqlpassword=="") || ($hostname=="") || ($db=="") || ($gl_tbl==""))
 	{
-		echo "Configuration file is missing";
+		echo "Configuration file is missing or with bad configuration";
 		exit;
 	}
 	$sql = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db, $port);
