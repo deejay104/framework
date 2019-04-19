@@ -101,7 +101,7 @@
 		}
 
 		// Sauvegarde un document
-		if (is_array($_FILES["form_adddocument"]["name"]))
+		if ((isset($_FILES["form_adddocument"])) && (is_array($_FILES["form_adddocument"]["name"])))
 		{
 			foreach($_FILES["form_adddocument"]["name"] as $i=>$n)
 			{

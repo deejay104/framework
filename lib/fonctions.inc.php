@@ -47,7 +47,7 @@ function MyRep($file,$mymod="",$custom=true)
   	  { return ""; }
   }
 
-function checkVar($var,$type,$len=256)
+function checkVar($var,$type,$len=256,$default="")
 {
 	global $_REQUEST,$tabPost;
 
@@ -55,7 +55,7 @@ function checkVar($var,$type,$len=256)
 	
 	if (!isset($_REQUEST[$var]))
 	{
-		$v="";
+		$v=$default;
 	}
 	else
 	{
@@ -68,6 +68,10 @@ function checkVar($var,$type,$len=256)
 		{
 			return $v;
 		}
+		if (is_numeric($default))
+		{
+			return $default;
+		}
 		else
 		{
 			return 0;
@@ -76,7 +80,7 @@ function checkVar($var,$type,$len=256)
 	else if ($type=="varchar")
 	{
 		return substr($v,0,$len);
-	}	
+	}
 	else if ($type=="token")
 	{
 		$v=preg_replace("/[^a-z0-9]*/","",$v);
@@ -1151,7 +1155,11 @@ function DisplayDate($dte)
 	$m=floor(($d-$h*3600)/60);
 	$s=$d-$h*3600-$m*60;
 
-	if (($s<60) && ($m==0) && ($h==0))
+	if (($s<2) && ($m==0) && ($h==0))
+	  {
+			return $tabLang["core_since"].$s." ".$tabLang["core_second"].$tabLang["core_ago"];
+	  }
+	else if (($s<60) && ($m==0) && ($h==0))
 	  {
 			return $tabLang["core_since"].$s." ".$tabLang["core_seconds"].$tabLang["core_ago"];
 	  }
