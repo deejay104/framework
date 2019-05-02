@@ -30,6 +30,7 @@
 	$critere=checkVar("critere","varchar");
   	$opt=checkVar("opt","numeric");
   	$fid=checkVar("fid","numeric");
+  	$max=checkVar("max","numeric",0,20);
 
   
 // ---- Test si l'on doit supprimer un message
@@ -99,8 +100,6 @@
 
 
 // ---- Affiche la liste des messages
-	if ((!isset($max)) || (!is_numeric($max)))
-	  { $max=20; }
 
 	$critere = trim($critere);
 	$tabcrit=explode(" ",$critere);

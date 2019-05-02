@@ -89,9 +89,9 @@
 		$sql->GetRow($i);
 
 		// Récupère le nombre de message
-		$query="SELECT COUNT(*) AS nb FROM ".$MyOpt["tbl"]."_forums AS forums WHERE forums.fid=".$sql->data["id"];
+		$query="SELECT COUNT(*) AS nb FROM ".$MyOpt["tbl"]."_forums AS forums WHERE forums.fid=".$sql->data["id"]." AND forums.fil=".$sql->data["id"]." AND actif='oui'";
 		$res=$sqlb->QueryRow($query);
-	
+
 		$tmpl_x->assign("numsforum", $sql->data["id"]);
 		$tmpl_x->assign("titreforum", $sql->data["titre"]);
 		$tmpl_x->assign("intitule", $sql->data["corps"]);

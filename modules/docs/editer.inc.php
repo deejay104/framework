@@ -46,6 +46,11 @@
 			// $tmpl_x->assign("msg_error", $error);
 			// $tmpl_x->parse("corps.msg_error");
 		// }
+	if (!isset($error))
+	{
+		$error="";
+	}
+		
 
 	if ($error!="")
 	  {
@@ -122,29 +127,6 @@
 		  }
 
 		$tmpl_x->parse("corps.droits");
-	  }
-
-// ---- Listes de diffusion
-	foreach ($MyOpt["type"] as $typeid=>$typeon)
-	{
-	 	if ($typeon=="on")
-	 	{
-			$tmpl_x->assign("forum_type_id", $typeid);
-			$tmpl_x->assign("forum_type_description", $tabTypeNom[$typeid]);
-			$tmpl_x->assign("forum_type_check", (($MyOpt["typeMail"][$typeid]=="on") && ($res["mailing"]!="1")) ? "checked" : "");
-			$tmpl_x->parse("corps.lst_type");
-		}
-	}
-
-	$query = "SELECT forum.mail_diff AS mail ";
-	$query.= "FROM ".$MyOpt["tbl"]."_forums AS forum ";
-	$query.= "WHERE forum.id=".$fid;
-
-	$res=$sql->QueryRow($query);
-	if ($res["mail"]!="")
-	  {
-			$tmpl_x->assign("forum_listediff", $res["mail"]!="" ? "(".$res["mail"].")" : "");
-			$tmpl_x->parse("corps.maildiff");
 	  }
 
 
