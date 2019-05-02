@@ -78,17 +78,42 @@ class objet_core
 			foreach($this->fields as $key=>$field)
 			{
 				$this->type[$key]=$field["type"];
-				if (isset($field["default"]))
+				if ($field["type"]=="date")
 				{
-					$this->data[$key]=$field["default"];
+					if ($field["default"]=="now")
+					{
+						$this->data[$key]=date("Y-m-d");
+					}
+					else
+					{
+						$this->data[$key]="0000-00-00";
+					}
+				}
+				else if ($field["type"]=="datetime")
+				{
+					if ($field["default"]=="now")
+					{
+						$this->data[$key]=now();
+					}
+					else
+					{
+						$this->data[$key]="0000-00-00 00:00:00";
+					}
 				}
 				else if ($field["type"]=="number")
 				{
-					$this->data[$key]=0;
+					if ((isset($field["default"])) && (is_numeric($field["default"])))
+					{
+						$this->data[$key]=$field["default"];
+					}
+					else
+					{
+						$this->data[$key]=0;
+					}
 				}
-				else if ($field["type"]=="date")
+				else if (isset($field["default"]))
 				{
-					$this->data[$key]="0000-00-00";
+					$this->data[$key]=$field["default"];
 				}
 				else
 				{
@@ -96,7 +121,7 @@ class objet_core
 				}
 			}
 		}
-	
+
 		if ($id>0)
 		{
 			$this->load($id);
@@ -724,6 +749,10 @@ class objet_core
 				{
 					$tabobj[$key]["Type"]="int(10) unsigned";
 					$tabobj[$key]["Default"]="0";
+					if (isset($field["default"]))
+					{
+						$tabobj[$key]["Default"]=$field["default"];
+					}
 				}
 				else if ($field["type"]=="date")
 				{
@@ -739,6 +768,10 @@ class objet_core
 				{
 					$tabobj[$key]["Type"]="int(10) unsigned";
 					$tabobj[$key]["Default"]="0";
+					if (isset($field["default"]))
+					{
+						$tabobj[$key]["Default"]=$field["default"];
+					}
 				}
 				// else if ($field["type"]=="ucword")
 				// {
@@ -764,7 +797,14 @@ class objet_core
 				else if ($field["type"]=="bool")
 				{
 					$tabobj[$key]["Type"]="enum('oui','non')";
-					$tabobj[$key]["Default"]="non";
+					if (isset($field["default"]))
+					{
+						$tabobj[$key]["Default"]=$field["default"];
+					}
+					else
+					{
+						$tabobj[$key]["Default"]="non";
+					}
 				}
 				else if (($field["type"]=="enum") || ($field["type"]=="radio"))
 				{
@@ -797,6 +837,10 @@ class objet_core
 							$tabobj[$key]["Default"]="";
 						}
 					}
+					if (isset($field["default"]))
+					{
+						$tabobj[$key]["Default"]=$field["default"];
+					}
 				}
 				// else if ($field["type"]=="multi")
 				// {
@@ -809,12 +853,12 @@ class objet_core
 				else
 				{
 					$tabobj[$key]["Type"]="varchar(".( ( (isset($field["len"])) && ($field["len"]>0) ) ? $field["len"] : "50").")";
+					if (isset($field["default"]))
+					{
+						$tabobj[$key]["Default"]=$field["default"];
+					}
 				}
 
-				if (isset($field["default"]))
-				{
-					$tabobj[$key]["Default"]=$field["default"];
-				}
 				if (isset($field["index"]))
 				{
 					$tabobj[$key]["Index"]=1;
