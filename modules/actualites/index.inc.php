@@ -38,7 +38,7 @@
 // ---- Variables
 	$id=checkVar("id","numeric");
 	$form_titre=checkVar("form_titre","varchar");
-	$form_message=checkVar("form_message","varchar");
+	$form_message=checkVar("form_message","text");
 	
 // ---- Enregistre le post
 	$txtnewmsg="Ecrivez votre message...";

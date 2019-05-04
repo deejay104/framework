@@ -80,7 +80,7 @@ class objet_core
 				$this->type[$key]=$field["type"];
 				if ($field["type"]=="date")
 				{
-					if ($field["default"]=="now")
+					if ((isset($field["default"])) && ($field["default"]=="now"))
 					{
 						$this->data[$key]=date("Y-m-d");
 					}
@@ -91,7 +91,7 @@ class objet_core
 				}
 				else if ($field["type"]=="datetime")
 				{
-					if ($field["default"]=="now")
+					if ((isset($field["default"])) && ($field["default"]=="now"))
 					{
 						$this->data[$key]=now();
 					}
