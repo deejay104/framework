@@ -39,9 +39,13 @@
 
 // ---- Charge la config  
 	if (!file_exists($appfolder."/config/config.inc.php"))
-	  { FatalError("Fichier de configuration introuvable","Il manque le fichier de configuration."); }
+	{
+		FatalError("Fichier de configuration introuvable","Il manque le fichier de configuration.");
+	}
 	if (!file_exists($appfolder."/config/variables.inc.php"))
-	  { FatalError("Fichier des variables introuvable","Il manque le fichier de variables."); }
+	{
+		FatalError("Fichier des variables introuvable","Il manque le fichier de variables.");
+	}
 
   	require ($appfolder."/config/config.inc.php");
 	require ($appfolder."/config/variables.inc.php");
@@ -54,6 +58,7 @@
 	require ("class/user.inc.php");
 
 // ---- Se connecte à la base MySQL
+	$MyOpt["tbl"]=$gl_tbl;
 	require ("class/mysql.inc.php");
 
 	$sql = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db);
@@ -61,7 +66,9 @@
 
 // ---- Défini l'utilisateur d'execution du batch
 	if ((!is_numeric($MyOpt["uid_system"])) || ($MyOpt["uid_system"]==0))
-	  { FatalError("Compte systeme introuvable","Le compte systeme n'est pas défini."); }
+	{
+		FatalError("Compte systeme introuvable","Le compte systeme n'est pas défini.");
+	}
 
 	$gl_uid=$MyOpt["uid_system"];
 	$uid=$gl_uid;

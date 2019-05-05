@@ -32,7 +32,7 @@ class amelioration_core extends objet_core
 		"titre"=>Array("type"=>"varchar","len"=>100),
 		"description"=>Array("type"=>"text"),
 		"version"=>Array("type"=>"varchar","len"=>10),
-		"status"=>Array("type"=>"enum","index" => "1"),
+		"status"=>Array("type"=>"enum","index" => "1","default"=>"1new"),
 		"module"=>Array("type"=>"enum","index" => "1"),
 		"actif"=>Array("type"=>"bool", "default" => "oui", "index" => "1",),
 		"uid_dist" => Array("type" => "number"),
@@ -55,15 +55,19 @@ class amelioration_core extends objet_core
 	function __construct($id=0,$sql)
 	{
 		global $gl_uid;
-		
-		$this->data["status"]="1new";
-		$this->data["uid_dist"]=$gl_uid;
-		
-		$tmpusr = new user_core($gl_uid,$sql,false,false);
-		$this->data["mail_dist"]=$tmpusr->data["mail"];
 
 		parent::__construct($id,$sql);		
 
+		if ($this->data["uid_dist"]==0)
+		{
+			$this->data["uid_dist"]=$gl_uid;
+		}
+		if ($this->data["mail_dist"]=="")
+		{
+			$tmpusr = new user_core($gl_uid,$sql,false,false);
+			$this->data["mail_dist"]=$tmpusr->data["mail"];
+		}
+		
 		$this->usr_maj = new user_core($this->uid_maj,$sql,false,false);
 	}
 

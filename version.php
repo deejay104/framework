@@ -1,4 +1,4 @@
 <?php
-$core_version = "40";
+$core_version = "41";
 
 ?>

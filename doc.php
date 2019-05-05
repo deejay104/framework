@@ -30,6 +30,8 @@
    	require ("lib/fonctions.inc.php");
 
 // ---- Variables
+	$MyOpt["tbl"]=$gl_tbl;
+
 	if ((is_numeric($_REQUEST["id"])) && ($_REQUEST["id"]>0))
 	{
 		$id=$_REQUEST["id"];

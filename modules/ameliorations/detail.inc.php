@@ -37,6 +37,7 @@
 	$msg_confirmation="";
 	if (($fonc=="Enregistrer") && (!isset($_SESSION['tab_checkpost'][$checktime])))
 	{
+		$form_data=checkVar("form_data","array");
 		$pb=new amelioration_core($id,$sql);
 		if (count($form_data)>0)
 		{
