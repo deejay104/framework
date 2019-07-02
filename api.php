@@ -49,8 +49,11 @@
 		$res  = $sql->QueryRow($query);
 		if ($res["id"]>0)
 		{
-			$query="UPDATE ".$MyOpt["tbl"]."_token SET dte_expire='".date("Y-m-d H:i:s",time()+$MyOpt["tokenexpire"]*3600*24)."'";
-			$sql->Update($query);
+			if ($MyOpt["tokenexpire"]>0)
+			{
+				$query="UPDATE ".$MyOpt["tbl"]."_token SET dte_expire='".date("Y-m-d H:i:s",time()+$MyOpt["tokenexpire"]*3600*24)."' WHERE id='".$myid."'";
+				$sql->Update($query);
+			}
 
 			$gl_uid=$res["uid"];
 			$_SESSION['uid']=$gl_uid;
