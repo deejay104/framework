@@ -483,6 +483,7 @@ function ListDocument($sql,$id,$type)
 	global $MyOpt, $gl_uid, $myuser;
 
 	$query="SELECT ".$MyOpt["tbl"]."_document.id,".$MyOpt["tbl"]."_document.uid,".$MyOpt["tbl"]."_document.droit  FROM ".$MyOpt["tbl"]."_document WHERE ".$MyOpt["tbl"]."_document.actif='oui' ".(($id>0) ? "AND ".$MyOpt["tbl"]."_document.uid='$id'" : "" )." ".(($type!="") ? "AND ".$MyOpt["tbl"]."_document.type='$type'" : "" )." ORDER BY name";
+
 	$sql->Query($query);
 	$lstdoc=array();
 	for($i=0; $i<$sql->rows; $i++)

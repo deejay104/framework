@@ -1,7 +1,19 @@
 <?
-
-class echeance_core
+class echeance_core extends objet_core
 {
+	# Constructor
+	protected $table="ressources";
+	protected $mod="";
+	protected $rub="";
+
+	protected $fields=array
+	(
+		"typeid" => Array("type" => "number", "index" => "1", ),
+		"uid" => Array("type" => "number", "index" => "1", ),
+		"dte_echeance" => Array("type" => "date", ),
+	);
+
+
 
  	# Constructor
 	function __construct($id="",$sql,$uid=0){
@@ -13,6 +25,7 @@ class echeance_core
 		$this->myuid=$gl_uid;
 
 		$this->id=0;
+		$this->type="user";
 		$this->typeid="";
 		$this->poste=0;
 		$this->description="";
@@ -32,9 +45,10 @@ class echeance_core
 	function load($id){
 		$this->id=$id;
 		$sql=$this->sql;
-		$query = "SELECT echeance.*, echeancetype.poste, echeancetype.description, echeancetype.droit, echeancetype.multi, echeancetype.resa FROM ".$this->tbl."_echeance AS echeance LEFT JOIN ".$this->tbl."_echeancetype AS echeancetype ON echeance.typeid=echeancetype.id WHERE echeance.id='$id'";
+		$query = "SELECT echeance.*, echeancetype.context, echeancetype.poste, echeancetype.description, echeancetype.droit, echeancetype.multi, echeancetype.resa FROM ".$this->tbl."_echeance AS echeance LEFT JOIN ".$this->tbl."_echeancetype AS echeancetype ON echeance.typeid=echeancetype.id WHERE echeance.id='$id'";
 		$res = $sql->QueryRow($query);
 		// Charge les variables
+		$this->context=$res["context"];
 		$this->typeid=$res["typeid"];
 		$this->poste=$res["poste"];
 		$this->uid=$res["uid"];
@@ -49,10 +63,11 @@ class echeance_core
 	# Charge une échéance par son type
 	function loadtype($tid){
 		$sql=$this->sql;
-		$query = "SELECT echeance.*, echeancetype.poste, echeancetype.description, echeancetype.droit, echeancetype.multi, echeancetype.resa FROM ".$this->tbl."_echeance AS echeance LEFT JOIN ".$this->tbl."_echeancetype AS echeancetype ON echeance.typeid=echeancetype.id WHERE echeance.typeid='$tid' AND echeance.uid='".$this->uid."'";
+		$query = "SELECT echeance.*, echeancetype.context, echeancetype.poste, echeancetype.description, echeancetype.droit, echeancetype.multi, echeancetype.resa FROM ".$this->tbl."_echeance AS echeance LEFT JOIN ".$this->tbl."_echeancetype AS echeancetype ON echeance.typeid=echeancetype.id WHERE echeance.typeid='$tid' AND echeance.uid='".$this->uid."'";
 		$res = $sql->QueryRow($query);
 		// Charge les variables
 		$this->id=$res["id"];
+		$this->context=$res["context"];
 		$this->typeid=$res["typeid"];
 		$this->poste=$res["poste"];
 		// $this->uid=$res["uid"];
@@ -64,7 +79,7 @@ class echeance_core
 		$this->resa=$res["resa"];
 	}
 
-	function Valid($k,$v) 
+	function Valid($k,$v,$ret = false) 
 	{
 
 		$vv=$v;
@@ -143,7 +158,9 @@ class echeance_core
 			$ret.="r=r+\"<select name='form_echeance_type[a\"+i+\"]' OnChange=''>\";\n";
 
 			$tabEcheance=array();
-			$query="SELECT echeance.typeid,echeancetype.multi FROM ".$MyOpt["tbl"]."_echeance AS echeance LEFT JOIN ".$MyOpt["tbl"]."_echeancetype AS echeancetype ON echeance.typeid=echeancetype.id WHERE echeance.uid='".$this->uid."' and actif='oui'";
+			$query ="SELECT echeance.typeid,echeancetype.multi FROM ".$MyOpt["tbl"]."_echeance AS echeance ";
+			$query.="LEFT JOIN ".$MyOpt["tbl"]."_echeancetype AS echeancetype ON echeance.typeid=echeancetype.id ";
+			$query.="WHERE echeancetype.context='".$this->context."' AND echeance.uid='".$this->uid."' AND echeance.actif='oui'";
 
 			$sql->Query($query);
 			for($i=0; $i<$sql->rows; $i++)
@@ -155,7 +172,7 @@ class echeance_core
 				}
 			}
 
-			$query="SELECT id,description,droit FROM ".$MyOpt["tbl"]."_echeancetype ORDER BY description";
+			$query="SELECT id,description,droit FROM ".$MyOpt["tbl"]."_echeancetype AS type WHERE context='".$this->context."' AND actif='oui' ORDER BY description";
 			$sql->Query($query);
 			for($i=0; $i<$sql->rows; $i++)
 			{
@@ -206,7 +223,7 @@ class echeance_core
 		return $ret;
 	}
 
-	function Val() 
+	function val($key="")
 	{ global $MyOpt;
 		
 		return $this->dte_echeance;
@@ -215,11 +232,13 @@ class echeance_core
 }
 
 
-function ListEcheance($sql,$id)
+function ListEcheance($sql,$id,$context="user")
   {
 	global $MyOpt, $gl_uid, $myuser;
 
-	$query="SELECT id FROM ".$MyOpt["tbl"]."_echeance WHERE actif='oui' ".(($id>0) ? "AND uid='$id'" : "" )." ORDER BY dte_echeance";
+	$query ="SELECT echeance.id FROM ".$MyOpt["tbl"]."_echeance AS echeance ";
+	$query.="LEFT JOIN ".$MyOpt["tbl"]."_echeancetype AS type ON echeance.typeid=type.id ";
+	$query.="WHERE type.context='".$context."' AND echeance.actif='oui' ".(($id>0) ? "AND uid='$id'" : "" )." ORDER BY dte_echeance";
 	$sql->Query($query);
 	$lstdte=array();
 	for($i=0; $i<$sql->rows; $i++)
@@ -231,12 +250,13 @@ function ListEcheance($sql,$id)
 	return $lstdte;
   }
 
-function VerifEcheance($sql,$id)
+function VerifEcheance($sql,$id,$context="user")
   {
 	global $MyOpt, $gl_uid, $myuser;
 
-	$query ="SELECT echeancetype.description,echeancetype.resa,echeance.dte_echeance FROM ".$MyOpt["tbl"]."_echeancetype AS echeancetype LEFT JOIN ".$MyOpt["tbl"]."_echeance AS echeance ON echeancetype.id=echeance.typeid AND echeance.actif='oui' AND echeance.uid='$id' ";
-	$query.="WHERE echeance.dte_echeance<'".now()."' OR echeance.dte_echeance IS NULL ORDER BY echeance.dte_echeance";
+	$query ="SELECT echeancetype.description,echeancetype.resa,echeance.dte_echeance FROM ".$MyOpt["tbl"]."_echeancetype AS echeancetype ";
+	$query.="LEFT JOIN ".$MyOpt["tbl"]."_echeance AS echeance ON echeancetype.id=echeance.typeid AND echeance.actif='oui' AND echeance.uid='".$id."' ";
+	$query.="WHERE echeancetype.actif='oui' AND echeancetype.type='".$context."' AND (echeance.dte_echeance<'".now()."' OR echeance.dte_echeance IS NULL) ORDER BY echeance.dte_echeance";
 
 	$sql->Query($query);
 	$lstdte=array();
@@ -251,10 +271,13 @@ function VerifEcheance($sql,$id)
 	return $lstdte;
   }
 
-function ListeEcheanceType($sql,$id) 
+function ListeEcheanceParType($sql,$id,$context="user") 
 { global $MyOpt;
-	$query="SELECT uid FROM ".$MyOpt["tbl"]."_echeance AS echeance LEFT JOIN ".$MyOpt["tbl"]."_utilisateurs AS usr ON echeance.uid=usr.id WHERE echeance.actif='oui' AND echeance.typeid='".$id."' AND usr.actif='oui' GROUP BY echeance.uid";
-	$query="SELECT echeance.id FROM ".$MyOpt["tbl"]."_echeance AS echeance LEFT JOIN ".$MyOpt["tbl"]."_utilisateurs AS usr ON echeance.uid=usr.id WHERE echeance.actif='oui' AND echeance.typeid='".$id."' AND usr.actif='oui'";
+	$query ="SELECT echeance.id FROM ".$MyOpt["tbl"]."_echeance AS echeance ";
+	$query.="LEFT JOIN ".$MyOpt["tbl"]."_echeancetype AS type ON echeance.typeid=type.id ";
+	$query.="LEFT JOIN ".$MyOpt["tbl"]."_utilisateurs AS usr ON echeance.uid=usr.id ";
+	$query.="WHERE type.context='".$context."' AND echeance.actif='oui' AND echeance.typeid='".$id."' AND usr.actif='oui'";
+
 	$sql->Query($query);
 	$lstdte=array();
 	for($i=0; $i<$sql->rows; $i++)
@@ -264,6 +287,116 @@ function ListeEcheanceType($sql,$id)
 	}
 
 	return $lstdte;		
+}
+
+
+
+
+
+
+class echeancetype_core extends objet_core
+{
+	# Constructor
+	protected $table="echeancetype";
+	protected $mod="";
+	protected $rub="";
+
+	protected $fields=array
+	(
+		"description" => Array("type" => "varchar", "len"=>100),
+		"resa" => Array("type" => "enum" ),
+		"droit" => Array("type" => "varchar","len"=>5 ),
+		"multi" => Array("type" => "bool", "default" => "non" ),
+		"notif" => Array("type" => "bool", "default" => "non" ),
+		"delai" => Array("type" => "number", "default" => "30" ),
+		"context" => Array("type" => "varchar", "len"=>10, "default" => "user" ),
+		"recipient" => Array("type" => "varchar", "len"=>10, "default" => "user" ),
+	);
+
+	protected $tabList=array(
+		"resa"=>array('obligatoire'=>'Obligatoire','instructeur'=>'Instructeur','facultatif'=>'Facultatif'),
+	);
+	
+	function aff($key,$typeaff="html",$formname="form_data",&$render="")
+	{
+		$ret=parent::aff($key,$typeaff,$formname,$render);
+
+		if ($typeaff=="form")
+		{
+			if ($key=="droit")
+			{
+				$sql=$this->sql;
+				$query = "SELECT groupe,description FROM ".$this->tbl."_groupe ORDER BY description";
+				$sql->Query($query);
+				$tabgrp=array();
+				for($i=0; $i<$sql->rows; $i++)
+				{ 
+					$sql->GetRow($i);
+					$tabgrp[$sql->data["groupe"]]=$sql->data["description"];
+				}
+
+				$ret="<select name=\"".$formname."[$key]\">";
+				$ret.="<option value=''>Tout le monde</option>";
+				foreach($tabgrp as $grp=>$d)
+				{
+					$ret.="<option value='".$grp."' ".(($grp==$this->data[$key]) ? "selected" : "").">".$d."</option>";
+				}
+				$ret.="</select>";
+			}
+			else if ($key=="recipient")
+			{
+				$sql=$this->sql;
+				$query = "SELECT groupe,description FROM ".$this->tbl."_groupe ORDER BY description";
+				$sql->Query($query);
+				$tabgrp=array();
+				for($i=0; $i<$sql->rows; $i++)
+				{ 
+					$sql->GetRow($i);
+					$tabgrp[$sql->data["groupe"]]=$sql->data["description"];
+				}
+
+				$ret="<select name=\"".$formname."[$key]\">";
+				$ret.="<option value=''>Utilisateur</option>";
+				foreach($tabgrp as $grp=>$d)
+				{
+					$ret.="<option value='".$grp."' ".(($grp==$this->data[$key]) ? "selected" : "").">".$d."</option>";
+				}
+				$ret.="</select>";
+			}		}
+		return $ret;
+	}
+
+	function ListeEcheance($context="user") 
+	{
+		$query ="SELECT echeance.id FROM ".$this->tbl."_echeance AS echeance ";
+		$query.="LEFT JOIN ".$this->tbl."_echeancetype AS type ON echeance.typeid=type.id ";
+		$query.="LEFT JOIN ".$this->tbl."_utilisateurs AS usr ON echeance.uid=usr.id ";
+		$query.="WHERE type.context='".$context."' AND echeance.actif='oui' AND echeance.typeid='".$this->id."' AND usr.actif='oui'";
+
+		$sql=$this->sql;
+		$sql->Query($query);
+		$lstdte=array();
+		for($i=0; $i<$sql->rows; $i++)
+		{
+			$sql->GetRow($i);
+			$lstdte[$i]=$sql->data["id"];
+		}
+
+		return $lstdte;		
+	}
+}
+
+function ListEcheanceType($sql,$context="user")
+{
+	if ($context=="")
+	{
+		$t=array("actif"=>"oui");
+	}
+	else
+	{
+		$t=array("actif"=>"oui","context"=>$context);
+	}
+	return ListeObjets($sql,"echeancetype",array("id"),$t);
 }
 
 ?>

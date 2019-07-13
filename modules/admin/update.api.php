@@ -131,27 +131,27 @@ function AjoutLog($txt)
 			}
 		}
 		// Vérifie si le champs obligatoire existent
-		if (!isset($tabTmpl[$MyOpt["tbl"]."_".$tab]["uid_creat"]))
-		{
-			$tabTmpl[$MyOpt["tbl"]."_".$tab]["uid_creat"]["Type"]="int(10) UNSIGNED";
-		}
-		if (!isset($tabTmpl[$MyOpt["tbl"]."_".$tab]["dte_creat"]))
-		{
-			$tabTmpl[$MyOpt["tbl"]."_".$tab]["uid_creat"]["Type"]="datetime";
-		}
-		if (!isset($tabTmpl[$MyOpt["tbl"]."_".$tab]["uid_maj"]))
-		{
-			$tabTmpl[$MyOpt["tbl"]."_".$tab]["uid_maj"]["Type"]="int(10) UNSIGNED";
-		}
-		if (!isset($tabTmpl[$MyOpt["tbl"]."_".$tab]["dte_maj"]))
-		{
-			$tabTmpl[$MyOpt["tbl"]."_".$tab]["dte_maj"]["Type"]="datetime";
-		}
+		// if (!isset($tabTmpl[$tab]["uid_creat"]))
+		// {
+			// $tabTmpl[$tab]["uid_creat"]["Type"]="int(10) UNSIGNED";
+		// }
+		// if (!isset($tabTmpl[$tab]["dte_creat"]))
+		// {
+			// $tabTmpl[$tab]["uid_creat"]["Type"]="datetime";
+		// }
+		// if (!isset($tabTmpl[$tab]["uid_maj"]))
+		// {
+			// $tabTmpl[$tab]["uid_maj"]["Type"]="int(10) UNSIGNED";
+		// }
+		// if (!isset($tabTmpl[$tab]["dte_maj"]))
+		// {
+			// $tabTmpl[$tab]["dte_maj"]["Type"]="datetime";
+		// }
 
 		// Si la table existe ou qu'elle a pu être créée
 		if (isset($tabProd[$MyOpt["tbl"]."_".$tab]))
 		{
-			foreach($fields as $field=>$d)
+			foreach($tabTmpl[$tab] as $field=>$d)
 			{
 				// Le champ n'existe pas
 				if (!isset($tabProd[$MyOpt["tbl"]."_".$tab][$field]))

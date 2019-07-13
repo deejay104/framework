@@ -302,6 +302,7 @@
 				{
 					$dte = new echeance_core(0,$sql,$id);
 					$dte->editmode="form";
+					$dte->context="user";
 					$tmpl_x->assign("form_echeance",$dte->Affiche());
 					$tmpl_x->parse("corps.aff_echeances.lst_echeance");
 				}

@@ -33,7 +33,7 @@
 	myPrint("Notification Echeance : ".implode(",",$tabPre));
 
 // ---- Liste les comptes actifs
-	$query="SELECT * FROM ".$MyOpt["tbl"]."_echeancetype ORDER BY description";
+	$query="SELECT * FROM ".$MyOpt["tbl"]."_echeancetype WHERE actif='oui' ORDER BY description";
 	$sql->Query($query);
 
 	$lsttype=array();
@@ -54,40 +54,49 @@
 		if ($d["notif"]=="oui")
 		{
 			$lstdte=array();
-			$lstdte=ListeEcheanceType($sql,$id);
-			foreach($lstdte as $i=>$did)
+			
+			$ech=new echeancetype_core($id,$sql);
+
+			if ($ech->val("recipient")=="")
 			{
-				$dte = new echeance_core($did,$sql,0);
-				$usr = new user_core($dte->uid,$sql,false);
-				$ret=true;
-
-				if (date_diff_txt($dte->Val(),date("Y-m-d"))>0)
+				$lstdte=$ech->ListeEcheance("user");
+				foreach($lstdte as $i=>$did)
 				{
-					myPrint($usr->fullname." - ".$dte->description." echue");
+					$dte = new echeance_core($did,$sql,0);
+					$usr = new user_core($dte->uid,$sql,false);
+					$ret=true;
 
-					$tabvar=array();
-					$tabvar["description"]=$dte->description;
-					$tabvar["type"]="est échue depuis le";
-					$tabvar["date"]=sql2date($dte->Val());
-					
-					SendMailFromFile($mailpre,$usr->data["mail"],$tabPre,"[".$MyOpt["site_title"]."] : ".$dte->description." échue",$tabvar,"echeance_nok");
-				}
-				else if (date_diff_txt($dte->Val(),date("Y-m-d"))>-$delai*24*3600)
-				{
-					myPrint($usr->fullname." - ".$dte->description." expire dans moins de ".$delai." jours");
+					if (date_diff_txt($dte->Val(),date("Y-m-d"))>0)
+					{
+						myPrint($usr->fullname." - ".$dte->description." echue");
 
-					$tabvar=array();
-					$tabvar["description"]=$dte->description;
-					$tabvar["type"]="expire le";
-					$tabvar["date"]=sql2date($dte->Val());
-					
-					SendMailFromFile($mailpre,$usr->data["mail"],$tabPre,"[".$MyOpt["site_title"]."] : ".$dte->description." arrive à échéance le ".sql2date($dte->Val()),$tabvar,"echeance_ok");
-				}
-				if (!$ret)
-				{
-					$gl_res="ERREUR";
+						$tabvar=array();
+						$tabvar["description"]=$dte->description;
+						$tabvar["type"]="est échue depuis le";
+						$tabvar["date"]=sql2date($dte->Val());
+						
+						SendMailFromFile($mailpre,$usr->data["mail"],$tabPre,"[".$MyOpt["site_title"]."] : ".$dte->description." échue",$tabvar,"echeance_nok");
+					}
+					else if (date_diff_txt($dte->Val(),date("Y-m-d"))>-$delai*24*3600)
+					{
+						myPrint($usr->fullname." - ".$dte->description." expire dans moins de ".$delai." jours");
+
+						$tabvar=array();
+						$tabvar["description"]=$dte->description;
+						$tabvar["type"]="expire le";
+						$tabvar["date"]=sql2date($dte->Val());
+						
+						SendMailFromFile($mailpre,$usr->data["mail"],$tabPre,"[".$MyOpt["site_title"]."] : ".$dte->description." arrive à échéance le ".sql2date($dte->Val()),$tabvar,"echeance_ok");
+					}
+					if (!$ret)
+					{
+						$gl_res="ERREUR";
+					}
 				}
 			}
+			// Need to add group notification
+			// List all group users and send the email to them
+			// Maybe need to create a new email template ?
 		}
 	}
 	

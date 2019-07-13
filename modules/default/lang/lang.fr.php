@@ -72,4 +72,8 @@
 	$tabLang["lang_datasaved"]="Vos données ont été enregistrées.";
 	$tabLang["lang_dataerror"]="Erreur lors de la sauvegarde";
 
+	$tabLang["lang_documents"]="Documents";
+	$tabLang["lang_deadline"]="Echéances";
+	$tabLang["lang_recipient"]="Destinataire";
+
 ?>

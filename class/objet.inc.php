@@ -20,7 +20,7 @@
 
 /*
 Type:
-	number: Nombre
+	number : Nombre
 	date
 	datetime
 	duration: Temps
@@ -100,7 +100,7 @@ class objet_core
 						$this->data[$key]="0000-00-00 00:00:00";
 					}
 				}
-				else if ($field["type"]=="number")
+				else if (($field["type"]=="number") || ($field["type"]=="numeric"))
 				{
 					if ((isset($field["default"])) && (is_numeric($field["default"])))
 					{
@@ -274,6 +274,10 @@ class objet_core
 			{
 				$ret="<INPUT id='".$key."'  name=\"".$formname."[$key]\" value=\"".date2sql(sql2date($txt,"jour"))."\" type=\"date\">";
 			}
+			else if ($type=="price")
+			{
+				$ret="<INPUT id='".$key."'  name=\"".$formname."[$key]\" value=\"".$txt."\" type=\"number\" step=\"0.01\" style='width:80px!important;'>";
+			}
 			else if (is_array($txt))
 			{
 				$ret="";
@@ -424,7 +428,7 @@ class objet_core
 			$len=80;
 			$type="";
 		}
-		else if ($type=="number")
+		else if (($type=="number") || ($type=="numeric"))
 		{
 			if (!is_numeric($txt))
 			{
@@ -745,7 +749,7 @@ class objet_core
 			foreach($this->fields as $key=>$field)
 			{
 				$tabobj[$key]=array();
-				if ($field["type"]=="number")
+				if (($field["type"]=="number") || ($field["type"]=="numeric"))
 				{
 					$tabobj[$key]["Type"]="int(10) unsigned";
 					$tabobj[$key]["Default"]="0";
@@ -865,6 +869,30 @@ class objet_core
 				}
 			}
 		}
+		
+		if (!isset($tabobj["actif"]))
+		{
+			$tabobj["actif"]=Array("Type" => "enum('oui','non')", "Default" => "oui", "Index" => "1");
+		}
+		if (!isset($tabobj["uid_creat"]))
+		{
+			$tabobj["uid_creat"]=Array("Type" => "int(10) unsigned");
+		}
+		if (!isset($tabobj["dte_creat"]))
+		{
+			$tabobj["dte_creat"]=Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00");
+		}
+		if (!isset($tabobj["uid_maj"]))
+		{
+			$tabobj["uid_maj"]=Array("Type" => "int(10) unsigned");
+		}
+		if (!isset($tabobj["dte_maj"]))
+		{
+			$tabobj["dte_maj"]=Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00");
+		}
+		// $tabobj["uid_maj"]=Array("Type" => "int(10) UNSIGNED");
+		// $tabobj["dte_maj"]=Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00");
+		
 		$tab[$this->table]=$tabobj;
 	}
 	

@@ -75,4 +75,8 @@
 	$tabLang["lang_datasaved"]="Data saved";
 	$tabLang["lang_dataerror"]="Error";
 
+	$tabLang["lang_documents"]="Documents";
+	$tabLang["lang_deadline"]="Deadline";
+	$tabLang["lang_recipient"]="Recipient";
+
 ?>
