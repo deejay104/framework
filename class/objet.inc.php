@@ -139,7 +139,7 @@ class objet_core
 		$res = $sql->QueryRow($query);
 		if (!is_array($res))
 		{
-			return "";
+			return 0;
 		}
 
 		$this->uid_creat=$res["uid_creat"];

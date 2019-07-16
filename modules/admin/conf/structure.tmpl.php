@@ -131,13 +131,13 @@ $tabTmpl=Array
 		"forum_usr" => Array("Type" => "int(10) unsigned", "Index" => "1", ),
 		"forum_date" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
 	),
-	"groupe" => Array
-	(
-		"id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
-		"groupe" => Array("Type" => "varchar(5)", "Index" => "PRIMARY", ),
-		"description" => Array("Type" => "varchar(200)", ),
-		"principale" => Array("Type" => "enum('oui','non')", "Default" => "non", "Index" => "1", ),
-	),
+	// "groupe" => Array
+	// (
+		// "id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
+		// "groupe" => Array("Type" => "varchar(5)", "Index" => "PRIMARY", ),
+		// "description" => Array("Type" => "varchar(200)", ),
+		// "principale" => Array("Type" => "enum('oui','non')", "Default" => "non", "Index" => "1", ),
+	// ),
 	"historique" => Array
 	(
 		"id" => Array("Type" => "bigint(20) unsigned", "Index" => "PRIMARY", ),
@@ -240,6 +240,10 @@ $tabTmpl=Array
 		// "uid_maj" => Array("Type" => "int(10) unsigned", "Default" => "0", ),
 		// "dte_maj" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00", ),
 	// ),
+
+	require_once ("class/user.inc.php");
+	$obj=new groupe_core(0,$sql);
+	$obj->genSqlTab($tabTmpl);
 	
 	require_once ("class/amelioration.inc.php");
 	$obj=new amelioration_core(0,$sql);

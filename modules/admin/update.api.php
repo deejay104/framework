@@ -37,7 +37,7 @@ function AjoutLog($txt)
 		}
 	}
 	
-	
+
 // ---- Charge la structure des tables en base
 	$tabProd=array();
 	$q="SHOW TABLES;";
@@ -153,6 +153,8 @@ function AjoutLog($txt)
 		{
 			foreach($tabTmpl[$tab] as $field=>$d)
 			{
+// echo $tab.":".$field."=".$tabTmpl[$tab][$field]["Type"]." ".$tabProd[$MyOpt["tbl"]."_".$tab][$field]["Type"]."<br>\n";
+
 				// Le champ n'existe pas
 				if (!isset($tabProd[$MyOpt["tbl"]."_".$tab][$field]))
 				{

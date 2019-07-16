@@ -724,5 +724,64 @@ function AffFullname($prenom,$nom)
 	}		
 	return $fullname;
 }
+
+
+
+class groupe_core extends objet_core
+{
+	# Constructor
+	protected $table="groupe";
+	protected $mod="";
+	protected $rub="";
+
+	protected $fields=array
+	(
+		"groupe" => Array("type" => "varchar", "len" => "5", "index"=>1),
+		"description" => Array("type" => "varchar", "len"=>200 ),
+		"principale" => Array("type" => "bool", "default" => "non", "index" => "1", ),
+	);
+
+	function __construct($id=0,$sql,$grp="")
+	{
+		parent::__construct($id,$sql);
+		if ($grp!="")
+		{
+			$this->loadgrp($grp);
+		}
+	}
+	
+	// Charge les données utilisateurs
+	function loadgrp($grp)
+	{
+		$sql=$this->sql;
+		$query = "SELECT * FROM ".$this->tbl."_groupe WHERE groupe='".$grp."'";
+		$res = $sql->QueryRow($query);
+		if (!is_array($res))
+		{
+			return 0;
+		}
+
+		
+		$this->id=$res["id"];
+		
+		$this->load($this->id);
+	}
+	
+	function ListUsers()
+	{
+		$sql=$this->sql;
+		$query="SELECT uid FROM ".$this->tbl."_droits WHERE groupe='".$this->data["groupe"]."'";
+		$sql->Query($query);
+
+		$lstuser=array();
+		for($i=0; $i<$sql->rows; $i++)
+		{ 
+			$sql->GetRow($i);
+			$lstuser[$i]=$sql->data["uid"];
+		}
+		return $lstuser;
+		
+	}
+}
  
 ?>

@@ -215,10 +215,9 @@ class echeance_core extends objet_core
 		}
 		else
 		{
-			$ret ="<p>";
+			$ret ="";
 			$ret.="<img src='static/images/icn16_".TestDate($this->dte_echeance).".png' style='vertical-align:middle; border: 0px;  height: 16px; width: 16px;'>&nbsp;";
 			$ret.="Echéance ".$this->description." le ".AffDate($this->dte_echeance);
-			$ret.="</p>";
 		}
 		return $ret;
 	}
@@ -232,7 +231,7 @@ class echeance_core extends objet_core
 }
 
 
-function ListEcheance($sql,$id,$context="user")
+function ListEcheance($sql,$id,$context="utilisateurs")
   {
 	global $MyOpt, $gl_uid, $myuser;
 
@@ -250,19 +249,20 @@ function ListEcheance($sql,$id,$context="user")
 	return $lstdte;
   }
 
-function VerifEcheance($sql,$id,$context="user")
+function VerifEcheance($sql,$id,$context="utilisateurs",$warn=false)
   {
 	global $MyOpt, $gl_uid, $myuser;
 
-	$query ="SELECT echeancetype.description,echeancetype.resa,echeance.dte_echeance FROM ".$MyOpt["tbl"]."_echeancetype AS echeancetype ";
-	$query.="LEFT JOIN ".$MyOpt["tbl"]."_echeance AS echeance ON echeancetype.id=echeance.typeid AND echeance.actif='oui' AND echeance.uid='".$id."' ";
-	$query.="WHERE echeancetype.actif='oui' AND echeancetype.type='".$context."' AND (echeance.dte_echeance<'".now()."' OR echeance.dte_echeance IS NULL) ORDER BY echeance.dte_echeance";
+	$query ="SELECT echeancetype.description,echeancetype.resa,echeance.id,echeance.dte_echeance FROM ".$MyOpt["tbl"]."_echeancetype AS echeancetype ";
+	$query.="LEFT JOIN ".$MyOpt["tbl"]."_echeance AS echeance ON echeancetype.id=echeance.typeid AND echeance.actif='oui' ".(($id>0) ? "AND echeance.uid='".$id."' " : "");
+	$query.="WHERE echeancetype.actif='oui' AND echeancetype.context='".$context."' AND (echeance.dte_echeance<".(($warn) ? "DATE_ADD('".now()."', INTERVAL echeancetype.delai DAY)" : "'".now()."'")." OR echeance.dte_echeance IS NULL) ORDER BY echeance.dte_echeance";
 
 	$sql->Query($query);
 	$lstdte=array();
 	for($i=0; $i<$sql->rows; $i++)
 	{
 		$sql->GetRow($i);
+		$lstdte[$i]["id"]=$sql->data["id"];
 		$lstdte[$i]["description"]=$sql->data["description"];
 		$lstdte[$i]["resa"]=$sql->data["resa"];
 		$lstdte[$i]["dte_echeance"]=$sql->data["dte_echeance"];
@@ -271,23 +271,24 @@ function VerifEcheance($sql,$id,$context="user")
 	return $lstdte;
   }
 
-function ListeEcheanceParType($sql,$id,$context="user") 
-{ global $MyOpt;
-	$query ="SELECT echeance.id FROM ".$MyOpt["tbl"]."_echeance AS echeance ";
-	$query.="LEFT JOIN ".$MyOpt["tbl"]."_echeancetype AS type ON echeance.typeid=type.id ";
-	$query.="LEFT JOIN ".$MyOpt["tbl"]."_utilisateurs AS usr ON echeance.uid=usr.id ";
-	$query.="WHERE type.context='".$context."' AND echeance.actif='oui' AND echeance.typeid='".$id."' AND usr.actif='oui'";
+// function ListeEcheanceParType($sql,$id,$context="utilisateurs") 
+// { global $MyOpt;
 
-	$sql->Query($query);
-	$lstdte=array();
-	for($i=0; $i<$sql->rows; $i++)
-	{
-		$sql->GetRow($i);
-		$lstdte[$i]=$sql->data["id"];
-	}
+	// $query ="SELECT echeance.id FROM ".$MyOpt["tbl"]."_echeance AS echeance ";
+	// $query.="LEFT JOIN ".$MyOpt["tbl"]."_echeancetype AS type ON echeance.typeid=type.id ";
+	// $query.="LEFT JOIN ".$MyOpt["tbl"]."_".$context." AS usr ON echeance.uid=usr.id ";
+	// $query.="WHERE echeance.actif='oui' AND echeance.typeid='".$id."' AND usr.actif='oui'"; 
 
-	return $lstdte;		
-}
+	// $sql->Query($query);
+	// $lstdte=array();
+	// for($i=0; $i<$sql->rows; $i++)
+	// {
+		// $sql->GetRow($i);
+		// $lstdte[$i]=$sql->data["id"];
+	// }
+
+	// return $lstdte;		
+// }
 
 
 
@@ -309,12 +310,13 @@ class echeancetype_core extends objet_core
 		"multi" => Array("type" => "bool", "default" => "non" ),
 		"notif" => Array("type" => "bool", "default" => "non" ),
 		"delai" => Array("type" => "number", "default" => "30" ),
-		"context" => Array("type" => "varchar", "len"=>10, "default" => "user" ),
+		"context" => Array("type" => "enum", "default" => "utilisateurs", "index"=>1 ),
 		"recipient" => Array("type" => "varchar", "len"=>10, "default" => "user" ),
 	);
 
 	protected $tabList=array(
 		"resa"=>array('obligatoire'=>'Obligatoire','instructeur'=>'Instructeur','facultatif'=>'Facultatif'),
+		"context"=>array('utilisateurs'=>'Utilisateur'),
 	);
 	
 	function aff($key,$typeaff="html",$formname="form_data",&$render="")
@@ -366,12 +368,11 @@ class echeancetype_core extends objet_core
 		return $ret;
 	}
 
-	function ListeEcheance($context="user") 
+	function ListeEcheance() 
 	{
 		$query ="SELECT echeance.id FROM ".$this->tbl."_echeance AS echeance ";
-		$query.="LEFT JOIN ".$this->tbl."_echeancetype AS type ON echeance.typeid=type.id ";
-		$query.="LEFT JOIN ".$this->tbl."_utilisateurs AS usr ON echeance.uid=usr.id ";
-		$query.="WHERE type.context='".$context."' AND echeance.actif='oui' AND echeance.typeid='".$this->id."' AND usr.actif='oui'";
+		$query.="LEFT JOIN ".$this->tbl."_".$this->data["context"]." AS usr ON echeance.uid=usr.id ";
+		$query.="WHERE echeance.actif='oui' AND echeance.typeid='".$this->id."'";
 
 		$sql=$this->sql;
 		$sql->Query($query);
@@ -386,7 +387,7 @@ class echeancetype_core extends objet_core
 	}
 }
 
-function ListEcheanceType($sql,$context="user")
+function ListEcheanceType($sql,$context="utilisateurs")
 {
 	if ($context=="")
 	{
