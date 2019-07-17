@@ -2,7 +2,7 @@
 class echeance_core extends objet_core
 {
 	# Constructor
-	protected $table="ressources";
+	protected $table="echeance";
 	protected $mod="";
 	protected $rub="";
 
