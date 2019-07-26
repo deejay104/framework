@@ -42,16 +42,17 @@
 // ---- Demande d'authentification
 	if ($mykey!="")
 	{
-		$res=array();
-		$res["mykey"]=md5("NOK");
+		$ret=array();
+		$ret["mykey"]=md5("NOK");
 
-		$query = "SELECT id,uid FROM ".$MyOpt["tbl"]."_token WHERE id='".$myid."' AND active='oui' AND MD5(CONCAT('".md5(session_id())."','-',token))='".$mykey."' AND dte_expire<>'0000-00-00' AND dte_expire>NOW()";
+		$query = "SELECT id,uid FROM ".$MyOpt["tbl"]."_token WHERE id='".$myid."' AND active='oui' AND MD5(CONCAT('".md5(session_id())."','-',token))='".$mykey."' AND dte_expire<>'0000-00-00' AND dte_expire>'".now()."'";
+
 		$res  = $sql->QueryRow($query);
 		if ($res["id"]>0)
 		{
 			if ($MyOpt["tokenexpire"]>0)
 			{
-				$query="UPDATE ".$MyOpt["tbl"]."_token SET dte_expire='".date("Y-m-d H:i:s",time()+$MyOpt["tokenexpire"]*3600*24)."' WHERE id='".$myid."'";
+				$query="UPDATE ".$MyOpt["tbl"]."_token SET dte_expire='".date("Y-m-d H:i:s",time()+$MyOpt["tokenexpire"]*3600*24)."' WHERE id='".$res["id"]."'";
 				$sql->Update($query);
 			}
 
@@ -59,12 +60,18 @@
 			$_SESSION['uid']=$gl_uid;
 			$_SESSION['sessid']=$myid;
 
-			$res["auth"]="OK";
-			$res["myid"]=$res["id"];
-			$res["mykey"]=md5("OK");
+			$ret["auth"]="OK";
+			$ret["myid"]=$res["id"];
+			$ret["mykey"]=md5("OK");
+
+			$query = "SELECT prenom,nom FROM ".$MyOpt["tbl"]."_utilisateurs WHERE id='".$res["uid"]."'";
+			$res  = $sql->QueryRow($query);
+			
+			$query="INSERT INTO ".$MyOpt["tbl"]."_login SET username='".addslashes($res["prenom"])." ".addslashes($res["nom"])."',dte_maj='".now()."',header='".substr(addslashes($_SERVER["HTTP_USER_AGENT"]),0,200)."',type='token'";
+			$sql->Insert($query);
 		}
 
-		echo json_encode($res);
+		echo json_encode($ret);
 		exit;
 	}
 	else if ((isset($_SESSION['uid'])) && ($_SESSION['uid']>0))

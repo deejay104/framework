@@ -476,7 +476,7 @@ class objet_core
 			$ret=strtolower($txt);
 		}
 
-	  return $ret;
+		return $ret;
 	}
 
 	function url()

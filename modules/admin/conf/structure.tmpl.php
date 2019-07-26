@@ -155,6 +155,7 @@ $tabTmpl=Array
 		"username" => Array("Type" => "varchar(100)", ),
 		"dte_maj" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00", ),
 		"header" => Array("Type" => "varchar(200)", ),
+		"type" => Array("Type" => "varchar(20)", ),
 	),
 	"mailtmpl" => Array
 	(

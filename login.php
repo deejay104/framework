@@ -102,7 +102,7 @@
 
 		if (($res["id"]>0) && (md5($res["password"].md5(session_id()))==$password))
 		{
-				$query="INSERT INTO ".$MyOpt["tbl"]."_login (username,dte_maj,header) VALUES ('".addslashes($res["prenom"])." ".addslashes($res["nom"])."','".now()."','".substr(addslashes($_SERVER["HTTP_USER_AGENT"]),0,200)."')";
+				$query="INSERT INTO ".$MyOpt["tbl"]."_login (username,dte_maj,header,type) VALUES ('".addslashes($res["prenom"])." ".addslashes($res["nom"])."','".now()."','".substr(addslashes($_SERVER["HTTP_USER_AGENT"]),0,200)."','password')";
 				$sql->Insert($query);
 				$_SESSION['uid']=$res["id"];
 
