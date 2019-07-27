@@ -814,7 +814,7 @@ class objet_core
 				{
 					if (isset($this->tabList[$key]))
 					{
-						if (is_array($this->tabList[$key]["fr"]))
+						if ((isset($this->tabList[$key]["fr"])) && (is_array($this->tabList[$key]["fr"])))
 						{
 							$t=$this->tabList[$key]["fr"];
 						}

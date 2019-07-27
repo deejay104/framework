@@ -108,7 +108,7 @@ img { color: #FFFFFF; border: 0px; }
     #main-sidebar { display: block; width: 200px;  z-index: 9000; }
 }
 @media (max-width: 1024px) {
-		body { font-size:16px; }
+	body { font-size:16px; }
 }
 
 @media (max-device-width: 714px) {
@@ -348,7 +348,7 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 
 .actualitesIcones { display: inline-block; position:relative; top:5px; float:right; padding-right:5px; }
 
-.actualitesTexte p { padding:10px; font-size:14px; }
+.actualitesTexte p { padding:10px; font-size:14px; overflow:hidden; }
 .actualitesTexte a { text-decoration: underline; }
 
 .actualitesSuivant { width:100%; background-color: #{FormulaireBackgroundLight}; text-align:center; }

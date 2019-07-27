@@ -288,18 +288,23 @@ class user_core extends objet_core
 					$query="SELECT id,groupe, description FROM ".$this->tbl."_groupe WHERE groupe='".$txt."'";
 					$res=$sql->QueryRow($query);
 
-					$ret=$res["description"];
+					$ret="<a href='index.php?mod=membres&rub=detail&id=".$this->id."'>".$res["description"]."</a>";
 				}
 				else
 				{
-					$ret="Aucun";
+					$ret="<a href='index.php?mod=membres&rub=detail&id=".$this->id."'>Aucun</a>";
 				}
 			}
 			else if ($key=="nom")
 			{
+				$ret=strtoupper($this->data[$key]);
+				if ($ret=="")
+				{
+					$ret="<i>NA</i>";
+				}
 				if ($this->actif!="oui")
 				{
-					$ret="<a href='index.php?mod=membres&rub=detail&id=".$this->id."'><s>".strtoupper($this->data[$key])."</s></a>";
+					$ret="<a href='index.php?mod=membres&rub=detail&id=".$this->id."'><s>".$ret."</s></a>";
 				}
 
 			}

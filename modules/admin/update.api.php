@@ -352,6 +352,7 @@ function AjoutLog($txt)
 	require($appfolder."/version.php");
 	$query="SELECT id FROM ".$MyOpt["tbl"]."_config WHERE param='version'";
 	$res=$sql->QueryRow($query);
+	$id=$res["id"];
 
 	if ($id>0)
 	{

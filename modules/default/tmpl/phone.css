@@ -63,6 +63,8 @@ input[type=submit] { -webkit-appearance: none; -moz-appearance: none; appearance
 
 .pageTitleSelected { background-color: #{TitleBackgroundButton}!important; }
 
+.pagemenu { background-color: #{FormulaireBackgroundNormal}; height: 20px; width: 100%; padding-top:0px; margin-bottom: 0px;  margin-top: 25px; }
+
 .navigation { margin-top: 60px; margin-bottom: 0px; background-color: #{FormulaireBackgroundNormal};  display: inline-block; width:100%; font-size: 0px; }
 .navigation p { margin-left:10px; margin-bottom: 0px; background-color: #{MenuBackgroundNormal}; width:40px; height:40px; float:left; text-align: center; border-radius: 20px; padding: 0px; }
 .navigation img { width: 32px; height:32px; margin-top:2px; margin-left: 0px; }
@@ -213,6 +215,8 @@ input[type=submit] { -webkit-appearance: none; -moz-appearance: none; appearance
 .imgDelete img { width: 16px; height: 16px;  }
 .imgDelete img:hover { background-color: #{TitleBackgroundHover}; border-radius: 2px; }
 
+.noMobile { display: none!important; visibility: hidden; }
+
 /* **** Actualités **** */
 .cadreinfos { width:100%; }
 .encadreInfos { min-width: 300px; padding: 0px 0px 10px 0px; margin-bottom:10px; }
@@ -261,7 +265,7 @@ input[type=submit] { -webkit-appearance: none; -moz-appearance: none; appearance
 .actualitesIcones a:hover { background-color: #{TitleBackgroundHover}; }
 .actualitesIcones img { vertical-align:middle; }
 
-.actualitesTexte p { padding:10px; font-size:14px; }
+.actualitesTexte p { padding:10px; font-size:14px; overflow:hidden; }
 .actualitesTexte a { text-decoration: underline; }
 
 .actualitesSuivant { width:100%; background-color: #{FormulaireBackgroundNormal}; text-align:center; }
