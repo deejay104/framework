@@ -305,7 +305,6 @@ class echeancetype_core extends objet_core
 	protected $fields=array
 	(
 		"description" => Array("type" => "varchar", "len"=>100),
-		"resa" => Array("type" => "enum" ),
 		"droit" => Array("type" => "varchar","len"=>5 ),
 		"multi" => Array("type" => "bool", "default" => "non" ),
 		"notif" => Array("type" => "bool", "default" => "non" ),
@@ -315,7 +314,6 @@ class echeancetype_core extends objet_core
 	);
 
 	protected $tabList=array(
-		"resa"=>array('obligatoire'=>'Obligatoire','instructeur'=>'Instructeur','facultatif'=>'Facultatif'),
 		"context"=>array('utilisateurs'=>'Utilisateur'),
 	);
 	

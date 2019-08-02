@@ -278,6 +278,10 @@ class objet_core
 			{
 				$ret="<INPUT id='".$key."'  name=\"".$formname."[$key]\" value=\"".$txt."\" type=\"number\" step=\"0.01\" style='width:80px!important;'>";
 			}
+			else if ($type=="duration")
+			{
+				$ret="<INPUT id='".$key."'  name=\"".$formname."[$key]\" value=\"".$txt."\" style='width:80px!important;'>";
+			}
 			else if (is_array($txt))
 			{
 				$ret="";
