@@ -304,8 +304,9 @@ class user_core extends objet_core
 				}
 				if ($this->actif!="oui")
 				{
-					$ret="<a href='index.php?mod=membres&rub=detail&id=".$this->id."'><s>".$ret."</s></a>";
+					$ret="<s>".$ret."</s>";
 				}
+				$ret="<a href='index.php?mod=membres&rub=detail&id=".$this->id."'>".$ret."</a>";
 
 			}
 			else if ($key=="prenom")

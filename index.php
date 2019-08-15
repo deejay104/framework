@@ -24,11 +24,11 @@
 		$MyOpt=array();
 	}
 
+	list($usec, $sec) = explode(" ", microtime());
+	$starttime=((float)$usec + (float)$sec);
 	if ($MyOpt["debug"]=="on")
 	{
 		// $starttime=microtime();
-		list($usec, $sec) = explode(" ", microtime());
-		$starttime=((float)$usec + (float)$sec);
 		error_reporting(E_ALL); 
 		ini_set("display_errors", 1); 
 	}

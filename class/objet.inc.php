@@ -142,6 +142,7 @@ class objet_core
 			return 0;
 		}
 
+		$this->actif=$res["actif"];
 		$this->uid_creat=$res["uid_creat"];
 		$this->dte_creat=$res["dte_creat"];
 		$this->uid_maj=$res["uid_maj"];
@@ -682,6 +683,7 @@ class objet_core
 		global $gl_uid;
 		$sql=$this->sql;
 		$this->actif="non";
+		$this->data["actif"]="non";
 
 		$sql->Edit($this->table,$this->tbl."_".$this->table,$this->id,array("actif"=>'non', "uid_maj"=>$gl_uid, "dte_maj"=>now()));
 	}
