@@ -92,7 +92,7 @@
 					},
 					error : function(response)
 					{
-						console.log("Cannot authentication api");	
+						console.log("Cannot access authentication api");	
 						loadIndex();
 					}
 				});
@@ -102,6 +102,7 @@
 		else
 		{
 			console.log("local storage not available, switching to login page");
+			loadIndex();
 		}
 		
 	
@@ -115,7 +116,7 @@
 	</script>
 	
 	
-	<div id='authcontent'style='visibility:hidden;'></div>
+	<div id='authcontent' style='visibility:hidden;'></div>
 </body>
 </html>
 <!-- END: main -->

@@ -42,12 +42,15 @@
 // ---- Demande d'authentification
 	if ($mykey!="")
 	{
+		$data=array();
+		$data["mykey"]=$mykey;
+		$data["myid"]=$myid;
+
 		$ret=array();
-		$ret["mykey"]=md5("NOK");
 
-		$query = "SELECT id,uid FROM ".$MyOpt["tbl"]."_token WHERE id='".$myid."' AND active='oui' AND MD5(CONCAT('".md5(session_id())."','-',token))='".$mykey."' AND dte_expire<>'0000-00-00' AND dte_expire>'".now()."'";
+		$q = "SELECT id,uid FROM ".$MyOpt["tbl"]."_token WHERE id='".$myid."' AND active='oui' AND MD5(CONCAT('".md5(session_id())."','-',token))='".$mykey."' AND dte_expire<>'0000-00-00' AND dte_expire>'".now()."'";
+		$res  = $sql->QueryRow($q);
 
-		$res  = $sql->QueryRow($query);
 		if ($res["id"]>0)
 		{
 			if ($MyOpt["tokenexpire"]>0)
@@ -66,8 +69,35 @@
 
 			$query = "SELECT prenom,nom FROM ".$MyOpt["tbl"]."_utilisateurs WHERE id='".$res["uid"]."'";
 			$res  = $sql->QueryRow($query);
+
+			$data["result"]="token";
 			
-			$query="INSERT INTO ".$MyOpt["tbl"]."_login SET username='".addslashes($res["prenom"])." ".addslashes($res["nom"])."',dte_maj='".now()."',header='".substr(addslashes($_SERVER["HTTP_USER_AGENT"]),0,200)."',type='token'";
+			$query="INSERT INTO ".$MyOpt["tbl"]."_login SET username='na',dte_maj='".now()."',header='".substr(addslashes($_SERVER["HTTP_USER_AGENT"]),0,200)."',type='".json_encode($data)."'";
+			// $query="INSERT INTO ".$MyOpt["tbl"]."_login SET username='".addslashes($res["prenom"])." ".addslashes($res["nom"])."',dte_maj='".now()."',header='".substr(addslashes($_SERVER["HTTP_USER_AGENT"]),0,200)."',type='token'";
+			$sql->Insert($query);
+		}
+		else
+		{
+			$_SESSION['sessid']=-1;
+
+			$ret["auth"]="NOK";
+			$ret["mykey"]=md5("NOK");
+
+			$query = "SELECT id,uid,token FROM ".$MyOpt["tbl"]."_token WHERE id='".$myid."'";
+			$res  = $sql->QueryRow($query);
+
+			$data=array();
+			$data["myid"]=$myid;
+			$data["mykey"]=$mykey;
+			$data["result"]="rejected";
+			$data["mysession"]=session_id();
+			$data["sqkey"]=md5(md5(session_id())."-".$res["token"]);
+			$data["req"]=preg_replace("/\\'/","",$q);
+
+			$query = "SELECT prenom,nom FROM ".$MyOpt["tbl"]."_utilisateurs WHERE id='".$res["uid"]."'";
+			$res  = $sql->QueryRow($query);
+			
+			$query="INSERT INTO ".$MyOpt["tbl"]."_login SET username='".addslashes($res["prenom"])." ".addslashes($res["nom"])."',dte_maj='".now()."',header='".substr(addslashes($_SERVER["HTTP_USER_AGENT"]),0,200)."',type='".json_encode($data)."'";
 			$sql->Insert($query);
 		}
 

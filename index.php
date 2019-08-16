@@ -165,6 +165,13 @@
 	}
 	if ($gl_uid==0)
 	{
+		$data=array();
+		$data["sessid"]=isset($_SESSION['sessid']) ? $_SESSION['sessid'] : "na";
+		$data["tokenexpire"]=$MyOpt["tokenexpire"];
+
+		// $query="INSERT INTO ".$MyOpt["tbl"]."_login SET username='na',dte_maj='".now()."',header='".substr(addslashes($_SERVER["HTTP_USER_AGENT"]),0,200)."',type='".json_encode($data)."'";
+		// $sql->Insert($query);
+// $_SESSION['sessid']=0;
 		if ( ((isset($_SESSION['sessid'])) && ($_SESSION['sessid']==-1)) || ($MyOpt["tokenexpire"]==0) )
 		{
 			include "login.php";
@@ -172,7 +179,6 @@
 		}
 		else
 		{
-			$_SESSION['sessid']=-1;
 			include "auth.php";
 			exit;
 		}
