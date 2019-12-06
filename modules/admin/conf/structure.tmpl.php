@@ -71,31 +71,6 @@ $tabTmpl=Array
 		"uid_creat" => Array("Type" => "int(10) unsigned", "Default" => 0, ),
 		"dte_creat" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
 	),
-	// "echeance" => Array
-	// (
-		// "id" => Array("Type" => "bigint(20) unsigned", "Index" => "PRIMARY", ),
-		// "typeid" => Array("Type" => "int(10) unsigned", "Index" => "1", ),
-		// "uid" => Array("Type" => "int(10) unsigned", "Index" => "1", ),
-		// "dte_echeance" => Array("Type" => "date", ),
-		// "paye" => Array("Type" => "enum('oui','non')", "Default" => "non", ),
-		// "actif" => Array("Type" => "enum('oui','non')", "Default" => "oui", "Index"=>1 ),
-		// "dte_creat" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
-		// "uid_creat" => Array("Type" => "int(10) unsigned", ),
-		// "dte_maj" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
-		// "uid_maj" => Array("Type" => "int(10) unsigned", ),
-	// ),
-	// "echeancetype" => Array
-	// (
-		// "id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
-		// "description" => Array("Type" => "varchar(100)", ),
-		// "poste" => Array("Type" => "int(11)", "Index" => "1", ),
-		// "cout" => Array("Type" => "decimal(10,2)", "Default" => "0.00", ),
-		// "resa" => Array("Type" => "enum('obligatoire','instructeur','facultatif')", ),
-		// "droit" => Array("Type" => "varchar(3)", ),
-		// "multi" => Array("Type" => "enum('oui','non')", "Default" => "non", ),
-		// "notif" => Array("Type" => "enum('oui','non')", "Default" => "non", ),
-		// "delai" => Array("Type" => "tinyint(3) unsigned", "Default" => "30", ),
-	// ),
 	"export" => Array
 	(
 		"id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
@@ -131,13 +106,6 @@ $tabTmpl=Array
 		"forum_usr" => Array("Type" => "int(10) unsigned", "Index" => "1", ),
 		"forum_date" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
 	),
-	// "groupe" => Array
-	// (
-		// "id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
-		// "groupe" => Array("Type" => "varchar(5)", "Index" => "PRIMARY", ),
-		// "description" => Array("Type" => "varchar(200)", ),
-		// "principale" => Array("Type" => "enum('oui','non')", "Default" => "non", "Index" => "1", ),
-	// ),
 	"historique" => Array
 	(
 		"id" => Array("Type" => "bigint(20) unsigned", "Index" => "PRIMARY", ),
@@ -225,22 +193,6 @@ $tabTmpl=Array
 
 );
 
-	// "ameliorations" => Array
-	// (
-		// "id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
-		// "titre"=>Array("Type"=>"varchar(100)"),
-		// "description"=>Array("Type"=>"text"),
-		// "version"=>Array("Type"=>"varchar(10)"),
-		// "status"=>Array("Type"=>"varchar(10)","Index" => "1"),
-		// "module"=>Array("Type"=>"varchar(10)","Index" => "1"),
-		// "actif"=>Array("Type"=>"enum('oui','non')", "Default" => "oui", "Index" => "1",),
-		// "uid_dist" => Array("Type" => "int(10) unsigned", "Default" => "0"),
-		// "mail_dist" => Array("Type" => "varchar(104)"),
-		// "uid_creat" => Array("Type" => "int(10) unsigned", "Default" => "0"),
-		// "dte_creat" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
-		// "uid_maj" => Array("Type" => "int(10) unsigned", "Default" => "0", ),
-		// "dte_maj" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00", ),
-	// ),
 
 	require_once ("class/user.inc.php");
 	$obj=new groupe_core(0,$sql);

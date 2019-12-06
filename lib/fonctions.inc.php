@@ -620,6 +620,10 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 					{
 						$val[$name]["val"]="";
 					}
+					if (!isset($val[$name]["color"]))
+					{
+						$val[$name]["color"]="";
+					}
 					if ((!isset($val[$name]["aff"])) || ($val[$name]["aff"]==""))
 					{
 						$val[$name]["aff"]=$val[$name]["val"];
@@ -635,7 +639,7 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 					}
 					else
 					{
-						$ret.="<td ".(($val[$name]["align"]!="") ? "align='".$val[$name]["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").">".$val[$name]["aff"]."</td>";
+						$ret.="<td ".(($val[$name]["align"]!="") ? "align='".$val[$name]["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").(($val[$name]["color"]!="") ? " style='background-color:#".$val[$name]["color"].";'" : "").">".$val[$name]["aff"]."</td>";
 					}
 				}
 				$ret.="</tr>\n";

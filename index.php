@@ -543,7 +543,7 @@
 
 	if ($MyOpt["debugtime"]=="on")
 	{
-		echo "<div style='border:1px solid #000000; padding:10px; margin: 0px; position:fixed; right:20px; bottom:30px; display: inline-block; font-size:10px;'>";
+		echo "<div class='affDebugTime'>";
 		$o=$starttime;
 		foreach($debug as $k=>$t)
 		{

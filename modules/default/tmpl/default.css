@@ -119,10 +119,17 @@ img { color: #FFFFFF; border: 0px; }
     #responsive-navigation { display: none; }
     #main-content { width: 100%; left: 0px; }
     #main-sidebar { display: none; }
+	textarea { border: 0px solid #ffffff; }
+	input {	border: 0px solid #ffffff; }
+    .footer { display: none; height: 0px; }
     .pagetitle { display: none; height: 0px; }
+	.formulaireTitre { font-weight: bold; border: 1px solid #bbbbbb; }
+	.affDebugTime { display: none; width: 0px; height: 0px; }
+	.affDebugTime p { display: none; width: 0px; height: 0px; }
 }
 
 
+.affDebugTime { border:1px solid #000000; padding:10px; margin: 0px; position:fixed; right:20px; bottom:30px; display: inline-block; font-size:10px; }
 
 .formulaire input { width:155px; } /* Overlapped by responsive */
 .formulaire input[type=number] { width:50px; }
