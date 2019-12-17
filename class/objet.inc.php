@@ -305,7 +305,7 @@ class objet_core
 			if ($type=="text")
 			{
 				$ret=nl2br(htmlentities($txt,ENT_HTML5,"ISO-8859-1"));
-				$ret="<p class='formulaire'>".$ret."</p>";
+				$ret="<div class='formulaire'><p>".$ret."</p></div>";
 				$link=false;
 			}
 			else if ($type=="date")

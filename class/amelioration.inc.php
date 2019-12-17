@@ -193,9 +193,9 @@ class amelioration_core extends objet_core
 		}
 	}
 	
-	function aff($key,$typeaff="html",$formname="form_data",&$render="")
+	function aff($key,$typeaff="html",$formname="form_data",&$render="",$formid="")
 	{
-		$ret=parent::aff($key,$typeaff,$formname,$render);
+		$ret=parent::aff($key,$typeaff,$formname,$render,$formid);
 
 		if ($key=="id")
 		{

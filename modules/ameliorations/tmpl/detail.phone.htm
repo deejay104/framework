@@ -68,7 +68,7 @@
 		<p><label>Version</label>{form_version}</p>
 		<p><label>Module</label>{form_module}</p>
 	</div>
-	<div class="actualitesTexte" style='padding-left:15px;'>
+	<div class="actualitesTexte">
 		{form_description}
 	</div>
 </div>
@@ -101,13 +101,15 @@
 			</div>
 		</div>
 		<div class="actualitesTexte">
+		<div class='formulaire'>
 			<p>{msg_message}</p>
+			</div>
 		</div>
 	</div>
 <!-- END: aff_commentaire -->
 
 <!-- BEGIN: aff_commentaire_vide -->
-<div id="form_reponse" class="actualitesNouveau">
+<div id="form_reponse" class="formulaire">
 	<form name="form_reponse" method="post" action="index.php" enctype="multipart/form-data">
 		<input type="hidden" name="mod" value="ameliorations">
 		<input type="hidden" name="rub" value="detail">

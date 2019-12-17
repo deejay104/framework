@@ -55,7 +55,7 @@
 
 <!-- BEGIN: photos -->
 <div class="formulaireTitre">{lang_picture}</div>
-<div class="formulaire" style="padding-left:10px;">
+<div class="formulaire">
 	<p>
 		{lang_selectpicture}
 		{lang_selectpicture2}
@@ -67,7 +67,7 @@
 
 <div class="formulaireTitre">{lang_documents}</div>
 
-<div class="formulaire" style="padding-left: 20px;">
+<div class="formulaire" style='margin-left:20px;'>
 	<!-- BEGIN: lst_document -->
 	{form_document}
 	<!-- END: lst_document -->
@@ -75,9 +75,9 @@
 
 <!-- BEGIN: aff_echeances -->
 <div class="formulaireTitre">{lang_deadline}</div>
-<div class="formulaire" style="padding-left: 10px;">
+<div class="formulaire" style="padding-left: 20px;">
 	<!-- BEGIN: lst_echeance -->
-	<p>{form_echeance}</p>
+	{form_echeance}
 	<!-- END: lst_echeance -->
 </div>
 <!-- END: aff_echeances -->
@@ -95,9 +95,7 @@
 </div>
 
 <div class="formulaireTitre">{lang_comments}</div>
-<div class="formulaire" style="padding-left: 20px;">
-	{form_commentaire}
-</div>
+{form_commentaire}
 
 <!-- BEGIN: droits -->
 <div class="formulaireTitre">{lang_rights}</div>
