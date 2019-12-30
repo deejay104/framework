@@ -8,51 +8,6 @@
 
 <!-- BEGIN: corps -->
 
-<script type="text/javascript">
-	$(function() {
-
-			// auto adjust the height of
-			$('#actualitesNouveau').delegate( 'textarea', 'keydown', function (){
-			    $(this).height( 0 );
-			    $(this).height( this.scrollHeight );
-			});
-			$('#actualitesNouveau').find( 'textarea' ).keydown();
-
-  });
-
-	function ClearText(e,txt) {
-	
-		if(window.event)
-	          {
-	          	//IE
-	          	var t = window.event.srcElement;
-	          } 
-		else
-	          { //firefox
-	          	var t = e.target;
-	          } 
-			
-		if (t.value==txt)
-		  { t.value=''; t.style.color="#000000"; }
-		return;
-	}
-	function CapturePost(e) {
-		seconds=timer;
-		text="";
-	
-		if(window.event)
-	          { key = window.event.keyCode;	} //IE
-		else
-	          { key = e.which;  } //firefox
-	
-		if (key==13)
-		 { 
-		 	document.forms["recherche"].submit(); 
-	 	 }
-	}
-	
-</script>
-
 <div class="cadreinfos">
 
 	<div class="encadreInfos">
@@ -67,7 +22,7 @@
 		<div class="encadreTitre">Rechercher dans les actualités</div>
 		<form name="recherche" method="post" action="index.php" enctype="multipart/form-data">
 			<input type="hidden" name="mod" value="actualites">
-			<p><input type="text" name="search" OnClick="ClearText(event,'Termes à rechercher');" value="Termes à rechercher" OnKeyPress="CapturePost(event);" style="color:#bbbbbb;"></p>
+			<p><input id="search" type="text" name="search" OnClick="ClearText(event,'Termes à rechercher');" value="Termes à rechercher" OnKeyUp="CapturePost(event);" style="color:#bbbbbb;"></p>
 		</form>
 	</div>
 	{aff_custom}
@@ -88,7 +43,8 @@
 		</form>
 	</div>
 
-<!-- BEGIN: aff_message -->
+<!-- BEGIN: aff_message_old -->
+<!-- BEGIN: aff_message2 -->
 	<div class='actualitesBloc'>
 		<div class="actualitesPhoto" >
 			<img src="{msg_avatar}" alt="">
@@ -124,7 +80,146 @@
 			</div>
 		</div>
 	</div>
+<!-- END: aff_message_old -->
+	<input type="hidden" id="lastid" value="-1">
+	<div id="news">
+	</div>
+
+
 </div>
+
+
+<script type="text/javascript">
+	var lastid=0;
+	var searchTxt="";
+
+	$(function() {
+
+			// auto adjust the height of
+			$('#actualitesNouveau').delegate( 'textarea', 'keydown', function (){
+			    $(this).height( 0 );
+			    $(this).height( this.scrollHeight );
+			});
+			$('#actualitesNouveau').find( 'textarea' ).keydown();
+
+	});
+
+	function loadNews(id,limit,search) {
+		console.log("load:"+id+"-"+limit);
+		console.log("lastid:"+lastid);
+
+		$.ajax({
+			type: 'GET',
+			url: 'api.php?mod=actualites&rub=actualites&fonc=get&id='+id+'&limit='+limit+'&search='+search,
+			dataType: 'JSON',
+
+			success: function(response) {
+
+				var txt="";
+				if (response.news.length>0)
+				{
+					$.each(response.news, function (index, value) {
+
+						txt="<div id='news_"+value.id+"' class='actualitesBloc'>";
+						txt=txt+"	<div class='actualitesPhoto' >";
+						txt=txt+"		<img src='"+value.avatar+"' alt=''>";
+						txt=txt+"	</div>";
+						txt=txt+"	<div class='actualitesMessage'>";
+						txt=txt+"		<div class='actualitesTitre' OnMouseOver='document.getElementById(\"icone_"+value.id+"\").style.display=\"block\";' OnMouseOut='document.getElementById(\"icone_"+value.id+"\").style.display=\"none\";'>";
+						txt=txt+"			<div class='actualitesTitreMsg'>";
+						txt=txt+"				<a name='id"+value.id+"'></a>";
+						txt=txt+"				<p>"+value.title+"</p>";
+						txt=txt+"				<span>par "+value.author+", "+value.date+"</span>";
+						txt=txt+"			</div>";
+						txt=txt+"			<div id='icone_"+value.id+"' class='actualitesIcones' style='display:none;'>";
+						txt=txt+"				<a href='index.php?mod=actualites&fonc=editer&id="+value.id+"' class='imgDelete'><img src='{path_module}/img/icn16_editer.png' /></a>";
+						txt=txt+"				<a href='' class='imgDelete' OnClick='return delNews("+value.id+");'><img src='{path_module}/img/icn16_supprimer.png' /></a>";
+						txt=txt+"			</div>";
+						txt=txt+"		</div>";
+						txt=txt+"		<div class='actualitesTexte'>";
+						txt=txt+"<p>"+value.message+"</p>";
+						txt=txt+"</div>";
+						txt=txt+"	</div>";
+						txt=txt+"</div>";
+						$("#news").append(txt);
+						lastid=value.id;
+						console.log("lastid:"+lastid);
+					});
+				}
+			},
+			error: function(response) {
+				console.log("error");
+				console.log(response);
+			}
+		});
+	}
+
+	function delNews(id)
+	{
+		var is_confirmed = confirm("Souhaitez-vous supprimer cette actualité ?");
+		if (is_confirmed) { 
+			
+			$.ajax({
+				type: 'GET',
+				url: 'api.php?mod=actualites&rub=actualites&fonc=del&id='+id,
+				dataType: 'JSON',
+
+				success: function(response) {
+					document.getElementById('news_'+id).style.display='none';
+				}
+			});
+		}
+		return false;
+	}
+	
+	loadNews(0,4,"");
+		
+	$(window).scroll(function() {
+		if($(window).scrollTop() + $(window).height() == $(document).height()) {
+			loadNews(lastid,2,searchTxt);
+		}
+	});
+	
+
+	function ClearText(e,txt) {
+	
+		if(window.event)
+	          {
+	          	//IE
+	          	var t = window.event.srcElement;
+	          } 
+		else
+	          { //firefox
+	          	var t = e.target;
+	          } 
+
+		if (t.value==txt)
+		  { t.value=''; t.style.color="#000000"; }
+		return;
+	}
+
+	function CapturePost(e) {
+		text="";
+	
+		if(window.event)
+	          { key = window.event.keyCode;	} //IE
+		else
+	          { key = e.which;  } //firefox
+	
+		if (key==13)
+		 { 
+		 	<!-- document.forms["recherche"].submit();  -->
+			return false;
+	 	 }
+
+		$("#news").text("");
+		searchTxt=document.getElementById("search").value;
+		loadNews(0,4,searchTxt);
+	console.log(searchTxt);
+	}
+
+	
+</script>
 
 <!-- BEGIN: aff_sendmail -->
 <script type="text/javascript">

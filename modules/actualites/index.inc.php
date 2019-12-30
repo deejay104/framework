@@ -76,12 +76,12 @@
 	}
 
 // ---- Supprime le post
-	if ( ($fonc=="supprimer") && (GetDroit("SupprimeActualite")) && ($id>0) )
-	{
-		$td=array("actif"=>"non","uid_maj"=>$gl_uid,"dte_maj"=>now());
-		$sql->Edit("actualites",$MyOpt["tbl"]."_actualites",$id,$td);
-		$id=0;
-	}
+	// if ( ($fonc=="supprimer") && (GetDroit("SupprimeActualite")) && ($id>0) )
+	// {
+		// $td=array("actif"=>"non","uid_maj"=>$gl_uid,"dte_maj"=>now());
+		// $sql->Edit("actualites",$MyOpt["tbl"]."_actualites",$id,$td);
+		// $id=0;
+	// }
 
 
 // ---- Affiche les échéances
@@ -130,6 +130,7 @@
 
 // ---- Actualités
 
+/*
 	$limit=checkVar("limit","numeric");
 	if ( ($limit==0) )
 	  { $limit=10; }
@@ -144,7 +145,6 @@
 			$tmpl_x->assign("aff_search", $search);
   	
 	  }
-
 	$query="SELECT * FROM `".$MyOpt["tbl"]."_actualites` WHERE actif='oui' $q ORDER BY dte_creat DESC LIMIT 0,$limit";
 	$sql->Query($query);
 	$news=array();
@@ -161,7 +161,6 @@
 	{
 		$resusr=new user_core($d["uid_creat"],$sql,false,false);
 
-		// $txt=nl2br(htmlentities($d["message"],ENT_HTML5,"ISO-8859-1"));
 		$txt=nl2br($d["message"]);
 		$txt=preg_replace("/((http|https|ftp):\/\/[^ \n\r<]*)/si","<a href='$1' target='_blank'>$1</a>",$txt);
 		$txt=preg_replace("/ (www\.[^ |\/]*)/si","<a href='http://$1' target='_blank'>$1</a>",$txt);
@@ -197,7 +196,7 @@
 		}
 		$tmpl_x->parse("corps.aff_message");
 	}
-
+*/
 	
 // ---- Personalisation
   	
