@@ -325,7 +325,6 @@
 	if ($fonc=="imprimer")
 	{
 		$tmpl_prg = new XTemplate (MyRep("print.htm","default"));
-		$tmpl_prg->assign("style_url", GenereStyle("print"));
 	}
 	else
 	{
@@ -490,7 +489,14 @@
 	
 
 // ---- Affecte les blocs
-	$tmpl_prg->assign("style_url", GenereStyle(($theme=="phone") ? "phone" : "default"));
+	if ($fonc=="imprimer")
+	{
+		$tmpl_prg->assign("style_url", GenereStyle("print"));
+	}
+	else
+	{
+		$tmpl_prg->assign("style_url", GenereStyle(($theme=="phone") ? "phone" : "default"));
+	}
 
 	$tmpl_prg->assign("icone", $icone);
 	$tmpl_prg->assign("infos", $infos);
@@ -537,7 +543,7 @@
 		}
 		if ($txt!="")
 		{
-			echo "<div style='border:1px solid #000000; background-color:#ffcccc; padding:10px; position:fixed; right:20px; top:20px; display: inline-block;'>".$txt."</div>";
+			echo "<div class='affDebug' style='border:1px solid #000000; background-color:#ffcccc; padding:10px; position:fixed; right:20px; top:20px; display: inline-block;'>".$txt."</div>";
 		}
 	}
 

@@ -26,7 +26,7 @@ h1, h2, h3, h4, h5, h6 { font-family: inherit; }
 .visible-xs,.visible-sm,.visible-md,.visible-lg {display:none!important}
 
 select { padding: 2px; font-size: 20px; font-family: inherit; width: 240px; height:30px; -webkit-appearance: none; background-color: #ffffff; background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");  background-repeat: no-repeat; background-position-x: 100%; background-position-y: 5px;  }
-textarea { width:420px; font-size: 20px; font-family: inherit; padding: 5px; margin-left: 15px; }
+textarea { width:420px; font-size: 20px; font-family: inherit; padding: 5px; }
 
 input { padding: 2px; -webkit-appearance: none; -moz-appearance: none; appearance: none; font-size: 20px; width: 240px; font-family: inherit; height:30px; }
 input[type=radio] { -webkit-appearance: radio; width: 25px; height: 25px; background: #ffffff; }
@@ -354,11 +354,13 @@ img:hover { color: #{TextBackgroundHover}; }
 .tableauBorderLeft { border-left: 1px solid black; width:1 px; }
 .tableauBas { background-color: #{FormulaireBackgroundNormal}; border-top: 1px solid black; height: 20px; }
 
-.formulaire p { margin: 4px 15px 4px 10px; padding-left:10px; }
-.formulaire label { display: inline-block; width: 160px; margin-right: 10px; text-align: left; vertical-align: top; }
-.formulaire span { display: inline-block;  }
-.formulaire2 span { display: inline-block; width:450px; border: 1px solid #{BorderBlack}; border-radius: 4px; padding: 4px; }
 
+
+.formulaire { margin-left: 15px; }
+.formulaire p { margin: 0px; padding-left:5px; }
+.formulaire label { display: inline-block; width: 160px; margin-right: 10px; text-align: left; vertical-align: top; }
+.formulaire span { margin: 0px; line-height:18px; padding-left:5px; display: inline-block;  }
+.formulaire2 span { display: inline-block; width:450px; border: 1px solid #{BorderBlack}; border-radius: 4px; padding: 4px; }
 
 
 .formulaireTitre { background-color: #{FormulaireBackgroundNormal};  margin-bottom: 15px; margin-top:20px; padding-left: 20px; font-size: 20px; }

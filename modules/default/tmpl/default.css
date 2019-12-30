@@ -124,11 +124,11 @@ img { color: #FFFFFF; border: 0px; }
     .footer { display: none; height: 0px; }
     .pagetitle { display: none; height: 0px; }
 	.formulaireTitre { font-weight: bold; border: 1px solid #bbbbbb; }
-	.affDebugTime { display: none; width: 0px; height: 0px; }
+	.affDebugTime { display: none; width: 0px; height: 0px; border:0px solid #ffffff; }
 	.affDebugTime p { display: none; width: 0px; height: 0px; }
 }
 
-
+.affDebug {}
 .affDebugTime { border:1px solid #000000; padding:10px; margin: 0px; position:fixed; right:20px; bottom:30px; display: inline-block; font-size:10px; }
 
 .formulaire input { width:155px; } /* Overlapped by responsive */
@@ -454,7 +454,7 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 .resaInfos a { display: inline-block; width:100%;padding: 4px; }
 .resaInfos a:hover { display: inline-block; background-color:#{FormulaireBackgroundNormal}; }
 
-.formulaire { padding: 5px; margin-bottom: 10px; border: 1px solid #{FormulaireBackgroundNormal}; }
+.formulaire { padding: 10px; margin-bottom: 10px; border: 1px solid #{FormulaireBackgroundNormal}; }
 .formulaire p { margin: 0px; padding-bottom: 2px;}
 .formulaire label { display: inline-block; width: 180px; margin-right: 10px; text-align: left; vertical-align: top; }
 .formulaire span { display: inline-block; width:160px; } /* Overlapped by responsive */

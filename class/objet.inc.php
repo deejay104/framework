@@ -305,7 +305,7 @@ class objet_core
 			if ($type=="text")
 			{
 				$ret=nl2br(htmlentities($txt,ENT_HTML5,"ISO-8859-1"));
-				$ret="<div class='formulaire'><p>".$ret."</p></div>";
+				$ret="<p>".$ret."</p>";
 				$link=false;
 			}
 			else if ($type=="date")
@@ -696,7 +696,7 @@ class objet_core
 		$sql->Edit($this->table,$this->tbl."_".$this->table,$this->id,array("actif"=>'non', "uid_maj"=>$gl_uid, "dte_maj"=>now()));
 	}
 
-	function Render($form,$render,$formname="form_data",$formid="")
+	function Render($form,$typeaff,$formname="form_data",$formid="")
 	{
 		global $tmpl_x;
 
@@ -712,9 +712,11 @@ class objet_core
 		}
 		$tmpl_x->assign($form."_dte_maj",DisplayDate($this->dte_maj));
 
+
 		foreach($this->data as $k=>$v)
 		{
-			$tmpl_x->assign($form."_".$k,$this->aff($k,$render,$formname,$render,$formid));
+			$render=$typeaff;
+			$tmpl_x->assign($form."_".$k,$this->aff($k,$typeaff,$formname,$render,$formid));
 		}
 	}
 

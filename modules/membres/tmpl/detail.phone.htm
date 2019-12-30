@@ -25,6 +25,7 @@
 
 {aff_data_right}
 
+
 <div class="formulaireTitre">{lang_informations}</div>
 <div class="formulaire">
 	<p>
@@ -67,7 +68,7 @@
 
 <div class="formulaireTitre">{lang_documents}</div>
 
-<div class="formulaire" style='margin-left:20px;'>
+<div class="formulaire">
 	<!-- BEGIN: lst_document -->
 	{form_document}
 	<!-- END: lst_document -->
@@ -75,7 +76,7 @@
 
 <!-- BEGIN: aff_echeances -->
 <div class="formulaireTitre">{lang_deadline}</div>
-<div class="formulaire" style="padding-left: 20px;">
+<div class="formulaire">
 	<!-- BEGIN: lst_echeance -->
 	{form_echeance}
 	<!-- END: lst_echeance -->
@@ -95,12 +96,14 @@
 </div>
 
 <div class="formulaireTitre">{lang_comments}</div>
-{form_commentaire}
+<div class="formulaire" >
+	{form_commentaire}
+</div>
 
 <!-- BEGIN: droits -->
 <div class="formulaireTitre">{lang_rights}</div>
-<div class="formulaire" style="padding-left: 20px;">
-		<span>{form_droits}</span>
+<div class="formulaire">
+	{form_droits}
 </div>
 <!-- END: droits -->
 

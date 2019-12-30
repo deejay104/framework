@@ -147,15 +147,12 @@ class echeance_core extends objet_core
 			$sql=$this->sql;
 			$n=0;
 
-			$ret.="<p>";
-			$ret.="<div id='echeance_0'></div>";
-			$ret.="</p>";
+			$ret.="<div id='echeance_0'><p></p></div>";
 
 			$ret.="<script>";
 			$ret.="function AddEcheance(i) {";
 
-			$ret.="var r=\"<img src='static/images/icn16_vide.png' style='vertical-align:middle; border: 0px;  height: 16px; width: 16px;'>&nbsp;\";\n";
-			$ret.="r=r+\"<select name='form_echeance_type[a\"+i+\"]' OnChange=''>\";\n";
+			$ret.="var r=\"<select name='form_echeance_type[a\"+i+\"]' OnChange=''>\";\n";
 
 			$tabEcheance=array();
 			$query ="SELECT echeance.typeid,echeancetype.multi FROM ".$MyOpt["tbl"]."_echeance AS echeance ";
@@ -201,13 +198,12 @@ class echeance_core extends objet_core
 		}
 		else if ( ($this->editmode=="edit") && (GetDroit($this->droit)) )
 		{
-			$ret ="<p>";
 			$ret.="<div id='aff_echeance".$this->id."' OnMouseOver='document.getElementById(\"echeance_del_".$this->id."\").style.visibility=\"visible\";' OnMouseOut='document.getElementById(\"echeance_del_".$this->id."\").style.visibility=\"hidden\";'>";
-			$ret.="<img src='static/images/icn16_vide.png' style='vertical-align:middle; border: 0px;  height: 16px; width: 16px;'>&nbsp;";
+			$ret.="<p>";
 			$ret.="Echéance ".$this->description." le <input name='form_echeance[".$this->id."]' id='form_echeance".$this->id."' value='".$this->dte_echeance."' type='date' style='width: 165px;'>&nbsp;";
 			$ret.="<a href=\"#\" OnClick=\"document.getElementById('form_echeance".$this->id."').value=''; document.getElementById('aff_echeance".$this->id."').style.display='none';\" class='imgDelete'><img  id='echeance_del_".$this->id."' src='static/images/icn16_supprimer.png' style='visibility:hidden;'></a>";
-			$ret.="</div>";
 			$ret.="</p>";
+			$ret.="</div>";
 		}
 		else if ($type=="val")
 		{
@@ -215,9 +211,10 @@ class echeance_core extends objet_core
 		}
 		else
 		{
-			$ret ="";
+			$ret ="<p>";
 			$ret.="<img src='static/images/icn16_".TestDate($this->dte_echeance).".png' style='vertical-align:middle; border: 0px;  height: 16px; width: 16px;'>&nbsp;";
 			$ret.="Echéance ".$this->description." le ".AffDate($this->dte_echeance);
+			$ret.="</p>";
 		}
 		return $ret;
 	}

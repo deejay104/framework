@@ -84,9 +84,20 @@ img { color: #FFFFFF; border: 0px; }
 
 
 /* **** Block principaux **** */
-#main-content { width: 100%; height: 100%; }
-#main-sidebar { display: none; height: 100%; position: fixed; background-color: #{MenuBackgroundNormal}; color: white; }
-#responsive-navigation { position: relative; width: 100%; display: block; z-index: 9999; }
+#responsive-navigation { display: none; }
+#main-content { width: 100%; left: 0px; }
+#main-sidebar { display: none; }
+textarea { border: 0px solid #ffffff; }
+input {	border: 0px solid #ffffff; }
+.footer { display: none; height: 0px; }
+.formulaireTitre { font-weight: bold; border: 1px solid #bbbbbb; }
+.affDebug { display: none; visibility: hidden; width: 0px; height: 0px; }
+.affDebugTime { display: none; visibility: hidden; width: 0px; height: 0px; }
+.affDebugTime p { display: none; visibility: hidden; width: 0px; height: 0px; }
+
+.pagetitle { display: none; visibility: hidden; height:0px; border: 0px;}
+.pagemenu {	display: none; visibility: hidden; height: 0px; }
+
 
 /* **** Style Responsive **** */
 
@@ -110,6 +121,13 @@ img { color: #FFFFFF; border: 0px; }
     #responsive-navigation { display: none; }
     #main-content { width: 100%; left: 0px; }
     #main-sidebar { display: none; }
+	textarea { border: 0px solid #ffffff; }
+	input {	border: 0px solid #ffffff; }
+    .footer { display: none; height: 0px; }
+    .pagetitle { display: none; height: 0px; }
+	.formulaireTitre { font-weight: bold; border: 1px solid #bbbbbb; }
+	.affDebugTime { display: none; width: 0px; height: 0px; border:0px solid #ffffff; }
+	.affDebugTime p { display: none; width: 0px; height: 0px; }
 }
 
 .formulaire input { width:155px; } /* Overlapped by responsive */
@@ -136,8 +154,6 @@ img { color: #FFFFFF; border: 0px; }
 .head { }
 
 .icone { }
-.pagetitle { display: none; visibility: hidden; height:0px; border: 1px solid #ff;}
-.pagemenu {	visibility: hidden; height: 0px; }
 
 .pageTitleSelected { background-color: #{TitleBackgroundNormal}!important; border: 1px solid #076983!important; color: #ffffff!important; box-shadow: 2px 2px #{TitleBackgroundHover}; }
 
@@ -158,17 +174,7 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 	}
 
 /* **** Bas de Page **** */
-.footer { /* general settings for footer*/
-	position:fixed;
-	bottom:0;
-	clear:both;
-	border-top: 1px solid #{BorderBlack};
-	border-bottom: 1px solid #{BorderBlack};
-	background-color: #{FormulaireBackgroundLight};
-	width: 100%;
-	height: 24px;
-	z-index: 9999;
-}
+
 
 .lastmod { /* last modified information */
 	float: right;
