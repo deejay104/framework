@@ -8,50 +8,6 @@
 
 <!-- BEGIN: corps -->
 
-
-<script type="text/javascript">
-	$(function() {
-
-			// auto adjust the height of
-			$('#actualitesNouveau').delegate( 'textarea', 'keydown', function (){
-			    $(this).height( 0 );
-			    $(this).height( this.scrollHeight );
-			});
-			$('#actualitesNouveau').find( 'textarea' ).keydown();
-  });
-
-	function ClearText(e,txt) {
-	
-		if(window.event)
-	          {
-	          	//IE
-	          	var t = window.event.srcElement;
-	          } 
-		else
-	          { //firefox
-	          	var t = e.target;
-	          } 
-			
-		if (t.value==txt)
-		  { t.value=''; t.style.color="#000000"; }
-		return;
-	}
-	function CapturePost(e) {
-		seconds=timer;
-		text="";
-	
-		if(window.event)
-	          { key = window.event.keyCode;	} //IE
-		else
-	          { key = e.which;  } //firefox
-	
-		if (key==13)
-		 { 
-		 	document.forms["recherche"].submit(); 
-	 	 }
-	}
-</script>
-
 <div class="cadreinfos">
 
 	<div class="encadreInfos">
@@ -60,9 +16,9 @@
 			<!-- BEGIN: lst_echeance -->
 			<p>{form_echeance}</p>
 			<!-- END: lst_echeance -->
-		<br />
 	</div>	
 
+<p style="text-align:center;"><a href="index.php?settheme=default">-Revenir à l'affichage classique-</a></p>
 
 	<div class="encadreInfos">
 		<a name="poster"></a>
@@ -84,9 +40,10 @@
 
 </div>
 
+<!-- BEGIN: aff_message1 -->
 <div id="actualites" class="actualites">
 
-<!-- BEGIN: aff_message -->
+<!-- BEGIN: aff_message2 -->
 	<div class="actualitesMessage">
 		<div class="actualitesTitre">
 			<div class="actualitesPhoto">
@@ -102,7 +59,7 @@
 			<p>{msg_message}</p>
 		</div>
 	</div>
-<!-- END: aff_message -->
+<!-- END: aff_message2 -->
 
 	<div class="actualitesSuivant">
 		<a href="index.php?mod=actualites&limit={aff_limit}&search={aff_search}#id{msg_lastid}">-Afficher les actualités suivantes-</a>
@@ -113,8 +70,121 @@
 
 
 </div>
+<!-- END: aff_message1 -->
 
+	<div id="news" class="actualites">
+	</div>
 
+<script type="text/javascript">
+	var lastid=0;
+	var aff=0;
+	var searchTxt="";
+
+	$(function() {
+
+			// auto adjust the height of
+			$('#actualitesNouveau').delegate( 'textarea', 'keydown', function (){
+			    $(this).height( 0 );
+			    $(this).height( this.scrollHeight );
+			});
+			$('#actualitesNouveau').find( 'textarea' ).keydown();
+	});
+
+	function loadNews(id,limit,search) {
+		console.log("load:"+id+"-"+limit+" (lastid:"+lastid+")");
+
+		$.ajax({
+			type: 'GET',
+			url: 'api.php?mod=actualites&rub=actualites&fonc=get&id='+id+'&limit='+limit+'&search='+search,
+			dataType: 'JSON',
+
+			success: function(response) {
+
+				var txt="";
+				if (response.news.length>0)
+				{
+					$.each(response.news, function (index, value)
+					{
+
+						txt="<div id='news_"+value.id+"' class='actualitesMessage'>";
+						txt=txt+"	<div class='actualitesTitre'>";
+						txt=txt+"		<div class='actualitesPhoto'>";
+						txt=txt+"			<img src='"+value.avatar+"' alt=''>";
+						txt=txt+"		</div>";
+						txt=txt+"		<div class='actualitesTitreMsg'>";
+						txt=txt+"			<p>"+value.title+"</p>";
+						txt=txt+"			<span>par "+value.author+", "+value.date+"</span>";
+						txt=txt+"		</div>";
+						txt=txt+"	</div>";
+						txt=txt+"	<div class='actualitesTexte'>";
+						txt=txt+"		<p>"+value.message+"</p>";
+						txt=txt+"	</div>";
+						txt=txt+"</div>";
+
+						$("#news").append(txt);
+						lastid=value.id;
+						console.log("lastid:"+lastid);
+					});
+				}
+				aff=0;
+			},
+			error: function(response) {
+				console.log("error");
+				console.log(response);
+			}
+		});
+	}
+
+	function delNews(id)
+	{
+		var is_confirmed = confirm("Souhaitez-vous supprimer cette actualité ?");
+		if (is_confirmed) { 
+			
+			$.ajax({
+				type: 'GET',
+				url: 'api.php?mod=actualites&rub=actualites&fonc=del&id='+id,
+				dataType: 'JSON',
+
+				success: function(response) {
+					document.getElementById('news_'+id).style.display='none';
+				}
+			});
+		}
+		return false;
+	}
+	
+	loadNews(0,2,"");
+		
+	$(window).scroll(function() {
+		if ($(window).scrollTop() + $(window).height() >= $(document).height()-120)
+		{
+console.log("scroll:"+$(window).scrollTop()+"+"+$(window).height()+" > "+$(document).height());
+			if (aff==0)
+			{
+				aff=1;
+				loadNews(lastid,1,'');
+			}
+		}
+	});
+	
+	function ClearText(e,txt) {
+	
+		if(window.event)
+	          {
+	          	//IE
+	          	var t = window.event.srcElement;
+	          } 
+		else
+	          { //firefox
+	          	var t = e.target;
+	          } 
+			
+		if (t.value==txt)
+		  { t.value=''; t.style.color="#000000"; }
+		return;
+	}
+
+</script>
 
 <!-- BEGIN: aff_sendmail -->
 <script type="text/javascript">
@@ -151,7 +221,6 @@
 </script>
 <!-- END: aff_sendmail -->
 
-<p style="text-align:center;"><a href="index.php?settheme=default">-Revenir à l'affichage classique-</a></p>
 
 <!-- END: corps -->
 

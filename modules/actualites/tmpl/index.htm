@@ -81,7 +81,7 @@
 		</div>
 	</div>
 <!-- END: aff_message_old -->
-	<input type="hidden" id="lastid" value="-1">
+
 	<div id="news">
 	</div>
 
@@ -91,6 +91,7 @@
 
 <script type="text/javascript">
 	var lastid=0;
+	var aff=0;
 	var searchTxt="";
 
 	$(function() {
@@ -146,6 +147,7 @@
 						console.log("lastid:"+lastid);
 					});
 				}
+				aff=0;
 			},
 			error: function(response) {
 				console.log("error");
@@ -175,8 +177,12 @@
 	loadNews(0,4,"");
 		
 	$(window).scroll(function() {
-		if($(window).scrollTop() + $(window).height() == $(document).height()) {
-			loadNews(lastid,2,searchTxt);
+		if($(window).scrollTop() + $(window).height() >= $(document).height()-10) {
+			if (aff==0)
+			{
+				aff=1;
+				loadNews(lastid,2,searchTxt);
+			}
 		}
 	});
 	
