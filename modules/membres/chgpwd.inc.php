@@ -21,9 +21,6 @@
 ?>
 
 <?
-// ---- Charge le template
-	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
-	$tmpl_x->assign("corefolder", $corefolder);
 
 // ---- Initialisation des variables
 	$id=checkVar("id","numeric");

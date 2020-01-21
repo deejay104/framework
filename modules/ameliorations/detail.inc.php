@@ -1,4 +1,4 @@
-<?
+<?php
 /*
     MnMs Framework
     Copyright (C) 2018 Matthieu Isorez
@@ -19,17 +19,12 @@
 */
 ?>
 
-<?
+<?php
 	require_once ("class/amelioration.inc.php");
-	if (!GetDroit("AccesAmelioration")) { FatalError("Accès non autorisé (AccesAmelioration)"); }
+	if (!GetDroit("AccesAmelioration")) { FatalError("AccÃ¨s non autorisÃ© (AccesAmelioration)"); }
 
+// ---- VÃ©rifie les variables
 	$id=checkVar("id","numeric");
-	
-// ---- Charge le template
-	$tmpl_x = new XTemplate (MyRep("detail.htm"));
-	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
-	$tmpl_x->assign("form_checktime",$_SESSION['checkpost']);
-
 	$newmsg="Ecrivez votre message...";
 	
 // ---- Enregistrer
@@ -45,7 +40,7 @@
 		  	{
 		  		$msg_erreur.=$pb->Valid($k,$v);
 		  	}
-			$msg_confirmation.="Vos données ont été enregistrées.<BR>";
+			$msg_confirmation.="Vos donnÃ©es ont Ã©tÃ© enregistrÃ©es.<BR>";
 		}
 
 		$pb->Save();
@@ -63,9 +58,10 @@
 		$pb->Delete();
 		$mod="ameliorations";
 		$affrub="index";
+		return;
 	}
 
-// ---- Sauver une réponse
+// ---- Sauver une rÃ©ponse
 	if (($fonc=="Poster") && ($id>0) && (GetDroit("CreeAmeliorationCommentaire")) && ($form_desc!="") && ($form_desc!=$newmsg) && (!isset($_SESSION['tab_checkpost'][$checktime])))
 	{
 		$pb=new amelioration_core($id,$sql);
@@ -99,7 +95,7 @@
 		$typeaff="html";
 	}
 
-// ---- Charge le problème
+// ---- Charge le problÃ¨me
 
 	$pb = new amelioration_core($id,$sql);
 
@@ -125,7 +121,7 @@
 		$tmpl_x->parse("corps.submit");
 	}
 
-// ---- Réponses
+// ---- RÃ©ponses
 
 	$tmpl_x->assign("reponse_vide",$newmsg);
 

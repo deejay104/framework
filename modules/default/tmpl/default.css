@@ -74,7 +74,10 @@ input[type=checkbox] { border: 0px; line-height: 16px; padding: 0px; -webkit-app
 input[type=checkbox]:checked { background: #{FormulaireBackgroundNormal}; border-color: #000000; }
 input[type=checkbox]:after { content: " "; padding-left: 6px; }
 
-p { margin-top: 4px; }
+button { height: 36px; padding:5px 15px 5px 15px;  background:#{FormulaireBackgroundNormal}; border: 1px solid #{FormulaireBackgroundDark}; cursor:pointer; border-radius: 5px; }
+button:hover { background:#{FormulaireBackgroundLight}; }
+
+p { margin: 1px; }
 
 table { border-width: 0px; border-spacing: 0px; border-padding: 0px; border-collapse: collapse; border-style: solid; color: #000000; text-decoration: none; padding: 0px; margin: 0px; }
 tr, td { border-width: 0px; border-spacing: 0px; border-padding: 0px; padding: 0px; margin: 0px; }
@@ -160,7 +163,7 @@ img { color: #FFFFFF; border: 0px; }
 
 .icone { padding-left:30px; display: inline-block; float: left; clear: right; padding-top:10px; }
 
-.pagetitle { padding-left:90px; padding-top:25px; text-transform: uppercase; font-size: 25px; color: white; }
+.pagetitle { padding-left:30px; padding-top:25px; text-transform: uppercase; font-size: 25px; color: white; }
 .pagetitle p { float: left; padding-right: 5px; margin-top: 0px; margin-bottom: 10px; display: inline-block; }
 .pagetitle a { height:36px; border: 1px solid #{TitleBackgroundHover}; background-color: #{TitleBackgroundHover}; font-size: 14px; text-transform: none; padding: 10px; border-radius: 5px; }
 .pagetitle a:hover { background-color: #{TitleBackgroundButton}; border-radius: 8px; border: 1px solid #{TitleBackgroundHover}; color: #ffffff;  }
@@ -302,7 +305,7 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 }
 
 
-/* **** Actualités **** */
+/* **** ActualitÃ©s **** */
 
 .cadreinfos { display: none; left:60%; width:40%; float:right; }
 .actualites { width: 100%; float:left;  }
@@ -545,7 +548,7 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 .fieldAdmin input { width:88px; padding-left:5px; }
 
 
-/* **** ToolTip **** */
+/* **** jQuery **** */
 .ui-widget { font-size: 12px; }
 .ui-menu-item { padding-top: 1px; padding-bottom: 1px; font-size: 14px; line-height: 18px; }
 
@@ -557,6 +560,8 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 	border-radius: 3px;
 	box-shadow: 0 0 1px black;
 }
+
+.ui-button { padding-left:20px; padding-right:20px;
 
 .arrow {
 	width: 24px;
@@ -585,13 +590,6 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 
   
 /* Dropbox */
-
-.dropBox { display: inline-block; list-style-type: none; margin: 0px; padding: 5px; width: 220px; border: 1px solid #000000; border-radius: 5px;  margin-right: 10px; vertical-align: top; }
-.dropBox li { margin: 5px; padding: 2px 5px 2px 5px; width: 200px; background: #{FormulaireBackgroundLight}; font-size:14px; color: #000000; border: 1px solid #{FormulaireBackgroundNormal}; }
-.dropBox p { margin: 0px; padding: 2px 5px 2px 5px; width: 100%; font-size:14px; }
-
-.dropDisable { width: 620px; }
-.dropDisable li { margin: 1px; float: left; }
 
 
  

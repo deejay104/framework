@@ -1,5 +1,5 @@
 <?php
-// ---- Refuse l'acc�s en direct
+// ---- Refuse l'accès en direct
 	if ((!isset($token)) || ($token==""))
 	  { header("HTTP/1.0 401 Unauthorized"); exit; }
 
@@ -26,7 +26,6 @@
 		  }
 
 		$query="SELECT * FROM `".$MyOpt["tbl"]."_actualites` WHERE actif='oui' ".(($id>0) ? "AND id<'".$id."'" : "")." ".$q." ORDER BY dte_creat DESC LIMIT 0,$limit";
-error_log($query);
 		$sql->Query($query);
 		$news=array();
 		for($i=0; $i<$sql->rows; $i++)
@@ -48,21 +47,23 @@ error_log($query);
 			$txt=preg_replace("/ (www\.[^ |\/]*)/si","<a href='http://$1' target='_blank'>$1</a>",$txt);
 
 			$result["news"][$id]["id"]=$d["id"];
-			$result["news"][$id]["title"]=utf8_encode($d["titre"]);
-			$result["news"][$id]["message"]=utf8_encode($txt);
-			$result["news"][$id]["author"]=utf8_encode($resusr->Aff("fullname"));
-			$result["news"][$id]["date"]=utf8_encode(DisplayDate($d["dte_creat"]));
+			$result["news"][$id]["title"]=$d["titre"];
+			// $result["news"][$id]["message"]=utf8_encode($txt);
+			$result["news"][$id]["message"]=$txt;
+			// $result["news"][$id]["message"]="éèà €";
+			$result["news"][$id]["author"]=$resusr->Aff("fullname");
+			$result["news"][$id]["date"]=DisplayDate($d["dte_creat"]);
 
 			$lstdoc=ListDocument($sql,$d["uid_creat"],"avatar");
 
 			if (count($lstdoc)>0)
 			{
 				$img=new document_core($lstdoc[0],$sql);
-				$result["news"][$id]["avatar"]=utf8_encode($img->GenerePath(64,64));
+				$result["news"][$id]["avatar"]=$img->GenerePath(64,64);
 			}
 			else
 			{
-				$result["news"][$id]["avatar"]=utf8_encode("static/images/icn64_membre.png");
+				$result["news"][$id]["avatar"]="static/images/icn64_membre.png";
 			}
 
 			if (GetDroit("SupprimeActualite"))

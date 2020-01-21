@@ -18,7 +18,7 @@
 			<!-- END: lst_echeance -->
 	</div>	
 
-<p style="text-align:center;"><a href="index.php?settheme=default">-Revenir à l'affichage classique-</a></p>
+<p style="text-align:center;"><a href="index.php?settheme=default">-Revenir Ã  l'affichage classique-</a></p>
 
 	<div class="encadreInfos">
 		<a name="poster"></a>
@@ -62,7 +62,7 @@
 <!-- END: aff_message2 -->
 
 	<div class="actualitesSuivant">
-		<a href="index.php?mod=actualites&limit={aff_limit}&search={aff_search}#id{msg_lastid}">-Afficher les actualités suivantes-</a>
+		<a href="index.php?mod=actualites&limit={aff_limit}&search={aff_search}#id{msg_lastid}">-Afficher les actualitÃ©s suivantes-</a>
 	</div>
 
 	<br />
@@ -95,7 +95,7 @@
 
 		$.ajax({
 			type: 'GET',
-			url: 'api.php?mod=actualites&rub=actualites&fonc=get&id='+id+'&limit='+limit+'&search='+search,
+			url: '{apiurlget}&id='+id+'&limit='+limit+'&search='+search,
 			dataType: 'JSON',
 
 			success: function(response) {
@@ -137,12 +137,12 @@
 
 	function delNews(id)
 	{
-		var is_confirmed = confirm("Souhaitez-vous supprimer cette actualité ?");
+		var is_confirmed = confirm("Souhaitez-vous supprimer cette actualitÃ© ?");
 		if (is_confirmed) { 
 			
 			$.ajax({
 				type: 'GET',
-				url: 'api.php?mod=actualites&rub=actualites&fonc=del&id='+id,
+				url: '{apiurldel}&id='+id,
 				dataType: 'JSON',
 
 				success: function(response) {
@@ -156,9 +156,9 @@
 	loadNews(0,2,"");
 		
 	$(window).scroll(function() {
-		if ($(window).scrollTop() + $(window).height() >= $(document).height()-120)
+		if ($(window).scrollTop() + $(window).height() >= $(document).height()-300)
 		{
-console.log("scroll:"+$(window).scrollTop()+"+"+$(window).height()+" > "+$(document).height());
+<!-- console.log("scroll:"+$(window).scrollTop()+"+"+$(window).height()+" > "+$(document).height()); -->
 			if (aff==0)
 			{
 				aff=1;
@@ -185,42 +185,6 @@ console.log("scroll:"+$(window).scrollTop()+"+"+$(window).height()+" > "+$(docum
 	}
 
 </script>
-
-<!-- BEGIN: aff_sendmail -->
-<script type="text/javascript">
-	document.getElementById("actualitesMail").innerHTML = "Envoie des emails...";
-	document.getElementById("actualitesMail").style.display = 'block';
-	$(function() {     
-		$.ajax({
-			url:'api.php?mod=actualites&rub=sendmail&id={aff_id}',
-			type: 'html',
-			success: function(content,code) {
-				if (content.charAt(0)=="O")
-				{
-					document.getElementById("actualitesMail").style.backgroundColor = "#BBFFAA";
-				}
-				else
-				{
-					document.getElementById("actualitesMail").style.backgroundColor = "#FFBBAA";
-				}
-
-				document.getElementById("actualitesMail").innerHTML =content;
-
-				if (content.charAt(0)!="*")
-				{
-					document.getElementById("actualitesMail").style.display = 'block';
-				}
-			}
-			error: function(content,code) {
-				document.getElementById("actualitesMail").style.backgroundColor = "#FFBBAA";
-				document.getElementById("actualitesMail").innerHTML = "Impossible d'ouvrir la page d'envoie du mail";
-				document.getElementById("actualitesMail").style.display = 'block';
-			}
-		});        
-	});
-</script>
-<!-- END: aff_sendmail -->
-
 
 <!-- END: corps -->
 

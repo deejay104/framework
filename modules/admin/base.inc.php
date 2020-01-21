@@ -1,4 +1,4 @@
-<?
+<?php
 // ---------------------------------------------------------------------------------------------
 //   Administration - Variables
 //     ($Author: miniroot $)
@@ -25,14 +25,10 @@
 */
 ?>
 
-<?
-// ---- Charge le template
-	$tmpl_x = LoadTemplate("base");
-	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
-
+<?php
 	
-// ---- Vérifie le droit d'accès
-	if (!GetDroit("AccesConfigBase")) { FatalError("Accès non autorisé (AccesConfigBase)"); }
+// ---- VÃ©rifie le droit d'accÃ¨s
+	if (!GetDroit("AccesConfigBase")) { FatalError("AccÃ¨s non autorisÃ© (AccesConfigBase)"); }
 
 // ---- Affiche le menu
 	$aff_menu="";

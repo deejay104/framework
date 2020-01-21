@@ -1,4 +1,4 @@
-<?
+<?php
 
 // *****************************************************************
 	$tabMails["echeance"]=Array
@@ -8,13 +8,13 @@
 		"mail"=>
 "Cher(e) ami(e) pilote,
 
-L'échéance {description} {type} {date}.
+L'Ã©chÃ©ance {description} {type} {date}.
 
-Je t'invite à faire le nécessaire pour la renouveler sans oublier de m'envoyer une copie pour mise à jour de ton profil sur le site.
+Je t'invite Ã  faire le nÃ©cessaire pour la renouveler sans oublier de m'envoyer une copie pour mise Ã  jour de ton profil sur le site.
 
-A bientôt au club
+A bientÃ´t au club
 
-Le Président"
+Le PrÃ©sident"
 	);
 // *****************************************************************
 
@@ -26,7 +26,7 @@ Le Président"
 		"mail"=>
 "Bonjour,
 
-Votre mot de passe a été modifié :
+Votre mot de passe a Ã©tÃ© modifiÃ© :
 Utilisateur : {username}
 Initiales : {initiales}
 
@@ -44,14 +44,14 @@ Cordialement"
 		"balise"=>"description,num,status,id,url",
 		"mail"=>
 "
-Notification de mise à jour de l'amélioration {num} :
+Notification de mise Ã  jour de l'amÃ©lioration {num} :
 Status : {status}
 
 Description :
 {description}
 
 
-<a href='{url}/index.php?mod=ameliorations&rub=detail&id={id}'>-Détail-</a>
+<a href='{url}/index.php?mod=ameliorations&rub=detail&id={id}'>-DÃ©tail-</a>
 
 "
 	);

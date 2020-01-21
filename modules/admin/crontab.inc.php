@@ -23,12 +23,9 @@
 */
 ?>
 
-<?
-// ---- Charge le template
-	$tmpl_x = LoadTemplate("crontab");
-	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
+<?php
 
-// ---- Vérifie le droit d'accès
+// ---- VÃ©rifie le droit d'accÃ¨s
 	if (!GetDroit("AccesConfigCrontab")) { FatalError($tabLang["lang_accessdenied"]." (AccesConfigCrontab)"); }
 
 	$id=checkVar("id","numeric");
@@ -65,14 +62,14 @@
 			else
 			{
 				$gl_res="NOK";
-				$gl_myprint_txt=utf8_encode("Script non trouvé : ".$sql->data["script"]);
+				$gl_myprint_txt="Script non trouvÃ© : ".$sql->data["script"];
 			}
 
 			$q="UPDATE ".$MyOpt["tbl"]."_cron SET lastrun='".now()."', nextrun='".date("Y-m-d H:i:s",time()+$res["schedule"]*60)."', txtretour='".$gl_res."', txtlog='".addslashes($gl_myprint_txt)."' WHERE id='".$gl_id."'";
 			$sql->Update($q);
 
 			
-			$tmpl_x->assign("aff_resultat",nl2br(utf8_decode($gl_myprint_txt)));
+			$tmpl_x->assign("aff_resultat",nl2br($gl_myprint_txt));
 			$tmpl_x->parse("corps.resultat");
 			$mod="admin";
 		}
@@ -97,7 +94,7 @@
 	$tabTitre["action"]["width"]=100;
 
 
-// ---- Charge la liste des taches planifiées
+// ---- Charge la liste des taches planifiÃ©es
 	$query="SELECT * FROM ".$MyOpt["tbl"]."_cron";
 	$sql->Query($query);
 
@@ -115,8 +112,8 @@
 		$tabValeur[$i]["resultat"]["val"]=$sql->data["txtretour"];
 		$tabValeur[$i]["actif"]["val"]=$sql->data["actif"];
 		$tabValeur[$i]["actif"]["aff"]="<div id='actif_".$sql->data["id"]."' class='fieldAdmin'><a id='actif_".$sql->data["id"]."_val' onClick='SwitchOn(\"actif\",".$sql->data["id"].")'>".$sql->data["actif"]."</a></div>";
-		$tabValeur[$i]["action"]["val"]="Démarrer";
-		$tabValeur[$i]["action"]["aff"]="<div class='fieldAdmin'><a href='index.php?mod=admin&rub=crontab&id=".$sql->data["id"]."&fonc=start'>Démarrer</a></div>";
+		$tabValeur[$i]["action"]["val"]="DÃ©marrer";
+		$tabValeur[$i]["action"]["aff"]="<div class='fieldAdmin'><a href='index.php?mod=admin&rub=crontab&id=".$sql->data["id"]."&fonc=start'>DÃ©marrer</a></div>";
 	}
 	
 	if ((!isset($order)) || ($order=="")) { $order="groupe"; }

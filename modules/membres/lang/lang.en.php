@@ -1,4 +1,4 @@
-<?
+<?php
 	// $tabLang["lang_list"]="List";
 	$tabLang["lang_pictures"]="Pictures";
 	$tabLang["lang_normal"]="Regular";

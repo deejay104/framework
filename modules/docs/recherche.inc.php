@@ -1,4 +1,4 @@
-<?
+<?php
 /*
     MnMs Framework
     Copyright (C) 2018 Matthieu Isorez
@@ -19,11 +19,7 @@
 */
 ?>
 
-<?
-// ---- Charge le template
-	$tmpl_x = new XTemplate (MyRep("recherche.htm"));
-	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
-
+<?php
 // ---- Initialisation des variables
 	$tmpl_x->assign("pageIndex", (isset($pageIndex)) ? $pageIndex : "");
 	$tmpl_x->assign("critere", (isset($critere)) ? $critere : "");

@@ -20,7 +20,7 @@
 
   	require ("lib/fonctions.inc.php");
 
-// ---- Connexion à la base de données
+// ---- Connexion Ã  la base de donnÃ©es
 	session_start();
 	require ("class/mysql.inc.php");
 	$sql = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db,$port);
@@ -32,7 +32,7 @@
 	$myid=checkVar("myid","numeric");
 	$mykey=checkVar("mykey","varchar");
 	$mod=checkVar("mod","varchar");
-	$rub=checkVar("rub","varchar");
+	$rub=checkVar("rub","varchar","index");
 
 	$gl_uid = 0;
 	$token=(!isset($token)) ? "" : $token;
@@ -145,14 +145,14 @@
 	header("Pragma: no-cache");
 
 	// Charset
-	header('Content-type: text/html; charset=ISO-8859-1');
+	header('Content-type: text/html; charset=UTF-8');
 
 // ---- Charge les informations standards
 
 	if ($MyOpt["timezone"]!="")
 	  { date_default_timezone_set($MyOpt["timezone"]); }
 
-// ---- Se connecte à  la base MySQL
+// ---- Se connecte Ã Â  la base MySQL
 	if ($mysqluser=="")
 	{
 		$res=array();
@@ -163,7 +163,7 @@
 
 	$sql = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db,$port);
 
-// ---- Charge les informations de l'utilisateur connecté
+// ---- Charge les informations de l'utilisateur connectÃ©
 	require ("class/objet.inc.php");
 	require ("class/user.inc.php");
 	if ($gl_uid>0)
@@ -195,14 +195,14 @@
 	$tabLang=array();
 	require ("modules/default/lang/lang.".$lang.".php");
 
-// ---- Vérifie la variable $mod
+// ---- VÃ©rifie la variable $mod
 	$mod=checkVar("mod","varchar");
 	if (trim($mod)=="")
 	  { $mod = "default"; }
 	if (!preg_match("/^[a-z0-9_]*$/",$mod))
 	  { $mod = "default"; }
 
-// ---- Vérifie la variable $rub
+// ---- VÃ©rifie la variable $rub
 	$rub=checkVar("rub","varchar");
 	if (trim($rub)=="")
 	  { $rub = "index"; }

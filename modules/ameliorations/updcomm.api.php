@@ -1,4 +1,4 @@
-<?
+<?php
 // ---- Refuse l'accès en direct
 	if ((!isset($token)) || ($token==""))
 	  { header("HTTP/1.0 401 Unauthorized"); exit; }
@@ -17,7 +17,7 @@ error_log(print_r($data,true));
 	if (count($data)>0)
 	{
 		$id=$data["fid"];
-		$txt=utf8_decode($data["description"]);
+		$txt=$data["description"];
 		$uid=$data["uid_dist"];
 
 		$pb = new amelioration_core($id,$sql);

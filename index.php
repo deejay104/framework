@@ -19,6 +19,8 @@
 */
 ?>
 <?php
+	ini_set('default_charset', 'UTF-8');
+
 	if (!isset($MyOpt))
 	{
 		$MyOpt=array();
@@ -47,7 +49,7 @@
 		$gl_uid = $_SESSION['uid'];
 	}
 
-// ---- Charge les bibliothèques
+// ---- Charge les bibliothÃ¨ques
 	require ("lib/fonctions.inc.php");
 
 // ---- Nettoyage des variables
@@ -62,7 +64,7 @@
 	require ("class/mysql.inc.php");
 	require ("class/document.inc.php");
 
-// ---- Se connecte à la base MySQL
+// ---- Se connecte Ã  la base MySQL
 	if (!isset($port))
 	{
 		$port=3306;
@@ -74,11 +76,11 @@
 	}
 	$sql = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db, $port);
 
-// ---- Vérifie si la configuration initiale a été faite
+// ---- VÃ©rifie si la configuration initiale a Ã©tÃ© faite
 	$MyOpt["tbl"]=$gl_tbl;
 	if ($gl_uid==0)
 	{
-		// Vérifie si la table config existe
+		// VÃ©rifie si la table config existe
 		$q="SHOW TABLES";
 		$sql->Query($q);
 
@@ -99,7 +101,8 @@
 		{
 			$module="modules";
 			$tmpl_prg = LoadTemplate("init","default");
-			$tmpl_prg->assign("corefolder", $corefolder);
+			$tmpl_prg->assign("corefolder", $MyOpt["host"]."/".$corefolder);
+			$tmpl_prg->assign("rootfolder", $MyOpt["host"]);
 
 			if (($mysqluser=="") || ($gl_tbl==""))
 			{
@@ -185,10 +188,10 @@
 	}
 
 // ---- Header de la page
-	// Date du passé
+	// Date du passÃ©
 	header("Expires: " . gmdate("D, d M Y H:i:s") . " GMT");
 	
-	// toujours modifié
+	// toujours modifiÃ©
 	header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
 	
 	// HTTP/1.1
@@ -198,11 +201,11 @@
 	header("Pragma: no-cache");
 
 	// Charset
-	header('Content-type: text/html; charset=ISO-8859-1');
+	header('Content-type: text/html; charset=UTF-8');
 
 	//error_reporting( E_ALL ^ E_NOTICE ^ E_DEPRECATED );
 
-// ---- Récupère les paramètres
+// ---- RÃ©cupÃ¨re les paramÃ¨tres
 	$e ="foreach( \$_REQUEST as \$key=>\$value) {"."\n";
 	$e.="if (!isset(\$_SESSION[\"\$key\"])) {"."\n";
 
@@ -221,14 +224,14 @@
 	if ($MyOpt["timezone"]!="")
 	  { date_default_timezone_set($MyOpt["timezone"]); }
 	
-// ---- Vérifie la variable $mod
+// ---- VÃ©rifie la variable $mod
 	$mod=checkVar("mod","varchar");
 	if (trim($mod)=="")
 	  { $mod = "default"; }
 	if (!preg_match("/^[a-z0-9_]*$/",$mod))
 	  { $mod = "default"; }
 
-// ---- Vérifie la variable $rub
+// ---- VÃ©rifie la variable $rub
 	$rub=checkVar("rub","varchar");
 	if (trim($rub)=="")
 	  { $rub = "index"; }
@@ -237,7 +240,7 @@
   
 
 
-// ---- Défini les variables globales
+// ---- DÃ©fini les variables globales
 	$prof="";
 	$gl_mode="html";
 	$uid=$gl_uid;
@@ -248,7 +251,7 @@
 	}
 
   
-// ---- Gestion des thèmes
+// ---- Gestion des thÃ¨mes
 
 // Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_2 like Mac OS X; fr-fr) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8H7 Safari/6533.18.5
 // Mozilla/5.0 (Linux; U; Android 2.2.1; fr-fr; HTC_Wildfire-orange-LS Build/FRG83D) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1
@@ -288,7 +291,7 @@
 // ---- Charge les variables et fonctions
 	$module="static/modules";
 
-// ---- Charge le numéro de version
+// ---- Charge le numÃ©ro de version
 	require ("version.php");
 
 
@@ -337,7 +340,8 @@
 	$tmpl_prg->assign("uid", $uid);
 	$tmpl_prg->assign("username", $myuser->fullname);
 	$tmpl_prg->assign("site_title", $MyOpt["site_title"]);
-	$tmpl_prg->assign("corefolder", $corefolder);
+	$tmpl_prg->assign("rootfolder", $MyOpt["host"]);
+	$tmpl_prg->assign("corefolder", $MyOpt["host"]."/".$corefolder);
 	$tmpl_prg->assign("gl_uid", $gl_uid);
 
 	if (file_exists($appfolder."/custom/".$MyOpt["site_logo"]))
@@ -346,10 +350,10 @@
 	}
 	else
 	{
-		$tmpl_prg->assign("site_logo", $corefolder."/static/images/logo.png");
+		$tmpl_prg->assign("site_logo", $MyOpt["host"]."/".$corefolder."/static/images/logo.png");
 	}
 
-// ---- Flag pour ne pouvoir poster qu'une seule fois les mêmes infos
+// ---- Flag pour ne pouvoir poster qu'une seule fois les mÃªmes infos
 	$checktime=checkVar("checktime","numeric");
 	if (!isset($_SESSION["checkpost"]))
 	{
@@ -372,7 +376,7 @@
 		$debug["load"]=microtime();
 	}
 
-// ---- Définition des variables
+// ---- DÃ©finition des variables
 	$gl_myprint_txt="";
 
 // ---- Initialisation des variables
@@ -398,20 +402,20 @@
 
 	if ($MyOpt["module"]["ameliorations"]=="on")
 	{
-		$tabMenu["amelioration"]["icone"]=$corefolder."/static/modules/ameliorations/img/icn32_titre.png";
+		$tabMenu["amelioration"]["icone"]=$MyOpt["host"]."/".$corefolder."/static/modules/ameliorations/img/icn32_titre.png";
 		$tabMenu["amelioration"]["nom"]=$tabLang["core_improve"];
 		$tabMenu["amelioration"]["droit"]="AccesAmeliorations";
-		$tabMenu["amelioration"]["url"]="mod=ameliorations";
-		$tabMenuPhone["amelioration"]["icone"]=$corefolder."/static/modules/ameliorations/img/icn48_titre.png";
+		$tabMenu["amelioration"]["url"]=geturl("ameliorations","","");
+		$tabMenuPhone["amelioration"]["icone"]=$MyOpt["host"]."/".$corefolder."/static/modules/ameliorations/img/icn48_titre.png";
 		$tabMenuPhone["amelioration"]["nom"]="";
 		$tabMenuPhone["amelioration"]["droit"]="AccesAmeliorations";
-		$tabMenuPhone["amelioration"]["url"]="mod=ameliorations";
+		$tabMenuPhone["amelioration"]["url"]=geturl("ameliorations","","");
 	}
 
-	$tabMenu["configuration"]["icone"]=$corefolder."/static/modules/admin/img/icn32_titre.png";
+	$tabMenu["configuration"]["icone"]=$MyOpt["host"]."/".$corefolder."/static/modules/admin/img/icn32_titre.png";
 	$tabMenu["configuration"]["nom"]=$tabLang["core_configure"];
 	$tabMenu["configuration"]["droit"]="AccesConfiguration";
-	$tabMenu["configuration"]["url"]="mod=admin";
+	$tabMenu["configuration"]["url"]=geturl("admin","","");
 
 
 	if ($theme=="phone")
@@ -436,7 +440,7 @@
 	{
 		$debug["menu"]=microtime();
 	}
-	
+		
 // ---- Charge la rubrique
 	$affrub=$rub;
 	while ($affrub!="")
@@ -463,7 +467,11 @@
 
 		// Charge le template
 		$tmpl_x = LoadTemplate($affrub);
-		
+		$tmpl_x->assign("path_root",$MyOpt["host"]);
+		$tmpl_x->assign("path_core",$corefolder);
+		$tmpl_x->assign("path_module",$module."/".$mod);
+		$tmpl_x->assign("form_checktime",$_SESSION['checkpost']);
+	
 		// Charge la rubrique
 		$r=MyRep($affrub.".inc.php");
 		if ($r!="")
@@ -491,11 +499,11 @@
 // ---- Affecte les blocs
 	if ($fonc=="imprimer")
 	{
-		$tmpl_prg->assign("style_url", GenereStyle("print"));
+		$tmpl_prg->assign("style_url", $MyOpt["host"]."/".GenereStyle("print"));
 	}
 	else
 	{
-		$tmpl_prg->assign("style_url", GenereStyle(($theme=="phone") ? "phone" : "default"));
+		$tmpl_prg->assign("style_url", $MyOpt["host"]."/".GenereStyle(($theme=="phone") ? "phone" : "default"));
 	}
 
 	$tmpl_prg->assign("icone", $icone);
@@ -527,7 +535,7 @@
 	$tmpl_prg->parse("main");
 	echo $tmpl_prg->text("main");
 
-// ---- Ferme la connexion à la base de données	  
+// ---- Ferme la connexion Ã  la base de donnÃ©es	  
     $sql->closedb();
 
 // ---- Debug: Show unitialized variables

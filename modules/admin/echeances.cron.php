@@ -1,15 +1,15 @@
-<?
+<?php
 // ---------------------------------------------------------------------------------------------
 //   Batch de notification 
 // ---------------------------------------------------------------------------------------------
 ?>
-<?
+<?php
 	if ($gl_mode!="batch")
 	  { FatalError("Acces refuse","Ne peut etre execute qu'en arriere plan"); }
 
   	require_once ("class/echeance.inc.php");
 
-// ---- Mail du président
+// ---- Mail du prÃ©sident
 
 	$mailpre=array();
 	$mailpre["name"]=$MyOpt["site_title"];
@@ -32,7 +32,7 @@
 
 	myPrint("Notification Echeance : ".implode(",",$tabPre));
 
-// ---- Liste les échéances actives
+// ---- Liste les Ã©chÃ©ances actives
 	$query="SELECT * FROM ".$MyOpt["tbl"]."_echeancetype WHERE actif='oui' AND notif='oui' ORDER BY description";
 	$sql->Query($query);
 
@@ -72,10 +72,10 @@
 
 						$tabvar=array();
 						$tabvar["description"]=$dte->description;
-						$tabvar["type"]="est échue depuis le";
+						$tabvar["type"]="est Ã©chue depuis le";
 						$tabvar["date"]=sql2date($dte->Val());
 						
-						SendMailFromFile($mailpre,$usr->data["mail"],$tabPre,"[".$MyOpt["site_title"]."] : ".$dte->description." échue",$tabvar,"echeance_nok");
+						SendMailFromFile($mailpre,$usr->data["mail"],$tabPre,"[".$MyOpt["site_title"]."] : ".$dte->description." Ã©chue",$tabvar,"echeance_nok");
 					}
 					else if (date_diff_txt($dte->Val(),date("Y-m-d"))>-$delai*24*3600)
 					{
@@ -86,7 +86,7 @@
 						$tabvar["type"]="expire le";
 						$tabvar["date"]=sql2date($dte->Val());
 						
-						SendMailFromFile($mailpre,$usr->data["mail"],$tabPre,"[".$MyOpt["site_title"]."] : ".$dte->description." arrive à échéance le ".sql2date($dte->Val()),$tabvar,"echeance_ok");
+						SendMailFromFile($mailpre,$usr->data["mail"],$tabPre,"[".$MyOpt["site_title"]."] : ".$dte->description." arrive Ã  Ã©chÃ©ance le ".sql2date($dte->Val()),$tabvar,"echeance_ok");
 					}
 					if (!$ret)
 					{
@@ -111,7 +111,7 @@
 
 					$tabvar=array();
 					$tabvar["description"]=$dte->description;
-					$tabvar["type"]="est échue depuis le";
+					$tabvar["type"]="est Ã©chue depuis le";
 					$tabvar["date"]=sql2date($dte->Val());
 
 					$grp=new groupe_core(0,$sql,$ech->val("recipient"));
@@ -120,7 +120,7 @@
 					{					
 						$usr = new user_core($uid,$sql,false);
 						myPrint($usr->fullname." - ".$dte->description." echue");
-						SendMailFromFile($mailpre,$usr->data["mail"],array(),"[".$MyOpt["site_title"]."] : ".$dte->description." échue",$tabvar,"echeance_nok");
+						SendMailFromFile($mailpre,$usr->data["mail"],array(),"[".$MyOpt["site_title"]."] : ".$dte->description." Ã©chue",$tabvar,"echeance_nok");
 					}
 				}
 				else if (date_diff_txt($dte->Val(),date("Y-m-d"))>-$delai*24*3600)
@@ -139,7 +139,7 @@
 						$usr = new user_core($uid,$sql,false);
 						myPrint($usr->fullname." - ".$dte->description." expire dans moins de ".$delai." jours");
 				
-						SendMailFromFile($mailpre,$usr->data["mail"],array(),"[".$MyOpt["site_title"]."] : ".$dte->description." arrive à échéance le ".sql2date($dte->Val()),$tabvar,"echeance_ok");
+						SendMailFromFile($mailpre,$usr->data["mail"],array(),"[".$MyOpt["site_title"]."] : ".$dte->description." arrive Ã  Ã©chÃ©ance le ".sql2date($dte->Val()),$tabvar,"echeance_ok");
 					}
 				}
 				if (!$ret)

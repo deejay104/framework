@@ -1,4 +1,4 @@
-<?
+<?php
 /*
     MnMs Framework
     Copyright (C) 2018 Matthieu Isorez
@@ -19,13 +19,10 @@
 */
 ?>
 
-<?
+<?php
 	require_once ("class/document.inc.php");
-// ---- Charge le template
-	$tmpl_x = new XTemplate (MyRep("detail.htm"));
-	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 
-// ---- VÈrifie les variables
+// ---- V√©rifie les variables
 
 	$fid=checkVar("fid","numeric");
 	$mid=checkVar("mid","numeric");
@@ -53,7 +50,7 @@
 		  }
 	  }
 
-// ---- RÈcupËre les donnÈes sur le message
+// ---- R√©cup√®re les donn√©es sur le message
 	$query = "SELECT forum.id AS id,";
 	$query.= "forum.fid AS fid,";
 	$query.= "forum.message AS corps,";
@@ -68,12 +65,6 @@
 
 	$query="SELECT titre,droit_w AS droit FROM ".$MyOpt["tbl"]."_forums WHERE id=".$res["fid"];
 	$resb=$sql->QueryRow($query);
-
-// ---- Initialisation des variables
-//	$tmpl_prg->assign("prg_icone","images/icones/forums.gif");
-//	$tmpl_prg->assign("prg_titre",(($res["user_buque_txt"] != "") ? $res["user_buque_txt"] : $res["forum_buque"])." : ".htmlentities($res["forum_titre"]));
-//	$tmpl_prg->assign("prg_titre",$resb["titre"]);
-//	$tmpl_prg->parse("main.haut");
 
 
 // ---- Initialisation des variables
@@ -90,24 +81,46 @@
 	$usr = new user_core($res["uid_maj"],$sql,false);
 	$tmpl_x->assign("usr_maj", $usr->fullname);
 
-
 // ---- Affiche les infos
 	$tmpl_x->parse("titre");
 
 // ---- Affiche les boutons
 
-	// Boutons de rÈponse ‡ un message
-	if (GetDroit($resb["droit"]))
-	  { $tmpl_x->parse("infos.ecrire"); }
-	if ((($res["uid_creat"] == $uid) && ($uid>0)) || (GetDroit("ModifMessage")))
-	  { $tmpl_x->parse("infos.modifier"); }
-	if (GetDroit("SupprimeMessage"))
-	  { $tmpl_x->parse("infos.supprimer"); }
 
+
+	// <p><A href="index.php?mod=docs&rub=liste&fid={fid}" class=clsLien><IMG src="{path_module}/img/icn32_retour.png">Retour</A></p>
+	addPageMenu($corefolder,$mod,"Retour",geturl("docs","liste","fid=".$fid),"icn32_retour.png");
+
+	// <!-- BEGIN: ecrire -->
+	// <p><A href="index.php?mod=docs&rub=editer&fid={fid}&fpars={mid}&fprec=detail" title="R√©pondre √† ce message."><IMG src="{path_module}/img/icn32_comment.png" />R√©pondre</A></p>
+	// <!-- END: ecrire -->
+	if (GetDroit($resb["droit"]))
+	{
+		addPageMenu($corefolder,$mod,"Ecrire",geturl("docs","editer","fid=".$fid."&fpars=".$mid."&fprec=detail"),"icn32_comment.png");
+	}
+
+	// <!-- BEGIN: modifier -->
+	// <p><A HREF="index.php?mod=docs&rub=editer&fid={fid}&fpars={mid}&mid={mid}&fprec=detail" title="Modifier ce message."><IMG src="{path_module}/img/icn32_modifier.png" />Modifier</A></p>
+	// <!-- END: modifier -->
+	if ((($res["uid_creat"] == $uid) && ($uid>0)) || (GetDroit("ModifMessage")))
+	{
+		addPageMenu($corefolder,$mod,"Modifier",geturl("docs","editer","fid=".$fid."&fpars=".$mid."&mid=".$mid."&fprec=detail"),"icn32_modifier.png");
+	}
+
+	// <!-- BEGIN: supprimer -->
+	// <p><A HREF="index.php?mod=docs&rub=liste&fid={fid}&opt={idmsg}&anc=visu" title="Effacer ce message."><IMG src="{path_module}/img/icn32_supprimer.png" />Supprimer</A></p>
+	// <!-- END: supprimer -->
+
+
+	// Boutons de r√©ponse √† un message
+	if (GetDroit("SupprimeMessage"))
+	{
+		addPageMenu($corefolder,$mod,"Supprimer",geturl("docs","liste","fid=".$fid."&opt=".$mid."&anc=visu"),"icn32_supprimer.png");
+	}
 
 // ---- Affiche le corps du message
 	if ((!preg_match("/<BR>/i",$res["corps"])) && (!preg_match("/<P>/i",$res["corps"])) && (!preg_match("/<DIV>/i",$res["corps"])) && (!preg_match("/<IMG/i",$res["corps"])) && (!preg_match("/<TABLE/i",$res["corps"])))
-	  { $msg = nl2br(htmlentities($res["corps"],ENT_HTML5,"ISO-8859-1")); }
+	  { $msg = nl2br(htmlentities($res["corps"],ENT_HTML5,"UTF-8")); }
 	else
 	  { $msg = $res["corps"]; }
 
@@ -117,7 +130,7 @@
 	$msg=preg_replace("/ (www\.[^ |\/]*)/si","<a href='http://$1' target='_blank'>$1</a>",$msg);
 
 	
-// ---- Mets en relief les critËres de recherche
+// ---- Mets en relief les crit√®res de recherche
 	$critere = trim($critere);
 	if ($critere!="")
 	  {
@@ -128,7 +141,7 @@
 
 	$tmpl_x->assign("msg", $msg);
 
-// ---- Affiche les piËces jointes au message
+// ---- Affiche les pi√®ces jointes au message
 	$lstdoc=ListDocument($sql,$mid,"forum");
 	  	
 	if ((is_array($lstdoc)) && (count($lstdoc)>0))
@@ -142,7 +155,7 @@
 		  $tmpl_x->parse("corps.pieces_jointes");
 	  }
 
-// ---- Affiche les rÈponses
+// ---- Affiche les r√©ponses
 	$query ="SELECT * ";
 	$query.="FROM ".$MyOpt["tbl"]."_forums AS forum ";
 	$query.="WHERE forum.fil = $mid";

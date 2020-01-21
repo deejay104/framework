@@ -1,4 +1,4 @@
-<?
+<?php
 /*
     MnMs Framework
     Copyright (C) 2018 Matthieu Isorez
@@ -19,14 +19,11 @@
 */
 ?>
 
-<?
+<?php
 	require_once ("class/document.inc.php");
 
-// ---- Charge le template
-	$tmpl_x = new XTemplate (MyRep("liste.htm"));
-	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 	
-// ---- Vérifie les variables
+// ---- VÃ©rifie les variables
 	$critere=checkVar("critere","varchar");
   	$opt=checkVar("opt","numeric");
   	$fid=checkVar("fid","numeric");
@@ -88,15 +85,30 @@
 	}
 	else if ($critere!="")
 	{
-		$tmpl_x->assign("infos","Résultat de la recherche");		
-		$tmpl_x->assign("description","Terme(s) recherché(s) : ".$critere);
+		$tmpl_x->assign("infos","RÃ©sultat de la recherche");		
+		$tmpl_x->assign("description","Terme(s) recherchÃ©(s) : ".$critere);
 	}
 
-	// Boutons de réponse à un message
+
+
+	// <p><A href="index.php?mod=docs" ><IMG src="{path_module}/img/icn32_retour.png">Liste</A></p>
+	addPageMenu($corefolder,$mod,"Liste",geturl("docs","",""),"icn32_retour.png");
+
+	// <!-- BEGIN: ecrire -->
+	// <p><A href="index.php?mod=docs&rub=editer&fid={fid}&fpars={fid}&fprec=liste" ><IMG src="{path_module}/img/icn32_nouveau.png" title="Ajouter un document Ã  ce classeur." align="absmiddle">Nouveau</A></p>
+	// <!-- END: ecrire -->
+
+	// Boutons de rÃ©ponse Ã  un message
 	if ((GetDroit($res["droit"])) && ($critere==""))
 	{
-			$tmpl_x->parse("infos.ecrire");
+		addPageMenu($corefolder,$mod,"Nouveau",geturl("docs","editer","fid=".$fid."&fpars=".$fid."&fprec=liste"),"icn32_nouveau.png");
+			// $tmpl_x->parse("infos.ecrire");
 	}
+
+	// <p><A href="index.php?mod=docs&rub=liste&fid={fid}&fprec=index&fonc=marquer"><IMG src="{path_module}/img/icn32_valider.png" title="Marquer tous les messages de ce forum comme lus." align="absmiddle">Marquer comme lus</A></p>
+	addPageMenu($corefolder,$mod,"Marquer comme lus",geturl("docs","liste","fid=".$fid."&fprec=index&fonc=marquer"),"icn32_valider.png");
+	// <p><A href="index.php?mod=docs&rub=recherche&critere={critere}&fid={fid}" ><IMG src="{path_module}/img/icn32_rechercher.png" title="Effectuer une recherche sur l'ensemble des messages des forums." align="absmiddle">Rechercher</A></p>
+	addPageMenu($corefolder,$mod,"Rechercher",geturl("docs","recherche","critere=".$critere."&fid=".$fid),"icn32_rechercher.png");
 
 
 // ---- Affiche la liste des messages
@@ -147,12 +159,12 @@
 	{
 		if ($msg["nbrep"]==1)
 		{
-			$tmpl_x->assign("msg_reponse","(1 réponse)");
+			$tmpl_x->assign("msg_reponse","(1 rÃ©ponse)");
 			$tmpl_x->parse("corps.lst_msg.aff_reponse");
 		}
 		else if ($msg["nbrep"]>1)
 		{
-			$tmpl_x->assign("msg_reponse","(".$msg["nbrep"]." réponses)");
+			$tmpl_x->assign("msg_reponse","(".$msg["nbrep"]." rÃ©ponses)");
 			$tmpl_x->parse("corps.lst_msg.aff_reponse");
 		}
 		else
@@ -170,7 +182,7 @@
 			$tmpl_x->assign("msg_class","forum_Liste_TitreNonlu");
 		}
 
-		// Affiche les pièces jointes au message
+		// Affiche les piÃ¨ces jointes au message
 		$lstdoc=ListDocument($sql,$msg["id"],"forum");
 
 		if ((is_array($lstdoc)) && (count($lstdoc)>0))
@@ -185,7 +197,7 @@
 		}
 
 
-		// Mets en relief les critères de recherche
+		// Mets en relief les critÃ¨res de recherche
 		//			$txt=GetFirstLine(nl2br(strip_tags($msg["message"], "<br>")));
 		$txt=nl2br(strip_tags($msg["message"], '<br>'));
 		$txt=preg_replace("/((http|https|ftp):\/\/[^ |<]*)/si","<a href='$1' target='_blank'>$1</a>",$txt);
@@ -201,7 +213,7 @@
 			}
 		}
 
-		// Paramètres du message
+		// ParamÃ¨tres du message
 		$usr = new user_core($msg["usr_id"],$sql,false);
 		$tmpl_x->assign("id_msg",$msg["id"]);
 		$tmpl_x->assign("id_forum",$msg["fid"]);

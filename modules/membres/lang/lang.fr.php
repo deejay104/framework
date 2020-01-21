@@ -1,4 +1,4 @@
-<?
+<?php
 	// $tabLang["lang_list"]="Liste";
 	$tabLang["lang_pictures"]="Trombinoscope";
 	$tabLang["lang_normal"]="Normaux";
@@ -6,22 +6,22 @@
 	// $tabLang["lang_add"]="Ajouter";
 	
 	
-	$tabLang["lang_firstname"]="Prénom";
+	$tabLang["lang_firstname"]="PrÃ©nom";
 	$tabLang["lang_name"]="Nom";
 	$tabLang["lang_email"]="Mail";
 	$tabLang["lang_group"]="Groupe";
 	
 	// $tabLang["lang_modify"]="Modifier";
 	$tabLang["lang_changepwd"]="Changer mot de passe";
-	// $tabLang["lang_disable"]="Désactiver";
+	// $tabLang["lang_disable"]="DÃ©sactiver";
 	// $tabLang["lang_enable"]="Activer";
 	// $tabLang["lang_delete"]="Supprimer";
-	$tabLang["lang_disablewarn"]="Voulez-vous désactiver cet utilisateur";
-	$tabLang["lang_enablewarn"]="Voulez-vous réactiver cet utilisateur";
+	$tabLang["lang_disablewarn"]="Voulez-vous dÃ©sactiver cet utilisateur";
+	$tabLang["lang_enablewarn"]="Voulez-vous rÃ©activer cet utilisateur";
 	$tabLang["lang_deletewarn"]="Voulez-vous supprimer cet utilisateur";
 
-	// $tabLang["lang_lastupdate"]="Dernière mise à jour";
-	// $tabLang["lang_lastconnection"]="Dernière connexion";
+	// $tabLang["lang_lastupdate"]="DerniÃ¨re mise Ã  jour";
+	// $tabLang["lang_lastconnection"]="DerniÃ¨re connexion";
 
 	$tabLang["lang_informations"]="Informations";
 	$tabLang["lang_nickname"]="Initiales";
@@ -32,20 +32,20 @@
 
 	$tabLang["lang_picture"]="Photo";
 
-	$tabLang["lang_picture"]="Sélectionner ci-dessus la photo voulue";
-	$tabLang["lang_picture2"]="Celle-ci sera transférée sur le serveur et remplacera la photo existante";
+	$tabLang["lang_picture"]="SÃ©lectionner ci-dessus la photo voulue";
+	$tabLang["lang_picture2"]="Celle-ci sera transfÃ©rÃ©e sur le serveur et remplacera la photo existante";
 	
 	$tabLang["lang_comments"]="Commentaires";
-	$tabLang["lang_data"]="Données";
+	$tabLang["lang_data"]="DonnÃ©es";
 	$tabLang["lang_documents"]="Documents";
-	$tabLang["lang_deadline"]="Echéances";
+	$tabLang["lang_deadline"]="EchÃ©ances";
 	$tabLang["lang_rights"]="Droits";
 
 	$tabLang["lang_save"]="Sauver";
 	$tabLang["lang_cancel"]="Annuler";
 	
 	$tabLang["lang_changepassword"]="Changement de mot de passe";
-	$tabLang["lang_passwordneverset"]="Le mot de passe n'a jamais été défini";
+	$tabLang["lang_passwordneverset"]="Le mot de passe n'a jamais Ã©tÃ© dÃ©fini";
 	$tabLang["lang_oldpwd"]="Ancien mot de passe";
 	$tabLang["lang_newpwd"]="Nouveau mot de passe";
 	$tabLang["lang_confirmpwd"]="Confirmation";

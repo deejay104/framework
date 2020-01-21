@@ -1,4 +1,4 @@
-<?
+<?php
 /*
     MnMs Framework
     Copyright (C) 2018 Matthieu Isorez
@@ -170,7 +170,7 @@ class document_core{
 			{
 				if (unlink($this->filepath."/".$this->filename))
 				{
-				  	$ret.="Fichier supprimé";
+				  	$ret.="Fichier supprimÃ©";
 				}
 			}
 			
@@ -250,11 +250,11 @@ class document_core{
 					$txt.="<img src='".$MyOpt["host"]."/".$corefolder."/static/images/icn16_".$icon.".png' style='vertical-align:middle; border: 0px; height: 16px; width: 16px;'> <s>".$this->name."</s>";
 			}
 
-			// Si mode édition
+			// Si mode Ã©dition
 			if ($this->editmode=="edit")
 			{
 				// $txt.=" <a href=\"#\" OnClick=\"var win=window.open('doc.php?id=".$this->id."&fonc=delete','scrollbars=no,resizable=no,width=10'); return false;\" class='imgDelete'><img src='".$corefolder."/static/images/icn16_supprimer.png'></a>";
-				$txt.=" <a href=\"#\" OnClick=\"$(function() { $.ajax({url:'doc.php?id=".$this->id."&fonc=delete'}); document.getElementById('doc_".$this->id."').style.visibility='hidden'; document.getElementById('doc_".$this->id."').style.height='0'; })\" class='imgDelete'><img  id='doc_del_".$this->id."' src='".$corefolder."/static/images/icn16_supprimer.png' style='visibility:hidden;'></a>";
+				$txt.=" <a href=\"#\" OnClick=\"$(function() { $.ajax({url:'".$MyOpt["host"]."/doc.php?id=".$this->id."&fonc=delete'}); document.getElementById('doc_".$this->id."').style.visibility='hidden'; document.getElementById('doc_".$this->id."').style.height='0'; })\" class='imgDelete'><img  id='doc_del_".$this->id."' src='".$MyOpt["host"]."/".$corefolder."/static/images/icn16_supprimer.png' style='visibility:hidden;'></a>";
 			}
 			$txt.="</p>";
 			$txt.="</div>";
@@ -404,7 +404,7 @@ class document_core{
 
 		$thumb=$this->Resize($newwidth,$newheight,"show");
 
-		header('Content-Type: image/png');
+		header('Content-Type:Â image/png');
 		imagepng($thumb);
 	}
 

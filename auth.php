@@ -61,6 +61,7 @@
 	
 // ---- Affiche la page
 	$tmpl_prg->assign("var", $var);
+	$tmpl_prg->assign("rootfolder", $MyOpt["host"]);
 	$tmpl_prg->assign("corefolder", $corefolder);
 	$tmpl_prg->assign("mysess", md5(session_id()));
 	$tmpl_prg->assign("site_title", $MyOpt["site_title"]);

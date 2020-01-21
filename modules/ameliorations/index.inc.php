@@ -1,4 +1,4 @@
-<?
+<?php
 /*
     MnMs Framework
     Copyright (C) 2018 Matthieu Isorez
@@ -19,18 +19,16 @@
 */
 ?>
 
-<?
+<?php
 	require_once ("class/amelioration.inc.php");
-	if (!GetDroit("AccesAmeliorations")) { FatalError("Accès non autorisé (AccesAmeliorations)"); }
+	if (!GetDroit("AccesAmeliorations")) { FatalError("AccÃ¨s non autorisÃ© (AccesAmeliorations)"); }
 
-// ---- Vérifie les variables
+// ---- VÃ©rifie les variables
 	$order=checkVar("order","varchar");
 	$trie=checkVar("trie","varchar");
+	$id=checkVar("id","numeric");
 	
-// ---- Charge le template
-	$tmpl_x = new XTemplate (MyRep("index.htm"));
-	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
-
+	
 // ---- Affiche le menu
 	$aff_menu="";
 	require("modules/".$mod."/menu.inc.php");

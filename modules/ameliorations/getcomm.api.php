@@ -1,4 +1,4 @@
-<?
+<?php
 // ---- Refuse l'accès en direct
 	if ((!isset($token)) || ($token==""))
 	  { header("HTTP/1.0 401 Unauthorized"); exit; }
@@ -24,7 +24,7 @@
 				if (($k!="usr_creat") && (!is_numeric($k)))
 
 				{
-					$res["lst"][$i][$k]=utf8_encode($v);
+					$res["lst"][$i][$k]=$v;
 				}
 			}
 			$res["lst"][$i]["uid_creat"]=$res["lst"][$i]["uid_dist"];

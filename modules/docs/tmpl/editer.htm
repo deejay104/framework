@@ -9,7 +9,7 @@
 
 <!-- BEGIN: corps -->
 
-<FORM name="forums" method="post" action="index.php" enctype="multipart/form-data">
+<FORM name="forums" method="post" action="{path_root}/index.php" enctype="multipart/form-data">
 <INPUT type="hidden" name="mod" value="docs">
 <INPUT type="hidden" name="rub" value="sauver">
 <INPUT type="hidden" name="fid" value="{fid}">
@@ -56,7 +56,7 @@ function AddPJ()
 		</select>
 	</p>
 	<p>
-		<label>Droit en écriture :</label>
+		<label>Droit en Ã©criture :</label>
 		<select name="form_droit_w" >
 			<option value="ALL">ALL</option>
 	<!-- BEGIN: lst_droits_w -->
@@ -66,7 +66,7 @@ function AddPJ()
 	</p>
 	<!-- END: droits -->
 
-	<p>Pièce(s) jointe(s) :<br />
+	<p>PiÃ¨ce(s) jointe(s) :<br />
 	<!-- BEGIN: lst_document -->
 	{form_document}
 	<!-- END: lst_document -->

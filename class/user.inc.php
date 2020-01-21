@@ -1,4 +1,4 @@
-<?
+<?php
 /*
     MnMs Framework
     Copyright (C) 2018 Matthieu Isorez
@@ -50,18 +50,18 @@ class user_core extends objet_core
 
 	protected $tabList=array(
 		"language"=>array(
-			"fr"=>array('fr'=>"Français",'en'=>'Anglais'),
+			"fr"=>array('fr'=>"FranÃ§ais",'en'=>'Anglais'),
 			"en"=>array('fr'=>"French",'en'=>'English'),
 		)
 	);
 
 	protected $tabLang=array(
 		"err_nickname"=>array(
-			"fr"=>"Les initiales choisies existent déjà !",
+			"fr"=>"Les initiales choisies existent dÃ©jÃ  !",
 			"en"=>"This nickname already exists",
 		),
 		"err_mail"=>array(
-			"fr"=>"Le mail choisi existe déjà !",
+			"fr"=>"Le mail choisi existe dÃ©jÃ  !",
 			"en"=>"This email already exists",
 		),
 		"err_name"=>array(
@@ -95,7 +95,7 @@ class user_core extends objet_core
 		$this->data["aff_msg"]="0";
 		$this->data["dte_login"]="0000-00-00 00:00:00";
 
-		// Données utilisateurs
+		// DonnÃ©es utilisateurs
 		$this->donnees=array();
 
 		// Droits utilisateurs
@@ -107,7 +107,7 @@ class user_core extends objet_core
 		// print_r($this);
 	}
 	
-	// Charge les données utilisateurs
+	// Charge les donnÃ©es utilisateurs
 	function load($id)
 	{
 		parent::load($id);
@@ -184,7 +184,7 @@ class user_core extends objet_core
 		return false;
 	}
 
-	// Charge les données complémentaires
+	// Charge les donnÃ©es complÃ©mentaires
 	function LoadDonneesComp()
 	{
 		$sql=$this->sql;
@@ -269,7 +269,7 @@ class user_core extends objet_core
 					$sql->GetRow($i);
 					if ($sql->data["groupe"]=="SYS")
 					{
-						$sql->data["description"]="Système";
+						$sql->data["description"]="SystÃ¨me";
 					}
 					if (($sql->data["groupe"]!="SYS") || GetDroit("SYS"))
 					{
@@ -288,11 +288,11 @@ class user_core extends objet_core
 					$query="SELECT id,groupe, description FROM ".$this->tbl."_groupe WHERE groupe='".$txt."'";
 					$res=$sql->QueryRow($query);
 
-					$ret="<a href='index.php?mod=membres&rub=detail&id=".$this->id."'>".$res["description"]."</a>";
+					$ret="<a href='".geturl("membres","detail","id=".$this->id)."'>".$res["description"]."</a>";
 				}
 				else
 				{
-					$ret="<a href='index.php?mod=membres&rub=detail&id=".$this->id."'>Aucun</a>";
+					$ret="<a href='".geturl("membres","detail","id=".$this->id)."'>Aucun</a>";
 				}
 			}
 			else if ($key=="nom")
@@ -306,14 +306,14 @@ class user_core extends objet_core
 				{
 					$ret="<s>".$ret."</s>";
 				}
-				$ret="<a href='index.php?mod=membres&rub=detail&id=".$this->id."'>".$ret."</a>";
+				$ret="<a href='".geturl("membres","detail","id=".$this->id)."'>".$ret."</a>";
 
 			}
 			else if ($key=="prenom")
 			{
 				if ($this->actif!="oui")
 				{
-					$ret="<a href='index.php?mod=membres&rub=detail&id=".$this->id."'><s>".ucwords($this->data[$key])."</s></a>";
+					$ret="<a href='".geturl("membres","detail","id=".$this->id)."'><s>".ucwords($this->data[$key])."</s></a>";
 				}
 
 			}
@@ -321,11 +321,11 @@ class user_core extends objet_core
 			{
 				if ($this->actif!="oui")
 				{
-					$ret="<a href='index.php?mod=membres&rub=detail&id=".$this->id."'><s>".$this->fullname."</s></a>";
+					$ret="<a href='".geturl("membres","detail","id=".$this->id)."'><s>".$this->fullname."</s></a>";
 				}
 				else
 				{
-					$ret="<a href='index.php?mod=membres&rub=detail&id=".$this->id."'>".$this->fullname."</a>";
+					$ret="<a href='".geturl("membres","detail","id=".$this->id)."'>".$this->fullname."</a>";
 				}
 			}
 		}
@@ -346,13 +346,13 @@ class user_core extends objet_core
 		return $ret;
 	}
 
-	// Affiche les données complémentaires
+	// Affiche les donnÃ©es complÃ©mentaires
 	function AffDonneesComp($i,$render="html")
 	{
-		// Défini les droits de modification des utilisateurs
+		// DÃ©fini les droits de modification des utilisateurs
 		$mycond=false;
 		
-		// Le user a le droit de modifier toutes ses données
+		// Le user a le droit de modifier toutes ses donnÃ©es
 		if (GetMyId($this->id))
 		  { $mycond=true; }
 
@@ -442,7 +442,7 @@ class user_core extends objet_core
 			}
 		}
 
-		// Vérifie la différence
+		// VÃ©rifie la diffÃ©rence
 		foreach($tabgrp as $grp=>$v)
 		{
 			if (($v["new"]==1) && ($v["old"]>0))
@@ -756,7 +756,7 @@ class groupe_core extends objet_core
 		}
 	}
 	
-	// Charge les données utilisateurs
+	// Charge les donnÃ©es utilisateurs
 	function loadgrp($grp)
 	{
 		$sql=$this->sql;

@@ -14,7 +14,7 @@
 <INPUT type="hidden" name="id" value="{id}">
 <INPUT type="hidden" name="checktime" value="{form_checktime}">
 
-<SCRIPT language="JavaScript" src="{corefolder}/static/js/_md5.js"></SCRIPT>
+<SCRIPT language="JavaScript" src="{path_root}/{corefolder}/static/js/_md5.js"></SCRIPT>
 <SCRIPT language="javascript">
 	<!-- 
 	function cryptData()
@@ -25,7 +25,7 @@
 
 		if ((str1=="") || (str2==""))
 		{
-			alert("Le mot de passe ne doit pas être vide.");
+			alert("Le mot de passe ne doit pas Ãªtre vide.");
 		  	return false;
 		}
 
@@ -34,7 +34,7 @@
 			if (str1=="")
 			{
 				document.getElementById('form_newmdp').value = "**NONE**";
-				alert("Le mot de passe ne doit pas être vide.");
+				alert("Le mot de passe ne doit pas Ãªtre vide.");
 				return false;
 			}
 			else
@@ -51,7 +51,7 @@
 		}
 		else
 		{
-		  	alert ("Les deux mots de passe sont différents !");
+		  	alert ("Les deux mots de passe sont diffÃ©rents !");
 		  	return false;
 		}
 	}

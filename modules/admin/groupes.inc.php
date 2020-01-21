@@ -1,4 +1,4 @@
-<?
+<?php
 // ---------------------------------------------------------------------------------------------
 //   Gestion des groupes
 //     ($Author: miniroot $)
@@ -22,16 +22,11 @@
 */
 ?>
 
-<?
-// ---- Vérifie le droit d'accès
+<?php
+// ---- VÃ©rifie le droit d'accÃ¨s
 	if (!GetDroit("AccesConfigGroupes")) { FatalError($tabLang["lang_accessdenied"]." (AccesConfigGroupes)"); }
 
-// ---- Charge le template
-	$tmpl_x = LoadTemplate("groupes");
-	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
-	$tmpl_x->assign("form_checktime",$_SESSION['checkpost']);
-
-// ---- Vérifie les variables
+// ---- VÃ©rifie les variables
 	$order=checkVar("order","varchar");
 	$trie=checkVar("trie","varchar");
 
@@ -39,6 +34,9 @@
 	$aff_menu="";
 	require_once("modules/".$mod."/menu.inc.php");
 	$tmpl_x->assign("aff_menu",$aff_menu);
+
+	addSubMenu("",$tabLang["lang_new"],geturl("admin","grpdetail",""),"icn32_groupeadd.png",false);
+	affSubMenu();
 
 // ---- Liste les groupes
 	$tabTitre=array();

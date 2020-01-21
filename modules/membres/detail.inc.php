@@ -27,11 +27,9 @@
 	require_once ("class/echeance.inc.php");
 
 // ---- Charge le template
-	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
-
+	$tmpl_x->assign("path_module",$MyOpt["host"]."/".$corefolder."/".$module."/".$mod);
 	
 // ---- Initialisation des variables
-	$tmpl_x->assign("form_checktime",$_SESSION['checkpost']);
 
 	$id=checkVar("id","numeric");
 	$form_data=checkVar("form_data","array");
@@ -261,11 +259,11 @@
 		if (count($lstdoc)>0)
 		{
 			$doc=new document_core($lstdoc[0],$sql);
-			$tmpl_x->assign("aff_avatar",$doc->GenerePath(200,240));
+			$tmpl_x->assign("aff_avatar",$MyOpt["host"]."/".$doc->GenerePath(200,240));
 		}
 		else
 		{
-			$tmpl_x->assign("aff_avatar",$corefolder."/static/images/none.gif");
+			$tmpl_x->assign("aff_avatar",$MyOpt["host"]."/".$corefolder."/static/images/none.gif");
 		}	
 
 

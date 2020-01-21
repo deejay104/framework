@@ -47,11 +47,128 @@ function MyRep($file,$mymod="",$custom=true)
   	  { return ""; }
   }
 
+function geturl($mod,$rub,$param="")
+{
+	global $MyOpt;
+	$url="";
+	if ($MyOpt["shorturl"]=="on")
+	{
+		$url=$MyOpt["host"]."/".$mod.(($rub!="") ? "/".$rub : "").(($param!="") ? "?".$param : "");
+	}
+	else
+	{
+		$url="index.php?mod=".$mod.(($rub!="") ? "&rub=".$rub : "").(($param!="") ? "&".$param : "");
+	}
+	return $url;
+}
+
+function geturlapi($mod,$rub,$fonc,$param="")
+{
+	global $MyOpt;
+	$url="";
+	if ($MyOpt["shorturl"]=="on")
+	{
+		$url=$MyOpt["host"]."/api/v1/".$mod."/".$rub.(($fonc!="") ? "/".$fonc : "").(($param!="") ? "?".$param : "");
+	}
+	else
+	{
+		$url="api.php?mod=".$mod."&rub=".$rub."?q=1".(($fonc!="") ? "&".$fonc : "").(($param!="") ? "&".$param : "");
+	}
+	return $url;
+}
+
+
+function addPageMenu($path,$mod,$title,$url,$img,$selected=false,$confirm="")
+{
+	global $tmpl_prg,$module,$MyOpt;
+	
+	
+	if ($confirm!="")
+	{
+		$tmpl_prg->assign("pagemenu_url","#");
+		$tmpl_prg->assign("pagemenu_confirm","OnClick=\"ConfirmeClick('".$url."','".$confirm."')\"");
+	}
+	else
+	{
+		$tmpl_prg->assign("pagemenu_url",$url);
+		$tmpl_prg->assign("pagemenu_confirm","");
+	}
+	
+	
+	$tmpl_prg->assign("pagemenu_name",$title);
+	$tmpl_prg->assign("pagemenu_image",$MyOpt["host"]."/".(($path!="") ? $path."/" : "").$module."/".$mod."/img/".$img);
+
+	if ($selected)
+	{
+		$tmpl_prg->assign("pagemenu_class","class='pageTitleSelected'");
+	}
+	else
+	{
+		$tmpl_prg->assign("pagemenu_class","");
+	}
+
+	$tmpl_prg->parse("main.lst_pagemenu");
+}
+
+function addSubMenu($path,$title,$url,$img="",$selected=false,$confirm="",$onclick="")
+{
+	global $tmpl_prg,$module,$mod,$MyOpt,$corefolder;
+	
+	if ($confirm!="")
+	{
+		$tmpl_prg->assign("submenu_url","#");
+		$tmpl_prg->assign("submenu_confirm","OnClick=\"ConfirmeClick('".$url."','".$confirm."')\"");
+	}
+	else if ($onclick!="")
+	{
+		$tmpl_prg->assign("submenu_url","#");
+		$tmpl_prg->assign("submenu_confirm","OnClick=\"".$onclick."\"");
+	}
+	else
+	{
+		$tmpl_prg->assign("submenu_url",$url);
+		$tmpl_prg->assign("submenu_confirm","");
+	}
+	
+	$tmpl_prg->assign("submenu_name",$title);
+
+	if ($selected)
+	{
+		$tmpl_prg->assign("submenu_class","class='pageTitleSelected'");
+	}
+	else
+	{
+		$tmpl_prg->assign("submenu_class","");
+	}
+
+	if ($img!="")
+	{
+		$tmpl_prg->assign("submenu_image",$MyOpt["host"]."/".(($path!="") ? $path."/" : "").$module."/".$mod."/img/".$img);
+	}
+	else
+	{
+		$tmpl_prg->assign("submenu_image",$MyOpt["host"]."/".$corefolder."/static/images/icn32_extend.png");
+	}
+
+	$tmpl_prg->parse("main.aff_submenu.lst_submenu");
+}
+function affSubMenu()
+{
+	global $tmpl_prg;
+	$tmpl_prg->parse("main.aff_submenu");
+}
+
+
 function checkVar($var,$type,$len=256,$default="")
 {
 	global $_REQUEST,$tabPost;
 
 	$tabPost[$var]="ok";
+
+	if (!is_numeric($len))
+	{
+		$len=256;
+	}
 	
 	if (!isset($_REQUEST[$var]))
 	{
@@ -136,7 +253,7 @@ function GetDroit($droit)
 	  { return false; }
 }
 
-// Test si un ID correspond ‡ l'utilisateur ou un de ses enfants
+// Test si un ID correspond √† l'utilisateur ou un de ses enfants
 function GetMyId($id)
 {
 	global $myuser;
@@ -295,7 +412,7 @@ function date_diff_txt($date1, $date2)
 
 
 
-// Ajoute un nombre de jour ‡ une date
+// Ajoute un nombre de jour √† une date
 function CalcDate($dte, $n)
 {
 		return date("Y-m-d",mktime(0, 0, 0, date("n",strtotime($dte)), date("j",strtotime($dte))+$n, date("Y",strtotime($dte))));
@@ -352,7 +469,7 @@ function SendMailFromFile($from,$to,$tabcc,$subject="",$tabvar,$name,$files="",$
 	}
 	else
 	{
-		$mail.="\n\n-Email envoyÈ ‡ partir du site ".$MyOpt["site_title"]."-";
+		$mail.="\n\n-Email envoy√© √† partir du site ".$MyOpt["site_title"]."-";
 		$mail=nl2br($mail);
 
 		return MyMail($from,$to,$tabcc,$subject,$mail,"",$files);
@@ -472,31 +589,31 @@ function MyMail($from,$to,$tabcc,$subject,$message,$headers="",$files="")
 
 function SendMail($From,$To,$Cc,$Subject,$Text,$Html,$AttmFiles)
 {
-	affInformation("*Fonction SendMail supprimÈe*","warning");
+	affInformation("*Fonction SendMail supprim√©e*","warning");
 }
 
 
 /* **** Fonction d'affichage d'un tableau ****
 
-	$tab	Tableau contenant l'ensemble des entrÈes ‡ afficher, chaque ligne est constituÈe d'un tableau
+	$tab	Tableau contenant l'ensemble des entr√©es √† afficher, chaque ligne est constitu√©e d'un tableau
 		par ex $tab[0]["nom"]="Produit 1"; $tab[0]["statut"]="OK"; $tab[0]["id"]="104"; $tab[0]["type"]="P";
 		       $tab[1]["nom"]="Produit 2"; $tab[1]["statut"]="NOK"; $tab[1]["id"]="97"; $tab[1]["type"]="P";
 		       ...
-	$varaff	Tableau ou liste (sÈparÈ par des virgules) des champs ‡ afficher
+	$varaff	Tableau ou liste (s√©par√© par des virgules) des champs √† afficher
 		par ex $varaff="nom,statut";
 	
-	$varlar	Tableau ou liste (sÈparÈ par des virgules) de la largeur de chaque colonne
+	$varlar	Tableau ou liste (s√©par√© par des virgules) de la largeur de chaque colonne
 		par ex $varlar="350,50";
 	
-	$order	Nom du champs sur lequel va Ítre triÈ la sortie (default sÈlectionne le rÈsultat de la fonction AffProduit)
+	$order	Nom du champs sur lequel va √™tre tri√© la sortie (default s√©lectionne le r√©sultat de la fonction AffProduit)
 		par ex $order="nom";
 	
-	$vartitre Tableau ou liste (sÈparÈ par des virgules) indiquant le nom ‡ afficher en haut de chaque colonne
+	$vartitre Tableau ou liste (s√©par√© par des virgules) indiquant le nom √† afficher en haut de chaque colonne
 		par ex $vartitre="Produit,Statut";
 
 	$valign	Alignement du texte dans les cellules (top, middle, bottom)
 	
-	$sens	Sens pour le trie des colonnes 'i' -> normal, 'd' -> inversÈ
+	$sens	Sens pour le trie des colonnes 'i' -> normal, 'd' -> invers√©
 
 	$skey	Si 'yes' test l'appuye de touche pour le raccourcis clavier
 
@@ -508,12 +625,13 @@ function SendMail($From,$To,$Cc,$Subject,$Text,$Html,$AttmFiles)
 */
 
 
-function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",$start=0,$limit="",$nbline=0,$showicon="")
-  {global $mod,$rub,$corefolder;
-	$ret ="\n<table class='tableauAff'>\n";
+function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",$start=0,$limit=-1,$nbline=0,$showicon="")
+  {global $mod,$rub,$corefolder,$MyOpt;
+	// $ret ="\n<table id='mytable' class='tableauAff' width'100%'>\n";
+	$idtbl=uniqid("tbl_");
+	$ret ="\n<table id='".$idtbl."' class='tableauAff' width='100%'>\n";
 
-	$ret.="<tr>";
-	$ret.="<th width=20>&nbsp;</th>";
+	$ret.="<thead><tr>";
 	$nb=1;
 	
 	$page=$_SERVER["SCRIPT_NAME"]."?mod=$mod&rub=$rub";
@@ -526,9 +644,9 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 	  	  	$tabTitre[$name]["aff"]=$name;
 	  	}
 	}
-	$sub="<tr><th></th>";
 	$affsub=0;
-	$subb="<tr><th></th>";
+	$sub="<tr>";
+	$subb="<tr>";
 	$affsubb=0;
   	foreach($tabTitre as $name=>$v)
 	{
@@ -546,8 +664,9 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 		if ($name==$order)
 		{
 			$ret.="<th width='".$v["width"]."'".(($v["align"]!="") ? " align='".$v["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").">";
-			$ret.="<b><a href='$page&order=$name&trie=".(($trie=="d") ? "i" : "d").(($url!="") ? "&$url" : "")."&ts=0'>".$v["aff"]."</a></b>";
-		  	$ret.=" <img src='".$corefolder."/static/images/sens_$trie.gif' border=0>";
+			// $ret.="<b><a href='$page&order=$name&trie=".(($trie=="d") ? "i" : "d").(($url!="") ? "&$url" : "")."&ts=0'>".$v["aff"]."</a></b>";
+		  	// $ret.=" <img src='".$MyOpt["host"]."/".$corefolder."/static/images/sens_$trie.gif' border=0>";
+			$ret.=$v["aff"];
 			$sub.="<th align='".$v["align"].(($v["mobile"]=="no") ? " class='noMobile'" :"")."'>".((isset($v["sub"])) ? $v["sub"] : "")."</th>";
 			$subb.="<th align='".$v["align"].(($v["mobile"]=="no") ? " class='noMobile'" :"")."'>".((isset($v["bottom"])) ? $v["bottom"] : "")."</th>";
 		}
@@ -564,7 +683,8 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 		else
 		{
 			$ret.="<th width='".$v["width"]."'".(($v["align"]!="") ? " align='".$v["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").">";
-			$ret.="<b><a href='$page&order=$name&trie=d".(($url!="") ? "&$url" : "")."&ts=0'>".$v["aff"]."</a></b>";
+			// $ret.="<b><a href='$page&order=$name&trie=d".(($url!="") ? "&$url" : "")."&ts=0'>".$v["aff"]."</a></b>";
+			$ret.=$v["aff"];
 			$sub.="<th align='".$v["align"].(($v["mobile"]=="no") ? " class='noMobile'" :"")."'>".((isset($v["sub"])) ? $v["sub"] : "")."</th>";
 			$subb.="<th align='".$v["align"].(($v["mobile"]=="no") ? " class='noMobile'" :"")."'>".((isset($v["bottom"])) ? $v["bottom"] : "")."</th>";
 		}
@@ -580,7 +700,7 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 		$ret.="</th>";
 		$nb++;
 	}
-	$ret.="</tr>\n";
+	$ret.="</tr></thead>\n";
 	$sub.="</tr>";
 	$subb.="</tr>";
 
@@ -588,22 +708,24 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 	{
 		$ret.=$sub;
 	}
+
+	$ret.="<tbody>\n";
 	
 	if (is_array($tabValeur))
 	  {
-		if ($trie=="d")
-		  { usort($tabValeur,"TrieVal"); }
-		else if ($trie=="i")
-		  { usort($tabValeur,"TrieValInv"); }
+		// if ($trie=="d")
+		  // { usort($tabValeur,"TrieVal"); }
+		// else if ($trie=="i")
+		  // { usort($tabValeur,"TrieValInv"); }
 		$ii=0;
 	
-		if ($limit=="")
-		  { $limit=count($tabValeur); }
+		// if ($limit<0)
+		  // { $limit=count($tabValeur); }
 
 		foreach($tabValeur as $i=>$val)
 		{ 
-			if (($ii>=$start) && ($ii<$start+$limit))
-			{
+			// if (($ii>=$start) && ($ii<$start+$limit))
+			// {
 				$ret.="<tr";
 				if ($showicon!="")
 				{
@@ -612,7 +734,6 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 				$ret.=">";
 				// $ret.="<tr onmouseover=\"setPointer(this, 'over', '#".$myColor[$col]."', '#".$myColor[$col+5]."', '#FF0000')\" onmouseout=\"setPointer(this, 'out', '#".$myColor[$col]."', '#".$myColor[$col+5]."', '#FF0000')\">";
 				// $ret.="<td bgcolor=\"#".$myColor[$col]."\">&nbsp;</td>";
-				$ret.="<td>&nbsp;</td>";
 		
 				foreach($tabTitre as $name=>$v)
 				{
@@ -639,55 +760,124 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 					}
 					else
 					{
-						$ret.="<td ".(($val[$name]["align"]!="") ? "align='".$val[$name]["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").(($val[$name]["color"]!="") ? " style='background-color:#".$val[$name]["color"].";'" : "").">".$val[$name]["aff"]."</td>";
+						$ret.="<td data-sort='".$val[$name]["val"]."' ".(($val[$name]["align"]!="") ? "align='".$val[$name]["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").(($val[$name]["color"]!="") ? " style='background-color:#".$val[$name]["color"].";'" : "").">".$val[$name]["aff"]."</td>";
 					}
 				}
 				$ret.="</tr>\n";
-			}
+			// }
 			$ii=$ii+1;
 		}
 	}
 	
 	if ($affsubb==1)
 	{
+		$ret.="<tfoot>";
 		$ret.=$subb;
+		$ret.="</tfoot>";
 	}
+	$ret.="</tbody>\n";
 
 	$ret.="</table>\n";
 
 	// Affiche la liste des pages
-	if (is_array($tabValeur))
-	{
-		$nbtot=($nbline>0) ? $nbline : count($tabValeur);
-		if ($nbtot>$limit)
-		{
-			$lstpage="";
-			$ii=1;
-			$t=0;
-			$nbp=20;
-			for($i=0; $i<$nbtot; $i=$i+$limit)
-			{
-				if (($i<=$start) && ($i>$start-$limit))
-				{
-					$lstpage.="<a href='$page&order=$order".(($trie!="") ? "&trie=$trie" : "").(($url!="") ? "&$url" : "")."&ts=$i'>[$ii]</a> ";
-					$t=0;
-				}
-				else if ( (($i>$start-$nbp*$limit/2) && ($i<$start+$nbp*$limit/2)) || ($i>$nbtot-$limit) || ($i==0))
-				{
-					$lstpage.="<a href='$page&order=$order".(($trie!="") ? "&trie=$trie" : "").(($url!="") ? "&$url" : "")."&ts=$i'>$ii</a> ";
-					$t=0;
-				}
-				else if ($t==0)
-				{
-					$lstpage.=" ... ";
-					$t=1;
-				}
-				$ii=$ii+1;
-			}
+	// if (is_array($tabValeur))
+	// {
+		// $nbtot=($nbline>0) ? $nbline : count($tabValeur);
+		// if ($nbtot>$limit)
+		// {
+			// $lstpage="";
+			// $ii=1;
+			// $t=0;
+			// $nbp=20;
+			// for($i=0; $i<$nbtot; $i=$i+$limit)
+			// {
+				// if (($i<=$start) && ($i>$start-$limit))
+				// {
+					// $lstpage.="<a href='$page&order=$order".(($trie!="") ? "&trie=$trie" : "").(($url!="") ? "&$url" : "")."&ts=$i'>[$ii]</a> ";
+					// $t=0;
+				// }
+				// else if ( (($i>$start-$nbp*$limit/2) && ($i<$start+$nbp*$limit/2)) || ($i>$nbtot-$limit) || ($i==0))
+				// {
+					// $lstpage.="<a href='$page&order=$order".(($trie!="") ? "&trie=$trie" : "").(($url!="") ? "&$url" : "")."&ts=$i'>$ii</a> ";
+					// $t=0;
+				// }
+				// else if ($t==0)
+				// {
+					// $lstpage.=" ... ";
+					// $t=1;
+				// }
+				// $ii=$ii+1;
+			// }
 
-			$ret.="Pages : $lstpage<br />\n";
-		}
+			// $ret.="Pages : $lstpage<br />\n";
+		// }
+	// }
+
+	// $ret.="<script type='text/javascript' src='https://code.jquery.com/jquery-3.3.1.js'></script>";
+	$ret.="<link rel='stylesheet' type='text/css' href='".$MyOpt["host"]."/core/external/jquery/css/dataTables.min.css' />";
+	$ret.="<script type='text/javascript' src='".$MyOpt["host"]."/core/external/jquery/jquery.dataTables.min.js'></script>";
+
+	$ret.="<script>";
+	$ret.="$(document).ready(function() {";
+	$ret.="$('#".$idtbl."').DataTable({";
+
+	if ($limit<0)
+	{
+		$limit=count($tabValeur);
 	}
+
+// $limit.',10, 25, 50, 75, 100
+	$lstLimit="";
+	$tabLimit=array(10,25,50,75,100);
+	$s="";
+	$ok=0;
+	foreach($tabLimit as $i=>$l)
+	{
+		if (($limit<$l) && ($ok==0))
+		{
+			$lstLimit.=$s.$limit;
+			$s=",";
+			$ok=1;
+		}
+		$lstLimit.=$s.$l;
+		$s=",";
+	}
+	if ($limit>100)
+	{
+		$lstLimit.=$s.$limit;
+	}
+
+	$ret.='    "language": { ';
+	$ret.='       "paginate": { "first":"D√©but","last":"Fin","next":"Suivant","previous":"Pr√©c√©dent" },';
+	$ret.='       "search": "Rechercher:",';
+	$ret.='       "lengthMenu":     "Affiche _MENU_ ligne(s)",';
+	$ret.='   	  "loadingRecords": "Chargement...",';
+	$ret.='       "processing":     "Mise en page...",';
+	$ret.='       "emptyTable":     "Pas de donn√©e disponible",';
+	$ret.='       "info":           "Affiche les lignes de _START_ √† _END_ sur _TOTAL_",';
+ 	$ret.='       "infoEmpty":      "Affiche 0 ligne",';
+	$ret.='       "infoFiltered":   "(filtered from _MAX_ total entries)",';
+	$ret.='    },';
+	$ret.='    "pageLength": '.$limit.',';
+	$ret.='    "lengthMenu": [ '.$lstLimit.' ],';
+
+	$ret.='    "columns": [';
+	$o="";
+	$i=0;
+	foreach($tabTitre as $name=>$t)
+	{
+		$ret.='{ "name": "'.$name.'"},';
+		if ($name==$order)
+		{
+			$o='   "order": [[ '.$i.', "'.(($trie=="d") ? "asc" : "desc").'" ]]';
+		}
+		$i=$i+1;
+	}
+	$ret.='],';
+	$ret.=$o;
+
+	$ret.="}) });";
+	$ret.="</script>";
 
 	return $ret;
   }
@@ -728,9 +918,133 @@ function TrieValInv ($a, $b)
 
 */
 
+function AfficheTableauRemote($tabTitre="",$url,$order="",$trie="d",$search,$nbline=25)
+{
+	global $mod,$rub,$corefolder,$MyOpt;
+
+	$idtbl=uniqid("tbl_");
+	$ret ="\n<table id='".$idtbl."' class='tableauAff'>\n";
+
+	$ret.="<thead><tr>";
+
+	if (!is_array($tabTitre))
+	{
+	  	$tabTitre=array();
+	  	foreach($tabValeur[0] as $name=>$t)
+	  	{
+	  	  	$tabTitre[$name]["aff"]=$name;
+	  	}
+	}
+
+  	foreach($tabTitre as $name=>$v)
+	{
+		if (!isset($v["align"]))
+		{
+			$tabTitre[$name]["align"]="center";
+			$v["align"]="center";
+		}
+		if (!isset($v["mobile"]))
+		{
+			$tabTitre[$name]["mobile"]="";
+			$v["mobile"]="";
+		}
+
+		if ($name==$order)
+		{
+			$ret.="<th width='".$v["width"]."'".(($v["align"]!="") ? " align='".$v["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").">";
+			// $ret.="<b><a href='$page&order=$name&trie=".(($trie=="d") ? "i" : "d").(($url!="") ? "&$url" : "")."&ts=0'>".$v["aff"]."</a></b>";
+		  	// $ret.=" <img src='".$MyOpt["host"]."/".$corefolder."/static/images/sens_$trie.gif' border=0>";
+			$ret.=$v["aff"];
+		}
+		else if ($v["aff"]=="<line>")
+		{
+			if ((!isset($v["width"])) || (!is_numeric($v["width"])))
+			{
+				$v["width"]=1;
+			}
+			$ret.="<th style='width:".$v["width"]."px; border-left: 1px solid black;'".(($v["mobile"]=="no") ? " class='noMobile'" :"").">";
+		}
+		else
+		{
+			$ret.="<th width='".$v["width"]."'".(($v["align"]!="") ? " align='".$v["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").">";
+			// $ret.="<b><a href='$page&order=$name&trie=d".(($url!="") ? "&$url" : "")."&ts=0'>".$v["aff"]."</a></b>";
+			$ret.=$v["aff"];
+		}
+		if (isset($v["sub"]))
+		{
+			$affsub=1;
+		}
+		if (isset($v["bottom"]))
+		{
+			$affsubb=1;
+		}
+		
+		$ret.="</th>";
+	}
+	$ret.="</tr></thead>\n";
+
+
+	$ret.="<tbody>\n";
+
+	$ret.="</tbody>\n";
+	// if ($affsubb==1)
+	// {
+		// $ret.="<tfoot>";
+		// $ret.=$subb;
+		// $ret.="</tfoot>";
+	// }
+	$ret.="</table>\n";
+
+	$ret.="<link rel='stylesheet' type='text/css' href='".$MyOpt["host"]."/core/external/jquery/css/dataTables.min.css' />";
+	$ret.="<script type='text/javascript' src='".$MyOpt["host"]."/core/external/jquery/jquery.dataTables.min.js'></script>";
+
+	$ret.="<script>";
+	$ret.='$(document).ready(function() {';
+	$ret.='  $("#'.$idtbl.'").DataTable({';
+	if (!$search)
+	{
+		$ret.='"searching": false,';
+	}
+	$ret.='    "language": { ';
+	$ret.='       "paginate": { "first":"D√©but","last":"Fin","next":"Suivant","previous":"Pr√©c√©dent" },';
+	$ret.='       "search": "Rechercher:",';
+	$ret.='       "lengthMenu":     "Affiche _MENU_ ligne(s)",';
+	$ret.='   	  "loadingRecords": "Chargement...",';
+	$ret.='       "processing":     "Mise en page...",';
+	$ret.='       "emptyTable":     "Pas de donn√©e disponible",';
+	$ret.='       "info":           "Lignes de _START_ √† _END_ sur un total de _TOTAL_",';
+ 	$ret.='       "infoEmpty":      "Affiche 0 ligne",';
+	$ret.='       "infoFiltered":   "(filtered from _MAX_ total entries)",';
+	$ret.='    },';
+	$ret.='    "pageLength": '.$nbline.',';
+	$ret.='    "processing": true,';
+    $ret.='    "serverSide": true,';
+    $ret.='    "ajax": "'.$url.'",';
+	$ret.='    "columns": [';
+	
+	$o="";
+	$i=0;
+	foreach($tabTitre as $name=>$t)
+	{
+		$ret.='{ "name": "'.$name.'"},';
+		if ($name==$order)
+		{
+			$o='   "order": [[ '.$i.', "'.(($trie=="d") ? "asc" : "desc").'" ]]';
+		}
+		$i=$i+1;
+	}
+	$ret.=' ],';
+	$ret.=$o;
+	$ret.='   });';
+	$ret.='});';
+	$ret.="</script>";
+
+	return $ret;
+}
+
 function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url="",$start=0,$limit=0,$nbline=0,$affsearch=false,$sort=true,$showicon="")
 {
-	global $mod,$rub,$tabsearch,$corefolder;
+	global $mod,$rub,$tabsearch,$corefolder,$MyOpt;
 	$ls="";
 	if (is_array($tabsearch))
 	{
@@ -795,7 +1109,7 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 			{
 				$ret.="<b>".$v["aff"]."</b>";
 			}
-		  	$ret.=" <img src='".$corefolder."/static/images/sens_$trie.gif' border=0><input type='hidden' name='trie' value='".$trie."'><input type='hidden' name='order' value='".$order."'>";
+		  	$ret.=" <img src='".$MyOpt["host"]."/".$corefolder."/static/images/sens_$trie.gif' border=0><input type='hidden' name='trie' value='".$trie."'><input type='hidden' name='order' value='".$order."'>";
 			$sub.="<th align='".$v["align"]."'>".((isset($v["sub"])) ? $v["sub"] : "").(($v["mobile"]=="no") ? " class='noMobile'" :"")."</th>";
 			$subb.="<th align='".$v["align"]."'>".((isset($v["bottom"])) ? $v["bottom"] : "").(($v["mobile"]=="no") ? " class='noMobile'" :"")."</th>";
 			$search.="<th><input type='text' style='width:".$v["width"]."px;' name='tabsearch[".$name."]' value='".((isset($tabsearch[$name])) ? $tabsearch[$name] : '').(($v["mobile"]=="no") ? " class='noMobile'" :"")."' OnChange='document.getElementById(\"form_tableau\").submit();'></th>";
@@ -965,7 +1279,7 @@ function TrieProduit2 ($a, $b)
   }
 
 
-// Calcul un dÈgradÈ de couleur
+// Calcul un d√©grad√© de couleur
 function CalcColor($color,$pour,$fcolor="FFFFFF")
   {
 	$color2=str_replace('#','',$color);
@@ -990,11 +1304,11 @@ function CalcColor($color,$pour,$fcolor="FFFFFF")
   }
 
 
-/* **** ComplËte une chaine de caractËres ****
+/* **** Compl√®te une chaine de caract√®res ****
 
-	$txt	Chaine ‡ complÈter
-	$nb	Nb de caractËres que doit comporter la chaine
-	$car	CaractËre de remplissage  
+	$txt	Chaine √† compl√©ter
+	$nb	Nb de caract√®res que doit comporter la chaine
+	$car	Caract√®re de remplissage  
 */
 function CompleteTxt($txt,$nb,$car)
   {
@@ -1054,7 +1368,7 @@ function AffMontant($val)
 	return $ret;
   }
 
-// Duplique une chaine de caractËres
+// Duplique une chaine de caract√®res
 function Duplique($txt,$nb)
   {
 	$ret="";
@@ -1084,7 +1398,7 @@ function CalcSize($s)
 	}
 }
 
-// Affiche les 4 premiËres lignes d'un texte
+// Affiche les 4 premi√®res lignes d'un texte
 
 /*
 Truc mavchin<BR>chose et companie<BR>1<BR>
@@ -1254,7 +1568,7 @@ function AffHeures($min){
 	return $ret;
 }
 
-// Affiche un tÈlÈphone
+// Affiche un t√©l√©phone
 function AffTelephone($txt)
   {
   	$rtxt=$txt;
@@ -1263,7 +1577,7 @@ function AffTelephone($txt)
   }
 
 
-// GÈnËre le fichier des variables
+// G√©n√®re le fichier des variables
 function GenereVariables($tab)
 {
 	global $sql,$gl_tbl;
@@ -1272,7 +1586,7 @@ function GenereVariables($tab)
 	$conffile="../config/variables.inc.php";
 	if (!file_exists($conffile))
 	{
-		$ret.="CrÈation du fichier";
+		$ret.="Cr√©ation du fichier";
 	}
 
 	$tab["version"]["valeur"]=time();
@@ -1319,11 +1633,11 @@ function GenereVariables($tab)
 	
 		fwrite($fd,"?>\n");
 		fclose($fd);
-		$ret.="Enregistrement effectuÈ";
+		$ret.="Enregistrement effectu√©";
 	}
 	else
 	{
-		$ret.="AccËs refusÈ. Fichier : ".$conffile;
+		$ret.="Acc√®s refus√©. Fichier : ".$conffile;
 	}
 	return $ret;
 }
@@ -1333,7 +1647,7 @@ function GenereFichierVariables($tab)
 	$ret="";
 	$conffile="../config/variables.inc.php";
 	if (!file_exists($conffile))
-		{ $ret.="CrÈation du fichier";}
+		{ $ret.="Cr√©ation du fichier";}
 
 	$tab["version"]=time();
 	if(is_writable($conffile))
@@ -1357,11 +1671,11 @@ function GenereFichierVariables($tab)
 		
 		fwrite($fd,"?>\n");
 		fclose($fd);
-		$ret.="Enregistrement effectuÈ";
+		$ret.="Enregistrement effectu√©";
 	}
 	else
 	{
-		$ret.="AccËs refusÈ. Fichier : ".$conffile;
+		$ret.="Acc√®s refus√©. Fichier : ".$conffile;
 	}
 	return $ret;
 }
@@ -1417,7 +1731,7 @@ function getDistance($lat1, $lon1, $lat2, $lon2, $unit="K") {
       }
 }
 
-// Calcul du cap pour aller d'un point ‡ un autre
+// Calcul du cap pour aller d'un point √† un autre
 function getBearing($lat1, $lon1, $lat2, $lon2) {
   //difference in longitudinal coordinates
   $dLon = deg2rad($lon2) - deg2rad($lon1);

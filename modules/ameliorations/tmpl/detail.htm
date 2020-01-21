@@ -39,13 +39,13 @@
 
 </script>
 
-<FORM name="form_detail" method="post" action="index.php" enctype="multipart/form-data">
+<FORM name="form_detail" method="post" action="{path_root}/index.php" enctype="multipart/form-data">
 	<INPUT type="hidden" name="mod" value="ameliorations">
 	<INPUT type="hidden" name="rub" value="detail">
 	<INPUT type="hidden" name="id" value="{form_id}">
 	<INPUT type="hidden" name="checktime" value="{form_checktime}">
 
-	<p class="lastupdate">Dernière mise à  jour : {form_usr_maj} {form_dte_maj}</p>
+	<p class="lastupdate">DerniÃ¨re mise Ã Â  jour : {form_usr_maj} {form_dte_maj}</p>
 
 	<div class='actualitesBloc'>
 		<div class="actualitesPhoto" >
@@ -60,7 +60,7 @@
 				</div>
 			</div>
 			<div class='formulaire' style='border: 0px; padding-left:30px;'>
-			<p><label>Numéro</label>{form_numid}</p>
+			<p><label>NumÃ©ro</label>{form_numid}</p>
 			<p><label>Status</label>{form_status}</p>
 			<p><label>Version</label>{form_version}</p>
 			<p><label>Module</label>{form_module}</p>
@@ -99,10 +99,10 @@
 				</div>
 				<div class="actualitesIcones">
 					<!-- BEGIN: icn_modifier -->
-					<a href="index.php?mod=actualites&fonc=editer&id={msg_id}" class='imgDelete'><img src="{path_module}/img/icn16_editer.png" /></a>
+					<a href="{path_root}/index.php?mod=actualites&fonc=editer&id={msg_id}" class='imgDelete'><img src="{path_module}/img/icn16_editer.png" /></a>
 					<!-- END: icn_modifier -->
 					<!-- BEGIN: icn_supprimer -->
-					<a href="#" class='imgDelete' OnClick="ConfirmeClick('index.php?mod=actualites&fonc=supprimer&id={msg_id}#id{msg_idprev}','Souhaitez-vous supprimer cette actualité ?');"><img src="{path_module}/img/icn16_supprimer.png" /></a>
+					<a href="#" class='imgDelete' OnClick="ConfirmeClick('{path_root}/index.php?mod=actualites&fonc=supprimer&id={msg_id}#id{msg_idprev}','Souhaitez-vous supprimer cette actualitÃ© ?');"><img src="{path_module}/img/icn16_supprimer.png" /></a>
 					<!-- END: icn_supprimer -->
 				</div>
 			</div>
@@ -115,7 +115,7 @@
 
 <!-- BEGIN: aff_commentaire_vide -->
 <div id="form_reponse" class="actualitesNouveau">
-	<form name="form_reponse" method="post" action="index.php" enctype="multipart/form-data">
+	<form name="form_reponse" method="post" action="{path_root}/index.php" enctype="multipart/form-data">
 		<input type="hidden" name="mod" value="ameliorations">
 		<input type="hidden" name="rub" value="detail">
 		<input type="hidden" name="id" value="{form_id}">

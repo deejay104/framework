@@ -1,9 +1,9 @@
-<?
-// ---- Refuse l'accès en direct
+<?php
+// ---- Refuse l'accÃ¨s en direct
 	if ((!isset($token)) || ($token==""))
 	  { header("HTTP/1.0 401 Unauthorized"); exit; }
 
- // ---- Vérifie les paramètres
+ // ---- VÃ©rifie les paramÃ¨tres
 	$fonc=checkVar("fonc","varchar");
 
 // ---- 
@@ -63,6 +63,6 @@
   
 function AjoutLog($txt)
 {
-	return utf8_encode(htmlentities($txt,ENT_HTML5,"ISO-8859-1"))."<br />";
+	return htmlentities($txt,ENT_HTML5,"ISO-8859-1")."<br />";
 }
 ?>

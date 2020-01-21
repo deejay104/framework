@@ -20,21 +20,15 @@
 ?>
 
 <?
-// ---- Refuse l'accès en direct
+// ---- Refuse l'accÃ¨s en direct
 	if ((!isset($token)) || ($token==""))
 	  { header("HTTP/1.0 401 Unauthorized"); exit; }
 
-// ---- Charge les dépendances
+// ---- Charge les dÃ©pendances
 	require_once ("class/document.inc.php");
 	require_once ("class/echeance.inc.php");
 
-// ---- Charge le template
-	$tmpl_x = new XTemplate (MyRep("index.htm"));
 
-	$tmpl_x->assign("site_title", $MyOpt["site_title"]);
-	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
-	$tmpl_x->assign("form_checktime",$_SESSION['checkpost']);
-	
 // ---- Variables
 	$id=checkVar("id","numeric");
 	$form_titre=checkVar("form_titre","varchar");
@@ -72,19 +66,16 @@
 				$sql->Edit("actualites",$MyOpt["tbl"]."_actualites",0,$td);
 			}
 			$id=0;
+
 		}
 	}
 
-// ---- Supprime le post
-	// if ( ($fonc=="supprimer") && (GetDroit("SupprimeActualite")) && ($id>0) )
-	// {
-		// $td=array("actif"=>"non","uid_maj"=>$gl_uid,"dte_maj"=>now());
-		// $sql->Edit("actualites",$MyOpt["tbl"]."_actualites",$id,$td);
-		// $id=0;
-	// }
+// ---- url de l'api
+	$tmpl_x->assign("site_title",$MyOpt["site_title"]);
+	$tmpl_x->assign("apiurlget",geturlapi("actualites","actualites","get","q=1"));
+	$tmpl_x->assign("apiurldel",geturlapi("actualites","actualites","del","q=1"));
 
-
-// ---- Affiche les échéances
+// ---- Affiche les Ã©chÃ©ances
 	$lstdte=ListEcheance($sql,$gl_uid);
 		
 	if (is_array($lstdte))
@@ -118,85 +109,14 @@
 	}
 	else
 	{
-		$tmpl_x->assign("news_title", "Nouvelle actualité");
+		$tmpl_x->assign("news_title", "Nouvelle actualitÃ©");
 		$tmpl_x->assign("news_message", $txtnewmsg);
 		$tmpl_x->assign("new_color", "bbbbbb");	
 	}
 
-	$tmpl_x->assign("news_title_clear", "Nouvelle actualité");
+	$tmpl_x->assign("news_title_clear", "Nouvelle actualitÃ©");
 	$tmpl_x->assign("news_message_clear", $txtnewmsg);
 	$tmpl_x->assign("form_id", $id);
-
-
-// ---- Actualités
-
-/*
-	$limit=checkVar("limit","numeric");
-	if ( ($limit==0) )
-	  { $limit=10; }
-	$tmpl_x->assign("aff_limit", $limit+5);	
-
-	$search=addslashes(checkVar("search","varchar",10));
-
-	$q="";
-	if ($search!="")
-	  {
-	  	$q=" AND (titre LIKE '%".$search."%' OR message LIKE '%".$search."%') ";
-			$tmpl_x->assign("aff_search", $search);
-  	
-	  }
-	$query="SELECT * FROM `".$MyOpt["tbl"]."_actualites` WHERE actif='oui' $q ORDER BY dte_creat DESC LIMIT 0,$limit";
-	$sql->Query($query);
-	$news=array();
-	for($i=0; $i<$sql->rows; $i++)
-	{ 
-		$sql->GetRow($i);
-		$news[$i]=$sql->data;
-	}
-
-	$tmpl_x->assign("msg_lastid", (isset($sql->data["id"])) ? $sql->data["id"] : "0" );	
-
-	$idprev=0;
-	foreach($news as $id=>$d)
-	{
-		$resusr=new user_core($d["uid_creat"],$sql,false,false);
-
-		$txt=nl2br($d["message"]);
-		$txt=preg_replace("/((http|https|ftp):\/\/[^ \n\r<]*)/si","<a href='$1' target='_blank'>$1</a>",$txt);
-		$txt=preg_replace("/ (www\.[^ |\/]*)/si","<a href='http://$1' target='_blank'>$1</a>",$txt);
-
-		$tmpl_x->assign("msg_id", $d["id"]);	
-		$tmpl_x->assign("msg_titre", $d["titre"]);	
-		$tmpl_x->assign("msg_message", $txt);	
-		$tmpl_x->assign("msg_autheur", $resusr->Aff("fullname"));	
-		$tmpl_x->assign("msg_date", DisplayDate($d["dte_creat"]));
-
-		$lstdoc=ListDocument($sql,$d["uid_creat"],"avatar");
-
-		if (count($lstdoc)>0)
-		{
-			$img=new document_core($lstdoc[0],$sql);
-			$tmpl_x->assign("msg_avatar",$img->GenerePath(64,64));
-		}
-		else
-		{
-			$tmpl_x->assign("msg_avatar","static/images/icn64_membre.png");
-		}				
-
-		$tmpl_x->assign("msg_idprev", $idprev);	
-		$idprev=$d["id"];
-
-		if (GetDroit("SupprimeActualite"))
-		{
-			$tmpl_x->parse("corps.aff_message.icn_supprimer");
-		}
-		if ( (($gl_uid==$d["uid_creat"]) && (time()-strtotime($d["dte_creat"])<3600)) || (GetDroit("ModifActualite")) )
-		{
-			$tmpl_x->parse("corps.aff_message.icn_modifier");
-		}
-		$tmpl_x->parse("corps.aff_message");
-	}
-*/
 	
 // ---- Personalisation
   	

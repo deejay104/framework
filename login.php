@@ -171,6 +171,7 @@
 	$tmpl_prg->assign("version", $version."-".$core_version.(($MyOpt["maintenance"]=="on") ? " - ".ucwords($tabLang["core_maintenance"]) : ""));
 	$tmpl_prg->assign("site_title", $MyOpt["site_title"]);
 	$tmpl_prg->assign("corefolder", $corefolder);
+	$tmpl_prg->assign("rootfolder", $MyOpt["host"]);
 
 	$tmpl_prg->assign("style_url", GenereStyle(($theme=="phone") ? "phone" : "default"));
 

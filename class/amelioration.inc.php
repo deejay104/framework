@@ -1,4 +1,4 @@
-<?
+<?php
 /*
     MnMs Framework
     Copyright (C) 2018 Matthieu Isorez
@@ -29,7 +29,7 @@ class amelioration_core extends objet_core
 
 	protected $fields=array
 	(
-		"titre"=>Array("type"=>"varchar","len"=>100),
+		"titre"=>Array("type"=>"varchar","len"=>100,"formlen"=>500),
 		"description"=>Array("type"=>"text"),
 		"version"=>Array("type"=>"varchar","len"=>10),
 		"status"=>Array("type"=>"enum","index" => "1","default"=>"1new"),
@@ -42,7 +42,7 @@ class amelioration_core extends objet_core
 	
 	protected $tabList=array(
 		"status"=>array(
-			"fr"=>array('1new'=>'Nouveau','2sched'=>'Prochaine version','3inprg'=>'En cours','4test'=>'En test','5close'=>'Publié','6duplicate'=>'Doublon','7cancel'=>'Annulé'),
+			"fr"=>array('1new'=>'Nouveau','2sched'=>'Prochaine version','3inprg'=>'En cours','4test'=>'En test','5close'=>'PubliÃ©','6duplicate'=>'Doublon','7cancel'=>'AnnulÃ©'),
 			"en"=>array('1new'=>'New','2sched'=>'Next release','3inprg'=>'In progress','4test'=>'Testing','5close'=>'Released','6duplicate'=>'Duplicate','7cancel'=>'Canceled'),
 		),
 		"module"=>array(
@@ -101,16 +101,16 @@ class amelioration_core extends objet_core
 			$tabList=json_decode($data,true);
 
 			$this->id=$id;
-			$this->uid_creat=utf8_decode($tabList["uid_creat"]);
-			$this->dte_creat=utf8_decode($tabList["dte_creat"]);
-			$this->uid_maj=utf8_decode($tabList["uid_maj"]);
-			$this->dte_maj=utf8_decode($tabList["dte_maj"]);
+			$this->uid_creat=$tabList["uid_creat"];
+			$this->dte_creat=$tabList["dte_creat"];
+			$this->uid_maj=$tabList["uid_maj"];
+			$this->dte_maj=$tabList["dte_maj"];
 
 			foreach($this->data as $k=>$v)
 			{
 				if (isset($tabList["data"][$k]))
 				{
-					$this->data[$k]=utf8_decode($tabList["data"][$k]);
+					$this->data[$k]=$tabList["data"][$k];
 				}
 				else
 				{
@@ -132,7 +132,7 @@ class amelioration_core extends objet_core
 		{
 			$post=array();
 			// $post[1]['titre']=utf8_encode("hello");
-			// $post['description']=utf8_encode("Description détaillée de l'amélioration");
+			// $post['description']=utf8_encode("Description dÃ©taillÃ©e de l'amÃ©lioration");
 			foreach($this->data as $k=>$v)
 			{
 				$post["data"][$k]=utf8_encode($v);
@@ -178,8 +178,8 @@ class amelioration_core extends objet_core
 				$usr = new user_core($id,$this->sql,false,true);
 				if ($usr->data["mail"]!="")
 				{
-					// MyMail($MyOpt["from_email"],$usr->data["mail"],array(),"[Amélioration] ".$this->data["titre"],);
-					// $this->data["description"]."<br><br><a href='".$MyOpt["host"]."/index.php?mod=ameliorations&rub=detail&id=".$this->id."'>-Détail-</a>"
+					// MyMail($MyOpt["from_email"],$usr->data["mail"],array(),"[AmÃ©lioration] ".$this->data["titre"],);
+					// $this->data["description"]."<br><br><a href='".$MyOpt["host"]."/index.php?mod=ameliorations&rub=detail&id=".$this->id."'>-DÃ©tail-</a>"
 
 					$tabvar=array();
 					$tabvar["description"]=$this->val("description");
@@ -187,7 +187,7 @@ class amelioration_core extends objet_core
 					$tabvar["num"]="#".CompleteTxt($this->id,4,"0");
 					$tabvar["id"]=$this->id;
 				
-					SendMailFromFile($MyOpt["from_email"],$usr->data["mail"],array(),"[Amélioration] ".$this->data["titre"],$tabvar,"amelioration");
+					SendMailFromFile($MyOpt["from_email"],$usr->data["mail"],array(),"[AmÃ©lioration] ".$this->data["titre"],$tabvar,"amelioration");
 				}
 			}
 		}
@@ -195,15 +195,16 @@ class amelioration_core extends objet_core
 	
 	function aff($key,$typeaff="html",$formname="form_data",&$render="",$formid="")
 	{
+		global $MyOpt;
 		$ret=parent::aff($key,$typeaff,$formname,$render,$formid);
 
 		if ($key=="id")
 		{
-			$ret="<a href='index.php?mod=ameliorations&rub=detail&id=".$this->id."'>#".CompleteTxt($this->id,4,"0")."</a>";
+			$ret="<a href='".geturl("ameliorations","detail","id=".$this->id)."'>#".CompleteTxt($this->id,4,"0")."</a>";
 		}
 		else if (($key=="description") && ($render!="form"))
 		{
-			$ret=preg_replace("/&num;([0-9]{4})/","<a href='index.php?mod=ameliorations&rub=detail&id=$1'>#$1</a>",$ret);
+			$ret=preg_replace("/&num;([0-9]{4})/","<a href='".$MyOpt["host"]."/index.php?mod=ameliorations&rub=detail&id=$1'>#$1</a>",$ret);
 		}
 		else if ($key=="uid_creat")
 		{
@@ -268,7 +269,7 @@ class amelioration_core extends objet_core
 
 			if ($this->data["mail_dist"]!="")
 			{
-				MyMail($MyOpt["from_email"],$this->data["mail_dist"],array(),"[Amélioration] ".$this->data["titre"],$txt."<br><br><a href='".$MyOpt["host"]."/index.php?mod=ameliorations&rub=detail&id=".$this->id."'>-Détail-</a>");
+				MyMail($MyOpt["from_email"],$this->data["mail_dist"],array(),"[AmÃ©lioration] ".$this->data["titre"],$txt."<br><br><a href='".$MyOpt["host"]."/index.php?mod=ameliorations&rub=detail&id=".$this->id."'>-DÃ©tail-</a>");
 			}
 
 			$lst=ListActiveUsers($this->sql,"",array("NotifAmelioration"),"non");
@@ -278,7 +279,7 @@ class amelioration_core extends objet_core
 				$usr = new user_core($id,$this->sql,false,true);
 				if ($usr->data["mail"]!="")
 				{
-					MyMail($MyOpt["from_email"],$usr->data["mail"],array(),"[Amélioration] ".$this->data["titre"],$txt."<br><br><a href='".$MyOpt["host"]."/index.php?mod=ameliorations&rub=detail&id=".$this->id."'>-Détail-</a>");
+					MyMail($MyOpt["from_email"],$usr->data["mail"],array(),"[AmÃ©lioration] ".$this->data["titre"],$txt."<br><br><a href='".$MyOpt["host"]."/index.php?mod=ameliorations&rub=detail&id=".$this->id."'>-DÃ©tail-</a>");
 				}
 			}
 			
@@ -345,7 +346,7 @@ class amelioration_core extends objet_core
 			$lst[$i]["usr_creat"]=new user_core($d["uid_creat"],$sql,false,false);
 			if ($d["uid_creat"]==0)
 			{
-				$lst[$i]["usr_creat"]->fullname="Développeur";
+				$lst[$i]["usr_creat"]->fullname="DÃ©veloppeur";
 			}
 		}
 		return $lst;

@@ -1,4 +1,4 @@
-<?
+<?php
 /*
     Easy-Aero
     Copyright (C) 2018 Matthieu Isorez
@@ -19,15 +19,11 @@
 */
 ?>
 
-<?
-// ---- Vérifie le droit d'accès
-	if (!GetDroit("AccesConfigEmails")) { FatalError("Accès non autorisé (AccesConfigEmails)"); }
+<?php
+// ---- VÃ©rifie le droit d'accÃ¨s
+	if (!GetDroit("AccesConfigEmails")) { FatalError("AccÃ¨s non autorisÃ© (AccesConfigEmails)"); }
 
-// ---- Charge le template
-	$tmpl_x = new XTemplate (MyRep("emails.htm"));
-	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
-
-// ---- Vérifie les variables
+// ---- VÃ©rifie les variables
 	$order=checkVar("order","varchar");
 	$trie=checkVar("trie","varchar");
 
@@ -66,7 +62,7 @@
 		$tabValeur[$i]["titre"]["aff"]=$sql->data["titre"];
 		$tabValeur[$i]["id"]["val"]=$sql->data["id"];
 		$tabValeur[$i]["action"]["val"]=$sql->data["id"];
-		$tabValeur[$i]["action"]["aff"]="<div id='action_".$sql->data["id"]."' style='display:none;'><a id='edit_".$sql->data["id"]."' class='imgDelete' ><img src='".$corefolder."/".$module."/".$mod."/img/icn16_editer.png'></a></div>";
+		$tabValeur[$i]["action"]["aff"]="<div id='action_".$sql->data["id"]."' style='display:none;'><a id='edit_".$sql->data["id"]."' class='imgDelete' ><img src='".$MyOpt["host"]."/".$corefolder."/".$module."/".$mod."/img/icn16_editer.png'></a></div>";
 		
 		$tmpl_x->assign("lst_id",$sql->data["id"]);
 		$tmpl_x->parse("corps.lst_edit");
@@ -75,7 +71,9 @@
 	if ($order=="") { $order="groupe"; }
 	if ($trie=="") { $trie="d"; }
 
-	$tmpl_x->assign("aff_tableau",AfficheTableau($tabValeur,$tabTitre,$order,$trie,"",0,"",0,"action"));
+
+// function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",$start=0,$limit=-1,$nbline=0,$showicon="")
+	$tmpl_x->assign("aff_tableau",AfficheTableau($tabValeur,$tabTitre,$order,$trie,"",0,-1,0,"action"));
 	                           // AfficheTableau($tabValeur,$tabTitre,$order,$trie,$url="",$start=0,$limit="",$nbline=0,$showicon="")
 	
 // ---- Affecte les variables d'affichage

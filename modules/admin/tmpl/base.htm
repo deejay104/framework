@@ -16,7 +16,7 @@ function Update()
 
 	$(function() {
 		$.ajax({
-			url:'api.php?mod=admin&rub=update',
+			url:'{path_root}/api.php?mod=admin&rub=update',
 			type: 'html',
 			dataType: 'JSON',
 			success: function(response)
@@ -51,7 +51,7 @@ function ReIndex()
 
 	$(function() {
 		$.ajax({
-			url:'api.php?mod=admin&rub=reindex',
+			url:'{path_root}/api.php?mod=admin&rub=reindex',
 			type: 'html',
 			dataType: 'JSON',
 			success: function(response)
@@ -85,7 +85,7 @@ function ReloadEmails(init)
 
 	$(function() {
 		$.ajax({
-			url:'api.php?mod=admin&rub=emails&fonc='+init,
+			url:'{path_root}/api.php?mod=admin&rub=emails&fonc='+init,
 			type: 'html',
 			dataType: 'JSON',
 			success: function(response)
@@ -122,7 +122,7 @@ function ExportConf()
 	
 	var link = document.createElement("a");
     link.download = "config.json";
-    link.href = 'api.php?mod=admin&rub=exportconf';
+    link.href = '{path_root}/api.php?mod=admin&rub=exportconf';
     link.click();
 }
 
@@ -132,7 +132,7 @@ function ImportConf()
 
 	if (document.getElementById('form_file').value=="")
 	{
-		document.getElementById('msgbox').innerHTML="<div class='msgbox-std msgbox-error'>Aucun fichier n'a été sélectionné</div>";
+		document.getElementById('msgbox').innerHTML="<div class='msgbox-std msgbox-error'>Aucun fichier n'a Ã©tÃ© sÃ©lectionnÃ©</div>";
 		valid = false;
 	}
 	
@@ -143,7 +143,7 @@ function ImportConf()
 		var formData = new FormData(form);
 
 		$.ajax({
-			url:'api.php?mod=admin&rub=importconf',
+			url:'{path_root}/api.php?mod=admin&rub=importconf',
 			type: 'POST',
 			data: formData,
 			dataType: 'JSON',
@@ -155,7 +155,7 @@ function ImportConf()
 				{
 					console.log("ok");
 					document.getElementById("form_import").innerHTML = response.data;
-					document.getElementById('msgbox').innerHTML="<div id='msgbox_import' class='msgbox-std msgbox-ok'>Import de configuration terminé</div>";
+					document.getElementById('msgbox').innerHTML="<div id='msgbox_import' class='msgbox-std msgbox-ok'>Import de configuration terminÃ©</div>";
 					<!-- document.location="index.php"; -->
 				}
 				else

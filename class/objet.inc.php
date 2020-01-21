@@ -1,4 +1,4 @@
-<?
+<?php
 /*
     MnMs Framework
     Copyright (C) 2018 Matthieu Isorez
@@ -163,7 +163,7 @@ class objet_core
 
 		if ($key=="dte_creat")
 		{
-			return "<A href=\"index.php?mod=".$this->mod."&rub=".$this->rub."&id=".$this->id."\">".sql2date($this->dte_creat,"jour")."</A>";
+			return "<A href=\"".geturl($this->mod,$this->rub,"id=".$this->id)."\">".sql2date($this->dte_creat,"jour")."</A>";
 		}
 		
 		
@@ -380,7 +380,8 @@ class objet_core
 			// A voir si on met tous les champs en clicable ou pas
 			if (($this->mod!="") && ($this->rub!="") && ($link))
 			{
-				$ret="<A href=\"index.php?mod=".$this->mod."&rub=".$this->rub."&id=".$this->id."\">".$ret."</A>";
+				// $ret="<A href=\"".$MyOpt["host"]."/index.php?mod=".$this->mod."&rub=".$this->rub."&id=".$this->id."\">".$ret."</A>";
+				$ret="<A href=\"".geturl($this->mod,$this->rub,"id=".$this->id)."\">".$ret."</A>";
 			}
 
 		}

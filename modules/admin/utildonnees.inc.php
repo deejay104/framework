@@ -1,9 +1,5 @@
-<?
-// ---- Charge le template
-	$tmpl_x = LoadTemplate("utildonnees");
-	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
-
-// ---- Vérifie le droit d'accès
+<?php
+// ---- VÃ©rifie le droit d'accÃ¨s
 	if (!GetDroit("AccesConfigDonneesUser")) { FatalError($tabLang["lang_accessdenied"]." (AccesConfigDonneesUser)"); }
 
 // ---- Affiche le menu
@@ -40,7 +36,7 @@
 		}
 	}
 
-// ---- Charge les définitions
+// ---- Charge les dÃ©finitions
 	$query="SELECT * FROM ".$MyOpt["tbl"]."_utildonneesdef WHERE actif='oui' ORDER BY ordre";
 	$sql->Query($query);
 

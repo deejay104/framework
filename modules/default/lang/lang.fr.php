@@ -1,4 +1,4 @@
-<?
+<?php
 	$tabLang["yes"]="oui";
 	$tabLang["no"]="non";
 
@@ -8,8 +8,8 @@
 	$tabLang["core_minutes"]="minutes";
 	$tabLang["core_hour"]="heure";
 	$tabLang["core_hours"]="heures";
-	$tabLang["core_yesterday"]="hier à";
-	$tabLang["core_at"]="à";
+	$tabLang["core_yesterday"]="hier Ã ";
+	$tabLang["core_at"]="Ã ";
 	$tabLang["core_the"]="le ";
 	$tabLang["core_since"]="il y a ";
 	$tabLang["core_ago"]="";
@@ -31,16 +31,16 @@
 	$tabLang["core_membres"]="Membres";
 	$tabLang["core_myinfos"]="Mes informations";
 	$tabLang["core_documents"]="Documents";
-	$tabLang["core_improve"]="Améliorations";
+	$tabLang["core_improve"]="AmÃ©liorations";
 	$tabLang["core_configure"]="Configuration";
-	$tabLang["core_logout"]="Se déconnecter";
+	$tabLang["core_logout"]="Se dÃ©connecter";
 	$tabLang["core_showmobile"]="Affichage smartphone";
 	$tabLang["core_version"]="Version";
 
-	$tabLang["login_noconfig"]="Vous devez creer le fichier de connexion à la base de données";
-	$tabLang["login_update"]="Mise à jour de l'installation";	
+	$tabLang["login_noconfig"]="Vous devez creer le fichier de connexion Ã  la base de donnÃ©es";
+	$tabLang["login_update"]="Mise Ã  jour de l'installation";	
 
-	$tabLang["lang_accessdenied"]="Accès non autorisé";
+	$tabLang["lang_accessdenied"]="AccÃ¨s non autorisÃ©";
 	
 	$tabLang["lang_yes"]="Oui";
 	$tabLang["lang_no"]="Non";
@@ -53,11 +53,11 @@
 	$tabLang["lang_modify"]="Modifier";
 	$tabLang["lang_active"]="Active";
 	$tabLang["lang_enable"]="Activer";
-	$tabLang["lang_disable"]="Désactiver";
+	$tabLang["lang_disable"]="DÃ©sactiver";
 	$tabLang["lang_delete"]="Supprimer";
 	$tabLang["lang_list"]="Liste";
-	$tabLang["lang_lastupdate"]="Dernière mise à jour";
-	$tabLang["lang_lastconnection"]="Dernière connection";
+	$tabLang["lang_lastupdate"]="DerniÃ¨re mise Ã  jour";
+	$tabLang["lang_lastconnection"]="DerniÃ¨re connection";
 	$tabLang["lang_group"]="Groupe";
 	$tabLang["lang_description"]="Description";
 	$tabLang["lang_main"]="Principal";
@@ -69,11 +69,11 @@
 	$tabLang["lang_week"]="Semaine";
 	$tabLang["lang_name"]="Nom";
 
-	$tabLang["lang_datasaved"]="Vos données ont été enregistrées.";
+	$tabLang["lang_datasaved"]="Vos donnÃ©es ont Ã©tÃ© enregistrÃ©es.";
 	$tabLang["lang_dataerror"]="Erreur lors de la sauvegarde";
 
 	$tabLang["lang_documents"]="Documents";
-	$tabLang["lang_deadline"]="Echéances";
+	$tabLang["lang_deadline"]="EchÃ©ances";
 	$tabLang["lang_recipient"]="Destinataire";
 
 ?>

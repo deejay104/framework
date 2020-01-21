@@ -12,17 +12,17 @@
 
 	<div class="encadreInfos">
 		<div class="encadreTitre">Informations</div>
-  		<p style='padding-bottom: 5px;'><A href="index.php?mod=docs">Nombre de documents non lus</A> : <A href="index.php?mod=docs" class="{color_nonlus}">{nb_nonlus}</A></p>
+  		<p style='padding-bottom: 5px;'><A href="{path_root}/docs">Nombre de documents non lus</A> : <A href="index.php?mod=docs" class="{color_nonlus}">{nb_nonlus}</A></p>
 		<!-- BEGIN: lst_echeance -->
 		<p>{form_echeance}</p>
 		<!-- END: lst_echeance -->
 	</div>
 
 	<div class="encadreInfos">
-		<div class="encadreTitre">Rechercher dans les actualités</div>
-		<form name="recherche" method="post" action="index.php" enctype="multipart/form-data">
+		<div class="encadreTitre">Rechercher dans les actualitÃ©s</div>
+		<form name="recherche" method="post" action="{path_root}/index.php" enctype="multipart/form-data">
 			<input type="hidden" name="mod" value="actualites">
-			<p><input id="search" type="text" name="search" OnClick="ClearText(event,'Termes à rechercher');" value="Termes à rechercher" OnKeyUp="CapturePost(event);" style="color:#bbbbbb;"></p>
+			<p><input id="search" type="text" name="search" OnClick="ClearText(event,'Termes Ã  rechercher');" value="Termes Ã  rechercher" OnKeyUp="CapturePost(event);" style="color:#bbbbbb;"></p>
 		</form>
 	</div>
 	{aff_custom}
@@ -30,7 +30,7 @@
 
 <div id="actualites" class="actualites">
 	<div id="actualitesNouveau" class="actualitesNouveau">
-		<form name="actualites" method="post" action="index.php" enctype="multipart/form-data">
+		<form name="actualites" method="post" action="{path_root}/index.php" enctype="multipart/form-data">
 			<input type="hidden" name="mod" value="actualites">
 			<input type="hidden" name="id" value="{form_id}">
 			<input type="hidden" name="checktime" value="{form_checktime}">
@@ -42,45 +42,6 @@
 			</p>
 		</form>
 	</div>
-
-<!-- BEGIN: aff_message_old -->
-<!-- BEGIN: aff_message2 -->
-	<div class='actualitesBloc'>
-		<div class="actualitesPhoto" >
-			<img src="{msg_avatar}" alt="">
-		</div>
-		<div class="actualitesMessage">
-			<div class="actualitesTitre" OnMouseOver="document.getElementById('icone_{msg_id}').style.display='block';" OnMouseOut="document.getElementById('icone_{msg_id}').style.display='none';">
-				<div class="actualitesTitreMsg">
-					<a name="id{msg_id}"></a>
-					<p>{msg_titre}</p>
-					<span>par {msg_autheur}, {msg_date}</span>
-				</div>
-				<div id="icone_{msg_id}" class="actualitesIcones" style='display:none;'>
-					<!-- BEGIN: icn_modifier -->
-					<a href="index.php?mod=actualites&fonc=editer&id={msg_id}" class='imgDelete'><img src="{path_module}/img/icn16_editer.png" /></a>
-					<!-- END: icn_modifier -->
-					<!-- BEGIN: icn_supprimer -->
-					<a href="#" class='imgDelete' OnClick="ConfirmeClick('index.php?mod=actualites&fonc=supprimer&id={msg_id}#id{msg_idprev}','Souhaitez-vous supprimer cette actualité ?');"><img src="{path_module}/img/icn16_supprimer.png" /></a>
-					<!-- END: icn_supprimer -->
-				</div>
-			</div>
-			<div class="actualitesTexte">
-				<p>{msg_message}</p>
-			</div>
-		</div>
-	</div>
-<!-- END: aff_message -->
-
-	<div class='actualitesBloc' style='margin-bottom: 45px;'>
-		<div class="actualitesPhoto" style='width:72px;' >&nbsp;</div>
-		<div class="actualitesMessage">
-			<div class="actualitesSuivant">
-				<a href="index.php?mod=actualites&limit={aff_limit}&search={aff_search}#id{msg_lastid}">-Afficher les actualités suivantes-</a>
-			</div>
-		</div>
-	</div>
-<!-- END: aff_message_old -->
 
 	<div id="news">
 	</div>
@@ -111,7 +72,7 @@
 
 		$.ajax({
 			type: 'GET',
-			url: 'api.php?mod=actualites&rub=actualites&fonc=get&id='+id+'&limit='+limit+'&search='+search,
+			url: '{apiurlget}&id='+id+'&limit='+limit+'&search='+search,
 			dataType: 'JSON',
 
 			success: function(response) {
@@ -123,7 +84,7 @@
 
 						txt="<div id='news_"+value.id+"' class='actualitesBloc'>";
 						txt=txt+"	<div class='actualitesPhoto' >";
-						txt=txt+"		<img src='"+value.avatar+"' alt=''>";
+						txt=txt+"		<img src='{path_root}/"+value.avatar+"' alt=''>";
 						txt=txt+"	</div>";
 						txt=txt+"	<div class='actualitesMessage'>";
 						txt=txt+"		<div class='actualitesTitre' OnMouseOver='document.getElementById(\"icone_"+value.id+"\").style.display=\"block\";' OnMouseOut='document.getElementById(\"icone_"+value.id+"\").style.display=\"none\";'>";
@@ -133,8 +94,8 @@
 						txt=txt+"				<span>par "+value.author+", "+value.date+"</span>";
 						txt=txt+"			</div>";
 						txt=txt+"			<div id='icone_"+value.id+"' class='actualitesIcones' style='display:none;'>";
-						txt=txt+"				<a href='index.php?mod=actualites&fonc=editer&id="+value.id+"' class='imgDelete'><img src='{path_module}/img/icn16_editer.png' /></a>";
-						txt=txt+"				<a href='' class='imgDelete' OnClick='return delNews("+value.id+");'><img src='{path_module}/img/icn16_supprimer.png' /></a>";
+						txt=txt+"				<a href='index.php?mod=actualites&fonc=editer&id="+value.id+"' class='imgDelete'><img src='{path_root}/{path_module}/img/icn16_editer.png' /></a>";
+						txt=txt+"				<a href='' class='imgDelete' OnClick='return delNews("+value.id+");'><img src='{path_root}/{path_module}/img/icn16_supprimer.png' /></a>";
 						txt=txt+"			</div>";
 						txt=txt+"		</div>";
 						txt=txt+"		<div class='actualitesTexte'>";
@@ -158,12 +119,12 @@
 
 	function delNews(id)
 	{
-		var is_confirmed = confirm("Souhaitez-vous supprimer cette actualité ?");
+		var is_confirmed = confirm("Souhaitez-vous supprimer cette actualitÃ© ?");
 		if (is_confirmed) { 
 			
 			$.ajax({
 				type: 'GET',
-				url: 'api.php?mod=actualites&rub=actualites&fonc=del&id='+id,
+				url: '{apiurldel}&id='+id,
 				dataType: 'JSON',
 
 				success: function(response) {
@@ -174,10 +135,10 @@
 		return false;
 	}
 	
-	loadNews(0,4,"");
+	loadNews(0,5,"");
 		
 	$(window).scroll(function() {
-		if($(window).scrollTop() + $(window).height() >= $(document).height()-10) {
+		if($(window).scrollTop() + $(window).height() >= $(document).height()-50) {
 			if (aff==0)
 			{
 				aff=1;
@@ -226,42 +187,5 @@
 
 	
 </script>
-
-<!-- BEGIN: aff_sendmail -->
-<script type="text/javascript">
-	document.getElementById("actualitesMail").innerHTML = "Envoie des emails...";
-	document.getElementById("actualitesMail").style.display = 'block';
-	$(function() {     
-		$.ajax({
-			url:'api.php?mod=actualites&rub=sendmail&id={aff_id}',
-			type: 'html',
-			success: function(content,code)
-			{
-				if (content.charAt(0)=="O")
-				{
-					document.getElementById("actualitesMail").style.backgroundColor = "#BBFFAA";
-				}
-				else
-				{
-					document.getElementById("actualitesMail").style.backgroundColor = "#FFBBAA";
-				}
-
-				document.getElementById("actualitesMail").innerHTML =content;
-
-				if (content.charAt(0)!="*")
-				{
-					document.getElementById("actualitesMail").style.display = 'block';
-				}
-			},
-			error : function(content, code, error)
-			{
-				document.getElementById("actualitesMail").style.backgroundColor = "#FFBBAA";
-				document.getElementById("actualitesMail").innerHTML = "Erreur : "+error;
-				document.getElementById("actualitesMail").style.display = 'block';
-			}
-		});        
-	});
-</script>
-<!-- END: aff_sendmail -->
 
 <!-- END: corps -->

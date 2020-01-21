@@ -3,39 +3,23 @@
 	if ((!isset($token)) || ($token==""))
 	  { header("HTTP/1.0 401 Unauthorized"); exit; }
 
-// ---- Charge le template
-  	$tmpl_menu = new XTemplate (MyRep("menu.htm"));
-	$tmpl_menu->assign("path_module",$corefolder."/".$module."/".$mod);
-
-// ---- Sélectionne le menu courant
-	$tmpl_menu->assign("class_".$rub,"class='pageTitleSelected'");
-	
+	if ($rub=="detail")
+	{
+		addPageMenu($corefolder,$mod,$tabLang["lang_list"],geturl("ameliorations","",""),"icn32_retour.png");
+	}
 // ---- Affiche les menus
-	if (isset($id))
-	{
-		$tmpl_menu->assign("form_id",$id);
-	}
-	else
-	{
-		$id=0;
-	}
-
 	if (GetDroit("CreeAmelioration"))
 	{
-		$tmpl_menu->parse("infos.ajouter");
+		addPageMenu($corefolder,$mod,$tabLang["lang_new"],geturl("ameliorations","detail","id=0"),"icn32_ajouter.png");
 	}
 	if ((GetDroit("ModifAmelioration")) && ($id>0))
 	{
-		$tmpl_menu->parse("infos.modifier");
+		addPageMenu($corefolder,$mod,$tabLang["lang_modify"],geturl("ameliorations","detail","fonc=modifier&id=".$id),"icn32_modifier.png");
 	}	
 	if ((GetDroit("SupprimeAmelioration")) && ($id>0))
 	{
-		$tmpl_menu->parse("infos.supprimer");
+		addPageMenu($corefolder,$mod,$tabLang["lang_delete"],geturl("ameliorations","detail","fonc=supprimer&id=".$id),"icn32_supprimer.png");
 	}
 
-	
-	
-	$tmpl_menu->parse("infos");
-	$aff_menu=$tmpl_menu->text("infos");
-	
+		
 ?>

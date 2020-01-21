@@ -19,9 +19,9 @@
 		if ($res["id"]>0)
 		{
 			$ret["id"]=$id;
-			$ret["titre"]=utf8_encode($res["titre"]);
-			$ret["balise"]=utf8_encode($res["balise"]);
-			$ret["corps"]=utf8_encode($res["corps"]);
+			$ret["titre"]=$res["titre"];
+			$ret["balise"]=$res["balise"];
+			$ret["corps"]=$res["corps"];
 			$ret["result"]="OK";
 		}
 	}
@@ -30,8 +30,8 @@
 	{
 	
 		$td=array();
-		$td["titre"]=addslashes(utf8_decode($_POST["titre"]));
-		$td["corps"]=addslashes(utf8_decode($_POST["corps"]));
+		$td["titre"]=addslashes($_POST["titre"]);
+		$td["corps"]=addslashes($_POST["corps"]);
 		$td["uid_maj"]=$gl_uid;
 		$td["dte_maj"]=now();
 		$sql->Edit("mailtmpl",$MyOpt["tbl"]."_mailtmpl",$id,$td);

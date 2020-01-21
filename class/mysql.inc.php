@@ -12,12 +12,10 @@ class mysql_core{
 
 		$this->id=@mysqli_connect($this->host,$this->user,$pass,$db,$port);
 
-		// mysqli_set_charset($this->id,'iso-8859-1');
-
 		if (mysqli_connect_errno()) {
-	    $this->mysql_ErrorMsg("Échec de la connexion : ".mysqli_connect_error());
+			$this->mysql_ErrorMsg("Ã‰chec de la connexion : ".mysqli_connect_error());
 		}		
-
+		mysqli_set_charset($this->id,'utf8');
 	}
 
 	# Close the connection

@@ -10,14 +10,14 @@ $MyOptHelp[""]="";
 
 // Prefixe des tables
 // $MyOptTmpl["tbl"]="core";
-// $MyOptHelp["tbl"]="Prefixe des tables dans la base de donnÈes";
+// $MyOptHelp["tbl"]="Prefixe des tables dans la base de donn√©es";
 
 // Timestamp pour le cache de la feuille de style
-// $MyOptHelp["styletime"]="Timestamp pour le cache de la feuille de style. Cette valeur sera re-Ècrite lors de l'enregistrement";
+// $MyOptHelp["styletime"]="Timestamp pour le cache de la feuille de style. Cette valeur sera re-√©crite lors de l'enregistrement";
 // $MyOptTmpl["styletime"]=time();
 
 // Timestamp pour la version du fichier de variable
-$MyOptHelp["version"]="Timestamp pour la version du fichier de variables. Cette valeur sera re-Ècrite lors de l'enregistrement";
+$MyOptHelp["version"]="Timestamp pour la version du fichier de variables. Cette valeur sera re-√©crite lors de l'enregistrement";
 $MyOptTmpl["version"]=time();
 
 // Site en maintenance
@@ -30,37 +30,41 @@ $MyOptHelp["debug"]="Affiche des informations de debuggage, notament les requete
 
 // Debug
 $MyOptTmpl["debugtime"]="off";
-$MyOptHelp["debugtime"]="Affiche des informations dÈtaillÈes des temps d'exÈcution";
+$MyOptHelp["debugtime"]="Affiche des informations d√©taill√©es des temps d'ex√©cution";
 
 // path
 $MyOptTmpl["mydir"]=htmlentities(preg_replace("/[a-z]*\.php/","",$_SERVER["SCRIPT_FILENAME"]));
-$MyOptHelp["mydir"]="Chemin de l'installation. UtilisÈ pour l'exÈcution des scripts";
+$MyOptHelp["mydir"]="Chemin de l'installation. Utilis√© pour l'ex√©cution des scripts";
 
 // Language
 $MyOptTmpl["DefaultLanguage"]="fr";
-$MyOptHelp["DefaultLanguage"]="Langue par dÈfault du site";
+$MyOptHelp["DefaultLanguage"]="Langue par d√©fault du site";
 
 // Timezone
 $MyOptTmpl["timezone"]=date_default_timezone_get();
-$MyOptHelp["timezone"]="SÈlectionner la timezone locale (Europe/Paris)";
+$MyOptHelp["timezone"]="S√©lectionner la timezone locale (Europe/Paris)";
 
 
 // URL
 $MyOptTmpl["host"]=htmlentities($_SERVER["REQUEST_SCHEME"]."://".$_SERVER["SERVER_NAME"].preg_replace("/\/[a-z]*\.php/","",$_SERVER["SCRIPT_NAME"]));
-$MyOptHelp["host"]="Chemin complet du site. UtilisÈ pour gÈnÈrer les url statiques.";
+$MyOptHelp["host"]="Chemin complet du site. Utilis√© pour g√©n√©rer les url statiques.";
+
+// Short url
+$MyOptTmpl["shorturl"]="off";
+$MyOptHelp["shorturl"]="Activer les url courtes (on=Activ√©)";
 
 // Titre du site
 $MyOptTmpl["site_title"]="MnMs";
 $MyOptHelp["site_title"]="Titre du site web";
 
-// Temps de validitÈ des tokens
+// Temps de validit√© des tokens
 $MyOptTmpl["tokenexpire"]="0";
-$MyOptHelp["tokenexpire"]="Nombre de jours de validitÈ des sessions par token (0=dÈsactivÈ)";
+$MyOptHelp["tokenexpire"]="Nombre de jours de validit√© des sessions par token (0=d√©sactiv√©)";
 
 
-// email par dÈfault d'envoie des mails
+// email par d√©fault d'envoie des mails
 $MyOptTmpl["from_email"]="noreply@les-mnms.net";
-$MyOptHelp["from_email"]="Email par dÈfault d'envoie des mails";
+$MyOptHelp["from_email"]="Email par d√©fault d'envoie des mails";
 
 // Logo du site dans le dossier images
 $MyOptTmpl["site_logo"]="logo.png";
@@ -68,7 +72,7 @@ $MyOptHelp["site_logo"]="Nom du fichier pour le logo. Il doit se trouver dans le
 
 // Active l'envoi de mail (0=ok, 1=nok)
 $MyOptTmpl["sendmail"]="off";
-$MyOptHelp["sendmail"]="Active l'envoi de mail (on=ActivÈ)";
+$MyOptHelp["sendmail"]="Active l'envoi de mail (on=Activ√©)";
 
 $MyOptTmpl["mail"]["smtp"]="on";
 $MyOptHelp["mail"]["smtp"]="Envoie des mails par SMTP (on=SMTP sinon sendmail)";
@@ -85,47 +89,47 @@ $MyOptHelp["mail"]["username"]="SMTP username";
 $MyOptTmpl["mail"]["password"]="";
 $MyOptHelp["mail"]["password"]="SMTP user password";
 
-// Uid SystËme
+// Uid Syst√®me
 $MyOptTmpl["uid_system"]=2;
-$MyOptHelp["uid_system"]="ID du compte systËme";
+$MyOptHelp["uid_system"]="ID du compte syst√®me";
 
-// Trie par Nom ou par PrÈnom
+// Trie par Nom ou par Pr√©nom
 $MyOptTmpl["globalTrie"]="prenom";
-$MyOptHelp["globalTrie"]="Ordre de trie par dÈfault des listes (prenom, nom,...). Mettre le nom du champs pour le trie";
+$MyOptHelp["globalTrie"]="Ordre de trie par d√©fault des listes (prenom, nom,...). Mettre le nom du champs pour le trie";
 
-// Active la visualisation des membres supprimÈs
+// Active la visualisation des membres supprim√©s
 $MyOptTmpl["showDesactive"]="";
-$MyOptHelp["showDesactive"]="on : Affiche les membres supprimÈs";
+$MyOptHelp["showDesactive"]="on : Affiche les membres supprim√©s";
 
 $MyOptTmpl["showSupprime"]="";
-$MyOptHelp["showSupprime"]="on : Affiche les membres supprimÈs";
+$MyOptHelp["showSupprime"]="on : Affiche les membres supprim√©s";
 
 // Documents
 $MyOptTmpl["expireCache"]="0";
-$MyOptHelp["expireCache"]="Si supÈrieur ‡ 0, nombre d'heure durant lesquelles on garde les fichiers en cache. Si 0, on garde indÈfiniment.";
+$MyOptHelp["expireCache"]="Si sup√©rieur √† 0, nombre d'heure durant lesquelles on garde les fichiers en cache. Si 0, on garde ind√©finiment.";
 
-// API amÈliorations
+// API am√©liorations
 $MyOptTmpl["amelioration"]["url"]="https://admin.les-mnms.net";
-$MyOptHelp["amelioration"]["url"]="URL de l'API pour la centralisation des amÈliorations";
+$MyOptHelp["amelioration"]["url"]="URL de l'API pour la centralisation des am√©liorations";
 $MyOptTmpl["amelioration"]["login"]="";
-$MyOptHelp["amelioration"]["login"]="login de l'API pour la centralisation des amÈliorations";
+$MyOptHelp["amelioration"]["login"]="login de l'API pour la centralisation des am√©liorations";
 $MyOptTmpl["amelioration"]["pwd"]="";
-$MyOptHelp["amelioration"]["pwd"]="Mot de passe de l'API pour la centralisation des amÈliorations";
+$MyOptHelp["amelioration"]["pwd"]="Mot de passe de l'API pour la centralisation des am√©liorations";
 
 
 // Modules
 $MyOptTmpl["module"]["actualites"]="on";
-$MyOptHelp["module"]["actualites"]="Active le module d'actualitÈs (on=ActivÈ)";
+$MyOptHelp["module"]["actualites"]="Active le module d'actualit√©s (on=Activ√©)";
 $MyOptTmpl["module"]["documents"]="on";
-$MyOptHelp["module"]["documents"]="Active le module de gestion des documents (on=ActivÈ)";
+$MyOptHelp["module"]["documents"]="Active le module de gestion des documents (on=Activ√©)";
 $MyOptTmpl["module"]["echeances"]="on";
-$MyOptHelp["module"]["echeances"]="Active le module des ÈchÈances (on=ActivÈ)";
+$MyOptHelp["module"]["echeances"]="Active le module des √©ch√©ances (on=Activ√©)";
 $MyOptTmpl["module"]["ameliorations"]="on";
-$MyOptHelp["module"]["ameliorations"]="Active le module de gestion des amÈliorations (on=ActivÈ)";
+$MyOptHelp["module"]["ameliorations"]="Active le module de gestion des am√©liorations (on=Activ√©)";
 
 
-// UnitÈ
-$MyOptTmpl["devise"]="Ä";
+// Unit√©
+$MyOptTmpl["devise"]="‚Ç¨";
 $MyOptHelp["devise"]="Devise";
 
 // Couleurs pour les feuilles de style

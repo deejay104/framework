@@ -1,4 +1,4 @@
-<?
+<?php
 class echeance_core extends objet_core
 {
 	# Constructor
@@ -41,7 +41,7 @@ class echeance_core extends objet_core
 		}
 	}
 
-	# Charge une échéance par son id
+	# Charge une Ã©chÃ©ance par son id
 	function load($id){
 		$this->id=$id;
 		$sql=$this->sql;
@@ -60,7 +60,7 @@ class echeance_core extends objet_core
 		$this->resa=$res["resa"];
 	}
 
-	# Charge une échéance par son type
+	# Charge une Ã©chÃ©ance par son type
 	function loadtype($tid){
 		$sql=$this->sql;
 		$query = "SELECT echeance.*, echeancetype.context, echeancetype.poste, echeancetype.description, echeancetype.droit, echeancetype.multi, echeancetype.resa FROM ".$this->tbl."_echeance AS echeance LEFT JOIN ".$this->tbl."_echeancetype AS echeancetype ON echeance.typeid=echeancetype.id WHERE echeance.typeid='$tid' AND echeance.uid='".$this->uid."'";
@@ -139,7 +139,7 @@ class echeance_core extends objet_core
 	}
 
 	function Affiche($type="") 
-	{ global $MyOpt;
+	{ global $MyOpt,$corefolder;
 		$ret="";
 
 		if ($this->editmode=="form")
@@ -200,8 +200,8 @@ class echeance_core extends objet_core
 		{
 			$ret.="<div id='aff_echeance".$this->id."' OnMouseOver='document.getElementById(\"echeance_del_".$this->id."\").style.visibility=\"visible\";' OnMouseOut='document.getElementById(\"echeance_del_".$this->id."\").style.visibility=\"hidden\";'>";
 			$ret.="<p>";
-			$ret.="Echéance ".$this->description." le <input name='form_echeance[".$this->id."]' id='form_echeance".$this->id."' value='".$this->dte_echeance."' type='date' style='width: 165px;'>&nbsp;";
-			$ret.="<a href=\"#\" OnClick=\"document.getElementById('form_echeance".$this->id."').value=''; document.getElementById('aff_echeance".$this->id."').style.display='none';\" class='imgDelete'><img  id='echeance_del_".$this->id."' src='static/images/icn16_supprimer.png' style='visibility:hidden;'></a>";
+			$ret.="EchÃ©ance ".$this->description." le <input name='form_echeance[".$this->id."]' id='form_echeance".$this->id."' value='".$this->dte_echeance."' type='date' style='width: 165px;'>&nbsp;";
+			$ret.="<a href=\"#\" OnClick=\"document.getElementById('form_echeance".$this->id."').value=''; document.getElementById('aff_echeance".$this->id."').style.display='none';\" class='imgDelete'><img  id='echeance_del_".$this->id."' src='".$MyOpt["host"]."/".$corefolder."/static/images/icn16_supprimer.png' style='visibility:hidden;'></a>";
 			$ret.="</p>";
 			$ret.="</div>";
 		}
@@ -212,8 +212,8 @@ class echeance_core extends objet_core
 		else
 		{
 			$ret ="<p>";
-			$ret.="<img src='static/images/icn16_".TestDate($this->dte_echeance).".png' style='vertical-align:middle; border: 0px;  height: 16px; width: 16px;'>&nbsp;";
-			$ret.="Echéance ".$this->description." le ".AffDate($this->dte_echeance);
+			$ret.="<img src='".$MyOpt["host"]."/".$corefolder."/static/images/icn16_".TestDate($this->dte_echeance).".png' style='vertical-align:middle; border: 0px;  height: 16px; width: 16px;'>&nbsp;";
+			$ret.="EchÃ©ance ".$this->description." le ".AffDate($this->dte_echeance);
 			$ret.="</p>";
 		}
 		return $ret;

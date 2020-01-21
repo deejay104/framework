@@ -216,7 +216,7 @@ img:hover { color: #{TextBackgroundHover}; }
 
 .noMobile { display: none!important; visibility: hidden; }
 
-/* **** Actualités **** */
+/* **** ActualitÃ©s **** */
 .cadreinfos { width:100%; }
 .encadreInfos { min-width: 300px; padding: 0px 0px 10px 0px; margin-bottom:10px; }
 .encadreInfos label { display: inline-block; width: 325px; text-align: left; vertical-align: top; padding-left: 21px; }

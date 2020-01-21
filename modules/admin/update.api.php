@@ -1,5 +1,5 @@
 <?php
-// ---- Refuse l'accès en direct
+// ---- Refuse l'accÃ¨s en direct
 	if ((!isset($token)) || ($token==""))
 	  { header("HTTP/1.0 401 Unauthorized"); exit; }
 
@@ -14,8 +14,8 @@
 	
 function AjoutLog($txt)
 {
-	return utf8_encode(htmlentities($txt,ENT_HTML5,"ISO-8859-1"))."<br />";
-}	
+	return htmlentities($txt,ENT_HTML5,"UTF-8")."<br />";
+}
 
 	
 // ---- Charge la structure des tables de la version_compare
@@ -36,7 +36,16 @@ function AjoutLog($txt)
 			}
 		}
 	}
-	
+
+// ---- VÃ©rifie le character set de la base
+	$q="SELECT @@character_set_database AS charset, @@collation_database AS col";
+	$res=$sql->QueryRow($q);
+	if ($res["charset"]!="utf8mb4")
+	{
+		$ret["data"].=AjoutLog("Convert characterset from ".$res["charset"]." to UTF-8 for ".$db);	
+		$q="ALTER DATABASE ".$db." CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+		$res=$sql->Update($q);
+	}
 
 // ---- Charge la structure des tables en base
 	$tabProd=array();
@@ -50,6 +59,20 @@ function AjoutLog($txt)
 	
 	foreach($tabProd as $tab=>$t)
 	{
+		// Get Characterset
+		$q ="SELECT CCSA.character_set_name AS charset FROM information_schema.`TABLES` T, information_schema.`COLLATION_CHARACTER_SET_APPLICABILITY` CCSA ";
+		$q.="WHERE CCSA.collation_name = T.table_collation ";
+		$q.="AND T.table_schema = '".$db."' ";
+		$q.="AND T.table_name = '".$tab."'; ";
+		$res=$sql->QueryRow($q);
+		if ($res["charset"]!="utf8mb4")
+		{
+			$ret["data"].=AjoutLog("Convert characterset from ".$res["charset"]." to UTF-8 for ".$db.".".$tab);	
+			$q="ALTER TABLE ".$tab." CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci";
+			$res=$sql->Update($q);
+		}
+		
+		// Get Structure
 		$q="DESCRIBE ".$tab.";";
 		$sql->Query($q);
 		for($i=0; $i<$sql->rows; $i++)
@@ -61,6 +84,8 @@ function AjoutLog($txt)
 				$tabProd[$tab][$sql->data["Field"]]["Default"] = $sql->data["Default"];
 			}
 		}
+
+		// Get Index
 		$q="SHOW INDEX FROM ".$tab.";";
 		$sql->Query($q);
 		for($i=0; $i<$sql->rows; $i++)
@@ -130,7 +155,7 @@ function AjoutLog($txt)
 				$tabProd[$MyOpt["tbl"]."_".$tab]["id"]["Index"]="PRIMARY";
 			}
 		}
-		// Vérifie si le champs obligatoire existent
+		// VÃ©rifie si le champs obligatoire existent
 		// if (!isset($tabTmpl[$tab]["uid_creat"]))
 		// {
 			// $tabTmpl[$tab]["uid_creat"]["Type"]="int(10) UNSIGNED";
@@ -148,7 +173,7 @@ function AjoutLog($txt)
 			// $tabTmpl[$tab]["dte_maj"]["Type"]="datetime";
 		// }
 
-		// Si la table existe ou qu'elle a pu être créée
+		// Si la table existe ou qu'elle a pu Ãªtre crÃ©Ã©e
 		if (isset($tabProd[$MyOpt["tbl"]."_".$tab]))
 		{
 			foreach($tabTmpl[$tab] as $field=>$d)
@@ -205,7 +230,7 @@ function AjoutLog($txt)
 		}
 	}
 
-// ---- Vérification des variables
+// ---- VÃ©rification des variables
 	require ("modules/$mod/conf/variables.tmpl.php");
 	if (file_exists("../modules/admin/conf/variables.tmpl.php"))
 	{
@@ -253,8 +278,8 @@ function AjoutLog($txt)
 
 	if ($nb>0)
 	{
-		// echo $nb." variables ajoutées<br>";
-		$ret["data"].=AjoutLog($nb." variables ajoutées");
+		// echo $nb." variables ajoutÃ©es<br>";
+		$ret["data"].=AjoutLog($nb." variables ajoutÃ©es");
 
 		$res=GenereVariables($MyOptTab);
 		$ret["data"].=AjoutLog($res);
@@ -265,7 +290,7 @@ function AjoutLog($txt)
 	{
 		error_log("easy-aero variable file does not exist");
 		$ret["result"]="NOK";
-		$ret["data"]=AjoutLog("La création du fichier variables a échouée");
+		$ret["data"]=AjoutLog("La crÃ©ation du fichier variables a Ã©chouÃ©e");
 		echo json_encode($ret);
 		exit;
 	}
@@ -347,7 +372,7 @@ function AjoutLog($txt)
 	}
 
 	
-// ---- Mise à jour de la base
+// ---- Mise Ã  jour de la base
 	require("version.php");
 	require($appfolder."/version.php");
 	$query="SELECT id FROM ".$MyOpt["tbl"]."_config WHERE param='version'";

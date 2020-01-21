@@ -1,4 +1,4 @@
-<?
+<?php
 /*
     MnMs Framework
     Copyright (C) 2018 Matthieu Isorez
@@ -19,13 +19,10 @@
 */
 ?>
 
-<?
+<?php
 	require_once ("class/document.inc.php");
-// ---- Charge le template
-	$tmpl_x = new XTemplate (MyRep("editer.htm"));
-	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
 
-// ---- Paramètres
+// ---- ParamÃ¨tres
 	$fid=checkVar("fid","numeric");
 	$mid=checkVar("mid","numeric");
 	$fpars=checkVar("fpars","numeric");
@@ -81,7 +78,7 @@
 	$tmpl_x->assign("fpars", $fpars);
 	$tmpl_x->assign("fprec", $fprec);
 
-// ---- Liste des documents attachés
+// ---- Liste des documents attachÃ©s
 
 	$doc = new document_core(0,$sql);
 	$doc->editmode="form";
@@ -103,7 +100,7 @@
 		  }
 	  }
 
-// ---- Création d'un nouveau forum
+// ---- CrÃ©ation d'un nouveau forum
 	if (($fid==0) || ($fid==$mid))
 	  {
 		$tgrp=array();

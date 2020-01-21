@@ -3,7 +3,7 @@
 <html>
   <head>
 	<title>{site_title} - {module} - {rub}</title>
-	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<link rel="stylesheet" type="text/css" href="{corefolder}/external/jquery/css/smoothness/jquery-ui.css" />
 	<link rel="stylesheet" href="{style_url}" type="text/css" />
 	<link rel="icon" type="image/png" href="{corefolder}/static/images/favicon.png" />
@@ -22,14 +22,13 @@
 		</p>
 		<div class="responsive-menu">
 			<p class="responsive-menulink">
-	   		<a href="index.php"><img src="{corefolder}/static/modules/actualites/img/icn32_titre.png" alt="" /> {core_home}</a>
+	   		<a href="{rootfolder}/index.php"><img src="{corefolder}/static/modules/actualites/img/icn32_titre.png" alt="" /> {core_home}</a>
 <!-- BEGIN: menu_lst_sm -->
-     		<a href="index.php?{menu_url}"><img src="{menu_icone}" alt="" /> {menu_nom}</a>
+     		<a href="{menu_url}"><img src="{menu_icone}" alt="" /> {menu_nom}</a>
 <!-- END: menu_lst_sm -->
-
-	   		<a href="index.php?fonc=logout"><img src="{corefolder}/static/images/icn32_logout.png" alt="" /> {core_logout}</A><br />
+	   		<a href="{rootfolder}/index.php?fonc=logout"><img src="{corefolder}/static/images/icn32_logout.png" alt="" /> {core_logout}</A><br />
 			</p>
-			<p style="text-align:center;" class="responsive-menulink"><a href="index.php?settheme=phone" style="width:100%; color:white;">-{core_showmobile}-</a></p>
+			<p style="text-align:center;" class="responsive-menulink"><a href="{rootfolder}/index.php?settheme=phone" style="width:100%; color:white;">-{core_showmobile}-</a></p>
 		</div> <!-- /.main_menu -->
 	</div> <!-- /responsive_navigation -->
 
@@ -40,12 +39,12 @@
 
 		<div class="navigation">
 			<ul class="main-menu">
-     		<li><a href="index.php"><img src="{corefolder}/static/modules/actualites/img/icn32_titre.png" alt="" /> {core_home}</a></li>
+     		<li><a href="{rootfolder}"><img src="{corefolder}/static/modules/actualites/img/icn32_titre.png" alt="" /> {core_home}</a></li>
 <!-- BEGIN: menu_lst -->
-     		<li><a href="index.php?{menu_url}"><img src="{menu_icone}" alt=""/> {menu_nom}</a></li>
+     		<li><a href="{menu_url}"><img src="{menu_icone}" alt=""/> {menu_nom}</a></li>
 <!-- END: menu_lst -->
 
-     		<li><a href="index.php?fonc=logout"><img src="{corefolder}/static/images/icn32_logout.png" alt="" /> {core_logout}</A></li>
+     		<li><a href="{rootfolder}/index.php?fonc=logout"><img src="{corefolder}/static/images/icn32_logout.png" alt="" /> {core_logout}</A></li>
 			</ul> <!-- /.main_menu -->
 		</div> <!-- /.navigation -->
 	</div> <!-- /#main-sidebar -->
@@ -53,8 +52,13 @@
 	<div id="main-content">
 		<div class='headbox'>
 		<div class='head'>
-			<div class='icone'>{icone}</div>
-			<div class='pagetitle'>{infos}</div>
+			<div class='icone'></div>
+			<div class='pagetitle'>
+<!-- BEGIN: lst_pagemenu -->
+			<p><A href="{pagemenu_url}" {pagemenu_confirm} {pagemenu_class}><IMG src="{pagemenu_image}" border=0 alt="">{pagemenu_name}</A></p>
+<!-- END: lst_pagemenu -->
+			{infos}
+			</div>
 		</div>
 		</div>
 		<div id="msgbox" class="msgbox">
@@ -64,6 +68,13 @@
 		</div>
 		<div id='popup'></div>
 		<div class='main'>
+			<!-- BEGIN: aff_submenu -->
+			 <div class="pagetitle pagemenu">
+			<!-- BEGIN: lst_submenu -->
+				<p><A href="{submenu_url}" {submenu_confirm} {submenu_class}>{submenu_name}</A></p>
+			<!-- END: lst_submenu -->
+			 </div>
+			<!-- END: aff_submenu -->
 			{corps}
 		</div>
 	</div>

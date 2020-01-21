@@ -1,5 +1,5 @@
-<?
-// ---- Refuse l'accès en direct
+<?php
+// ---- Refuse l'accÃ¨s en direct
 	if ((!isset($token)) || ($token==""))
 	  { header("HTTP/1.0 401 Unauthorized"); exit; }
 
@@ -54,13 +54,13 @@
 			{
 				if (!is_array($v))
 				{
-					$tabImport["param"][$k]=utf8_decode($v);
+					$tabImport["param"][$k]=$v;
 				}
 			}
 			
 			$ret=GenereVariables($tabImport["param"]);
 			
-			$ret["data"].=AjoutLog("Import variables terminé");
+			$ret["data"].=AjoutLog("Import variables terminÃ©");
 		}
 		else
 		{
@@ -80,7 +80,7 @@
 			foreach($tabImport["group"] as $g=>$d)
 			{
 				$ret["data"].=AjoutLog("Import ".$g);
-				$q="INSERT INTO ".$MyOpt["tbl"]."_groupe SET groupe='".$g."',description='".utf8_decode($d["description"])."',principale='".$d["principal"]."'";
+				$q="INSERT INTO ".$MyOpt["tbl"]."_groupe SET groupe='".$g."',description='".$d["description"]."',principale='".$d["principal"]."'";
 				$sql->Insert($q);
 				foreach($d["roles"] as $i=>$dd)
 				{
@@ -89,7 +89,7 @@
 				}
 			}
 			
-			$ret["data"].=AjoutLog("Import des groupes terminé");
+			$ret["data"].=AjoutLog("Import des groupes terminÃ©");
 		}
 		else
 		{
@@ -102,7 +102,7 @@
 	
 function AjoutLog($txt)
 {
-	return utf8_encode(htmlentities($txt,ENT_HTML5,"ISO-8859-1"))."<br />";
+	return htmlentities($txt,ENT_HTML5,"UTF-8")."<br />";
 }	
 
 ?>

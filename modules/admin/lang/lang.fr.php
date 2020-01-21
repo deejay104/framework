@@ -1,37 +1,37 @@
 <?
 
 $tabLang["lang_configuration"]="Configuration";
-$tabLang["lang_database"]="Base de données";
+$tabLang["lang_database"]="Base de donnÃ©es";
 $tabLang["lang_groups"]="Groupes";
-$tabLang["lang_deadline"]="Echéances";
-$tabLang["lang_userdata"]="Données Utilisateurs";
-$tabLang["lang_crontab"]="Taches Planifiées";
+$tabLang["lang_deadline"]="EchÃ©ances";
+$tabLang["lang_userdata"]="DonnÃ©es Utilisateurs";
+$tabLang["lang_crontab"]="Taches PlanifiÃ©es";
 $tabLang["lang_emails"]="Emails";
 
-$tabLang["lang_parameter"]="Paramètre";
+$tabLang["lang_parameter"]="ParamÃ¨tre";
 $tabLang["lang_variable"]="Variable";
 $tabLang["lang_value"]="Valeur";
-$tabLang["lang_default"]="Défaut";
+$tabLang["lang_default"]="DÃ©faut";
 
 $tabLang["lang_test"]="Test";
 $tabLang["lang_action"]="Action";
-$tabLang["lang_result"]="Résultat";
-$tabLang["lang_update"]="Mise à jour";
+$tabLang["lang_result"]="RÃ©sultat";
+$tabLang["lang_update"]="Mise Ã  jour";
 $tabLang["lang_reindex"]="Suppression des Index";
-$tabLang["lang_updateemailtmpl"]="Mise à jour templates emails";
-$tabLang["lang_resetemailtmpl"]="Réinitialise templates emails";
+$tabLang["lang_updateemailtmpl"]="Mise Ã  jour templates emails";
+$tabLang["lang_resetemailtmpl"]="RÃ©initialise templates emails";
 $tabLang["lang_exportconfig"]="Sauvegarde configuration";
 $tabLang["lang_importconfig"]="Import configuration";
 $tabLang["lang_processing"]="Traitement en cours...";
-$tabLang["lang_checkvar"]="Vérification de la présence des variables";
-$tabLang["lang_checkdb"]="Vérification de la base de données";
-$tabLang["lang_errorcreate"]="Erreur création";
-$tabLang["lang_createtable"]="Création table";
-$tabLang["lang_create"]="Création";
+$tabLang["lang_checkvar"]="VÃ©rification de la prÃ©sence des variables";
+$tabLang["lang_checkdb"]="VÃ©rification de la base de donnÃ©es";
+$tabLang["lang_errorcreate"]="Erreur crÃ©ation";
+$tabLang["lang_createtable"]="CrÃ©ation table";
+$tabLang["lang_create"]="CrÃ©ation";
 $tabLang["lang_errormodify"]="Erreur modification";
 $tabLang["lang_modify"]="Modification";
-$tabLang["lang_errorcreateindex"]="Erreur création Index";
-$tabLang["lang_createindex"]="Création Index";
+$tabLang["lang_errorcreateindex"]="Erreur crÃ©ation Index";
+$tabLang["lang_createindex"]="CrÃ©ation Index";
 $tabLang["lang_patchcore"]="Application des patchs framework";
 $tabLang["lang_patch"]="Application des patchs";
 $tabLang["lang_errorpatch"]="Erreur lors de l'application du patch";
@@ -40,17 +40,22 @@ $tabLang["lang_code"]="Code";
 
 $tabLang["lang_allow"]="Autoriser";
 $tabLang["lang_deny"]="Refuser";
-$tabLang["lang_txtsearch"]="Texte à rechercher";
+$tabLang["lang_txtsearch"]="Texte Ã  rechercher";
 $tabLang["lang_grpmembers"]="Utilisateurs dans ce groupe";
 
 $tabLang["lang_description"]="Description";
-$tabLang["lang_calendar"]="Réservation";
+$tabLang["lang_calendar"]="RÃ©servation";
 $tabLang["lang_right"]="Droit";
 $tabLang["lang_multi"]="Multi";
 $tabLang["lang_notif"]="Notif";
-$tabLang["lang_delay"]="Délai";
+$tabLang["lang_delay"]="DÃ©lai";
 
-$tabLang["lang_lastexec"]="Dernière exécution";
-$tabLang["lang_nextexec"]="Prochaine exécution";
+$tabLang["lang_lastexec"]="DerniÃ¨re exÃ©cution";
+$tabLang["lang_nextexec"]="Prochaine exÃ©cution";
+
+$tabLang["lang_text"]="Texte";
+$tabLang["lang_number"]="Nombre";
+$tabLang["lang_date"]="Date";
+$tabLang["lang_phone"]="TÃ©lÃ©phone";
 
 ?>

@@ -19,20 +19,17 @@
 */
 ?>
 
-<?
-// ---- Charge le template
-	$tmpl_x = LoadTemplate("config");
-	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
+<?php
 
-// ---- Charge les variables par défault
+// ---- Charge les variables par dÃ©fault
 	require_once("modules/admin/conf/variables.tmpl.php");
 	if (file_exists($appfolder."/modules/admin/conf/variables.tmpl.php"))
 	{
 		require_once($appfolder."/modules/admin/conf/variables.tmpl.php");
 	}
 
-// ---- Vérifie le droit d'accès
-	if (!GetDroit("AccesConfigVar")) { FatalError("Accès non autorisé (AccesConfiguration)"); }
+// ---- VÃ©rifie le droit d'accÃ¨s
+	if (!GetDroit("AccesConfigVar")) { FatalError("AccÃ¨s non autorisÃ© (AccesConfiguration)"); }
 
 // ---- Affiche le menu
 	$aff_menu="";

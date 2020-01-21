@@ -1,5 +1,5 @@
-<?
-// ---- Refuse l'accès en direct
+<?php
+// ---- Refuse l'accÃ¨s en direct
 	if ((!isset($token)) || ($token==""))
 	  { header("HTTP/1.0 401 Unauthorized"); exit; }
 
@@ -10,35 +10,37 @@
 	}
 
   
-// ---- Génére le tableau des variables
+// ---- GÃ©nÃ©re le tableau des variables
 	$tabExport=array();
 	$tabMyOpt=array();
 	
-	foreach($MyOpt as $k=>$v)
+	$MyOpt=array();
+	$MyOpt["tbl"]=$gl_tbl;
+	$q="SELECT * FROM ".$MyOpt["tbl"]."_config WHERE param='variable'";
+	$sql->Query($q);
+	for($i=0; $i<$sql->rows; $i++)
 	{
-		if (is_array($v))
+		$sql->GetRow($i);
+		if ($sql->data["name2"]=="")
 		{
-			foreach($v as $kk=>$vv)
-			{
-				$tabMyOpt[$k][$kk]=utf8_encode($vv);
-			}
+			$tabMyOpt[$sql->data["name1"]]["valeur"]=$sql->data["value"];
 		}
 		else
 		{
-			$tabMyOpt[$k]["valeur"]=utf8_encode($v);
+			$tabMyOpt[$sql->data["name1"]][$sql->data["name2"]]=$sql->data["value"];
 		}
 	}
 
 	$tabExport["param"]=$tabMyOpt;
 
-// ---- Exporte les groupes et droits associés
+// ---- Exporte les groupes et droits associÃ©s
 	$query="SELECT * FROM ".$MyOpt["tbl"]."_groupe";
 	$sql->Query($query);
 	for($i=0; $i<$sql->rows; $i++)
 	{ 
 		$sql->GetRow($i);
-		$tabExport["group"][$sql->data["groupe"]]["description"]=utf8_encode($sql->data["description"]);
-		$tabExport["group"][$sql->data["groupe"]]["principal"]=utf8_encode($sql->data["principale"]);
+		$tabExport["group"][$sql->data["groupe"]]["description"]=$sql->data["description"];
+		$tabExport["group"][$sql->data["groupe"]]["principal"]=$sql->data["principale"];
 	}
 
 	$query="SELECT * FROM ".$MyOpt["tbl"]."_roles";

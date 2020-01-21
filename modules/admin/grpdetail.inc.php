@@ -1,4 +1,4 @@
-<?
+<?php
 // ---------------------------------------------------------------------------------------------
 //   Admin groupe
 //     ($Author: miniroot $)
@@ -23,19 +23,14 @@
 */
 ?>
 
-<?
-// ---- Vérifie le droit d'accès
+<?php
+// ---- VÃ©rifie le droit d'accÃ¨s
 	if (!GetDroit("AccesConfigGroupes")) { FatalError($tabLang["lang_accessdenied"]." (AccesConfigGroupes)"); }
 
-// ---- Charge le template
-	$tmpl_x = LoadTemplate("grpdetail");
-	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
-	$tmpl_x->assign("form_checktime",$_SESSION['checkpost']);
-
-// ---- Vérifie les variables
+// ---- VÃ©rifie les variables
 	$sup=checkVar("sup","numeric");
 	$search=checkVar("search","varchar");
-	$grp=checkVar("grp","varchar",3);
+	$grp=checkVar("grp","varchar",5);
 
 	$form_grp=checkVar("form_grp","varchar");
 	$form_desc=checkVar("form_desc","varchar");
@@ -49,10 +44,7 @@
 		require_once($appfolder."/modules/".$mod."/conf/roles.tmpl.php");
 	}
 
-// ---- Affiche le menu
-	$aff_menu="";
-	require_once("modules/".$mod."/menu.inc.php");
-	$tmpl_x->assign("aff_menu",$aff_menu);
+
 
 // ---- Enregistre le groupe
 	if (($grp=="") && ($fonc==$tabLang["lang_save"]) && (GetDroit("CreeGroupe")) && (!isset($_SESSION['tab_checkpost'][$checktime])))
@@ -85,7 +77,7 @@
 		$q="DELETE FROM ".$MyOpt["tbl"]."_groupe WHERE groupe='$grp'";
 		$sql->Delete($q);
 		// Purge roles
-		// A voir si nécessaire ? Sinon cela permet de les récupérer en cas de mauvaise manip
+		// A voir si nÃ©cessaire ? Sinon cela permet de les rÃ©cupÃ©rer en cas de mauvaise manip
 		$q="DELETE FROM ".$MyOpt["tbl"]."_roles WHERE groupe='$grp'";
 		$sql->Delete($q);
 
@@ -134,6 +126,24 @@
 		$q="DELETE FROM ".$MyOpt["tbl"]."_droits WHERE groupe='$grp' AND uid='$sup'";
 		$sql->Delete($q);
 	}
+
+// ---- Affiche le menu
+	$aff_menu="";
+	require_once("modules/".$mod."/menu.inc.php");
+	$tmpl_x->assign("aff_menu",$aff_menu);
+
+// <div class="pagetitle pagemenu">
+	// <p><A href="index.php?mod=admin&rub=groupes"><IMG src="{path_module}/img/icn32_retour.png" border=0 alt="">{lang_list}</A></p>
+	// <p><A href="index.php?mod=admin&rub=grpdetail"><IMG src="{path_module}/img/icn32_groupeadd.png" border=0 alt="">{lang_new}</A></p>
+	// <p><A href="index.php?mod=admin&rub=grpdetail&grp={form_grp}&fonc=copier"><IMG src="{path_module}/img/icn32_groupecopy.png" border=0 alt="">{lang_copy}</A></p>
+	// <p><A href="#" OnClick="ConfirmeClick('index.php?mod=admin&rub=grpdetail&grp={form_grp}&fonc=supprimer','Souhaitez-vous supprimer ce groupe ?');"><IMG src="{path_module}/img/icn32_groupesup.png" border=0 alt="">{lang_delete}</A></p>
+// </div>
+	addSubMenu("",$tabLang["lang_list"],geturl("admin","groupes",""),"icn32_retour.png",false);
+	addSubMenu("",$tabLang["lang_new"],geturl("admin","grpdetail",""),"icn32_groupeadd.png",false);
+	addSubMenu("",$tabLang["lang_copy"],geturl("admin","grpdetail","grp=".$grp."&fonc=copier"),"icn32_groupecopy.png",false);
+	addSubMenu("",$tabLang["lang_delete"],geturl("admin","grpdetail","grp=".$grp."&fonc=supprimer"),"icn32_groupesup.png",false,"Souhaitez-vous supprimer ce groupe ?");
+	affSubMenu();
+
 
 // ---- Affiche les informations
 	$tmpl_x->assign("form_grp",$grp);

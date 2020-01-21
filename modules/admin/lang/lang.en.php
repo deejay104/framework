@@ -53,4 +53,9 @@ $tabLang["lang_delay"]="Delay";
 $tabLang["lang_lastexec"]="Last run";
 $tabLang["lang_nextexec"]="Next run";
 
+$tabLang["lang_text"]="Text";
+$tabLang["lang_number"]="Number";
+$tabLang["lang_date"]="Date";
+$tabLang["lang_phone"]="Phone";
+
 ?>

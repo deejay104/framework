@@ -1,9 +1,9 @@
-<?
+<?php
 // ---------------------------------------------------------------------------------------------
 //   Page d'accueil des forums
 //   
 // ---------------------------------------------------------------------------------------------
-//   Variables  : $fonc - fonction à exécuter
+//   Variables  : $fonc - fonction Ã  exÃ©cuter
 //		  $critere - liste des criteres de recherche
 // ---------------------------------------------------------------------------------------------
 /*
@@ -26,12 +26,9 @@
 */
 ?>
 
-<?
-	$tmpl_x = new XTemplate (MyRep("index.htm"));
-	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
-
+<?php
 	if ( (!GetDroit("AccesDocuments")) && (!GetMyId($id)) )
-	  { FatalError("Accès non autorisé (AccesDocuments)"); }
+	  { FatalError("AccÃ¨s non autorisÃ© (AccesDocuments)"); }
 
 // ---- Fonc = marquer
 //	 On marque tous les messages comme lus
@@ -59,24 +56,28 @@
 
 // ---- Fonc = Delete
 	if (isset($fonc) && ($fonc=='delete') && ($fid>0)) 
-	  {
-  	  $query = "UPDATE ".$MyOpt["tbl"]."_forums SET actif='non' WHERE id='$fid' OR fid='$fid'";
-			$sql->Delete($query);
-	  }
+	{
+		$query = "UPDATE ".$MyOpt["tbl"]."_forums SET actif='non' WHERE id='$fid' OR fid='$fid'";
+		$sql->Delete($query);
+	}
 
 // ---- Initialisation des variables
-	$tmpl_x->assign("pageIndex", (isset($pageIndex)) ? $pageIndex : "");
-	$tmpl_x->assign("critere", (isset($critere)) ? $critere : "");
+	$pageIndex=checkVar("pageIndex","varchar");
+	$critere=checkVar("critere","varchar");
+	$tmpl_x->assign("pageIndex", $pageIndex);
+	$tmpl_x->assign("critere", $critere);
 
 
 // ---- Affiche les bouttons
+	addPageMenu($corefolder,$mod,"Rechercher",geturl("docs","recherche","critere=".$critere),"icn32_rechercher.png");
 	if (GetDroit("CreeClasseur"))
-	  {
-			$tmpl_x->parse("infos.nouveau");
-	  }
+	{
+		addPageMenu($corefolder,$mod,"Nouveau classeur",geturl("docs","editer","fid=0&fpars=0&fprec=liste"),"icn32_nouveau.png");
+	}
+	addPageMenu($corefolder,$mod,"Marquer comme lus",geturl("docs","","fonc=marquer"),"icn32_valider.png");
 
 
-// ---- Récupère la liste des forums
+// ---- RÃ©cupÃ¨re la liste des forums
 	$sqlb = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db, $port);
 
 	$query ="SELECT id, fid, titre, message AS corps, fil, droit_r AS droit ";
@@ -88,7 +89,7 @@
 	  {
 		$sql->GetRow($i);
 
-		// Récupère le nombre de message
+		// RÃ©cupÃ¨re le nombre de message
 		$query="SELECT COUNT(*) AS nb FROM ".$MyOpt["tbl"]."_forums AS forums WHERE forums.fid=".$sql->data["id"]." AND forums.fil=".$sql->data["id"]." AND actif='oui'";
 		$res=$sqlb->QueryRow($query);
 
