@@ -538,6 +538,7 @@ function MyMail($from,$to,$tabcc,$subject,$message,$headers="",$files="")
 			//Password to use for SMTP authentication
 			$mail->Password = $MyOpt["mail"]["password"];
 		}
+
 	}
 	else
 	{
@@ -562,6 +563,7 @@ function MyMail($from,$to,$tabcc,$subject,$message,$headers="",$files="")
 	}
 	
 	//Set the subject line
+	$mail->CharSet = 'UTF-8';
 	$mail->Subject = $subject;
 
 	$mail->msgHTML($message);
@@ -1338,10 +1340,10 @@ function UpperFirstLetter($txt)
   }
 
 function FatalError($txt,$msg="")
-  { global $tmpl_prg,$corefolder,$theme;
+  { global $MyOpt,$tmpl_prg,$corefolder,$theme;
   	if (isset($tmpl_prg))
   	{
-		$tmpl_prg->assign("style_url", GenereStyle(($theme=="phone") ? "phone" : "default"));
+		$tmpl_prg->assign("style_url", $MyOpt["host"]."/".GenereStyle(($theme=="phone") ? "phone" : "default"));
 		$tmpl_prg->assign("icone","<IMG src=\"".$corefolder."/static/images/icn48_erreur.png\">");
 		$tmpl_prg->assign("infos","$txt");
 		$tmpl_prg->assign("corps","$msg");
