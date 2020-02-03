@@ -185,7 +185,7 @@ function checkVar($var,$type,$len=256,$default="")
 		{
 			return $v;
 		}
-		if (is_numeric($default))
+		else if (is_numeric($default))
 		{
 			return $default;
 		}

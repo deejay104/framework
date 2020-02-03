@@ -1,15 +1,15 @@
-<?
+<?php
 // ---------------------------------------------------------------------------------------------
 //   Batch de notification 
 // ---------------------------------------------------------------------------------------------
 ?>
-<?
+<?php
 	if ($gl_mode!="batch")
 	  { FatalError("Acces refuse","Ne peut etre execute qu'en arriere plan"); }
 
-	myPrint("Notification des actualités");
+	myPrint("Notification des actualitÃ©s");
 
-// ---- Récupère les actualités pour lesquels le mail n'a pas été envoyé
+// ---- RÃ©cupÃ¨re les actualitÃ©s pour lesquels le mail n'a pas Ã©tÃ© envoyÃ©
 	$query="SELECT * FROM `".$MyOpt["tbl"]."_actualites` WHERE mail='non' AND actif='oui'";
 	$sql->Query($query);
 	
@@ -21,7 +21,7 @@
 		$tabActu[$sql->data["id"]]=$sql->data;
 	}
 
-// ---- On récupère la liste des membres
+// ---- On rÃ©cupÃ¨re la liste des membres
 	$lst=ListActiveMails($sql);
 
 // ---- traite toutes les actus
@@ -38,13 +38,13 @@
 		$txt=nl2br($d["message"]);
 		$txt=preg_replace("/((http|https|ftp):\/\/[^ \n\r<]*)/si","<a href='$1' target='_blank'>$1</a>",$txt);
 		$txt=preg_replace("/ (www\.[^ |\/]*)/si","<a href='http://$1' target='_blank'>$1</a>",$txt);
-		$txt.="<br /><br />-Email envoyé à partir du site ".$MyOpt["site_title"]."-";
+		$txt.="<br /><br />-Email envoyÃ© Ã  partir du site ".$MyOpt["site_title"]."-";
 
 		// Envoie du message aux membres
 		$dest="";
 		foreach($lst as $i=>$uid)
 		{
-			// Et on envoie un mail à chacune des personnes de la liste
+			// Et on envoie un mail Ã  chacune des personnes de la liste
 			$usr = new user_core($uid,$sql,false);
 			$to=$usr->data["mail"];
 			if ($to!="")

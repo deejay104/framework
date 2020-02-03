@@ -354,7 +354,10 @@ img:hover { color: #{TextBackgroundHover}; }
 .tableauBorderLeft { border-left: 1px solid black; width:1 px; }
 .tableauBas { background-color: #{FormulaireBackgroundNormal}; border-top: 1px solid black; height: 20px; }
 
-
+.formulaireTableau { width: 100%; }
+.formulaireTableau tr {  }
+.formulaireTableau th { background-color:#dddddd; font-size:20px; font-weight:300; }
+.formulaireTableau td { padding:10px; }
 
 .formulaire { margin-left: 15px; }
 .formulaire p { margin: 0px; padding-left:5px; }
@@ -376,6 +379,12 @@ img:hover { color: #{TextBackgroundHover}; }
 
 
 /* **** Tableau **** */
+
+.dataTables_length { text-align: left!important; }
+.dataTables_length select { width: 60px; text-align: left; }
+.dataTables_filter { text-align: right!important; padding-right:10px;}
+
+
 .tableauAff { border-bottom: 1px solid #cccccc; }
 .tableauAff th { background-color: #{FormulaireBackgroundNormal}; height: 30px; border-bottom: 1px solid #cccccc; }
 .tableauAff tr { border-bottom: 1px dashed #{FormulaireBackgroundNormal}; height: 25px; }
@@ -412,7 +421,8 @@ img:hover { color: #{TextBackgroundHover}; }
 
 /* **** ToolTip **** */
 .ui-widget { font-size: 12px; }
-.ui-menu-item { padding-top: 1px; padding-bottom: 1px; }
+.ui-menu { background-color: #ffffff; }
+.ui-menu-item { padding-top: 1px; padding-bottom: 1px; -webkit-transition: none; -moz-transition: none; }
 
 	
 <!-- END: main -->
