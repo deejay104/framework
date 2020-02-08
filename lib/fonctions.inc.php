@@ -635,6 +635,16 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 
 	$ret.="<thead><tr>";
 	$nb=1;
+
+	if (is_array($order))
+	{
+		$taborder=$order;
+	}
+	else
+	{
+		$taborder=array();
+		$taborder[$order]=(($trie=="d") ? "asc" : "desc");
+	}
 	
 	$page=$_SERVER["SCRIPT_NAME"]."?mod=$mod&rub=$rub";
 
@@ -663,16 +673,7 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 			$v["mobile"]="";
 		}
 
-		if ($name==$order)
-		{
-			$ret.="<th width='".$v["width"]."'".(($v["align"]!="") ? " align='".$v["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").">";
-			// $ret.="<b><a href='$page&order=$name&trie=".(($trie=="d") ? "i" : "d").(($url!="") ? "&$url" : "")."&ts=0'>".$v["aff"]."</a></b>";
-		  	// $ret.=" <img src='".$MyOpt["host"]."/".$corefolder."/static/images/sens_$trie.gif' border=0>";
-			$ret.=$v["aff"];
-			$sub.="<th align='".$v["align"].(($v["mobile"]=="no") ? " class='noMobile'" :"")."'>".((isset($v["sub"])) ? $v["sub"] : "")."</th>";
-			$subb.="<th align='".$v["align"].(($v["mobile"]=="no") ? " class='noMobile'" :"")."'>".((isset($v["bottom"])) ? $v["bottom"] : "")."</th>";
-		}
-		else if ($v["aff"]=="<line>")
+		if ($v["aff"]=="<line>")
 		{
 			if ((!isset($v["width"])) || (!is_numeric($v["width"])))
 			{
@@ -715,58 +716,46 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 	
 	if (is_array($tabValeur))
 	  {
-		// if ($trie=="d")
-		  // { usort($tabValeur,"TrieVal"); }
-		// else if ($trie=="i")
-		  // { usort($tabValeur,"TrieValInv"); }
 		$ii=0;
-	
-		// if ($limit<0)
-		  // { $limit=count($tabValeur); }
 
 		foreach($tabValeur as $i=>$val)
 		{ 
-			// if (($ii>=$start) && ($ii<$start+$limit))
-			// {
-				$ret.="<tr";
-				if ($showicon!="")
+			$ret.="<tr";
+			if ($showicon!="")
+			{
+				$ret.=" OnMouseOver=\"document.getElementById('".$showicon."_".$val["id"]["val"]."').style.display='block';\" OnMouseOut=\"document.getElementById('".$showicon."_".$val["id"]["val"]."').style.display='none';\"";
+			}
+			$ret.=">";
+	
+			foreach($tabTitre as $name=>$v)
+			{
+				if (!isset($val[$name]["val"]))
 				{
-					$ret.=" OnMouseOver=\"document.getElementById('".$showicon."_".$val["id"]["val"]."').style.display='block';\" OnMouseOut=\"document.getElementById('".$showicon."_".$val["id"]["val"]."').style.display='none';\"";
+					$val[$name]["val"]="";
 				}
-				$ret.=">";
-				// $ret.="<tr onmouseover=\"setPointer(this, 'over', '#".$myColor[$col]."', '#".$myColor[$col+5]."', '#FF0000')\" onmouseout=\"setPointer(this, 'out', '#".$myColor[$col]."', '#".$myColor[$col+5]."', '#FF0000')\">";
-				// $ret.="<td bgcolor=\"#".$myColor[$col]."\">&nbsp;</td>";
-		
-				foreach($tabTitre as $name=>$v)
+				if (!isset($val[$name]["color"]))
 				{
-					if (!isset($val[$name]["val"]))
-					{
-						$val[$name]["val"]="";
-					}
-					if (!isset($val[$name]["color"]))
-					{
-						$val[$name]["color"]="";
-					}
-					if ((!isset($val[$name]["aff"])) || ($val[$name]["aff"]==""))
-					{
-						$val[$name]["aff"]=$val[$name]["val"];
-					}
-					if (!isset($val[$name]["align"]))
-					{
-						$val[$name]["align"]="left";
-					}
-					if ("*".$val[$name]["val"]=="*<line>")
-					{
-						// echo "'".$val[$name]["val"]."'";
-						$ret.="<td style='border-left: 1px solid black;'".(($v["mobile"]=="no") ? " class='noMobile'" :"")."></td>";
-					}
-					else
-					{
-						$ret.="<td data-sort='".$val[$name]["val"]."' ".(($val[$name]["align"]!="") ? "align='".$val[$name]["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").(($val[$name]["color"]!="") ? " style='background-color:#".$val[$name]["color"].";'" : "").">".$val[$name]["aff"]."</td>";
-					}
+					$val[$name]["color"]="";
 				}
-				$ret.="</tr>\n";
-			// }
+				if ((!isset($val[$name]["aff"])) || ($val[$name]["aff"]==""))
+				{
+					$val[$name]["aff"]=$val[$name]["val"];
+				}
+				if (!isset($val[$name]["align"]))
+				{
+					$val[$name]["align"]="left";
+				}
+				if ("*".$val[$name]["val"]=="*<line>")
+				{
+					// echo "'".$val[$name]["val"]."'";
+					$ret.="<td style='border-left: 1px solid black;'".(($v["mobile"]=="no") ? " class='noMobile'" :"")."></td>";
+				}
+				else
+				{
+					$ret.="<td data-sort='".$val[$name]["val"]."' ".(($val[$name]["align"]!="") ? "align='".$val[$name]["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").(($val[$name]["color"]!="") ? " style='background-color:#".$val[$name]["color"].";'" : "").">".$val[$name]["aff"]."</td>";
+				}
+			}
+			$ret.="</tr>\n";
 			$ii=$ii+1;
 		}
 	}
@@ -778,44 +767,8 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 		$ret.="</tfoot>";
 	}
 	$ret.="</tbody>\n";
-
 	$ret.="</table>\n";
 
-	// Affiche la liste des pages
-	// if (is_array($tabValeur))
-	// {
-		// $nbtot=($nbline>0) ? $nbline : count($tabValeur);
-		// if ($nbtot>$limit)
-		// {
-			// $lstpage="";
-			// $ii=1;
-			// $t=0;
-			// $nbp=20;
-			// for($i=0; $i<$nbtot; $i=$i+$limit)
-			// {
-				// if (($i<=$start) && ($i>$start-$limit))
-				// {
-					// $lstpage.="<a href='$page&order=$order".(($trie!="") ? "&trie=$trie" : "").(($url!="") ? "&$url" : "")."&ts=$i'>[$ii]</a> ";
-					// $t=0;
-				// }
-				// else if ( (($i>$start-$nbp*$limit/2) && ($i<$start+$nbp*$limit/2)) || ($i>$nbtot-$limit) || ($i==0))
-				// {
-					// $lstpage.="<a href='$page&order=$order".(($trie!="") ? "&trie=$trie" : "").(($url!="") ? "&$url" : "")."&ts=$i'>$ii</a> ";
-					// $t=0;
-				// }
-				// else if ($t==0)
-				// {
-					// $lstpage.=" ... ";
-					// $t=1;
-				// }
-				// $ii=$ii+1;
-			// }
-
-			// $ret.="Pages : $lstpage<br />\n";
-		// }
-	// }
-
-	// $ret.="<script type='text/javascript' src='https://code.jquery.com/jquery-3.3.1.js'></script>";
 	$ret.="<link rel='stylesheet' type='text/css' href='".$MyOpt["host"]."/core/external/jquery/css/dataTables.min.css' />";
 	$ret.="<script type='text/javascript' src='".$MyOpt["host"]."/core/external/jquery/jquery.dataTables.min.js'></script>";
 
@@ -866,15 +819,18 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 	$ret.='    "columns": [';
 	$o="";
 	$i=0;
+	$o='   "order": [';
 	foreach($tabTitre as $name=>$t)
 	{
 		$ret.='{ "name": "'.$name.'"},';
-		if ($name==$order)
+		if (isset($taborder[$name]))
 		{
-			$o='   "order": [[ '.$i.', "'.(($trie=="d") ? "asc" : "desc").'" ]]';
+			$o.='["'.$i.'","'.$taborder[$name].'"],';
+			// ["'.$i.'", "'.(($trie=="d") ? "asc" : "desc").'" ]]';
 		}
 		$i=$i+1;
 	}
+	$o.="]";
 	$ret.='],';
 	$ret.=$o;
 
