@@ -72,7 +72,7 @@ function geturlapi($mod,$rub,$fonc,$param="")
 	}
 	else
 	{
-		$url="api.php?mod=".$mod."&rub=".$rub.(($fonc!="") ? "&".$fonc : "").(($param!="") ? "&".$param : "");
+		$url="api.php?mod=".$mod."&rub=".$rub.(($fonc!="") ? "&fonc=".$fonc : "").(($param!="") ? "&".$param : "");
 	}
 	return $url;
 }
