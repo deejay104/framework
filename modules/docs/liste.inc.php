@@ -217,7 +217,7 @@
 		$usr = new user_core($msg["usr_id"],$sql,false);
 		$tmpl_x->assign("id_msg",$msg["id"]);
 		$tmpl_x->assign("id_forum",$msg["fid"]);
-		$tmpl_x->assign("msg_titre",htmlentities(($msg["titre"]!="") ? $msg["titre"] : " - ",ENT_HTML5,"ISO-8859-1"));
+		$tmpl_x->assign("msg_titre",htmlentities(($msg["titre"]!="") ? $msg["titre"] : " - ",ENT_HTML5,"UTF-8"));
 		$tmpl_x->assign("msg_auteur",$usr->fullname);
 		$tmpl_x->assign("msg_texte",$txt);
 		$tmpl_x->assign("msg_dte",DisplayDate($msg["date_maj"]));

@@ -75,7 +75,7 @@
 // ---- Titre de la page
 	$usr = new user_core($res["uid_creat"],$sql,false);
 	$tmpl_x->assign("buque", $usr->fullname);
-	$tmpl_x->assign("titre", htmlentities($res["titre"],ENT_HTML5,"ISO-8859-1"));
+	$tmpl_x->assign("titre", htmlentities($res["titre"],ENT_HTML5,"UTF-8"));
 	$tmpl_x->assign("date", DisplayDate($res["date_maj"]));
 
 	$usr = new user_core($res["uid_maj"],$sql,false);

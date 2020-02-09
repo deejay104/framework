@@ -304,7 +304,7 @@ class objet_core
 
 			if ($type=="text")
 			{
-				$ret=nl2br(htmlentities($txt,ENT_HTML5,"ISO-8859-1"));
+				$ret=nl2br(htmlentities($txt,ENT_HTML5,"UTF-8"));
 				$ret="<p>".$ret."</p>";
 				$link=false;
 			}
