@@ -182,16 +182,47 @@ class objet_core
 
 		if (!$mycond)
 		{
-			$render="html";
+			if ($render=="form")
+			{
+				$render="read";
+			}
+			else
+			{
+				$render="html";
+			}
 		}
+		
 		if ((isset($this->droit[$key])) && ($this->droit[$key]=="[readonly]"))
 		{
 			$render="html";
 		}
 		if ((isset($this->nomodif[$key])) && ($this->nomodif[$key]=="yes") && ($this->id>0))
 		{
-			$render="html";
+				$render="html";
 		}
+		if (isset($this->fields[$key]["readonly"]))
+		{
+			if ($render=="form")
+			{
+				$render="read";
+			}
+			else
+			{
+				$render="html";
+			}
+		}
+		if ((isset($this->fields[$key]["nomodif"])) && ($this->id>0))
+		{
+			if ($render=="form")
+			{
+				$render="read";
+			}
+			else
+			{
+				$render="html";
+			}
+		}
+
 		if ($render=="form")
 		{
 			if ($type=="text")
@@ -294,10 +325,6 @@ class objet_core
 				$ret="<INPUT id='".(($formid!="") ? $formid : "").$key."' name=\"".$formname."[$key]\" value=\"".$txt."\" ".(($type!="") ? "type=\"".$type."\"" : "")." ".(($len>0) ? "style='width:".$len."px!important;'" : "").">";
 			}
 		}
-		else if ($render=="val")
-		{
-
-		}
 		else
 		{
 			$link=true;
@@ -329,8 +356,7 @@ class objet_core
 			}
 			else if ($type=="email")
 			{
-				$ret="<A href=\"mailto:".strtolower($txt)."\">".strtolower($txt)."</A>";
-				$link=false;
+				$ret=strtolower($txt);
 			}
 			else if ($type=="tel")
 			{
@@ -376,12 +402,26 @@ class objet_core
 			{
 				$ret=$txt;
 			}
+
+			if ($render=="read")
+			{
+				$link=false;
+				$type=(isset($type)) ? $type : "text";
+				$ret="<INPUT value=\"".$ret."\" ".(($type!="") ? "type=\"".$type."\"" : "")." ".(($len>0) ? "style='width:".$len."px!important;'" : "")." readonly style='background-color:#eeeeee;'>";
+			}
+
 			
 			// A voir si on met tous les champs en clicable ou pas
 			if (($this->mod!="") && ($this->rub!="") && ($link))
 			{
-				// $ret="<A href=\"".$MyOpt["host"]."/index.php?mod=".$this->mod."&rub=".$this->rub."&id=".$this->id."\">".$ret."</A>";
-				$ret="<A href=\"".geturl($this->mod,$this->rub,"id=".$this->id)."\">".$ret."</A>";
+				if ($type=="email")
+				{
+					$ret="<A href=\"mailto:".strtolower($txt)."\">".strtolower($txt)."</A>";
+				}
+				else
+				{
+					$ret="<A href=\"".geturl($this->mod,$this->rub,"id=".$this->id)."\">".$ret."</A>";
+				}
 			}
 
 		}

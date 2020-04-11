@@ -672,6 +672,10 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 			$tabTitre[$name]["mobile"]="";
 			$v["mobile"]="";
 		}
+		if (!isset($v["width"]))
+		{
+			$v["width"]=0;
+		}
 
 		if ($v["aff"]=="<line>")
 		{
@@ -685,7 +689,7 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 		}
 		else
 		{
-			$ret.="<th width='".$v["width"]."'".(($v["align"]!="") ? " align='".$v["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").">";
+			$ret.="<th ".(($v["width"]>0) ? "width='".$v["width"]."'" : "")." ".(($v["align"]!="") ? " align='".$v["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").">";
 			// $ret.="<b><a href='$page&order=$name&trie=d".(($url!="") ? "&$url" : "")."&ts=0'>".$v["aff"]."</a></b>";
 			$ret.=$v["aff"];
 			$sub.="<th align='".$v["align"].(($v["mobile"]=="no") ? " class='noMobile'" :"")."'>".((isset($v["sub"])) ? $v["sub"] : "")."</th>";

@@ -159,28 +159,6 @@ $tabTmpl=Array
 		"type" => Array("Type" => "varchar(10)", ),
 		"actif" => Array("Type" => "enum('oui','non')", "Default" => "oui", "Index" => "1"),
 	),
-	"utilisateurs" => Array
-	(
-		"id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
-		"nom" => Array("Type" => "varchar(40)", ),
-		"prenom" => Array("Type" => "varchar(40)", ),
-		"initiales" => Array("Type" => "char(3)", ),
-		"password" => Array("Type" => "varchar(50)", ),
-		"mail" => Array("Type" => "varchar(104)", ),
-		"notification" => Array("Type" => "enum('oui','non')", "Default" => "oui", ),
-		"commentaire" => Array("Type" => "text", ),
-		"droits" => Array("Type" => "varchar(100)", ),
-		"groupe" => Array("Type" => "varchar(5)", "Default"=>"ALL"),
-		"actif" => Array("Type" => "enum('oui','non','off')", "Default" => "oui", "Index" => "1", ),
-		"virtuel" => Array("Type" => "enum('oui','non')", "Default" => "non", "Index" => "1", ),
-		"language" => Array("Type" => "enum('fr','en')", "Default" => "fr" ),
-		"aff_msg" => Array("Type" => "tinyint(3) unsigned", "Default" => "0", ),
-		"dte_login" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
-		"uid_creat" => Array("Type" => "int(10) unsigned", "Default" => "0"),
-		"dte_creat" => Array("Type" => "date", "Default" => "0000-00-00"),
-		"uid_maj" => Array("Type" => "int(10) unsigned", "Default" => "0", ),
-		"dte_maj" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00", ),
-	),
 	"token" => Array
 	(
 		"id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
@@ -195,6 +173,8 @@ $tabTmpl=Array
 
 
 	require_once ("class/user.inc.php");
+	$obj=new user_core(0,$sql);
+	$obj->genSqlTab($tabTmpl);
 	$obj=new groupe_core(0,$sql);
 	$obj->genSqlTab($tabTmpl);
 	

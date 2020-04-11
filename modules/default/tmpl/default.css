@@ -96,7 +96,7 @@ img { color: #FFFFFF; border: 0px; }
 
 @media (min-width: 1200px) and (min-device-width: 1200px) {
 	body { font-size:16px; }
-	.formulaire input { width:250px!important; } /* Overlapped by responsive */
+	.formulaire input { width:250px!important; } 
 	.formulaire span { width:260px!important; }
 	.formulaire input[type=number] { width:80px!important; }
 	.formulaire input[type=date] { width:155px!important; }
@@ -135,9 +135,9 @@ img { color: #FFFFFF; border: 0px; }
 .affDebugTime { border:1px solid #000000; padding:10px; margin: 0px; position:fixed; right:20px; bottom:30px; display: inline-block; font-size:10px; }
 
 .formulaire input { width:155px; } /* Overlapped by responsive */
-.formulaire input[type=number] { width:50px; }
-.formulaire input[type=date] { width:155px; }
-.formulaire input[type=checkbox] { width:20px; }
+.formulaire input[type=number] { width:50px; } /* Overlapped by responsive */
+.formulaire input[type=date] { width:155px; } /* Overlapped by responsive */
+.formulaire input[type=checkbox] { width:20px; } /* Overlapped by responsive */
 
 
 /* **** Menu **** */
@@ -462,6 +462,8 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 .formulaire label { display: inline-block; width: 180px; margin-right: 10px; text-align: left; vertical-align: top; }
 .formulaire span { display: inline-block; width:160px; } /* Overlapped by responsive */
 .formulaire2 span { display: inline-block; width:450px; border: 1px solid #{BorderBlack}; border-radius: 4px; padding: 4px; }
+
+.formulaireLarge label { width: 300px!important; }
 
 .formulaireTitre { background-color: #{FormulaireBackgroundNormal}; border-radius: 4px; margin-bottom: 4px; padding-left: 20px; padding-top:7px; padding-bottom:7px; line-height:24px; }
 .formulairePhoto img { border: 1px solid #{FormulaireBackgroundNormal}; border-radius: 5px; }

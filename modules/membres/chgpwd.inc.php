@@ -39,7 +39,7 @@
 
 	if ((!GetMyId($id)) && (!GetDroit("ModifUserPassword")))
 	{
-		FatalError("Accès non autorisé (ModifUserPassword)");
+		FatalError("AccÃ¨s non autorisÃ© (ModifUserPassword)");
 	}
 
 // ---- Modification du mot de passe
@@ -53,11 +53,11 @@
 			if ($ret=="") 
 			{
 				// ENVOIE DU MDP PAR MAIL (+LOGIN)
-				// ---- Récupère l'adresse email de l'émetteur
+				// ---- RÃ©cupÃ¨re l'adresse email de l'Ã©metteur
 				$from=$myuser->data["mail"];
 				SendMailFromFile($from,$usr->data["mail"],"","[".$MyOpt["site_title"]."] : Changement de votre mot de passe",array("username"=>$usr->fullname,"initiales"=>$usr->data["initiales"],"url"=>$MyOpt["host"]),"chgpwd");
 			
-				$msg_confirmation.="Votre mot de passe a été mis à jour.<br />";
+				$msg_confirmation.="Votre mot de passe a Ã©tÃ© mis Ã  jour.<br />";
 			}
 			else
 			{ 
@@ -71,7 +71,7 @@
 	}
 	else if ($fonc=="Enregistrer")
 	{
-	 	$msg_erreur.="Erreur lors de la mise à jour du mot de passe !<br />";
+	 	$msg_erreur.="Erreur lors de la mise Ã  jour du mot de passe !<br />";
 	}
 
 	if ($fonc=="Annuler")

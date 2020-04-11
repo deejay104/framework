@@ -22,19 +22,41 @@ class user_core extends objet_core
 	protected $mod="membres";
 	protected $rub="detail";
 
-	protected $type=array(
-		"prenom"=>"ucword",
-		"nom"=>"uppercase",
-		"initiales"=>"uppercase",
-		"mail"=>"email",
-		"commentaire"=>"text",
-		"notification"=>"bool",
-		"virtuel"=>"bool",
-		"groupe"=>"uppercase",
-		"aff_jour"=>"date",
-		"dte_login"=>"datetime",
-		"language"=>"enum"
+	protected $fields = Array
+	(
+		"prenom" => Array("type" => "ucword","len"=>40 ),
+		"nom" => Array("type" => "uppercase","len"=>40 ),
+		"initiales" => Array("type" => "uppercase","len"=>3, "index"=>1 ),
+		"password" => Array("type" => "varchar","len"=>50 ),
+		"mail" => Array("type" => "email","len"=>104 ),
+		"notification" => Array("type" => "bool", "default" => "oui", ),
+		"commentaire" => Array("type" => "text", ),
+		"droits" => Array("type" => "varchar","len"=>100 ),
+		"groupe" => Array("type" => "uppercase","len"=>5, "default"=>"ALL"),
+		"actif" => Array("type" => "enum", "default" => "oui", "index" => "1", ),
+		"virtuel" => Array("type" => "bool", "default" => "non", "index" => "1", ),
+		"language" => Array("type" => "enum", "default" => "fr" ),
+		"aff_msg" => Array("type" => "number", "default" => "0", ),
+		"dte_login" => Array("type" => "datetime", "default" => "0000-00-00 00:00:00"),
+		"uid_creat" => Array("type" => "number", "default" => "0"),
+		"dte_creat" => Array("type" => "date", "default" => "0000-00-00"),
+		"uid_maj" => Array("type" => "number", "default" => "0", ),
+		"dte_maj" => Array("type" => "datetime", "default" => "0000-00-00 00:00:00", ),
 	);
+
+	// protected $type=array(
+		// "prenom"=>"ucword",
+		// "nom"=>"uppercase",
+		// "initiales"=>"uppercase",
+		// "mail"=>"email",
+		// "commentaire"=>"text",
+		// "notification"=>"bool",
+		// "virtuel"=>"bool",
+		// "groupe"=>"uppercase",
+		// "aff_jour"=>"date",
+		// "dte_login"=>"datetime",
+		// "language"=>"enum"
+	// );
 
 	protected $droit=array(
 		"prenom"=>"ModifUserInfos",
@@ -52,6 +74,10 @@ class user_core extends objet_core
 		"language"=>array(
 			"fr"=>array('fr'=>"Français",'en'=>'Anglais'),
 			"en"=>array('fr'=>"French",'en'=>'English'),
+		),
+		"actif"=>array(
+			"fr"=>array("oui"=>"Oui","non"=>"Non","off"=>"Désactivé"),
+			"en"=>array("oui"=>"Yes","non"=>"No","off"=>"Disabled"),
 		)
 	);
 
@@ -86,6 +112,7 @@ class user_core extends objet_core
 		$this->data["nom"]="";
 		$this->data["prenom"]="";
 		$this->data["initiales"]="";
+		$this->data["password"]="";
 		$this->data["mail"]="";
 		$this->data["notification"]="oui";
 		$this->data["commentaire"]="";
@@ -295,7 +322,7 @@ class user_core extends objet_core
 					$ret="<a href='".geturl("membres","detail","id=".$this->id)."'>Aucun</a>";
 				}
 			}
-			else if ($key=="nom")
+			else if (($key=="nom") && ($render!="read"))
 			{
 				$ret=strtoupper($this->data[$key]);
 				if ($ret=="")
@@ -309,7 +336,7 @@ class user_core extends objet_core
 				$ret="<a href='".geturl("membres","detail","id=".$this->id)."'>".$ret."</a>";
 
 			}
-			else if ($key=="prenom")
+			else if (($key=="prenom") && ($render!="read"))
 			{
 				if ($this->actif!="oui")
 				{
@@ -317,7 +344,7 @@ class user_core extends objet_core
 				}
 
 			}
-			else if ($key=="fullname")
+			else if (($key=="fullname") && ($render!="read"))
 			{
 				if ($this->actif!="oui")
 				{

@@ -135,13 +135,12 @@ function AjoutLog($txt)
                 // )
         // )
 
-
 	foreach($tabTmpl as $tab=>$fields)
 	{
 		// Tester si la table n'existe pas
 		if (!isset($tabProd[$MyOpt["tbl"]."_".$tab]))
 		{
-			$q="CREATE TABLE `".$MyOpt["tbl"]."_".$tab."` (`id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`)) ENGINE=InnoDB COLLATE=latin1_general_ci;";
+			$q="CREATE TABLE `".$MyOpt["tbl"]."_".$tab."` (`id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`)) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
 			$res=$sql->Update($q);
 			if ($res==-1)
 			{
@@ -202,6 +201,8 @@ function AjoutLog($txt)
 					$res=$sql->Update($q);
 					if ($res==-1)
 					{
+	$ret["data"].=AjoutLog($tabTmpl[$tab][$field]["Type"]."=".$tabProd[$MyOpt["tbl"]."_".$tab][$field]["Type"]);
+	$ret["data"].=AjoutLog("**".$q);
 						$ret["result"]="NOK";
 						$ret["data"].=AjoutLog(" ! ".$tabLang["lang_errormodify"]." ".$MyOpt["tbl"]."_".$tab.":".$field." (".$q.")");	
 					}
