@@ -1,0 +1,41 @@
+<!-- BEGIN: icone -->
+	<img src="{path_module}/img/icn48_titre.png" alt="" border=0 />
+<!-- END: icone -->
+
+<!-- BEGIN: infos -->
+<!-- END: infos -->
+
+
+<!-- BEGIN: corps -->
+
+	<div class="forum_Message_Description">
+		<p class="forum_Message_DescriptionTitre">{titre}</p>
+		<p class="forum_Message_DescriptionModif">par {usr_maj} {date}</p>
+	</div>
+
+	<div class="forum_Message_Message"><p>{msg}</p></div>
+
+<!-- BEGIN: pieces_jointes -->
+	<div class="forum_Message_PJ">
+	  <!-- BEGIN: lst_document -->
+		<p>{form_document}</p>
+	  <!-- END: lst_document -->
+	</div>
+<!-- END: pieces_jointes -->
+
+	<div class="forum_Message_Reponses">
+<!-- BEGIN: lst_reponse -->
+	<div class="forum_Message_Reponse">
+		<div class="actualitesPhoto">
+			<img src="doc.php?id={rep_usrid}&type=image&width=64&height=64" alt="">
+		</div>
+
+		<p class="forum_Message_ReponseTitre"><a href="index.php?mod=docs&rub=detail&fid={fid}&mid={rep_mid}">{rep_titre}</a></p>
+		<p class="forum_Message_ReponseModif">par {rep_usr_creat} {rep_dte_creat}</p>
+		<p>{rep_message}</p>
+	</div>
+<!-- END: lst_reponse -->
+	</div>
+	
+<!-- END: corps -->
+

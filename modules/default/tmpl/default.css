@@ -401,22 +401,22 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 .forum_Liste_Texte a { text-decoration: underline; }
 .forum_Liste_PieceJointe { margin-left: 35px; margin-top: 10px; padding-top:4px; padding-bottom: 5px; border-top: 1px solid #{FormulaireBackgroundLight}; }
 
-.forum_Message_Description { width:950px; background-color: #{FormulaireBackgroundNormal}; margin: 0px ; padding-left: 15px;  padding-top:10px;  padding-bottom:10px; border-radius: 4px;}
+.forum_Message_Description { width:100%; background-color: #{FormulaireBackgroundNormal}; margin: 0px ; padding-left: 15px;  padding-top:10px;  padding-bottom:10px; border-radius: 4px;}
 .forum_Message_Description p { margin:0px;  }
 .forum_Message_DescriptionTitre { color: #000000; font-weight: bold; padding-top:5px;}
 .forum_Message_DescriptionModif { font-size:10px;}
 
-.forum_Message_Message { width:950px; margin: 0px; padding-left: 35px; }
+.forum_Message_Message { width:800px; margin: 0px; padding-left: 35px; }
 .forum_Message_Message a { text-decoration: underline; }
 
 
-.forum_Message_PJ { width: 915px; margin-left: 35px; margin-top: 10px; padding-top:4px; padding-bottom: 5px; border-top: 1px solid #{FormulaireBackgroundLight};  }
+.forum_Message_PJ { width: 800px; margin-left: 35px; margin-top: 10px; padding-top:4px; padding-bottom: 5px; border-top: 1px solid #{FormulaireBackgroundLight};  }
 .forum_Message_PJ p { margin: 0px; }
 
-.forum_Message_Reponses { margin-left:100px;  width:850px; margin-top:15px;}
+.forum_Message_Reponses { width:100%; margin-left:0px;  margin-top:15px;}
 .forum_Message_Reponse { border-top:1px solid #{FormulaireBackgroundLight}; border:1px solid #{FormulaireBackgroundLight}; border-radius: 5px; }
 .forum_Message_Reponse p {padding: 5px 15px 5px 90px; }
-.forum_Message_ReponseTitre { background-color: #{FormulaireBackgroundNormal}; font-weight: bold; margin: 0px; padding: 5px 15px 5px 150px;}
+.forum_Message_ReponseTitre { background-color: #{FormulaireBackgroundNormal}; font-weight: bold; margin: 0px; padding: 5px 15px 5px 5px;}
 .forum_Message_ReponseModif { font-size: 10px; margin:0px; margin-left: 20px; margin-top: -8px; }
 .forum_Message_Selection { background-color: #95d7f5; border: 1px dashed #{BorderBlack}; border-radius: 3px; padding: 2px; }
 
@@ -501,7 +501,7 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 .imgDelete img:hover { background-color: #{FormulaireBackgroundNormal}; border-radius: 2px; border: 1px solid #{BorderBlack}; border-radius: 2px; }
 
 /* **** Tableau **** */
-.tableauAff { border-bottom: 1px solid #{FormulaireBackgroundNormal}; }
+.tableauAff { padding-top:4px; border-bottom: 1px solid #{FormulaireBackgroundNormal}; }
 .tableauAff th { background-color: #{FormulaireBackgroundNormal}; height: 30px; border-bottom: 1px solid #{FormulaireBackgroundNormal}; text-align:left; }
 .tableauAff tr { border-bottom: 1px dashed #{FormulaireBackgroundNormal}; height: 25px; }
 .tableauAff tr:nth-child(even) { background-color: #f8f8f8; }

@@ -159,7 +159,7 @@ class objet_core
 	# Show object informations
 	function aff($key,$typeaff="html",$formname="form_data",&$render="",$formid="")
 	{
-		global $MyOpt,$lang;
+		global $MyOpt,$lang,$theme;
 
 		if ($key=="dte_creat")
 		{
@@ -322,7 +322,7 @@ class objet_core
 			else
 			{
 				$type=(isset($type)) ? $type : "text";
-				$ret="<INPUT id='".(($formid!="") ? $formid : "").$key."' name=\"".$formname."[$key]\" value=\"".$txt."\" ".(($type!="") ? "type=\"".$type."\"" : "")." ".(($len>0) ? "style='width:".$len."px!important;'" : "").">";
+				$ret="<INPUT id='".(($formid!="") ? $formid : "").$key."' name=\"".$formname."[$key]\" value=\"".$txt."\" ".(($type!="") ? "type=\"".$type."\"" : "")." ".((($len>0) && ($theme!="phone")) ? "style='width:".$len."px!important;'" : "").">";
 			}
 		}
 		else

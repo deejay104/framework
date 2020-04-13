@@ -57,7 +57,7 @@ function geturl($mod,$rub,$param="")
 	}
 	else
 	{
-		$url="index.php?mod=".$mod.(($rub!="") ? "&rub=".$rub : "").(($param!="") ? "&".$param : "");
+		$url=$MyOpt["host"]."/index.php?mod=".$mod.(($rub!="") ? "&rub=".$rub : "").(($param!="") ? "&".$param : "");
 	}
 	return $url;
 }
@@ -631,7 +631,8 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
   {global $mod,$rub,$corefolder,$MyOpt;
 	// $ret ="\n<table id='mytable' class='tableauAff' width'100%'>\n";
 	$idtbl=uniqid("tbl_");
-	$ret ="\n<table id='".$idtbl."' class='tableauAff' width='100%'>\n";
+	$ret ="\n";
+	$ret.="<table id='".$idtbl."' class='tableauAff' style='opacity:0;' width='100%'>\n";
 
 	$ret.="<thead><tr>";
 	$nb=1;
@@ -838,7 +839,9 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 	$ret.='],';
 	$ret.=$o;
 
-	$ret.="}) });";
+	$ret.="})"; 
+	$ret.="});";
+	$ret.="$(document).ready(function() { $('#".$idtbl."').css('opacity',1); });"; 
 	$ret.="</script>";
 
 	return $ret;
@@ -914,8 +917,6 @@ function AfficheTableauRemote($tabTitre="",$url,$order="",$trie="d",$search,$nbl
 		if ($name==$order)
 		{
 			$ret.="<th width='".$v["width"]."'".(($v["align"]!="") ? " align='".$v["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").">";
-			// $ret.="<b><a href='$page&order=$name&trie=".(($trie=="d") ? "i" : "d").(($url!="") ? "&$url" : "")."&ts=0'>".$v["aff"]."</a></b>";
-		  	// $ret.=" <img src='".$MyOpt["host"]."/".$corefolder."/static/images/sens_$trie.gif' border=0>";
 			$ret.=$v["aff"];
 		}
 		else if ($v["aff"]=="<line>")
@@ -929,7 +930,6 @@ function AfficheTableauRemote($tabTitre="",$url,$order="",$trie="d",$search,$nbl
 		else
 		{
 			$ret.="<th width='".$v["width"]."'".(($v["align"]!="") ? " align='".$v["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").">";
-			// $ret.="<b><a href='$page&order=$name&trie=d".(($url!="") ? "&$url" : "")."&ts=0'>".$v["aff"]."</a></b>";
 			$ret.=$v["aff"];
 		}
 		if (isset($v["sub"]))
@@ -967,6 +967,30 @@ function AfficheTableauRemote($tabTitre="",$url,$order="",$trie="d",$search,$nbl
 	{
 		$ret.='"searching": false,';
 	}
+
+	$limit=$nbline;
+
+// $limit.',10, 25, 50, 75, 100
+	$lstLimit="";
+	$tabLimit=array(10,25,50,75,100);
+	$s="";
+	$ok=0;
+	foreach($tabLimit as $i=>$l)
+	{
+		if (($limit<$l) && ($ok==0))
+		{
+			$lstLimit.=$s.$limit;
+			$s=",";
+			$ok=1;
+		}
+		$lstLimit.=$s.$l;
+		$s=",";
+	}
+	if ($limit>100)
+	{
+		$lstLimit.=$s.$limit;
+	}
+	
 	$ret.='    "language": { ';
 	$ret.='       "paginate": { "first":"Début","last":"Fin","next":"Suivant","previous":"Précédent" },';
 	$ret.='       "search": "Rechercher:",';
@@ -978,25 +1002,39 @@ function AfficheTableauRemote($tabTitre="",$url,$order="",$trie="d",$search,$nbl
  	$ret.='       "infoEmpty":      "Affiche 0 ligne",';
 	$ret.='       "infoFiltered":   "(filtered from _MAX_ total entries)",';
 	$ret.='    },';
-	$ret.='    "pageLength": '.$nbline.',';
+	$ret.='    "pageLength": '.$limit.',';
+	$ret.='    "lengthMenu": [ '.$lstLimit.' ],';
 	$ret.='    "processing": true,';
     $ret.='    "serverSide": true,';
     $ret.='    "ajax": "'.$url.'",';
 	$ret.='    "columns": [';
 	
-	$o="";
+	$o='"order": [';
+	$align="";
 	$i=0;
 	foreach($tabTitre as $name=>$t)
 	{
-		$ret.='{ "name": "'.$name.'"},';
-		if ($name==$order)
+		$ret.='{ "data": "'.$name.'"},';
+		if (($name==$order) && ($trie!="none"))
 		{
-			$o='   "order": [[ '.$i.', "'.(($trie=="d") ? "asc" : "desc").'" ]]';
+			$o.='[ '.$i.', "'.(($trie=="d") ? "asc" : "desc").'" ]';
+		}
+		if ((isset($t["calign"])) && ($t["calign"]=="right"))
+		{
+			$align.='{"targets":'.$i.',"className": "dt-right"},';
 		}
 		$i=$i+1;
 	}
+	$o.='],';
 	$ret.=' ],';
 	$ret.=$o;
+	$ret.='"columnDefs":[';
+	if ($trie=="none")
+	{
+		$ret.='{"targets":"no-sort","orderable": false},';
+	}
+	$ret.=$align;
+	$ret.='],';
 	$ret.='   });';
 	$ret.='});';
 	$ret.="</script>";
@@ -1545,9 +1583,15 @@ function GenereVariables($tab)
 	global $sql,$gl_tbl;
 
 	$ret="";
-	$conffile="../config/variables.inc.php";
+	$conffile="../static/cache/config/variables.inc.php";
+
+	if (!is_dir("../static/cache/config"))
+	{
+		mkdir("../static/cache/config");
+	}
 	if (!file_exists($conffile))
 	{
+		error_log("Create variable file");
 		$ret.="Création du fichier";
 	}
 
@@ -1608,8 +1652,18 @@ function GenereFichierVariables($tab)
 {
 	$ret="";
 	$conffile="../config/variables.inc.php";
+	$conffile="../static/cache/config/variables.inc.php";
+	if (!is_dir("../static/cache/config"))
+	{
+		mkdir("../static/cache/config");
+	}
 	if (!file_exists($conffile))
-		{ $ret.="Création du fichier";}
+	{
+		$ret.="Création du fichier<br />";
+		error_log("Create variables file");
+		$fd=fopen($conffile,"w");
+		fclose($fd);
+	}
 
 	$tab["version"]=time();
 	if(is_writable($conffile))

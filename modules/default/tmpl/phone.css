@@ -266,6 +266,7 @@ img:hover { color: #{TextBackgroundHover}; }
 
 .actualitesTexte p { padding:10px; font-size:14px; overflow:hidden; }
 .actualitesTexte a { text-decoration: underline; }
+.actualitesTexte textarea { margin-left:10px; margin-top:5px; font-size:14px; overflow:hidden; }
 
 .actualitesSuivant { width:100%; background-color: #{FormulaireBackgroundNormal}; text-align:center; }
 .actualitesSuivant a { display:block; }
@@ -322,7 +323,7 @@ img:hover { color: #{TextBackgroundHover}; }
 .forum_Liste_Texte { display: none; }
 .forum_Liste_PieceJointe { margin-left: 35px; margin-top: 10px; padding-top:4px; padding-bottom: 5px; border-top: 1px solid #efefef; }
 
-.forum_Message_Description { width:450px; color: #{MenuBackgroundNormal}; border-top:1px solid #{BorderBlack}; border-bottom:1px solid #{BorderBlack}; background-color: #ffffff; margin: 0px ; padding-left: 15px;  padding-bottom:5px; }
+.forum_Message_Description { width:100%; color: #{MenuBackgroundNormal}; border-top:1px solid #{BorderBlack}; border-bottom:1px solid #{BorderBlack}; background-color: #ffffff; margin: 0px ; padding-left: 15px;  padding-bottom:5px; }
 .forum_Message_Description p { margin:0px;  }
 .forum_Message_DescriptionTitre { color: #000000; font-weight: bold; padding-top:5px;}
 .forum_Message_DescriptionModif { font-size:10px;}
@@ -336,7 +337,7 @@ img:hover { color: #{TextBackgroundHover}; }
 .forum_Message_PJ { border-top: 1px solid #efefef; padding-top:5px;  }
 .forum_Message_PJ p { margin:0px; padding-left: 15px; }
 
-.forum_Message_Reponses { margin-left:100px;  width:850px; margin-top:15px;}
+.forum_Message_Reponses { margin-left:0px;  width:100%; margin-top:15px;}
 .forum_Message_Reponse { border-top:1px solid #efefef; border:1px solid #efefef; border-radius: 5px; }
 .forum_Message_Reponse p {padding: 5px 15px 5px 90px; }
 .forum_Message_ReponseTitre { background-color: #{FormulaireBackgroundNormal}; font-weight: bold; margin: 0px; padding: 5px 15px 5px 150px;}
@@ -360,11 +361,12 @@ img:hover { color: #{TextBackgroundHover}; }
 .formulaireTableau td { padding:10px; }
 
 .formulaire { margin-left: 15px; }
-.formulaire p { margin: 0px; padding-left:5px; }
+.formulaire p { margin: 0px; padding-left:5px; padding-bottom:2px; line-height: 24px; }
 .formulaire label { display: inline-block; width: 160px; margin-right: 10px; text-align: left; vertical-align: top; }
 .formulaire span { margin: 0px; line-height:18px; padding-left:5px; display: inline-block;  }
 .formulaire2 span { display: inline-block; width:450px; border: 1px solid #{BorderBlack}; border-radius: 4px; padding: 4px; }
 
+.formulaire table { margin: 0px; padding:0px;}
 
 .formulaireTitre { background-color: #{FormulaireBackgroundNormal};  margin-bottom: 15px; margin-top:20px; padding-left: 20px; font-size: 20px; }
 .formulairePhoto img { border: 1px solid #{BorderBlack}; border-radius: 5px; }

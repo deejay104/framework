@@ -33,6 +33,7 @@
 	$mykey=checkVar("mykey","varchar");
 	$mod=checkVar("mod","varchar");
 	$rub=checkVar("rub","varchar","index");
+	$fonc=checkVar("fonc","varchar");
 
 	$gl_uid = 0;
 	$token=(!isset($token)) ? "" : $token;

@@ -28,13 +28,13 @@
 
 	list($usec, $sec) = explode(" ", microtime());
 	$starttime=((float)$usec + (float)$sec);
-	if ($MyOpt["debug"]=="on")
+	if ((isset($MyOpt["debug"])) && ($MyOpt["debug"]=="on"))
 	{
 		// $starttime=microtime();
 		error_reporting(E_ALL); 
 		ini_set("display_errors", 1); 
 	}
-	if ($MyOpt["debugtime"]=="on")
+	if ((isset($MyOpt["debugtime"])) && ($MyOpt["debugtime"]=="on"))
 	{
 		$debug=array();
 	}
@@ -152,6 +152,7 @@
 				$MyOpt[$sql->data["name1"]][$sql->data["name2"]]=$sql->data["value"];
 			}
 		}
+
 		$ret=GenereFichierVariables($MyOpt);
 	}
 	

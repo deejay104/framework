@@ -8,11 +8,14 @@
 
 <!-- BEGIN: corps -->
 
-	<div class="forum_Message_Description">
-		<p class="forum_Message_DescriptionTitre">{titre}</p>
-		<p class="forum_Message_DescriptionModif">par {usr_maj} {date}</p>
-	</div>
+<div class="forum_Message_Description">
+	<p class="forum_Message_DescriptionTitre">{titre}</p>
+	<p class="forum_Message_DescriptionModif">par {usr_maj} {date}</p>
+</div>
 
+<table width="100%">
+<tr>
+	<td style="vertical-align:top;">
 	<div class="forum_Message_Message"><p>{msg}</p></div>
 
 <!-- BEGIN: pieces_jointes -->
@@ -23,6 +26,8 @@
 	</div>
 <!-- END: pieces_jointes -->
 
+	</td>
+	<td>
 	<div class="forum_Message_Reponses">
 <!-- BEGIN: lst_reponse -->
 	<div class="forum_Message_Reponse">
@@ -36,6 +41,8 @@
 	</div>
 <!-- END: lst_reponse -->
 	</div>
-	
+	</td>
+</tr>
+</table>
 <!-- END: corps -->
 

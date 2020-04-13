@@ -323,7 +323,7 @@ class amelioration_core extends objet_core
 				{
 					foreach($v as $kk=>$vv)
 					{
-						$lst[$k][$kk]=utf8_decode($vv);
+						$lst[$k][$kk]=$vv;
 					}
 				}
 			}
