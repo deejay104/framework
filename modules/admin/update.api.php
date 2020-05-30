@@ -285,7 +285,7 @@ function AjoutLog($txt)
 		$MyOpt=UpdateVariables($MyOptTab);
 	}
 
-	if (!file_exists("../config/variables.inc.php"))
+	if (!file_exists("../static/cache/config/variables.inc.php"))
 	{
 		error_log("easy-aero variable file does not exist");
 		$ret["result"]="NOK";

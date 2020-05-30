@@ -495,7 +495,10 @@ class user_core extends objet_core
 			
 	function Valid($key,$v,$ret=false)
 	{ global $lang;
-		$v=stripslashes(parent::Valid($key,$v,true));
+		if (!is_array($v))
+		{
+			$v=stripslashes(parent::Valid($key,$v,true));
+		}			
 
 		if ($key=="initiales")
 		  {
@@ -565,10 +568,21 @@ class user_core extends objet_core
 			$vv=$v;
 		}
 
-		if ( (!is_numeric($key)) && ("($vv)"!="(**none**)") && ($ret==false))
-		  { $this->data[$key]=$vv; }
-		else if ($ret==true)
-		  { return addslashes($vv); }
+		if (!is_array($vv))
+		{
+			if ( (!is_numeric($key)) && ("($vv)"!="(**none**)") && ($ret==false))
+			{
+				$this->data[$key]=$vv;
+			}
+			else if ($ret==true)
+			{ 
+				return addslashes($vv);
+			}
+		}
+		else
+		{
+			return "";
+		}
 	}
 
 	
