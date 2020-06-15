@@ -259,7 +259,7 @@ class objet_core
 		  	  	$ret ="";
 				foreach($this->tabList[$key][$lang] as $k=>$v)
 				{
-					$ret.="<input id='".(($formid!="") ? $formid : "").$key."_".$k."' type='radio' name=\"".$formname."[$key]\" value=\"".$k."\" ".(($txt==$k) ? "checked" : "").">".$this->tabList[$key][$lang][$k];
+					$ret.="<input id='".(($formid!="") ? $formid : "").$key."_".$k."' type='radio' name=\"".$formname."[$key]\" value=\"".$k."\" ".(($txt==$k) ? "checked" : "").">".$this->tabList[$key][$lang][$k]." ";
 				}
 
 			}

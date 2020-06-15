@@ -68,7 +68,7 @@ input[type=number] { border: 1px solid #{FormulaireBackgroundDark}; line-height:
 input[type=date] { border: 1px solid #{FormulaireBackgroundDark}; line-height: 16px; padding: 2px 5px 2px 5px; width:155px; }
 input[type=submit] { height: 36px; padding:5px 15px 5px 15px;  background:#{FormulaireBackgroundNormal}; border: 1px solid #{FormulaireBackgroundDark}; cursor:pointer; border-radius: 5px; }
 input[type=submit]:hover { background:#{FormulaireBackgroundLight}; }
-input[type=radio] { -webkit-appearance: none; vertical-align: sub; height:20px; width:20px!important; margin: 0px; border: 1px solid #{FormulaireBackgroundDark}; background-color:#{FormulaireBackgroundLight}; border-radius: 50%; }
+input[type=radio] { -webkit-appearance: none; vertical-align: sub; margin-bottom:2px; margin-left: 0px; height:16px; width:16px!important; border: 1px solid #{FormulaireBackgroundDark}; background-color:#{FormulaireBackgroundLight}; border-radius: 50%; }
 input[type=radio]:checked { border: 5px solid #{FormulaireBackgroundDark}; background-color:#{FormulaireBackgroundLight}; }
 input[type=file] { height:30px; border: 1px solid #{FormulaireBackgroundDark}; background-color: #ffffff; border: 0px; }
 
@@ -104,7 +104,7 @@ img { color: #FFFFFF; border: 0px; }
 	.formulaire input[type=number] { width:80px!important; }
 	.formulaire input[type=date] { width:155px!important; }
 	.formulaire input[type=checkbox] { width:20px!important; }
-	.formulaire input[type=radio] { width:20px!important; }
+	.formulaire input[type=radio] { width:16px!important; }
     #main-content { padding-left: 240px!important;  }
     #main-sidebar { width: 240px!important; z-index: 9000; }
 }
@@ -172,7 +172,7 @@ img { color: #FFFFFF; border: 0px; }
 .pagetitle a:hover { background-color: #{TitleBackgroundButton}; border-radius: 8px; border: 1px solid #{TitleBackgroundHover}; color: #ffffff;  }
 .pagetitle img { vertical-align:middle; margin-right: 5px; }
 
-.pagemenu { background-color: #{FormulaireBackgroundNormal}; height: 20px; width: 100%; padding-top:0px; margin-bottom: 30px;  margin-top: -10px; }
+.pagemenu { background-color: #{FormulaireBackgroundLight}; border-top: 1px solid #{FormulaireBackgroundNormal}; height: 10px; width: 100%; padding-top:0px; margin-bottom: 30px;  margin-top: -10px; }
 
 .pageTitleSelected { background-color: #{TitleBackgroundButton}!important; border: 1px solid #076983!important; color: #ffffff!important; box-shadow: 2px 2px #{TitleBackgroundHover}; }
 
@@ -356,7 +356,7 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 .actualitesPhoto img { border-radius: 32px; width:64px; height:64px; }
 
 .actualitesTitreMsg { display: inline-block; float: left; }
-.actualitesTitreMsg p { font-weight: bold; margin:0px; padding:0px 0px; line-height:16px; padding-left:10px; padding-top:10px; font-size:16px; }
+.actualitesTitreMsg p { margin:0px; padding:0px 0px; line-height:16px; padding-left:10px; padding-top:10px; font-size:18px; }
 .actualitesTitreMsg span { margin:0px; padding:0px; font-size:10px; padding-left:10px; }
 
 .actualitesIcones { display: inline-block; position:relative; top:5px; float:right; padding-right:5px; }
@@ -462,13 +462,13 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 
 .formulaire { padding: 10px; margin-bottom: 10px; border: 1px solid #{FormulaireBackgroundNormal}; }
 .formulaire p { margin: 0px; padding-bottom: 2px;}
-.formulaire label { display: inline-block; width: 180px; margin-right: 10px; text-align: left; vertical-align: top; }
+.formulaire label { display: inline-block; width: 180px; line-height:24px; margin-right: 10px; text-align: left; vertical-align: top; }
 .formulaire span { display: inline-block; width:160px; } /* Overlapped by responsive */
 .formulaire2 span { display: inline-block; width:450px; border: 1px solid #{BorderBlack}; border-radius: 4px; padding: 4px; }
 
 .formulaireLarge label { width: 300px!important; }
 
-.formulaireTitre { background-color: #{FormulaireBackgroundNormal}; border-radius: 4px; margin-bottom: 4px; padding-left: 20px; padding-top:7px; padding-bottom:7px; line-height:24px; }
+.formulaireTitre { background-color: #{FormulaireBackgroundLight}; color: black; font-size:18px; border-left: 1px solid #{FormulaireBackgroundNormal}; border-top: 1px solid #{FormulaireBackgroundNormal}; border-right: 1px solid #{FormulaireBackgroundNormal}; border-radius: 4px 4px 0px 0px; padding-left: 20px; padding-top:7px; padding-bottom:7px; line-height:24px; }
 .formulairePhoto img { border: 1px solid #{FormulaireBackgroundNormal}; border-radius: 5px; }
 .formulaireSubmit { margin-left: 20px; margin-top: 20px; }
 .formulaireListe p { margin: 0px; padding-left:20px; }
@@ -488,7 +488,7 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 .formulaireCadre { border: 1px solid #{FormulaireBackgroundNormal}; padding:5px; min-height:50px; margin-bottom:10px!important; }
 
 
-.formulaireInformation { min-width:300px; width:400px;  margin-left:10px; margin-bottom:10px; border: 1px solid #000000; border-radius: 5px; padding: 15px; background-color:#{FormulaireBackgroundNormal}; }
+.formulaireInformation { min-width:300px; width:400px;  margin-left:10px; margin-bottom:10px; border: 1px solid #{FormulaireBackgroundNormal}; border-radius: 4px; padding: 15px; background-color:#{FormulaireBackgroundLight}; }
 
 .formulaireTableau { width: 100%; }
 .formulaireTableau tr {  }
@@ -516,6 +516,8 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 .tableauBorderLeft { border-left: 1px solid black; width:1 px; }
 .tableauBas { }
 .tableauBas td { background-color: #{FormulaireBackgroundNormal}; border-top: 1px solid black; height: 20px; font-weight: bold; }
+
+.dataTables_filter input { width: 180px!important; }
 
 /* **** Comptes **** */
 .tableauCompte { background-color: #{FormulaireBackgroundNormal}; border-bottom:1px solid #{FormulaireBackgroundNormal}; }
