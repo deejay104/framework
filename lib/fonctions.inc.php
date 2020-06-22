@@ -1593,6 +1593,9 @@ function GenereVariables($tab)
 	{
 		error_log("Create variable file");
 		$ret.="Création du fichier";
+		$fd=fopen($conffile,"w");
+		fwrite($fd,"<?php\n?>");
+		fclose($fd);
 	}
 
 	$tab["version"]["valeur"]=time();
