@@ -122,6 +122,14 @@ class objet_core
 				}
 			}
 		}
+		else
+		{
+			$this->fields=array();
+			foreach($this->type as $k=>$v)
+			{
+				$this->fields[$k]["type"]=$v;
+			}
+		}
 
 		if ($id>0)
 		{
@@ -150,6 +158,7 @@ class objet_core
 		$this->dte_maj=$res["dte_maj"];
 		
 		// Charge les variables
+		
 		foreach($this->fields as $k=>$v)
 		{
 			$this->data[$k]=$res[$k];
