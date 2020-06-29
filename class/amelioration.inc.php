@@ -74,7 +74,7 @@ class amelioration_core extends objet_core
 	function load($id)
 	{
 		global $MyOpt;
-	
+
 		if ((isset($MyOpt["amelioration"]["url"])) && ($MyOpt["amelioration"]["url"]!=""))
 		{
 
@@ -97,6 +97,7 @@ class amelioration_core extends objet_core
 			$ch = curl_init($url); 
 			curl_setopt_array( $ch, $options );
 			$data = curl_exec($ch); 
+
 			curl_close($ch); 
 			$tabList=json_decode($data,true);
 
@@ -234,7 +235,7 @@ class amelioration_core extends objet_core
 			$url=$MyOpt["amelioration"]["url"]."/api.php?mod=ameliorations&rub=updcomm";
 			$options = array(
 				CURLOPT_RETURNTRANSFER => true,     // return web page
-				CURLOPT_HEADER         => false,    // don't return headers
+				CURLOPT_HEADER         => true,    // don't return headers
 				CURLOPT_FOLLOWLOCATION => true,     // follow redirects
 				CURLOPT_ENCODING       => "",       // handle all encodings
 				CURLOPT_USERAGENT      => "MNMS", // who am i

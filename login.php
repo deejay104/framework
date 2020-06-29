@@ -105,6 +105,7 @@
 				$query="INSERT INTO ".$MyOpt["tbl"]."_login (username,dte_maj,header,type) VALUES ('".addslashes($res["prenom"])." ".addslashes($res["nom"])."','".now()."','".substr(addslashes($_SERVER["HTTP_USER_AGENT"]),0,200)."','password')";
 				$sql->Insert($query);
 				$_SESSION['uid']=$res["id"];
+				$gl_uid=$res["id"];
 
 				$myid=0;
 				$token="";
@@ -113,7 +114,7 @@
 					// $token=bin2hex(random_bytes(32));
 					$token=bin2hex(openssl_random_pseudo_bytes(32));
 
-					$query="INSERT INTO ".$MyOpt["tbl"]."_token SET uid=".$res["id"].", token='".$token."', dte_creat='".now()."', dte_expire='".date("Y-m-d H:i:s",time()+$MyOpt["tokenexpire"]*3600*24)."'";
+					$query="INSERT INTO ".$MyOpt["tbl"]."_token SET uid=".$gl_uid.", token='".$token."', uid_creat='".$gl_uid."',uid_maj='".$gl_uid."',dte_creat='".now()."', dte_expire='".date("Y-m-d H:i:s",time()+$MyOpt["tokenexpire"]*3600*24)."'";
 					$myid=$sql->Insert($query);
 					$_SESSION['sessid']=$myid;
 				}

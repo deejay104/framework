@@ -114,7 +114,7 @@ class mysql_core{
 
 	# Add/Update a line in the table
 	function Edit($class,$tab,$id,$val,$comment="")
-	{ global $MyOpt,$uid;
+	{ global $MyOpt,$gl_uid;
 		$v="";
 		$c="";
 		$s="";
@@ -139,7 +139,7 @@ class mysql_core{
 			$ret=$id;
 
 			$query ="INSERT INTO ".$MyOpt["tbl"]."_historique (`class` ,`table` ,`idtable` ,`uid_maj` ,`dte_maj` ,`type` ,`comment`) ";
-			$query.="VALUES ('".$class."', '".$tab."', '$id', '$uid', '".now()."', 'MOD', '".(($comment!="") ? $comment : $c)."')";
+			$query.="VALUES ('".$class."', '".$tab."', '$id', '$gl_uid', '".now()."', 'MOD', '".(($comment!="") ? $comment : $c)."')";
 			$this->Insert($query);
 		}
 		else
@@ -148,7 +148,7 @@ class mysql_core{
 			$ret=$this->Insert($query);
 
 			$query ="INSERT INTO ".$MyOpt["tbl"]."_historique (`class` ,`table` ,`idtable` ,`uid_maj` ,`dte_maj` ,`type` ,`comment`) ";
-			$query.="VALUES ('".$class."', '".$tab."', '$ret', '$uid', '".now()."', 'ADD', '".(($comment!="") ? $comment : $c)."')";
+			$query.="VALUES ('".$class."', '".$tab."', '$ret', '$gl_uid', '".now()."', 'ADD', '".(($comment!="") ? $comment : $c)."')";
 			$this->Insert($query);
 		}
 		return $ret;

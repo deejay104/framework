@@ -65,18 +65,22 @@ class echeance_core extends objet_core
 		$sql=$this->sql;
 		$query = "SELECT echeance.*, echeancetype.context, echeancetype.poste, echeancetype.description, echeancetype.droit, echeancetype.multi, echeancetype.resa FROM ".$this->tbl."_echeance AS echeance LEFT JOIN ".$this->tbl."_echeancetype AS echeancetype ON echeance.typeid=echeancetype.id WHERE echeance.typeid='$tid' AND echeance.uid='".$this->uid."'";
 		$res = $sql->QueryRow($query);
-		// Charge les variables
-		$this->id=$res["id"];
-		$this->context=$res["context"];
-		$this->typeid=$res["typeid"];
-		$this->poste=$res["poste"];
-		// $this->uid=$res["uid"];
-		$this->dte_echeance=$res["dte_echeance"];
-		$this->paye=$res["paye"];
-		$this->description=$res["description"];
-		$this->droit=$res["droit"];
-		$this->multi=$res["multi"];
-		$this->resa=$res["resa"];
+		
+		if (is_array($res))
+		{
+			// Charge les variables
+			$this->id=$res["id"];
+			$this->context=$res["context"];
+			$this->typeid=$res["typeid"];
+			$this->poste=$res["poste"];
+			// $this->uid=$res["uid"];
+			$this->dte_echeance=$res["dte_echeance"];
+			$this->paye=$res["paye"];
+			$this->description=$res["description"];
+			$this->droit=$res["droit"];
+			$this->multi=$res["multi"];
+			$this->resa=$res["resa"];
+		}
 	}
 
 	function Valid($k,$v,$ret = false) 

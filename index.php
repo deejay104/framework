@@ -207,18 +207,18 @@
 	//error_reporting( E_ALL ^ E_NOTICE ^ E_DEPRECATED );
 
 // ---- Récupère les paramètres
-	$e ="foreach( \$_REQUEST as \$key=>\$value) {"."\n";
-	$e.="if (!isset(\$_SESSION[\"\$key\"])) {"."\n";
+	// $e ="foreach( \$_REQUEST as \$key=>\$value) {"."\n";
+	// $e.="if (!isset(\$_SESSION[\"\$key\"])) {"."\n";
 
-	$e.="  if (is_array(\$value)) {"."\n";
-	$e.="      foreach(\$value as \$k=>\$v) { if (!is_array(\$v)) { \$value[\$k]=stripslashes(\$v); } } \$\$key=\$value;"."\n";
-	$e.="  } else if (get_magic_quotes_gpc()) {"."\n";
-	$e.="      \$\$key = stripslashes(\$value);"."\n";
-	$e.="  } else {"."\n";
-	$e.="    \$\$key = \$value;"."\n";
-	$e.="} } }"."\n";
+	// $e.="  if (is_array(\$value)) {"."\n";
+	// $e.="      foreach(\$value as \$k=>\$v) { if (!is_array(\$v)) { \$value[\$k]=stripslashes(\$v); } } \$\$key=\$value;"."\n";
+	// $e.="  } else if (get_magic_quotes_gpc()) {"."\n";
+	// $e.="      \$\$key = stripslashes(\$value);"."\n";
+	// $e.="  } else {"."\n";
+	// $e.="    \$\$key = \$value;"."\n";
+	// $e.="} } }"."\n";
 
-	eval($e);
+	// eval($e);
 
 
 // ---- Force la timezone

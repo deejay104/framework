@@ -96,7 +96,14 @@ function addPageMenu($path,$mod,$title,$url,$img,$selected=false,$confirm="")
 	
 	
 	$tmpl_prg->assign("pagemenu_name",$title);
-	$tmpl_prg->assign("pagemenu_image",$MyOpt["host"]."/".(($path!="") ? $path."/" : "").$module."/".$mod."/img/".$img);
+	if ($img!="")
+	{
+		$tmpl_prg->assign("pagemenu_image","<IMG src='".$MyOpt["host"]."/".(($path!="") ? $path."/" : "").$module."/".$mod."/img/".$img."' border=0 alt=''>");
+	}
+	else
+	{
+		$tmpl_prg->assign("pagemenu_image","");
+	}
 
 	if ($selected)
 	{
@@ -268,7 +275,7 @@ function myPrint($txt)
 { global $gl_mode,$gl_myprint_txt;
 	if ($gl_mode=="batch")
 	{
-		$gl_myprint_txt.=utf8_encode($txt)."\n";
+		$gl_myprint_txt.=$txt."\n";
 	}
 	else
 	{

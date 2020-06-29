@@ -41,6 +41,10 @@
 	{
 		addPageMenu($corefolder,$mod,$tabLang["lang_delete"],geturl("membres","detail","id=".$id."&fonc=delete"),"icn32_supprime.png");
 	}
+	if ((GetDroit("SupprimeUser")) && ($usr->actif=="non"))
+	{
+		addPageMenu($corefolder,$mod,$tabLang["lang_enable"],geturl("membres","detail","id=".$id."&fonc=active"),"icn32_desactive.png");
+	}
 
 // ---- Menu custom
 	if (file_exists($appfolder."/modules/membres/menu.inc.php"))

@@ -150,8 +150,12 @@ class user_core extends objet_core
 		$sql=$this->sql;
 		$query = "SELECT actif,password FROM ".$this->tbl."_utilisateurs WHERE id='".$this->id."'";
 		$res=$sql->QueryRow($query);
-		$this->password=$res["password"];
-		$this->actif=$res["actif"];
+
+		if (is_array(($res)))
+		{
+			$this->password=$res["password"];
+			$this->actif=$res["actif"];
+		}
 	
 		// Charge les droits
 		$query = "SELECT groupe FROM ".$this->tbl."_droits WHERE uid='".$this->id."' ORDER BY groupe";
@@ -409,12 +413,16 @@ class user_core extends objet_core
 	function SaveDonneesComp($tabd)
 	{ 
 		global $gl_uid;
+		
 		$sql=$this->sql;
 		foreach($this->donnees as $did=>$d)
 		{
-			$this->donnees[$did]["valeur"]=$tabd[$did];
-			$td=array("valeur"=>$this->donnees[$did]["valeur"], "uid"=>$this->id, "did"=>$did);
-			$sql->Edit("user",$this->tbl."_utildonnees",$d["id"],$td);
+			if (isset($tabd[$did]))
+			{
+				$this->donnees[$did]["valeur"]=$tabd[$did];
+				$td=array("valeur"=>$this->donnees[$did]["valeur"], "uid"=>$this->id, "did"=>$did);
+				$sql->Edit("user",$this->tbl."_utildonnees",$d["id"],$td);
+			}
 		}
 	}
 	
@@ -495,6 +503,11 @@ class user_core extends objet_core
 			
 	function Valid($key,$v,$ret=false)
 	{ global $lang;
+		if (!isset($this->fields[$key]))
+		{
+			return "";
+		}
+
 		if (!is_array($v))
 		{
 			$v=stripslashes(parent::Valid($key,$v,true));
@@ -563,7 +576,7 @@ class user_core extends objet_core
 		{
 			$vv=strtoupper($v);
 		}
-		else
+		else if (isset($this->fields[$key]))
 		{
 			$vv=$v;
 		}
@@ -572,7 +585,10 @@ class user_core extends objet_core
 		{
 			if ( (!is_numeric($key)) && ("($vv)"!="(**none**)") && ($ret==false))
 			{
-				$this->data[$key]=$vv;
+				if (isset($this->fields[$key]))
+				{
+					$this->data[$key]=$vv;
+				}
 			}
 			else if ($ret==true)
 			{ 
@@ -606,7 +622,7 @@ class user_core extends objet_core
 			$query ="SELECT id FROM ".$this->tbl."_droits WHERE uid='".$this->id."' AND groupe='".$grp."'";
 			$res=$sql->QueryRow($query);
 	
-			if ($res["id"]==0)
+			if ((!isset($res["id"])) || ($res["id"]==0))
 			{
 				$query ="INSERT INTO ".$this->tbl."_droits SET groupe='".$grp."',uid='".$this->id."',uid_creat='".$gl_uid."',dte_creat='".now()."'";
 				$sql->Insert($query);

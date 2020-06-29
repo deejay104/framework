@@ -69,7 +69,6 @@
 				affInformation($err,"error");
 		  	}
 		}
-
 		$usr->Save();
 		if ($id==0)
 		{

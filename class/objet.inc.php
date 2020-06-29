@@ -66,6 +66,7 @@ class objet_core
 		// $this->table="";
 
 		$this->id=0;
+		$this->actif="oui";
 		$this->uid_creat=$gl_uid;
 		$this->dte_creat=date("Y-m-d H:i:s");
 		$this->uid_maj=$gl_uid;
@@ -149,11 +150,10 @@ class objet_core
 		$this->dte_maj=$res["dte_maj"];
 		
 		// Charge les variables
-		foreach($this->data as $k=>$v)
+		foreach($this->fields as $k=>$v)
 		{
 			$this->data[$k]=$res[$k];
 		}
-
 	}
 	
 	# Show object informations
@@ -549,6 +549,11 @@ class objet_core
 	{
 		$vv="**none**";
 
+		if (!isset($this->fields[$key]))
+		{
+			return "";
+		}
+
 		if (!isset($this->type[$key]))
 		{
 			if (!is_array($v))
@@ -574,6 +579,10 @@ class objet_core
 	  	  	  { $vv=date2sql($v); }
 	  	  	else if (preg_match("/^([0-9]{2,4})-([0-9]{1,2})-([0-9]{1,2})([0-9: ]*)$/",$v))
 	  	  	  { $vv=$v; }
+			if ($v=="")
+			{
+				$vv="0000-00-00";
+			}
 		}
 	  	else if ($this->type[$key]=="datetime")
 		{
@@ -647,11 +656,6 @@ class objet_core
 	{
 		global $gl_uid;
 		$sql=$this->sql;
-
-		if ($this->id==0)
-		{
-			$this->Create();
-		}
 		
 		$td=array();
 		foreach($this->data as $k=>$v)
@@ -663,10 +667,21 @@ class objet_core
 				$td[$k]=$vv;
 			// }
 		}
+		$td["actif"]=$this->actif;
 		$td["uid_maj"]=$gl_uid;
 		$td["dte_maj"]=now();
+		$this->uid_maj=$gl_uid;
+		$this->dte_maj=now();
 
-		$sql->Edit($this->table,$this->tbl."_".$this->table,$this->id,$td);
+		if ($this->id==0)
+		{
+			$td["uid_creat"]=$gl_uid;
+			$td["dte_creat"]=now();
+			$this->uid_creat=$gl_uid;
+			$this->uid_creat=now();
+		}
+
+		$this->id=$sql->Edit($this->table,$this->tbl."_".$this->table,$this->id,$td);
 		return $sql->a_rows;
 	}
 
