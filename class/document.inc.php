@@ -100,7 +100,7 @@ class document_core{
 			$filename=substr(GetFilename($name),0,96).".".$myext;
 		}
 
-	  	$query="INSERT INTO ".$this->tbl."_document SET name='$name', uid='$id', droit='$this->droit', type='$this->type', actif='oui', uid_creat='$gl_uid',dte_creat='".now()."'";
+	  	$query="INSERT INTO ".$this->tbl."_document SET name='$name', uid='$id', droit='$this->droit', type='$this->type', actif='oui', uid_creat='$gl_uid',dte_creat='".now()."', uid_maj='$gl_uid',dte_maj='".now()."'";
 		$this->id=$sql->Insert($query);
 
 		$myname=CompleteTxt($this->id,6,"0");
