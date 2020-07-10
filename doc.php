@@ -83,10 +83,25 @@
 //	header('Content-Disposition: inline; filename="'.substr($name,strrpos($name,"/")+1,strlen($name)-strrpos($name,"/")).'";');
 
 // ---- Renvoie le contenu du fichier
-
 	if ( (isset($_REQUEST["type"])) && ($_REQUEST["type"]=="image") )
 	{
-		$doc->ShowImage($_REQUEST["width"],$_REQUEST["height"]);
+		if ((isset($_REQUEST["width"])) && (is_numeric($_REQUEST["width"])))
+		{
+			$w=$_REQUEST["width"];
+		}
+		else
+		{
+			$w=0;
+		}
+		if ((isset($_REQUEST["height"])) && (is_numeric($_REQUEST["height"])))
+		{
+			$h=$_REQUEST["height"];
+		}
+		else
+		{
+			$h=0;
+		}
+		$doc->ShowImage($w,$h);
 	}
 	else
 	{

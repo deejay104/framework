@@ -113,6 +113,7 @@ class document_core{
 
 		$this->uid=$id;
 		$this->filename=$mypath."/".$myname.".".$myext;
+		$this->name=$name;			
 
 		if (!move_uploaded_file($tmpname,$this->filepath."/".$this->filename))
 		{
@@ -121,7 +122,7 @@ class document_core{
 		else
 		{
 		  	$query="UPDATE ".$this->tbl."_document SET filename='".$this->filename."' WHERE id='".$this->id."'";
-			$sql->Update($query);
+			$sql->Update($query);			
 		}
 
 		return $ret;
@@ -235,6 +236,22 @@ class document_core{
 			
 			$txt.="AddDocument(0);\n";
 			$txt.="</script>";
+		}
+		else if ($this->editmode=="regular")
+		{
+			$txt ="<div id='doc_".$this->id."' >";
+			$txt.="<p>";
+			if (file_exists($this->filepath."/".$this->filename))
+			{
+					$fsize=CalcSize(filesize($this->filepath."/".$this->filename));
+					$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><img src='".$MyOpt["host"]."/".$corefolder."/static/images/icn16_".$icon.".png' width=16 height=16 border=0> ".$this->name." ($fsize) </a>";
+			}
+			else
+			{
+					$txt.="<img src='".$MyOpt["host"]."/".$corefolder."/static/images/icn16_".$icon.".png' style='vertical-align:middle; border: 0px; height: 16px; width: 16px;'> <s>".$this->name."</s>";
+			}
+			$txt.="</p>";
+			$txt.="</div>";
 		}
 		else
 		{
@@ -401,13 +418,41 @@ class document_core{
 	function ShowImage($newwidth,$newheight)
 	{
 		$file=$this->filepath."/".$this->filename;
-
+		if (($newwidth==0) || ($newheight==0))
+		{
+			if (is_array(getimagesize($file)))
+			{
+				list($newwidth, $newheight) = getimagesize($file);
+			}
+		}
+		
 		$thumb=$this->Resize($newwidth,$newheight,"show");
 
 		header('Content-Type: image/png');
 		imagepng($thumb);
 	}
 
+	function isImage()
+	{
+		$file=$this->filepath."/".$this->filename;
+
+		if(is_array(getimagesize($file))){
+			return true;
+		}
+		return false;
+	}
+
+	function getSize()
+	{
+		$file=$this->filepath."/".$this->filename;
+
+		if (is_array(getimagesize($file)))
+		{
+			return getimagesize($file);
+		}
+		return array();
+	}
+	
 	function GenerePath($w,$h)
 	{
 		// $f=preg_split("/\\//",$this->filename);

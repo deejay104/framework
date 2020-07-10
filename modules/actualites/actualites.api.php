@@ -8,6 +8,7 @@
 	
 	$id=checkVar("id","numeric");
 	$fonc=checkVar("fonc","varchar");
+	$type=checkVar("type","varchar");
 
 	require_once ("class/document.inc.php");
 
@@ -37,7 +38,7 @@
 		$result["lastid"]=(isset($sql->data["id"])) ? $sql->data["id"] : "0";
 
 		$idprev=0;
-		foreach($news as $id=>$d)
+		foreach($news as $nid=>$d)
 		{
 			$resusr=new user_core($d["uid_creat"],$sql,false,false);
 
@@ -46,33 +47,63 @@
 			$txt=preg_replace("/((http|https|ftp):\/\/[^ \n\r<]*)/si","<a href='$1' target='_blank'>$1</a>",$txt);
 			$txt=preg_replace("/ (www\.[^ |\/]*)/si","<a href='http://$1' target='_blank'>$1</a>",$txt);
 
-			$result["news"][$id]["id"]=$d["id"];
-			$result["news"][$id]["title"]=$d["titre"];
-			// $result["news"][$id]["message"]=utf8_encode($txt);
-			$result["news"][$id]["message"]=$txt;
-			// $result["news"][$id]["message"]="éèà €";
-			$result["news"][$id]["author"]=$resusr->Aff("fullname");
-			$result["news"][$id]["date"]=DisplayDate($d["dte_creat"]);
+			$lstdoc=ListDocument($sql,$d["id"],"actualite");
+			if (is_array($lstdoc))
+			{
+				foreach($lstdoc as $i=>$did)
+				{
+					$doc = new document_core($did,$sql);
+					$doc->editmode="regular";
+					if ($doc->isImage())
+					{
+						list($w, $h) = $doc->getSize();
+						
+						if ($w>500)
+						{
+							$w=500;
+						}
+						if ($h>400)
+						{
+							$h=400;
+						}
+												
+						$txt.="<p><img src='doc.php?id=".$doc->id."&type=image&width=".$w."&height=".$h."'></p>";
+					}
+					else
+					{
+						$txt.=$doc->Affiche();
+					}
+				}
+			}
+
+
+			$result["news"][$nid]["id"]=$d["id"];
+			$result["news"][$nid]["title"]=$d["titre"];
+			// $result["news"][$nid]["message"]=utf8_encode($txt);
+			$result["news"][$nid]["message"]=$txt;
+			// $result["news"][$nid]["message"]="éèà €";
+			$result["news"][$nid]["author"]=$resusr->Aff("fullname");
+			$result["news"][$nid]["date"]=DisplayDate($d["dte_creat"]);
 
 			$lstdoc=ListDocument($sql,$d["uid_creat"],"avatar");
 
 			if (count($lstdoc)>0)
 			{
 				$img=new document_core($lstdoc[0],$sql);
-				$result["news"][$id]["avatar"]=$img->GenerePath(64,64);
+				$result["news"][$nid]["avatar"]=$img->GenerePath(64,64);
 			}
 			else
 			{
-				$result["news"][$id]["avatar"]="static/images/icn64_membre.png";
+				$result["news"][$nid]["avatar"]="static/images/icn64_membre.png";
 			}
 
 			if (GetDroit("SupprimeActualite"))
 			{
-				$result["news"][$id]["delete"]="ok";
+				$result["news"][$nid]["delete"]="ok";
 			}
 			if ( (($gl_uid==$d["uid_creat"]) && (time()-strtotime($d["dte_creat"])<3600)) || (GetDroit("ModifActualite")) )
 			{
-				$result["news"][$id]["edit"]="ok";
+				$result["news"][$nid]["edit"]="ok";
 			}
 		}
 		$result["status"]="ok";
@@ -87,6 +118,53 @@
 		}
 		$result["status"]="deleted";
 	}
-	
+	else if (($fonc=="post") && ($type=="file") && ($_FILES['file']['name']))
+	{
+		// $filename = $_FILES['file']['name'];
+		$doc = new document_core(0,$sql,"actualite");
+
+		if ($id==0)
+		{
+			$td=array();
+			$td["titre"]="Nouvelle actualité";
+			$td["mail"]="draft";
+			$td["uid_creat"]=$gl_uid;
+			$td["dte_creat"]=now();	
+			$id=$sql->Edit("actualites",$MyOpt["tbl"]."_actualites",0,$td);
+		}
+
+		$r=$doc->Save($id,$_FILES["file"]["name"],$_FILES["file"]["tmp_name"]);
+		$result["id"]=$id;
+		$result["status"]="ok";
+		if ($r!="")
+		{
+			$result["error"]=$r;
+			$result["status"]="nok";
+		}
+		$doc->editmode="regular";
+
+		if ($doc->isImage())
+		{
+			list($w, $h) = $doc->getSize();
+			
+			if ($w>500)
+			{
+				$w=500;
+			}
+			if ($h>400)
+			{
+				$h=400;
+			}
+			$result["type"]="image";
+			$result["link"]="<img src='doc.php?id=".$doc->id."&type=image&width=".$w."&height=".$h."'>";
+		}
+		else
+		{
+			$result["type"]="file";
+			$result["link"]=$doc->Affiche();
+		}
+		
+	}
+
 	echo json_encode($result);	
 ?>

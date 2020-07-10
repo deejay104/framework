@@ -41,7 +41,7 @@
 	{
 		$_SESSION['tab_checkpost'][$checktime]=$checktime;
 
-		if ($form_message!=$txtnewmsg)
+		if (($form_message!=$txtnewmsg) || ($id>0))
 		{
 			$td=array(
 				"titre"=>addslashes(strip_tags($form_titre)),
@@ -51,16 +51,21 @@
 				);		
 			if ($id>0)
 			{
-				$query="SELECT uid_creat FROM `".$MyOpt["tbl"]."_actualites` WHERE id='$id'";
+				$query="SELECT mail,uid_creat FROM `".$MyOpt["tbl"]."_actualites` WHERE id='$id'";
 				$res = $sql->QueryRow($query);
+				if ($res["mail"]=="draft")
+				{
+					$td["mail"]="non";
+				}
 
-				if ( (GetDroit("ModifActualite")) || ( ($gl_uid==$res["uid_creat"]) && (time()-strtotime($d["dte_creat"])<3600) ) )
+				if ( (GetDroit("ModifActualite")) || ( ($gl_uid==$res["uid_creat"]) && ((time()-strtotime($d["dte_creat"])<3600) || ($res["mail"]=="draft")) ) )
 				{
 					$sql->Edit("actualites",$MyOpt["tbl"]."_actualites",$id,$td);
 				}
 			}
 			else
 			{
+				$td["uid_creat"]=$gl_uid;
 				$td["uid_creat"]=$gl_uid;
 				$td["dte_creat"]=now();	
 				$sql->Edit("actualites",$MyOpt["tbl"]."_actualites",0,$td);
@@ -73,6 +78,7 @@
 // ---- url de l'api
 	$tmpl_x->assign("site_title",$MyOpt["site_title"]);
 	$tmpl_x->assign("apiurlget",geturlapi("actualites","actualites","get","q=1"));
+	$tmpl_x->assign("apiurlpost",geturlapi("actualites","actualites","post","q=1"));
 	$tmpl_x->assign("apiurldel",geturlapi("actualites","actualites","del","q=1"));
 
 // ---- Affiche les échéances

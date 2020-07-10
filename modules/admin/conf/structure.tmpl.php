@@ -7,7 +7,7 @@ $tabTmpl=Array
 		"titre" => Array("Type" => "varchar(150)", "Default" => "Titre" ),
 		"message" => Array("Type" => "text", ),
 		"dte_mail" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
-		"mail" => Array("Type" => "enum('oui','non')", "Default" => "non", ),
+		"mail" => Array("Type" => "enum('oui','non','draft')", "Default" => "non", ),
 		"actif" => Array("Type" => "enum('oui','non')", "Default" => "oui", "Index"=>1),
 		"uid_creat" => Array("Type" => "int(10) unsigned", "Index" => "1", ),
 		"dte_creat" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),

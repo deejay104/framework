@@ -13,16 +13,17 @@
 	<div class="encadreInfos">
 		<div class="encadreTitre">Informations Personnelles</div>
 	  
-			<!-- BEGIN: lst_echeance -->
-			<p>{form_echeance}</p>
-			<!-- END: lst_echeance -->
+		<!-- BEGIN: lst_echeance -->
+		<p>{form_echeance}</p>
+		<!-- END: lst_echeance -->
+		{aff_custom}
 	</div>	
 
 <p style="text-align:center;"><a href="index.php?settheme=default">-Revenir à l'affichage classique-</a></p>
 
 	<div class="encadreInfos">
 		<a name="poster"></a>
-		<div class="encadreTitre">Poster un nouveau message</div>
+		<div class="encadreTitre">Actualités</div>
 		<div id="actualitesNouveau" class="actualitesNouveau">		
 			<form name="actualites" method="post" action="index.php#poster" enctype="multipart/form-data">
 				<input type="hidden" name="mod" value="actualites">

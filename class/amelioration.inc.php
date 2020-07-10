@@ -136,7 +136,7 @@ class amelioration_core extends objet_core
 			// $post['description']=utf8_encode("Description détaillée de l'amélioration");
 			foreach($this->data as $k=>$v)
 			{
-				$post["data"][$k]=utf8_encode($v);
+				$post["data"][$k]=$v;
 			}
 
 			$url=$MyOpt["amelioration"]["url"]."/api.php?mod=ameliorations&rub=upddetail&id=".$this->id;
