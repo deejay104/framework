@@ -225,7 +225,7 @@ class amelioration_core extends objet_core
 		{
 			$td=array();
 			$td["fid"]=$this->id;
-			$td["description"]=utf8_encode($txt);
+			$td["description"]=$txt;
 			$td["uid_dist"]=$gl_uid;
 			$td["uid_creat"]=$gl_uid;
 			$td["dte_creat"]=now();

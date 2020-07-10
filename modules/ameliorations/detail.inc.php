@@ -62,11 +62,16 @@
 	}
 
 // ---- Sauver une réponse
-	if (($fonc=="Poster") && ($id>0) && (GetDroit("CreeAmeliorationCommentaire")) && ($form_desc!="") && ($form_desc!=$newmsg) && (!isset($_SESSION['tab_checkpost'][$checktime])))
+	if (($fonc=="Poster") && ($id>0) && (GetDroit("CreeAmeliorationCommentaire")) && (!isset($_SESSION['tab_checkpost'][$checktime])))
 	{
-		$pb=new amelioration_core($id,$sql);
-		$pb->AddCommentaire($form_desc);
-		$_SESSION['tab_checkpost'][$checktime]=$checktime;
+		$form_desc=checkVar("form_desc","varchar");
+
+		if (($form_desc!="") && ($form_desc!=$newmsg))
+		{
+			$pb=new amelioration_core($id,$sql);
+			$pb->AddCommentaire($form_desc);
+			$_SESSION['tab_checkpost'][$checktime]=$checktime;
+		}
 	}
 
 // ---- Affiche le menu
