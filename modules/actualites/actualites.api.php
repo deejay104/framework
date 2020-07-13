@@ -57,7 +57,7 @@
 					if ($doc->isImage())
 					{
 						list($w, $h) = $doc->getSize();
-						
+
 						if ($w>500)
 						{
 							$w=500;
@@ -66,8 +66,12 @@
 						{
 							$h=400;
 						}
-												
-						$txt.="<p><img src='doc.php?id=".$doc->id."&type=image&width=".$w."&height=".$h."'></p>";
+						list($w,$h)= $doc->newSize($w,$h);
+						$result["type"]="image";
+						$result["id"]=$doc->id;
+						$result["width"]=$w;
+						$result["height"]=$h;
+						$txt.="<div class='thumbnail' ><img src='".$MyOpt["host"]."/doc.php?id=".$doc->id."&type=image&width=".$w."&height=".$h."' ".(($w<500) ? "style='width:".$w."px!important'" : "")."></div>";
 					}
 					else
 					{
@@ -146,21 +150,26 @@
 		if ($doc->isImage())
 		{
 			list($w, $h) = $doc->getSize();
-			
-			if ($w>500)
+			if ($w>1280)
 			{
-				$w=500;
+				$w=1280;
 			}
-			if ($h>400)
+			if ($h>800)
 			{
-				$h=400;
+				$h=800;
 			}
+			list($w,$h)= $doc->newSize($w,$h);
+			$doc->Resize($w,$h);
 			$result["type"]="image";
-			$result["link"]="<img src='doc.php?id=".$doc->id."&type=image&width=".$w."&height=".$h."'>";
+			$result["docid"]=$doc->id;
+			$result["width"]=$w;
+			$result["height"]=$h;
+			$result["link"]="<img src='".$MyOpt["host"]."/doc.php?id=".$doc->id."&type=image&width=".$w."&height=".$h."'>";
 		}
 		else
 		{
 			$result["type"]="file";
+			$result["docid"]=$doc->id;
 			$result["link"]=$doc->Affiche();
 		}
 		

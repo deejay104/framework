@@ -125,6 +125,8 @@ class document_core{
 			$sql->Update($query);			
 		}
 
+		$this->orientation();
+
 		return $ret;
 	}
 
@@ -353,7 +355,7 @@ class document_core{
 		{
 		  	$file="static/images/icn32_erreur.png";
 		}
-
+		
 		$thumb = imagecreatetruecolor($newwidth, $newheight);
 		$white = imagecolorallocate ($thumb, 255, 255, 255);
 		imagefill($thumb,0,0,$white); 
@@ -415,16 +417,104 @@ class document_core{
 		}
 	}
 
-	function ShowImage($newwidth,$newheight)
+	function orientation()
 	{
 		$file=$this->filepath."/".$this->filename;
-		if (($newwidth==0) || ($newheight==0))
+	  	list($newwidth, $newheight) = getimagesize($file);
+		
+		if (!file_exists($file))
 		{
-			if (is_array(getimagesize($file)))
-			{
-				list($newwidth, $newheight) = getimagesize($file);
+		  	return;
+		}
+				
+		$exif = @exif_read_data($file);
+		$orientation = $exif['Orientation'];
+
+		$deg=0;
+		if (isset($orientation) && $orientation != 1)
+		{
+			switch ($orientation) {
+				case 3:
+					$deg = 180;
+					break;
+				case 6:
+					$deg = 270;
+					break;
+				case 8:
+					$deg = 90;
+					break;
 			}
 		}
+		else
+		{
+			return false;
+		}
+
+		if (exif_imagetype($file)==IMAGETYPE_JPEG)
+		{
+			$source = imagecreatefromjpeg($file);
+		}
+		else if (exif_imagetype($file)==IMAGETYPE_PNG)
+		{
+			$source = imagecreatefrompng($file);
+		}
+		else if (exif_imagetype($file)==IMAGETYPE_GIF)
+		{
+			$source = imagecreatefromgif($file);
+		}
+		else
+		{
+			return false;
+		}
+
+		if ($deg>0) {
+			$source = imagerotate($source, $deg, 0);
+
+			if (exif_imagetype($file)==IMAGETYPE_JPEG)
+			{
+				imagejpeg($source,$file,95);
+			}
+			else if (exif_imagetype($file)==IMAGETYPE_PNG)
+			{
+				imagepng($source,$file,6);
+			}
+			else if (exif_imagetype($file)==IMAGETYPE_GIF)
+			{
+				imagegif($source,$file);
+			}
+		}
+	}
+
+	function newSize($newwidth,$newheight)
+	{
+		list($width, $height) = $this->getSize();
+
+		if (($width<$height) && ($newwidth>0))
+		{
+			$w = $newwidth;
+			$h = floor(($height/$width) * $newwidth );
+		}
+		else if (($width>$height) && ($newheight>0))
+		{
+			$w = floor(($width/$height) * $newheight);
+			$h = $newheight;
+		}
+		else
+		{
+			$w = $newwidth;
+			$h = $newheight;
+		}
+		$ret=array($w,$h);
+		return $ret;
+	}
+
+	function ShowImage($newwidth=0,$newheight=0)
+	{
+		if (($newwidth==0) || ($newheight==0))
+		{
+			list($newwidth, $newheight) = $this->getSize();
+		}
+		list($newwidth, $newheight) = $this->newSize($newwidth, $newheight);
 		
 		$thumb=$this->Resize($newwidth,$newheight,"show");
 

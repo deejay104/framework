@@ -43,15 +43,21 @@
 
 		if (($form_message!=$txtnewmsg) || ($id>0))
 		{
+			if ($form_message==$txtnewmsg)
+			{
+				$form_message="";
+			}
+			
 			$td=array(
 				"titre"=>addslashes(strip_tags($form_titre)),
 				"message"=>addslashes(strip_tags($form_message)),
 				"uid_maj"=>$gl_uid,
 				"dte_maj"=>now()
 				);		
+
 			if ($id>0)
 			{
-				$query="SELECT mail,uid_creat FROM `".$MyOpt["tbl"]."_actualites` WHERE id='$id'";
+				$query="SELECT mail,uid_creat FROM `".$MyOpt["tbl"]."_actualites` WHERE id='".$id."'";
 				$res = $sql->QueryRow($query);
 				if ($res["mail"]=="draft")
 				{
@@ -80,6 +86,8 @@
 	$tmpl_x->assign("apiurlget",geturlapi("actualites","actualites","get","q=1"));
 	$tmpl_x->assign("apiurlpost",geturlapi("actualites","actualites","post","q=1"));
 	$tmpl_x->assign("apiurldel",geturlapi("actualites","actualites","del","q=1"));
+	$tmpl_x->assign("FormulaireBackgroundNormal",$MyOpt["styleColor"]["FormulaireBackgroundNormal"]);
+	$tmpl_x->assign("FormulaireBackgroundDark",$MyOpt["styleColor"]["FormulaireBackgroundDark"]);
 
 // ---- Affiche les échéances
 	$lstdte=ListEcheance($sql,$gl_uid);

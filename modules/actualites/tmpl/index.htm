@@ -11,14 +11,20 @@
 .thumbnail{
     max-width: 500px;
     max-height: 500px;
-    padding: 2px;
-    border: 2px solid lightgray;
-    border-radius: 3px;
-    float: left;
 }
 .thumbnail img{
+	width: 100%;
     max-width: 500px;
     max-height: 500px;
+}
+.upload {
+	width:100%;
+	padding-top:5px;
+	margin-bottom:5px;
+	display:inline-block;"
+}
+.upload p {
+	text-align:left;
 }
 </style>
 
@@ -53,9 +59,16 @@
 			<input type="text" name="form_titre" value="{news_title}" OnFocus="ClearText(event,'{news_title_clear}');"  style="color:#{new_color};"><br />
 			<textarea name="form_message" OnFocus="ClearText(event,'{news_message_clear}');"  style="color:#{new_color}; height:51px;">{news_message}</textarea>
 			<p>
+				<label for='file' style='display: inline-block; width:46px; height:36px; background:#{FormulaireBackgroundNormal}; border: 1px solid #{FormulaireBackgroundDark}; padding-top:2px; padding-left:2px; border-radius: 5px; text-align:center;'><img src='{path_core}/{path_module}/img/icn32_picture.png' style='vertical-align:middle;'></label>
+				<input id='file' type='file' style='display:none'>
 				<input name='fonc' type='submit' value='Poster'>
 			</p>
 		</form>
+
+		<div id="uploadDoc" class="upload">
+			<div id="uploadProgress" style="display:none; text-align: center;"></div>
+		</div>
+
 	</div>
 
 	<div id="news">
@@ -83,7 +96,7 @@ $(function() {
     $("html").on("dragover", function(e) {
         e.preventDefault();
         e.stopPropagation();
-        $("h1").text("Drag here");
+        <!-- $("h1").text("Drag here"); -->
     });
 
     $("html").on("drop", function(e) { e.preventDefault(); e.stopPropagation(); });
@@ -92,7 +105,7 @@ $(function() {
     $('#actualitesNouveau').on('dragenter', function (e) {
         e.stopPropagation();
         e.preventDefault();
-        $("h1").text("Drop");
+        $("#actualitesNouveau").css({"border":"1px dashed #000000"});
     });
 
     // Drag over
@@ -100,6 +113,11 @@ $(function() {
         e.stopPropagation();
         e.preventDefault();
         $("#actualitesNouveau").css({"border":"1px dashed #000000"});
+    });
+
+    // Drag leave
+    $('#actualitesNouveau').on('dragleave', function (e) {
+        $("#actualitesNouveau").css({"border":"0px"});
     });
 
     // Drop
@@ -138,6 +156,9 @@ $(function() {
 
 // Sending AJAX request and upload file
 function uploadData(formdata){
+	$("#uploadProgress").css({"display":"block"});
+	$("#uploadProgress").text("Chargement du document en cours");
+
     $.ajax({
         url: '{apiurlpost}&type=file&id='+document.getElementById("id").value,
         type: 'post',
@@ -147,13 +168,17 @@ function uploadData(formdata){
         dataType: 'json',
         success: function(response){
             addThumbnail(response);
+			$("#uploadProgress").css({"display":"none"});
+        },
+		error: function(response){
+			$("#uploadProgress").css({"display":"none"});
         }
     });
 }
 
 // Added thumbnail
 function addThumbnail(data){
-    $("#actualitesNouveau h1").remove(); 
+    <!-- $("#actualitesNouveau h1").remove();  -->
     var len = $("#actualitesNouveau div.thumbnail").length;
 
     var num = Number(len);
@@ -161,7 +186,14 @@ function addThumbnail(data){
 	
 	if (data.status=="ok")
 	{
-		$("#actualitesNouveau").append('<div id="thumbnail_'+num+'" class="thumbnail"></div>');
+		if (data.type=="image")
+		{
+			$("#uploadDoc").append('<div id="thumbnail_'+num+'" class="thumbnail"></div>');
+		}
+		else
+		{
+			$("#uploadDoc").append('<div id="thumbnail_'+num+'"></div>');
+		}
 		$("#thumbnail_"+num).append(data.link);
 		document.getElementById("id").value=data.id;
 		console.log(data.id);
