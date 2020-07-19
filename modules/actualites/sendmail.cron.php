@@ -9,6 +9,9 @@
 
 	myPrint("Notification des actualités");
 
+
+require_once("class/document.inc.php");
+
 // ---- Récupère les actualités pour lesquels le mail n'a pas été envoyé
 	$query="SELECT * FROM `".$MyOpt["tbl"]."_actualites` WHERE mail='non' AND actif='oui'";
 	$sql->Query($query);
