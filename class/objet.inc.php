@@ -331,7 +331,7 @@ class objet_core
 			else
 			{
 				$type=(isset($type)) ? $type : "text";
-				$ret="<INPUT id='".(($formid!="") ? $formid : "").$key."' name=\"".$formname."[$key]\" value=\"".$txt."\" ".(($type!="") ? "type=\"".$type."\"" : "")." ".((($len>0) && ($theme!="phone")) ? "style='width:".$len."px!important;'" : "").">";
+				$ret="<INPUT id='".(($formid!="") ? $formid : "").$key."' name=\"".$formname."[$key]\" value=\"".$txt."\" ".(($type!="") ? "type=\"".$type."\"" : "")." ".((($len>0) && ($theme!="phone")) ? "style='width:".$len."px!important;'" : "")." ".((isset($this->fields[$key]["len"]) && ($this->fields[$key]["len"]>0)) ? "maxlength='".$this->fields[$key]["len"]."'" : "").">";
 			}
 		}
 		else
@@ -625,7 +625,14 @@ class objet_core
 		}
 		else if ($this->type[$key]=="varchar")
 		{
-			$vv=$v;
+			if ($this->fields[$key]["len"]>0)
+			{
+				$vv=substr($v,0,$this->fields[$key]["len"]);
+			}
+			else
+			{
+				$vv=$v;
+			}
 		}
 		else if ($this->type[$key]=="enum")
 		{

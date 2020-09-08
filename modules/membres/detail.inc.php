@@ -20,6 +20,7 @@
 ?>
 
 <?
+	$id=checkVar("id","numeric");
 	if ( (!GetDroit("AccesMembre")) && (!GetMyId($id)) )
 	  { FatalError("Accès non autorisé (AccesMembre)"); }
 
@@ -31,7 +32,6 @@
 	
 // ---- Initialisation des variables
 
-	$id=checkVar("id","numeric");
 	$form_data=checkVar("form_data","array");
 	$form_droits=checkVar("form_droits","array");
 	$form_donnees=checkVar("form_donnees","array");
