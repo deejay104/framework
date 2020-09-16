@@ -635,7 +635,7 @@ function SendMail($From,$To,$Cc,$Subject,$Text,$Html,$AttmFiles)
 
 
 function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",$start=0,$limit=-1,$nbline=0,$showicon="")
-  {global $mod,$rub,$corefolder,$MyOpt;
+  {global $mod,$rub,$corefolder,$MyOpt,$tabLang;
 	// $ret ="\n<table id='mytable' class='tableauAff' width'100%'>\n";
 	$idtbl=uniqid("tbl_");
 	$ret ="\n";
@@ -814,19 +814,36 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 		$lstLimit.=$s.$limit;
 	}
 
+	// $ret.='    "language": { ';
+	// $ret.='       "paginate": { "first":"Début","last":"Fin","next":"Suivant","previous":"Précédent" },';
+	// $ret.='       "search": "Rechercher:",';
+	// $ret.='       "lengthMenu":     "Affiche _MENU_ ligne(s)",';
+	// $ret.='   	  "loadingRecords": "Chargement...",';
+	// $ret.='       "processing":     "Mise en page...",';
+	// $ret.='       "emptyTable":     "Pas de donnée disponible",';
+	// $ret.='       "info":           "Affiche les lignes de _START_ à _END_ sur _TOTAL_",';
+ 	// $ret.='       "infoEmpty":      "Affiche 0 ligne",';
+	// $ret.='       "infoFiltered":   "(filtered from _MAX_ total entries)",';
+	// $ret.='    },';
+	// $ret.='    "pageLength": '.$limit.',';
+	// $ret.='    "lengthMenu": [ '.$lstLimit.' ],';
+
+
 	$ret.='    "language": { ';
-	$ret.='       "paginate": { "first":"Début","last":"Fin","next":"Suivant","previous":"Précédent" },';
-	$ret.='       "search": "Rechercher:",';
-	$ret.='       "lengthMenu":     "Affiche _MENU_ ligne(s)",';
-	$ret.='   	  "loadingRecords": "Chargement...",';
-	$ret.='       "processing":     "Mise en page...",';
-	$ret.='       "emptyTable":     "Pas de donnée disponible",';
-	$ret.='       "info":           "Affiche les lignes de _START_ à _END_ sur _TOTAL_",';
- 	$ret.='       "infoEmpty":      "Affiche 0 ligne",';
+	$ret.='       "paginate": { "first":"'.$tabLang["lang_tab_first"].'","last":"'.$tabLang["lang_tab_last"].'","next":"'.$tabLang["lang_tab_next"].'","previous":"'.$tabLang["lang_tab_previous"].'" },';
+	$ret.='       "search": "'.$tabLang["lang_tab_search"].':",';
+	$ret.='       "lengthMenu":     "'.$tabLang["lang_tab_lengthmenu"].'",';
+	$ret.='   	  "loadingRecords": "'.$tabLang["lang_tab_loading"].'...",';
+	$ret.='       "processing":     "'.$tabLang["lang_tab_processing"].'...",';
+	$ret.='       "emptyTable":     "'.$tabLang["lang_tab_emptytable"].'",';
+	$ret.='       "info":           "'.$tabLang["lang_tab_info"].'",';
+ 	$ret.='       "infoEmpty":      "'.$tabLang["lang_tab_infoempty"].'",';
 	$ret.='       "infoFiltered":   "(filtered from _MAX_ total entries)",';
 	$ret.='    },';
 	$ret.='    "pageLength": '.$limit.',';
 	$ret.='    "lengthMenu": [ '.$lstLimit.' ],';
+
+
 
 	$ret.='    "columns": [';
 	$o="";
@@ -892,7 +909,7 @@ function TrieValInv ($a, $b)
 
 function AfficheTableauRemote($tabTitre="",$url,$order="",$trie="d",$search,$nbline=25)
 {
-	global $mod,$rub,$corefolder,$MyOpt;
+	global $mod,$rub,$corefolder,$MyOpt,$tabLang;
 
 	$idtbl=uniqid("tbl_");
 	$ret ="\n<table id='".$idtbl."' class='tableauAff'>\n";
@@ -999,14 +1016,14 @@ function AfficheTableauRemote($tabTitre="",$url,$order="",$trie="d",$search,$nbl
 	}
 	
 	$ret.='    "language": { ';
-	$ret.='       "paginate": { "first":"Début","last":"Fin","next":"Suivant","previous":"Précédent" },';
-	$ret.='       "search": "Rechercher:",';
+	$ret.='       "paginate": { "first":"'.$tabLang["lang_tab_first"].'","last":"'.$tabLang["lang_tab_last"].'","next":"'.$tabLang["lang_tab_next"].'","previous":"'.$tabLang["lang_tab_previous"].'" },';
+	$ret.='       "search": "'.$tabLang["lang_tab_search"].':",';
 	$ret.='       "lengthMenu":     "Affiche _MENU_ ligne(s)",';
-	$ret.='   	  "loadingRecords": "Chargement...",';
-	$ret.='       "processing":     "Mise en page...",';
-	$ret.='       "emptyTable":     "Pas de donnée disponible",';
-	$ret.='       "info":           "Lignes de _START_ à _END_ sur un total de _TOTAL_",';
- 	$ret.='       "infoEmpty":      "Affiche 0 ligne",';
+	$ret.='   	  "loadingRecords": "'.$tabLang["lang_tab_loading"].'...",';
+	$ret.='       "processing":     "'.$tabLang["lang_tab_processing"].'...",';
+	$ret.='       "emptyTable":     "'.$tabLang["lang_tab_emptytable"].'",';
+	$ret.='       "info":           "'.$tabLang["lang_tab_info"].'",';
+ 	$ret.='       "infoEmpty":      "'.$tabLang["lang_tab_infoempty"].'",';
 	$ret.='       "infoFiltered":   "(filtered from _MAX_ total entries)",';
 	$ret.='    },';
 	$ret.='    "pageLength": '.$limit.',';

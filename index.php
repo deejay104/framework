@@ -328,7 +328,7 @@
 // ---- Template par default
 	if ($fonc=="imprimer")
 	{
-		$tmpl_prg = new XTemplate (MyRep("print.htm","default"));
+		$tmpl_prg = LoadTemplate("print","default");
 	}
 	else
 	{

@@ -39,7 +39,7 @@
 	$tabLang["lang_data"]="Personnal data";
 	$tabLang["lang_documents"]="Documents";
 	$tabLang["lang_deadline"]="Deadlines";
-	$tabLang["lang_rights"]="Profile rights";
+	$tabLang["lang_rights"]="Profile permissions";
 
 	$tabLang["lang_save"]="Save";
 	$tabLang["lang_cancel"]="Cancel";

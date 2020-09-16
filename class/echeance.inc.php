@@ -143,7 +143,7 @@ class echeance_core extends objet_core
 	}
 
 	function Affiche($type="") 
-	{ global $MyOpt,$corefolder;
+	{ global $MyOpt,$corefolder,$tabLang;
 		$ret="";
 
 		if ($this->editmode=="form")
@@ -204,7 +204,7 @@ class echeance_core extends objet_core
 		{
 			$ret.="<div id='aff_echeance".$this->id."' OnMouseOver='document.getElementById(\"echeance_del_".$this->id."\").style.visibility=\"visible\";' OnMouseOut='document.getElementById(\"echeance_del_".$this->id."\").style.visibility=\"hidden\";'>";
 			$ret.="<p>";
-			$ret.="Echéance ".$this->description." le <input name='form_echeance[".$this->id."]' id='form_echeance".$this->id."' value='".$this->dte_echeance."' type='date' style='width: 165px;'>&nbsp;";
+			$ret.=$tabLang["lang_echeance"]." ".$this->description." ".$tabLang["core_the"]." <input name='form_echeance[".$this->id."]' id='form_echeance".$this->id."' value='".$this->dte_echeance."' type='date' style='width: 165px;'>&nbsp;";
 			$ret.="<a href=\"#\" OnClick=\"document.getElementById('form_echeance".$this->id."').value=''; document.getElementById('aff_echeance".$this->id."').style.display='none';\" class='imgDelete'><img  id='echeance_del_".$this->id."' src='".$MyOpt["host"]."/".$corefolder."/static/images/icn16_supprimer.png' style='visibility:hidden;'></a>";
 			$ret.="</p>";
 			$ret.="</div>";
@@ -217,7 +217,7 @@ class echeance_core extends objet_core
 		{
 			$ret ="<p>";
 			$ret.="<img src='".$MyOpt["host"]."/".$corefolder."/static/images/icn16_".TestDate($this->dte_echeance).".png' style='vertical-align:middle; border: 0px;  height: 16px; width: 16px;'>&nbsp;";
-			$ret.="Echéance ".$this->description." le ".AffDate($this->dte_echeance);
+			$ret.=$tabLang["lang_echeance"]." ".$this->description." ".$tabLang["core_the"]." ".AffDate($this->dte_echeance);
 			$ret.="</p>";
 		}
 		return $ret;

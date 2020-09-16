@@ -76,4 +76,18 @@
 	$tabLang["lang_deadline"]="Echéances";
 	$tabLang["lang_recipient"]="Destinataire";
 
+	$tabLang["lang_tab_first"]="Début";
+	$tabLang["lang_tab_last"]="Fin";
+	$tabLang["lang_tab_next"]="Suivant";
+	$tabLang["lang_tab_previous"]="Précédent";
+	$tabLang["lang_tab_search"]="Rechercher";
+	$tabLang["lang_tab_loading"]="Chargement";
+	$tabLang["lang_tab_processing"]="Mise en page";
+	$tabLang["lang_tab_emptytable"]="Pas de donnée disponible";
+	$tabLang["lang_tab_infoempty"]="Affiche 0 ligne";
+	$tabLang["lang_tab_info"]="Lignes de _START_ à _END_ sur un total de _TOTAL_";
+	$tabLang["lang_tab_lengthmenu"]="Affiche _MENU_ ligne(s)";
+
+	$tabLang["lang_echeance"]="Echéance";
+
 ?>

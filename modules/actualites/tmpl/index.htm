@@ -31,18 +31,18 @@
 <div class="cadreinfos">
 
 	<div class="encadreInfos">
-		<div class="encadreTitre">Informations</div>
-  		<p style='padding-bottom: 5px;'><A href="{path_root}/docs">Nombre de documents non lus</A> : <A href="index.php?mod=docs" class="{color_nonlus}">{nb_nonlus}</A></p>
+		<div class="encadreTitre">{lang_information}</div>
+  		<p style='padding-bottom: 5px;'><A href="{path_root}/docs">{lang_nbdocs}</A> : <A href="index.php?mod=docs" class="{color_nonlus}">{nb_nonlus}</A></p>
 		<!-- BEGIN: lst_echeance -->
 		<p>{form_echeance}</p>
 		<!-- END: lst_echeance -->
 	</div>
 
 	<div class="encadreInfos">
-		<div class="encadreTitre">Rechercher dans les actualités</div>
+		<div class="encadreTitre">{lang_search}</div>
 		<form name="recherche" method="post" action="{path_root}/index.php" enctype="multipart/form-data">
 			<input type="hidden" name="mod" value="actualites">
-			<p><input id="search" type="text" name="search" OnClick="ClearText(event,'Termes à rechercher');" value="Termes à rechercher" OnKeyUp="CapturePost(event);" style="color:#bbbbbb;"></p>
+			<p><input id="search" type="text" name="search" OnClick="ClearText(event,'{lang_searchterms}');" value="{lang_searchterms}" OnKeyUp="CapturePost(event);" style="color:#bbbbbb;"></p>
 		</form>
 	</div>
 	{aff_custom}
@@ -61,7 +61,7 @@
 			<p>
 				<label for='file' style='display: inline-block; width:46px; height:36px; background:#{FormulaireBackgroundNormal}; border: 1px solid #{FormulaireBackgroundDark}; padding-top:2px; padding-left:2px; border-radius: 5px; text-align:center;'><img src='{path_core}/{path_module}/img/icn32_picture.png' style='vertical-align:middle;'></label>
 				<input id='file' type='file' style='display:none'>
-				<input name='fonc' type='submit' value='Poster'>
+				<input name='fonc' type='submit' value='{lang_post}'>
 			</p>
 		</form>
 
@@ -157,7 +157,7 @@ $(function() {
 // Sending AJAX request and upload file
 function uploadData(formdata){
 	$("#uploadProgress").css({"display":"block"});
-	$("#uploadProgress").text("Chargement du document en cours");
+	$("#uploadProgress").text("{lang_upload}");
 
     $.ajax({
         url: '{apiurlpost}&type=file&id='+document.getElementById("id").value,
@@ -282,7 +282,7 @@ function convertSize(size) {
 
 	function delNews(id)
 	{
-		var is_confirmed = confirm("Souhaitez-vous supprimer cette actualité ?");
+		var is_confirmed = confirm("{lang_delpost}");
 		if (is_confirmed) { 
 			
 			$.ajax({

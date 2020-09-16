@@ -771,6 +771,7 @@ function AffFullname($prenom,$nom)
 	$prenom=preg_replace("/-/"," ",$prenom);
 	$prenom=ucwords($prenom);
 	$prenom=preg_replace("/ /","-",$prenom);
+
 	if ($MyOpt["globalTrie"]=="nom")
 	{
 		$fullname=$nom;

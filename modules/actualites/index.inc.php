@@ -35,7 +35,6 @@
 	$form_message=checkVar("form_message","text");
 	
 // ---- Enregistre le post
-	$txtnewmsg="Ecrivez votre message...";
 
 	if ( ($fonc=="Poster") && (!isset($_SESSION['tab_checkpost'][$checktime])) )
 	{
@@ -123,13 +122,13 @@
 	}
 	else
 	{
-		$tmpl_x->assign("news_title", "Nouvelle actualité");
-		$tmpl_x->assign("news_message", $txtnewmsg);
+		$tmpl_x->assign("news_title", $langTab["lang_newpost"]);
+		$tmpl_x->assign("news_message", $langTab["lang_newmsg"]);
 		$tmpl_x->assign("new_color", "bbbbbb");	
 	}
 
-	$tmpl_x->assign("news_title_clear", "Nouvelle actualité");
-	$tmpl_x->assign("news_message_clear", $txtnewmsg);
+	$tmpl_x->assign("news_title_clear", $langTab["lang_newpost"]);
+	$tmpl_x->assign("news_message_clear", $langTab["lang_newmsg"]);
 	$tmpl_x->assign("form_id", $id);
 	
 // ---- Personalisation
