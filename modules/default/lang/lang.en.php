@@ -24,6 +24,7 @@
 	$tabLang["core_user"]="User";
 	$tabLang["core_password"]="Password";
 	$tabLang["core_connect"]="Connect";
+	$tabLang["core_autherror"]="Authentication error";
 	
 	$tabLang["core_authenticate"]="Authentication";
 

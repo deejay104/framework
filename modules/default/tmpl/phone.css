@@ -116,15 +116,15 @@ img:hover { color: #{TextBackgroundHover}; }
 .loginLogo { background-color:#{TitleBackgroundNormal};  }
 
 .loginAuthBox { background-color:#{TitleBackgroundNormal}; height: 100px; }
-.loginAuthTitre { text-decoration: none; vertical-align: middle; color: white; }
-.loginAuthTitre label { padding-left:20px; display: inline-block; width:100px; }
-.loginAuthTitre p { font-size:200%; font-weight:600; }
+.loginAuthTitre { width:100%; text-decoration: none; vertical-align: middle; text-align:center; padding-top:30px; color: white; }
+.loginAuthTitre label { padding-left:0px; display: inline-block; width:100px; }
+.loginAuthTitre p { text-align: center; font-size:200%; font-weight:600; }
 .loginAuthDesc { background-color:#ffffff; padding-top: 10px; padding-left: 20px; padding-right:20px; height: 80px; line-height:20px; }
 
-.loginIdent { padding-top:10px; }
-.loginIdent p { line-height:12px;  margin: 5px 0px 0px 0px; ; }
+.loginIdent { margin: 0 auto; border: 1px solid #{FormulaireBackgroundNormal}; background-color: #{FormulaireBackgroundLight}; border-radius: 4px; padding:10px; width:320px; }
+.loginIdent p { line-height:12px;  margin: 5px 0px 0px 0px; padding-top: 10px; }
 .loginIdent label { display: inline-block; width: 120px; margin-right: 10px; text-align: right; }
-.loginIdent input { width:200px; }
+.loginIdent input { width:300px!important; }
 
 .loginSubmit { padding-left: 135px; padding-top: 40px; }
 

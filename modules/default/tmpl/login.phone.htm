@@ -9,89 +9,201 @@
   </head>
   
 <body onload="setFormFocus();">
-	<script language="JavaScript" src="{corefolder}/static/js/_md5.js"></script>
+<!-- BEGIN: logout -->
 	<script language="javascript">
-	<!-- 
+		if (localStorage)
+		{
+			localStorage.setItem("myid","");
+			localStorage.setItem("mytoken","");
+		}
+	</script>
+<!-- END: logout -->
+
+	<div id='load' class="preloader5">
+		<span></span>
+		<span></span>
+		<span></span>
+	</div>
+
+	<style>
+		.preloader5 {
+		   display:inline-block;
+		   font-size:0px;
+		   padding:0px;
+		   left:50%;
+		   top:50%;
+		   position: fixed;
+		}
+		.preloader5 span {
+		   vertical-align:middle;
+		   border-radius:100%;
+		   background:#000000;
+		   display:inline-block;
+		   width:10px;
+		   height:10px;
+		   margin:3px 2px;
+		   -webkit-animation:preloader5 0.8s linear infinite alternate;
+		   animation:preloader5 0.8s linear infinite alternate;
+		}
+		.preloader5 span:nth-child(1) {
+		   -webkit-animation-delay:-0.8s;
+		   animation-delay:-0.8s;
+		}
+		.preloader5 span:nth-child(2) {
+		   -webkit-animation-delay:-0.53333s;
+		   animation-delay:-0.53333s;
+		}
+		.preloader5 span:nth-child(3) {
+		   -webkit-animation-delay:-0.26666s;
+		   animation-delay:-0.26666s;
+		}
+		@keyframes preloader5 {
+		   from {transform: scale(0, 0);}
+		   to {transform: scale(1, 1);}
+		}
+		@-webkit-keyframes preloader5 {
+		   from {-webkit-transform: scale(0, 0);}
+		   to {-webkit-transform: scale(1, 1);}
+		}
+	</style>
+
+
+	<script type="text/javascript" src="{rootfolder}/{corefolder}/external/jquery/jquery.min.js"></script>
+	<script type="text/JavaScript" src="{rootfolder}/{corefolder}/static/js/_md5.js"></script>
+	
+	<script type="text/javascript">
 		function setFormFocus()
 		{
 			self.focus();
 			document.forms[0].username.focus(); 
 			document.forms[0].username.select();
 		}
+
+		function checkCredrential()
+		{
+			username=document.getElementById("username").value;
+			password=MD5(document.getElementById("mypassword").value);
+
+			console.log("authenticate");
+
+			$(function() {
+				$.ajax({
+					url:'{rootfolder}/api.php?fonc=login&myusr='+username+'&mypwd='+password,
+					type: 'html',
+					dataType: 'JSON',
+					success: function(response)
+					{
+						console.log(response);
+
+						if (response.auth=="OK")
+						{
+							console.log("credentials confirmed");
+							localStorage.setItem("myid",response.myid);
+							localStorage.setItem("mytoken",response.mytoken);
+							document.location="{url}";
+						}
+						else
+						{
+							console.log("credentials rejected");						
+							console.log(response);						
+							document.getElementById("errormsg").innerHTML="{core_autherror}: "+response.error;
+						}
+					},
+					error : function(response)
+					{
+						console.log("Cannot access authentication api");	
+					}
+				});
+			});
+			return false;
+		}
+
+		if (localStorage)
+		{
+			console.log("load local storage");
+			var myid=localStorage.getItem("myid");
+			var mytoken=localStorage.getItem("mytoken");
+
+			$(function() {
+				$.ajax({
+					url:'{rootfolder}/api.php?fonc=login&myid='+myid+'&mykey='+mytoken,
+					type: 'html',
+					dataType: 'JSON',
+					success: function(response)
+					{
+						<!-- console.log(response); -->
+
+						if (response.auth=="OK")
+						{
+							console.log("token confirmed");
+							document.location="{url}";
+						}
+						else
+						{
+							console.log("token rejected");						
+							loadIndex();
+						}
+					},
+					error : function(response)
+					{
+						console.log("Cannot access authentication api");	
+						loadIndex();
+					}
+				});
+			});
+			
+		}
+		else
+		{
+			console.log("local storage not available, switching to login page");
+			loadIndex();
+		}
 		
-<!-- BEGIN: secure -->
-		function cryptData()
+	
+		function loadIndex()
 		{
-			str = document.FormLogin.mypassword.value;
+			var myload=document.getElementById("load");
+			var mytxt=document.getElementById("authcontent");
 
-			if (str=="")
-			{ document.FormLogin.password.value = ""; }
-			else
-			{ document.FormLogin.password.value = MD5(MD5(str)+document.FormLogin.myid.value); }
-			document.FormLogin.mypassword.value = "";
-
-			document.FormLogin.submit();
+			console.log('{var}');
+			<!-- document.location='{var}'; -->
+			document.getElementById("load").style.display='none';
+			document.getElementById("loginbox").style.display='block';
+			setFormFocus();
 		}
-<!-- END: secure -->
-
-<!-- BEGIN: unsecure -->
-		function cryptData()
-		{
-			str = document.FormLogin.mypassword.value;
-			if (str=="")
-			{ document.FormLogin.password.value = ""; }
-			else
-			{ document.FormLogin.password.value = MD5(str); }
-			document.FormLogin.mypassword.value = "";
-			document.FormLogin.submit();
-		}
-<!-- END: unsecure -->
-
-	// -->
 	</script>
 
-  </head>
 
-
-<form METHOD="post" ACTION="index.php" NAME="FormLogin" OnSubmit="cryptData();">
-	<input type="hidden" name="varlogin" value="{var}">
-  <input type="hidden" name="password" />
-  <input type="hidden" name="myid" value="{myid}" />
-
-	<div class="login">
-			<div class="loginLogo">
-				<img src="{site_logo}" alt="Home" border="0" />
-			</div>
-	
-			<div class="loginAuthBox">
-				<div class="loginAuthTitre">
-					<p>
-						<label><img src="{corefolder}/static/images/icn64_login.png"></label>
-						{core_authenticate}
-					</p>
+<form METHOD="post" ACTION="index.php" NAME="FormLogin" OnSubmit="checkCredrential(); return false;">
+	<div id='loginbox' style="display:none;">
+		<div class="login">
+		
+				<div class="loginAuthBox">
+					<div class="loginAuthTitre">
+						<p>
+							<img src="{site_logo}" alt="Home" border="0" />
+						</p>
+					</div>
+				</div>
+		
+				<div class="loginAuthDesc">
+						<font color=red><B>{errmsg}</b></font>
+				</div>
+					
+				<div class="loginIdent">
+					<p>{core_userlarge}</p>
+					<p><input name="username" value="{username}" id="username" maxlength=256></p>
+					<p>{core_password}</p>
+					<p><input name="mypassword" value="" type=password id="mypassword" maxlength=256 /></p>
+					<p><input type="submit" id="fonc" name="fonc" value="{core_connect}"></p>
 				</div>
 			</div>
-	
-			<div class="loginAuthDesc">
-					{core_authtxt}<br />
-					<font color=red><B>{errmsg}</b></font>
-			</div>
-				
-			<div class="loginIdent">
-				<p><label for="login">{core_user}</label> <input name="username" value="{username}" id="login" maxlength=256></p>
-				<p><label for="pwd">{core_password}</label> <input name="mypassword" value="" type=password id="pwd" maxlength=256 /></p>
-			</div>
-			<div class="loginSubmit">
-				<input type="submit" id="fonc" name="fonc" value="{core_connect}">
-			</div>
+		
 		</div>
-	
 	</div>
-
+ 
 </form>
 
 </body>
 </html>
-
-
 <!-- END: main -->

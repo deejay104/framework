@@ -31,6 +31,8 @@
 
 	$myid=checkVar("myid","numeric");
 	$mykey=checkVar("mykey","varchar");
+	$myusr=checkVar("myusr","varchar");
+	$mypwd=checkVar("mypwd","varchar");
 	$mod=checkVar("mod","varchar");
 	$rub=checkVar("rub","varchar","index");
 	$fonc=checkVar("fonc","varchar");
@@ -41,73 +43,125 @@
 
 	
 // ---- Demande d'authentification
-	if ($mykey!="")
+	if (($fonc=="login") && ($mykey!=""))
 	{
 		$data=array();
-		$data["mykey"]=$mykey;
-		$data["myid"]=$myid;
+		$data["type"]="token";
 
 		$ret=array();
 
-		$q = "SELECT id,uid FROM ".$MyOpt["tbl"]."_token WHERE id='".$myid."' AND active='oui' AND MD5(CONCAT('".md5(session_id())."','-',token))='".$mykey."' AND dte_expire<>'0000-00-00' AND dte_expire>'".now()."'";
+		$q = "SELECT id,uid,token FROM ".$MyOpt["tbl"]."_token WHERE id='".$myid."' AND active='oui' AND dte_expire<>'0000-00-00' AND dte_expire>'".now()."'";
 		$res  = $sql->QueryRow($q);
+
+		$ret["auth"]="NOK";
 
 		if ($res["id"]>0)
 		{
-			if ($MyOpt["tokenexpire"]>0)
+			if (password_verify($mykey,$res["token"]))
 			{
-				$query="UPDATE ".$MyOpt["tbl"]."_token SET dte_expire='".date("Y-m-d H:i:s",time()+$MyOpt["tokenexpire"]*3600*24)."' WHERE id='".$res["id"]."'";
+				$data["result"]="success";
+
+				if ($MyOpt["tokenexpire"]>0)
+				{
+					$query="UPDATE ".$MyOpt["tbl"]."_token SET dte_expire='".date("Y-m-d H:i:s",time()+$MyOpt["tokenexpire"]*3600*24)."' WHERE id='".$res["id"]."'";
+					$sql->Update($query);
+				}
+
+				$gl_uid=$res["uid"];
+				$_SESSION['uid']=$gl_uid;
+				$_SESSION['sessid']=$myid;
+
+				$ret["auth"]="OK";
+				$ret["myid"]=$res["id"];
+
+				$query = "SELECT prenom,nom FROM ".$MyOpt["tbl"]."_utilisateurs WHERE id='".$gl_uid."'";
+				$res = $sql->QueryRow($query);
+
+				
+				$query="INSERT INTO ".$MyOpt["tbl"]."_login SET username='".addslashes($res["prenom"])." ".addslashes($res["nom"])."',status='token',dte_maj='".now()."',header='".substr(addslashes($_SERVER["HTTP_USER_AGENT"]),0,200)."',type='".json_encode($data)."'";
+				// $query="INSERT INTO ".$MyOpt["tbl"]."_login SET username='".addslashes($res["prenom"])." ".addslashes($res["nom"])."',dte_maj='".now()."',header='".substr(addslashes($_SERVER["HTTP_USER_AGENT"]),0,200)."',type='token'";
+				$sql->Insert($query);
+
+				$query="UPDATE ".$MyOpt["tbl"]."_utilisateurs SET dte_login='".now()."' WHERE id='".$gl_uid."'";
 				$sql->Update($query);
 			}
-
-			$gl_uid=$res["uid"];
-			$_SESSION['uid']=$gl_uid;
-			$_SESSION['sessid']=$myid;
-
-			$ret["auth"]="OK";
-			$ret["myid"]=$res["id"];
-			$ret["mykey"]=md5("OK");
-
-			$query = "SELECT prenom,nom FROM ".$MyOpt["tbl"]."_utilisateurs WHERE id='".$gl_uid."'";
-			$res  = $sql->QueryRow($query);
-
-			$data["result"]="token";
-			
-			$query="INSERT INTO ".$MyOpt["tbl"]."_login SET username='".addslashes($res["prenom"])." ".addslashes($res["nom"])."',dte_maj='".now()."',header='".substr(addslashes($_SERVER["HTTP_USER_AGENT"]),0,200)."',type='".json_encode($data)."'";
-			// $query="INSERT INTO ".$MyOpt["tbl"]."_login SET username='".addslashes($res["prenom"])." ".addslashes($res["nom"])."',dte_maj='".now()."',header='".substr(addslashes($_SERVER["HTTP_USER_AGENT"]),0,200)."',type='token'";
-			$sql->Insert($query);
-
-			$query="UPDATE ".$MyOpt["tbl"]."_utilisateurs SET dte_login='".now()."' WHERE id='".$gl_uid."'";
-			$sql->Update($query);
-
 		}
-		else
+
+		if ($ret["auth"]=="NOK")
 		{
 			$_SESSION['sessid']=-1;
-
-			$ret["auth"]="NOK";
-			$ret["mykey"]=md5("NOK");
 
 			$query = "SELECT id,uid,token FROM ".$MyOpt["tbl"]."_token WHERE id='".$myid."'";
 			$res  = $sql->QueryRow($query);
 
-			$data=array();
 			$data["myid"]=$myid;
 			$data["mykey"]=$mykey;
 			$data["result"]="rejected";
-			$data["mysession"]=session_id();
-			$data["sqkey"]=md5(md5(session_id())."-".$res["token"]);
-			$data["req"]=preg_replace("/\\'/","",$q);
 
 			$query = "SELECT prenom,nom FROM ".$MyOpt["tbl"]."_utilisateurs WHERE id='".$res["uid"]."'";
 			$res  = $sql->QueryRow($query);
 			
-			$query="INSERT INTO ".$MyOpt["tbl"]."_login SET username='".addslashes($res["prenom"])." ".addslashes($res["nom"])."',dte_maj='".now()."',header='".substr(addslashes($_SERVER["HTTP_USER_AGENT"]),0,200)."',type='".json_encode($data)."'";
+			$query="INSERT INTO ".$MyOpt["tbl"]."_login SET username='".addslashes($res["prenom"])." ".addslashes($res["nom"])."',status='rejected',dte_maj='".now()."',header='".substr(addslashes($_SERVER["HTTP_USER_AGENT"]),0,200)."',type='".json_encode($data)."'";
 			$sql->Insert($query);
 		}
 
 		echo json_encode($ret);
 		exit;
+	}
+	else if (($fonc=="login") && ($mypwd!=""))
+	{
+		$myusr=strtolower($myusr);
+		$myusr=preg_replace("/[\"'<>\\\;]/i","",$myusr);
+
+		$data=array();
+		$data["type"]="password";
+		$data["myusr"]=$myusr;
+
+		$ret=array();
+		$ret["auth"]="NOK";
+
+		$query = "SELECT id,prenom,nom,mail,password FROM ".$MyOpt["tbl"]."_utilisateurs WHERE ((mail='".$myusr."' AND mail<>'') OR (initiales='".$myusr."' AND initiales<>'')) AND actif='oui' AND virtuel='non'";
+		$res = $sql->QueryRow($query);
+
+		if (($res["id"]>0) && ($res["password"]==$mypwd))
+		{
+			$data["result"]="success";
+			$query="INSERT INTO ".$MyOpt["tbl"]."_login SET username='".addslashes($res["prenom"])." ".addslashes($res["nom"])."',status='password',dte_maj='".now()."',header='".substr(addslashes($_SERVER["HTTP_USER_AGENT"]),0,200)."',type='".json_encode($data)."'";
+			$sql->Insert($query);
+			$_SESSION['uid']=$res["id"];
+			$gl_uid=$res["id"];
+
+			$myid=0;
+			$token="";
+			if ($MyOpt["tokenexpire"]>0)
+			{
+				$token=bin2hex(random_bytes(32));
+				
+				$query="INSERT INTO ".$MyOpt["tbl"]."_token SET uid=".$gl_uid.", token='".password_hash($token, PASSWORD_BCRYPT, array('cost' => 12))."', uid_creat='".$gl_uid."',uid_maj='".$gl_uid."',dte_creat='".now()."', dte_expire='".date("Y-m-d H:i:s",time()+$MyOpt["tokenexpire"]*3600*24)."'";
+				$myid=$sql->Insert($query);
+				$_SESSION['sessid']=$myid;
+
+				$ret["myid"]=$myid;
+				$ret["mytoken"]=$token;
+			}
+			
+			$query="UPDATE ".$MyOpt["tbl"]."_utilisateurs SET dte_login='".now()."' WHERE id='".$res["id"]."'";
+			$sql->Update($query);
+
+			$ret["auth"]="OK";
+		}
+		else
+		{
+			$data["result"]="rejected";
+
+			$query="INSERT INTO ".$MyOpt["tbl"]."_login SET username='".addslashes($myusr)."',status='rejected',dte_maj='".now()."',header='".substr(addslashes($_SERVER["HTTP_USER_AGENT"]),0,200)."',type='".json_encode($data)."'";
+			$sql->Insert($query);
+			$ret["error"]="Bad password";
+		}
+
+		echo json_encode($ret);
+		exit;
+		
 	}
 	else if ((isset($_SESSION['uid'])) && ($_SESSION['uid']>0))
 	{

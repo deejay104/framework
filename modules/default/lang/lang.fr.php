@@ -22,8 +22,11 @@
 	$tabLang["core_maintenancetxt"]="Ce site est en maintenance.<br/>Veuillez retenter votre connexion dans quelques instants.<br/>";
 	$tabLang["core_authtxt"]="Merci d'entrer votre adresse mail ou vos initiales ainsi que votre mot de passe.";
 	$tabLang["core_user"]="Utilisateur";
+	$tabLang["core_userlarge"]="Adresse email ou initiales";
 	$tabLang["core_password"]="Mot de passe";
 	$tabLang["core_connect"]="Connecter";
+	$tabLang["core_autherror"]="Erreur d'authentification";
+	$tabLang["core_wrongpwd"]="Mauvais mot de passe";
 
 	$tabLang["core_authenticate"]="Authentification";
 
