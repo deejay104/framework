@@ -125,6 +125,7 @@ $tabTmpl=Array
 		"username" => Array("Type" => "varchar(100)", ),
 		"dte_maj" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00", ),
 		"status" => Array("Type" => "enum('password','token','rejected','na')", "Default" => "na"),
+		"srcip" => Array("Type" => "varchar(16)"),
 		"header" => Array("Type" => "varchar(200)", ),
 		"type" => Array("Type" => "text", ),
 	),

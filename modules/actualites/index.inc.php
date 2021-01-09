@@ -40,9 +40,9 @@
 	{
 		$_SESSION['tab_checkpost'][$checktime]=$checktime;
 
-		if (($form_message!=$txtnewmsg) || ($id>0))
+		if (($form_message!=$langTab["lang_newmsg"]) || ($id>0))
 		{
-			if ($form_message==$txtnewmsg)
+			if ($form_message==$langTab["lang_newmsg"])
 			{
 				$form_message="";
 			}

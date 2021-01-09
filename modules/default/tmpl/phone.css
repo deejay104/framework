@@ -121,10 +121,10 @@ img:hover { color: #{TextBackgroundHover}; }
 .loginAuthTitre p { text-align: center; font-size:200%; font-weight:600; }
 .loginAuthDesc { background-color:#ffffff; padding-top: 10px; padding-left: 20px; padding-right:20px; height: 80px; line-height:20px; }
 
-.loginIdent { margin: 0 auto; border: 1px solid #{FormulaireBackgroundNormal}; background-color: #{FormulaireBackgroundLight}; border-radius: 4px; padding:10px; width:320px; }
+.loginIdent { margin: 0 auto; border: 1px solid #{FormulaireBackgroundLight};  border-radius: 5px; padding:10px; width:320px; }
 .loginIdent p { line-height:12px;  margin: 5px 0px 0px 0px; padding-top: 10px; }
 .loginIdent label { display: inline-block; width: 120px; margin-right: 10px; text-align: right; }
-.loginIdent input { width:300px!important; }
+.loginIdent input { width:300px!important; padding: 10px; height: 40px;}
 
 .loginSubmit { padding-left: 135px; padding-top: 40px; }
 
@@ -275,6 +275,9 @@ img:hover { color: #{TextBackgroundHover}; }
 .actualitesSuivant a:hover { background-color: #{TitleBackgroundHover}; color: white; }
 
 .actualitesMail { display: none; width: 100%; border: 1px solid #{BorderBlack}; margin-bottom:10px; border-radius: 4px; padding-left:5px; }
+
+.docLink p { margin-left:15px; padding:0px; margin-bottom: 0px; }
+
 
 /* **** MEMBRES **** */
 

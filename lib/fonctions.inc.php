@@ -78,6 +78,18 @@ function geturlapi($mod,$rub,$fonc,$param="")
 }
 
 
+function getip()
+{
+	global $MyOpt;
+	$ip="";
+
+	if (isset($_SERVER[$MyOpt["ipfield"]]))
+	{
+		$ip=$_SERVER[$MyOpt["ipfield"]];
+	}
+	return $ip;
+}
+
 function addPageMenu($path,$mod,$title,$url,$img,$selected=false,$confirm="")
 {
 	global $tmpl_prg,$module,$MyOpt;

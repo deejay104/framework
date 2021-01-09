@@ -241,7 +241,7 @@ class document_core{
 		}
 		else if ($this->editmode=="regular")
 		{
-			$txt ="<div id='doc_".$this->id."' >";
+			$txt ="<div id='doc_".$this->id."' class='docLink'>";
 			$txt.="<p>";
 			if (file_exists($this->filepath."/".$this->filename))
 			{

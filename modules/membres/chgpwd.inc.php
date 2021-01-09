@@ -46,9 +46,9 @@
 
 	if ( ($fonc=="Enregistrer") && ($form_newmdp!="") && ($form_newmdp!="**NONE**") && ( ((GetMyId($id)) && ($form_oldmdp!="")) || (GetDroit("ModifUserPassword")) ) )
 	{
-		if (($usr->password==$form_oldmdp) || (GetDroit("ModifUserPassword")))
+		if (($usr->CheckPassword($form_oldmdp)) || (GetDroit("ModifUserPassword")))
 		{
-			$ret=$usr->SaveMdp($form_newmdp);
+			$ret=$usr->SavePassword($form_newmdp);
 
 			if ($ret=="") 
 			{
@@ -78,6 +78,7 @@
 	{
 		$affrub="detail";
 	}
+	
 // ---- Affiche le menu
 	$aff_menu="";
 	require_once("modules/".$mod."/menu.inc.php");
@@ -93,7 +94,7 @@
 	}
 
 
-	if ($usr->password=="")
+	if ($usr->data["creds"]=="")
 	  { $tmpl_x->parse("corps.neverset"); }
 	  	
 

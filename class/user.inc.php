@@ -28,6 +28,7 @@ class user_core extends objet_core
 		"nom" => Array("type" => "uppercase","len"=>40 ),
 		"initiales" => Array("type" => "uppercase","len"=>3, "index"=>1 ),
 		"password" => Array("type" => "varchar","len"=>50 ),
+		"creds" => Array("type" => "varchar","len"=>64 ),
 		"mail" => Array("type" => "email","len"=>104 ),
 		"notification" => Array("type" => "bool", "default" => "oui", ),
 		"commentaire" => Array("type" => "text", ),
@@ -106,13 +107,11 @@ class user_core extends objet_core
 		$this->fullname="";
 		$this->actif="oui";
 		$this->virtuel="non";
-		$this->password="";
 		$this->mail="";
 
 		$this->data["nom"]="";
 		$this->data["prenom"]="";
 		$this->data["initiales"]="";
-		$this->data["password"]="";
 		$this->data["mail"]="";
 		$this->data["notification"]="oui";
 		$this->data["commentaire"]="";
@@ -146,18 +145,9 @@ class user_core extends objet_core
 		$this->mail=strtolower($this->data["mail"]);
 		$this->fullname=AffFullName($this->prenom,$this->nom);
 		$this->data["droits"]="";
-
-		$sql=$this->sql;
-		$query = "SELECT actif,password FROM ".$this->tbl."_utilisateurs WHERE id='".$this->id."'";
-		$res=$sql->QueryRow($query);
-
-		if (is_array(($res)))
-		{
-			$this->password=$res["password"];
-			$this->actif=$res["actif"];
-		}
 	
 		// Charge les droits
+		$sql=$this->sql;
 		$query = "SELECT groupe FROM ".$this->tbl."_droits WHERE uid='".$this->id."' ORDER BY groupe";
 		$sql->Query($query);
 		$this->groupe=array();
@@ -603,11 +593,18 @@ class user_core extends objet_core
 
 	
 	# Save Password
-	function SaveMdp($mdp){
+	function SavePassword($pwd)
+	{
 		$sql=$this->sql;
-		$this->data["password"]=$mdp;
-		$sql->Edit("user",$this->tbl."_utilisateurs",$this->id,array("password"=>$mdp));		
+		$this->data["creds"]=password_hash($pwd, PASSWORD_BCRYPT, array('cost' => 12));
+		$sql->Edit("user",$this->tbl."_utilisateurs",$this->id,array("creds"=>$this->data["creds"]));		
 		return "";
+	}
+	
+	# Check Password
+	function CheckPassword($pwd)
+	{
+		return password_verify($pwd,$this->data["creds"]);
 	}
 	
 	

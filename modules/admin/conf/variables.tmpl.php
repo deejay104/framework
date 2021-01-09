@@ -49,6 +49,10 @@ $MyOptHelp["timezone"]="Sélectionner la timezone locale (Europe/Paris)";
 $MyOptTmpl["host"]=htmlentities($_SERVER["REQUEST_SCHEME"]."://".$_SERVER["SERVER_NAME"].preg_replace("/\/[a-z]*\.php/","",$_SERVER["SCRIPT_NAME"]));
 $MyOptHelp["host"]="Chemin complet du site. Utilisé pour générer les url statiques.";
 
+// Forwarded source IP
+$MyOptTmpl["ipfield"]="HTTP_X_REAL_IP";
+$MyOptHelp["ipfield"]="Nom du header dans lequel se trouve l'IP source";
+
 // Short url
 $MyOptTmpl["shorturl"]="off";
 $MyOptHelp["shorturl"]="Activer les url courtes (on=Activé)";
