@@ -184,12 +184,27 @@
 	}
 	else if ( (isset($_SERVER["PHP_AUTH_USER"])) && (isset($_SERVER["PHP_AUTH_PW"])) )
 	{
-		$query = "SELECT id FROM ".$MyOpt["tbl"]."_utilisateurs WHERE (mail='".$_SERVER["PHP_AUTH_USER"]."' OR initiales='".$_SERVER["PHP_AUTH_USER"]."') AND password='".$_SERVER["PHP_AUTH_PW"]."'";
-		$res  = $sql->QueryRow($query);
+		$gl_uid=0;
+
+		$query = "SELECT id,creds FROM ".$MyOpt["tbl"]."_utilisateurs WHERE (mail='".$_SERVER["PHP_AUTH_USER"]."' OR initiales='".$_SERVER["PHP_AUTH_USER"]."')";
+		$res = $sql->QueryRow($query);
+
 		if ($res["id"]>0)
 		{
-			$gl_uid=$res["id"];
+			if (password_verify($_SERVER["PHP_AUTH_PW"],$res["creds"]))
+			{
+				$gl_uid=$res["id"];
+			}
+			else if (password_verify(md5($_SERVER["PHP_AUTH_PW"]),$res["creds"]))
+			{
+				$gl_uid=$res["id"];
+			}
 		}
+
+		if ($gl_uid==0)
+		{
+			header("HTTP/1.0 401 Unauthorized"); exit;
+		}		
 	}
 	else
 	{

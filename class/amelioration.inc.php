@@ -91,7 +91,7 @@ class amelioration_core extends objet_core
 				CURLOPT_TIMEOUT        => 120,      // timeout on response
 				CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
 				CURLOPT_SSL_VERIFYPEER => false,     // Disabled SSL Cert checks
-				CURLOPT_USERPWD        => $MyOpt["amelioration"]["login"].':'.md5($MyOpt["amelioration"]["pwd"])
+				CURLOPT_USERPWD        => $MyOpt["amelioration"]["login"].':'.$MyOpt["amelioration"]["pwd"]
 			);
 
 			$ch = curl_init($url); 
@@ -151,7 +151,7 @@ class amelioration_core extends objet_core
 				CURLOPT_TIMEOUT        => 120,      // timeout on response
 				CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
 				CURLOPT_SSL_VERIFYPEER => false,     // Disabled SSL Cert checks
-				CURLOPT_USERPWD        => $MyOpt["amelioration"]["login"].':'.md5($MyOpt["amelioration"]["pwd"]),
+				CURLOPT_USERPWD        => $MyOpt["amelioration"]["login"].':'.$MyOpt["amelioration"]["pwd"],
 				CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
 				CURLOPT_CUSTOMREQUEST  => "PUT",
 				CURLOPT_POSTFIELDS     => json_encode($post)
@@ -244,7 +244,7 @@ class amelioration_core extends objet_core
 				CURLOPT_TIMEOUT        => 120,      // timeout on response
 				CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
 				CURLOPT_SSL_VERIFYPEER => false,     // Disabled SSL Cert checks
-				CURLOPT_USERPWD        => $MyOpt["amelioration"]["login"].':'.md5($MyOpt["amelioration"]["pwd"]),
+				CURLOPT_USERPWD        => $MyOpt["amelioration"]["login"].':'.$MyOpt["amelioration"]["pwd"],
 				CURLOPT_HTTPHEADER     => array('Content-Type: application/json'),
 				CURLOPT_CUSTOMREQUEST  => "PUT",
 				CURLOPT_POSTFIELDS     => json_encode($td)
@@ -308,7 +308,7 @@ class amelioration_core extends objet_core
 				CURLOPT_TIMEOUT        => 120,      // timeout on response
 				CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
 				CURLOPT_SSL_VERIFYPEER => false,     // Disabled SSL Cert checks
-				CURLOPT_USERPWD        => $MyOpt["amelioration"]["login"].':'.md5($MyOpt["amelioration"]["pwd"])
+				CURLOPT_USERPWD        => $MyOpt["amelioration"]["login"].':'.$MyOpt["amelioration"]["pwd"]
 			);
 
 			$ch = curl_init($url); 
@@ -373,7 +373,7 @@ function ListActiveAmeliorations($sql)
 			CURLOPT_TIMEOUT        => 120,      // timeout on response
 			CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
 			CURLOPT_SSL_VERIFYPEER => false,     // Disabled SSL Cert checks
-			CURLOPT_USERPWD        => $MyOpt["amelioration"]["login"].':'.md5($MyOpt["amelioration"]["pwd"])
+			CURLOPT_USERPWD        => $MyOpt["amelioration"]["login"].':'.$MyOpt["amelioration"]["pwd"]
 		);
 
 		$ch = curl_init($url); 
