@@ -42,13 +42,13 @@
 	{
 		FatalError("Fichier de configuration introuvable","Il manque le fichier de configuration.");
 	}
-	if (!file_exists($appfolder."/config/variables.inc.php"))
+	if (!file_exists($appfolder."/static/cache/config/variables.inc.php"))
 	{
 		FatalError("Fichier des variables introuvable","Il manque le fichier de variables.");
 	}
 
   	require ($appfolder."/config/config.inc.php");
-	require ($appfolder."/config/variables.inc.php");
+	require ($appfolder."/static/cache/config/variables.inc.php");
 
 // ---- Charge le numéro de version
 	require ("version.php");
@@ -64,8 +64,10 @@
 	$sql = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db);
 	$sql_cron = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db);
 
+echo "start";
+
 // ---- Défini l'utilisateur d'execution du batch
-	if ((!is_numeric($MyOpt["uid_system"])) || ($MyOpt["uid_system"]==0))
+	if ((!isset($MyOpt["uid_system"])) && (!is_numeric($MyOpt["uid_system"])) || ($MyOpt["uid_system"]==0))
 	{
 		FatalError("Compte systeme introuvable","Le compte systeme n'est pas défini.");
 	}

@@ -1708,7 +1708,7 @@ function GenereFichierVariables($tab)
 	if(is_writable($conffile))
 	{
 		$fd=fopen($conffile,"w");
-		fwrite($fd,"<?\n");
+		fwrite($fd,"<?php\n");
 		foreach($tab as $nom=>$d)
 		{
 			if (is_array($d))
