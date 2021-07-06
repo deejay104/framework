@@ -386,8 +386,8 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 .forum_Liste_Description { width:950px; font-size:14px; background-color: #{FormulaireBackgroundNormal}; margin: 0px; margin-bottom: 10px; padding-left: 15px; padding-bottom: 5px; padding-top: 10px; border-radius: 4px; }
 .forum_Liste_DescriptionTitre { font-size:16px; font-weight: bold; }
 
-.forum_Liste { width:950px;  margin: 0px; background-color: #ffffff; border:1px solid #{FormulaireBackgroundLight}; margin:0px; padding-bottom: 5px; border-radius: 4px; }
-.forum_Liste_Titre { padding-left: 15px; padding-top:10px; padding-bottom:10px; background-color: #{FormulaireBackgroundLight}; }
+.forum_Liste { width:950px; margin: 0px; background-color: #ffffff; border:1px solid #{FormulaireBackgroundLight}; margin:0px; padding-bottom: 5px; border-radius: 4px; }
+.forum_Liste_Titre { border-top: 1px solid #{FormulaireBackgroundNormal}; padding-left: 15px; padding-top:10px; padding-bottom:10px; background-color: #{FormulaireBackgroundLight}; }
 .forum_Liste_Titre p { margin: 0px; font-weight: bold; }
 .forum_Liste_Titre span { font-size: 10px; line-height:12px; font-weight: normal; padding-left:0px; }
 .forum_Liste_Titre a:hover { color:#{TextBackgroundHover}; }
@@ -495,7 +495,7 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 .formulaireTableau th { background-color: #{FormulaireBackgroundNormal}; padding-top:7px; padding-bottom:7px; line-height:24px; font-size:16px; font-weight:300; }
 .formulaireTableau td { padding:10px; }
 
-.docLink p { padding:0px; }
+.docLink p { margin-left:15px; padding:0px; }
 
 /* **** Boutton de suppression */
 .bouttonSupprime { margin-left:5px; }

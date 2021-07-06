@@ -660,7 +660,7 @@ class user_core extends objet_core
 // *********************************************************************************************************
 
 
-function ListActiveUsers($sql,$order="",$tabtype=array(),$virtuel="non")
+function ListActiveUsers($sql,$order="",$tabtype=array(),$virtuel="non",$type="")
 {
 	global $MyOpt;
  
@@ -692,12 +692,17 @@ function ListActiveUsers($sql,$order="",$tabtype=array(),$virtuel="non")
 	$query.="actif='oui'";
 	if ((GetDroit("ListeUserDesactive")) && ($MyOpt["showDesactive"]=="on"))
 	{
-		$query.=" OR actif='off'";
+		$query.=" OR actif='off' ";
 	}
 	if ((GetDroit("ListeUserSupprime")) && ($MyOpt["showSupprime"]=="on"))
 	{
-		$query.="OR actif='non'";
+		$query.="OR actif='non' ";
 	}
+	if ($type=="all")
+	{
+		$query.="OR 1=1";
+	}
+
 	$query.=") ";
 	$query.=(($virtuel!="") ? " AND virtuel='$virtuel'" : "");
 	
