@@ -387,7 +387,7 @@ body>.main { /* hack necessary for correct display of the height with IE and Moz
 .forum_Liste_DescriptionTitre { font-size:16px; font-weight: bold; }
 
 .forum_Liste { width:950px; margin: 0px; background-color: #ffffff; border:1px solid #{FormulaireBackgroundLight}; margin:0px; padding-bottom: 5px; border-radius: 4px; }
-.forum_Liste_Titre { border-top: 1px solid #{FormulaireBackgroundNormal}; padding-left: 15px; padding-top:10px; padding-bottom:10px; background-color: #{FormulaireBackgroundLight}; }
+.forum_Liste_Titre { border-top: 2px solid #{FormulaireBackgroundNormal}; padding-left: 15px; padding-top:10px; padding-bottom:10px; background-color: #{FormulaireBackgroundLight}; }
 .forum_Liste_Titre p { margin: 0px; font-weight: bold; }
 .forum_Liste_Titre span { font-size: 10px; line-height:12px; font-weight: normal; padding-left:0px; }
 .forum_Liste_Titre a:hover { color:#{TextBackgroundHover}; }
