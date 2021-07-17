@@ -295,6 +295,76 @@ function myPrint($txt)
 	}
 }
 
+function checkToken($token)
+{
+	global $sql, $MyOpt;
+	$ses=explode(".",$token);
+
+	$b64_header=(isset($ses[0])) ? $ses[0] : "";
+	$b64_payload=(isset($ses[1])) ? $ses[1] : "";
+	$b64_sign=(isset($ses[2])) ? $ses[2] :"";
+
+	$my_sign=str_replace(['+', '/', '='],['-', '_', ''],base64_encode(hash_hmac("sha256",$b64_header.".".$b64_payload,$MyOpt["jwtsecret"],true)));
+
+	$payload=json_decode(base64_decode($b64_payload),true);
+
+	$result=array();
+	$result["status"]="nok";
+	$result["tid"]=isset($payload["tid"]) ? $payload["tid"] : 0;
+	$result["uid"]=0;
+	$result["expire"]=0;
+
+	if (($my_sign==$b64_sign) && ($result["tid"]>0))
+	{
+		$query = "SELECT id,uid,token,dte_expire FROM ".$MyOpt["tbl"]."_token WHERE id='".$result["tid"]."' AND active='oui' AND dte_expire<>'0000-00-00 00:00:00' AND dte_expire>'".now()."'";
+		$res = $sql->QueryRow($query);
+
+		if ((is_array($res)) && ($res["id"]>0))
+		{
+			$result["uid"]=$res["uid"];
+			if (password_verify($payload["token"],$res["token"]))
+			{
+				$result["status"]="ok";
+				$result["expire"]=strtotime($res["dte_expire"]);
+			}
+		}
+	}
+
+	return $result;
+}
+
+
+function generateToken($gl_uid,$expire=0)
+{
+	global $sql,$MyOpt;
+	
+	if ($expire==0)
+	{
+		$expire=$MyOpt["tokenexpire"]*3600*24;
+	}
+	
+	$token=bin2hex(random_bytes(32));
+	$query="INSERT INTO ".$MyOpt["tbl"]."_token SET uid=".$gl_uid.", token='".password_hash($token, PASSWORD_BCRYPT, array('cost' => 12))."', uid_creat='".$gl_uid."',uid_maj='".$gl_uid."',dte_creat='".now()."',dte_maj='".now()."', dte_expire='".date("Y-m-d H:i:s",time()+$MyOpt["tokenexpire"]*24*3600)."'";
+	$tid=$sql->Insert($query);
+
+	$header='{"typ":"JWT","alg":"HS256"}';
+
+	$payload=array(
+		"iss"=>$MyOpt["host"],
+		"iat"=>time(),
+		"exp"=>time()+$expire,
+		"tid"=>$tid,
+		"token"=>$token
+	);
+
+	$b64_header=str_replace(['+', '/', '='],['-', '_', ''],base64_encode($header));
+	$b64_payload=str_replace(['+', '/', '='],['-', '_', ''],base64_encode(json_encode($payload)));
+	$b64_sign=str_replace(['+', '/', '='],['-', '_', ''],base64_encode(hash_hmac('sha256',$b64_header.".".$b64_payload,$MyOpt["jwtsecret"],true)));
+	$b64_token=$b64_header.".".$b64_payload.".".$b64_sign;
+	
+	return $b64_token;
+
+}
 
 // Charge un template
 function LoadTemplate($tmpl,$mymod="",$custom=true)

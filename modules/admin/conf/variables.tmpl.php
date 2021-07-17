@@ -44,6 +44,10 @@ $MyOptHelp["DefaultLanguage"]="Langue par défault du site";
 $MyOptTmpl["timezone"]=date_default_timezone_get();
 $MyOptHelp["timezone"]="Sélectionner la timezone locale (Europe/Paris)";
 
+// JWT secret
+$MyOptTmpl["jwtsecret"]=bin2hex(random_bytes(32));
+$MyOptHelp["jwtsecret"]="Secret utilisé pour signer les token";
+
 
 // URL
 $MyOptTmpl["host"]=htmlentities($_SERVER["REQUEST_SCHEME"]."://".$_SERVER["SERVER_NAME"].preg_replace("/\/[a-z]*\.php/","",$_SERVER["SCRIPT_NAME"]));

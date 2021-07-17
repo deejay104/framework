@@ -244,7 +244,7 @@ class user_core extends objet_core
 				}
 				if (GetDroit("SYS"))
 				{
-					$ret.="<input type='checkbox' name='form_droits[SYS]' ".(($this->groupe["SYS"]) ? "checked" : "")." value='SYS' /> Super Administrateur (SYS)<br />";
+					$ret.="<input type='checkbox' name='form_droits[SYS]' ".(((isset($this->groupe["SYS"])) && ($this->groupe["SYS"])) ? "checked" : "")." value='SYS' /> Super Administrateur (SYS)<br />";
 				}
 				$ret="<span>".$ret."</span>";
 			}
