@@ -407,7 +407,7 @@ function ListActiveAmeliorations($sql)
 			$res[$i]["version"]=$pb->val("version");
 			$res[$i]["module"]=$pb->val("module");
 			$res[$i]["uid_creat"]=$pb->uid_creat;
-			// $res[$i]["creat"]=$pb->aff("uid_creat");
+			$res[$i]["uid_dist"]=$pb->val("uid_dist");
 		}
 
 		return $res;
