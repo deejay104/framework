@@ -62,11 +62,11 @@
 		// $pb = new amelioration_core($i,$sql);
 
 		$tabValeur[$i]["id"]["val"]=$d["id"];
-		$tabValeur[$i]["id"]["aff"]=$d["id"];
+		$tabValeur[$i]["id"]["aff"]="<a href='".geturl("ameliorations","detail","id=".$d["id"])."'>#".CompleteTxt($d["id"],4,"0")."</a>";;
 		$tabValeur[$i]["titre"]["val"]=$d["titre"];
-		$tabValeur[$i]["titre"]["aff"]=$d["titre"];
+		$tabValeur[$i]["titre"]["aff"]="<a href='".geturl("ameliorations","detail","id=".$d["id"])."'>".$d["titre"]."</a>";
 		$tabValeur[$i]["status"]["val"]=$d["status"];
-		$tabValeur[$i]["status"]["aff"]=$d["status"];
+		$tabValeur[$i]["status"]["aff"]=$d["affstatus"];
 		$tabValeur[$i]["version"]["val"]=$d["version"];
 		$tabValeur[$i]["version"]["aff"]=$d["version"];
 		$tabValeur[$i]["module"]["val"]=$d["module"];
