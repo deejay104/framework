@@ -97,7 +97,6 @@ class amelioration_core extends objet_core
 			$ch = curl_init($url); 
 			curl_setopt_array( $ch, $options );
 			$data = curl_exec($ch); 
-
 			curl_close($ch); 
 			$tabList=json_decode($data,true);
 
@@ -357,11 +356,9 @@ class amelioration_core extends objet_core
 function ListActiveAmeliorations($sql)
 {
 	global $MyOpt;
-
 	if ((isset($MyOpt["amelioration"]["url"])) && ($MyOpt["amelioration"]["url"]!=""))
 	{
 		$url=$MyOpt["amelioration"]["url"]."/api.php?mod=ameliorations&rub=getlist";
-
 		$options = array(
 			CURLOPT_RETURNTRANSFER => true,     // return web page
 			CURLOPT_HEADER         => false,    // don't return headers
@@ -379,6 +376,7 @@ function ListActiveAmeliorations($sql)
 		$ch = curl_init($url); 
 		curl_setopt_array( $ch, $options );
 		$data = curl_exec($ch); 
+
 		curl_close($ch); 
 		$tabList=json_decode($data,true);
 
@@ -387,7 +385,7 @@ function ListActiveAmeliorations($sql)
 		{
 			foreach($tabList["lst"] as $k=>$v)
 			{
-				$lst[$k]=array();
+				$lst[$k]=$v;
 			}
 		}
 
@@ -395,7 +393,7 @@ function ListActiveAmeliorations($sql)
 	}
 	else
 	{
-		return ListeObjets($sql,"ameliorations",array("id"),array("actif"=>"oui"));
+		return ListeObjets($sql,"ameliorations",array("id","titre","status","version","module","uid_creat"),array("actif"=>"oui"));
 	}
 }
 ?>

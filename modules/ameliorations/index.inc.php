@@ -59,20 +59,20 @@
 	$tabValeur=array();
 	foreach($lst as $i=>$d)
 	{
-		$pb = new amelioration_core($i,$sql);
+		// $pb = new amelioration_core($i,$sql);
 
-		$tabValeur[$i]["id"]["val"]=$pb->id;
-		$tabValeur[$i]["id"]["aff"]=$pb->aff("id");
-		$tabValeur[$i]["titre"]["val"]=$pb->val("titre");
-		$tabValeur[$i]["titre"]["aff"]=$pb->aff("titre");
-		$tabValeur[$i]["status"]["val"]=$pb->val("status");
-		$tabValeur[$i]["status"]["aff"]=$pb->aff("status");
-		$tabValeur[$i]["version"]["val"]=$pb->val("version");
-		$tabValeur[$i]["version"]["aff"]=$pb->aff("version");
-		$tabValeur[$i]["module"]["val"]=$pb->val("module");
-		$tabValeur[$i]["module"]["aff"]=$pb->aff("module");
-		$tabValeur[$i]["creat"]["val"]=$pb->uid_creat;
-		$tabValeur[$i]["creat"]["aff"]=$pb->aff("uid_creat");
+		$tabValeur[$i]["id"]["val"]=$d["id"];
+		$tabValeur[$i]["id"]["aff"]=$d["id"];
+		$tabValeur[$i]["titre"]["val"]=$d["titre"];
+		$tabValeur[$i]["titre"]["aff"]=$d["titre"];
+		$tabValeur[$i]["status"]["val"]=$d["status"];
+		$tabValeur[$i]["status"]["aff"]=$d["status"];
+		$tabValeur[$i]["version"]["val"]=$d["version"];
+		$tabValeur[$i]["version"]["aff"]=$d["version"];
+		$tabValeur[$i]["module"]["val"]=$d["module"];
+		$tabValeur[$i]["module"]["aff"]=$d["module"];
+		$tabValeur[$i]["creat"]["val"]=$d["uid_creat"];
+		$tabValeur[$i]["creat"]["aff"]=$d["creat"];
 	}
 
 	if ((!isset($order)) || ($order=="")) { $order="status"; }
