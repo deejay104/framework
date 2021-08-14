@@ -739,28 +739,50 @@ function ListActiveMails($sql)
 	return $lstuser;
 }
 
-function AffListeMembres($sql,$form_uid,$name,$type="",$sexe="",$order="std",$virtuel="non")
+function AffListeMembres($sql,$form_uid,$name,$type="",$sexe="",$order="std",$virtuel="non",$tabtype=array())
 {
 	global $MyOpt;
 	if ($order=="std")
 	  { $order=(($MyOpt["globalTrie"]=="nom") ? "nom,prenom" : "prenom,nom"); }
-	$query ="SELECT id,prenom,nom FROM ".$MyOpt["tbl"]."_utilisateurs WHERE actif='oui' ";
+	$query ="SELECT id,prenom,nom ";
+
+
+	if ((is_array($tabtype)) && (count($tabtype)>0))
+	{
+		$type="";
+		$s="";
+		foreach($tabtype as $i=>$t)
+		{
+			$type.=$s."'".$t."'";
+			$s=",";
+		}
+		
+		$query.=", (SELECT COUNT(*) FROM ".$MyOpt["tbl"]."_droits AS droits LEFT JOIN ".$MyOpt["tbl"]."_roles AS roles ON droits.groupe=roles.groupe OR roles.groupe='ALL' WHERE roles.role IN (".$type.") AND droits.uid=usr.id) AS nb ";
+	}
+
+	$query.="FROM ".$MyOpt["tbl"]."_utilisateurs AS usr ";
+	$query.="WHERE actif='oui' ";
 	$query.=(($virtuel!="") ? "AND virtuel='$virtuel' " : "");
-	$query.=(($type!="") ? "AND type='$type' " : "");
+	// $query.=(($type!="") ? "AND type='$type' " : "");
 	$query.=(($sexe!="") ? "AND sexe='$sexe' " : "");
+
 	$query.=(($order!="") ? " ORDER BY $order" : "");
 	
 	$sql->Query($query);
 	$lstuser ="<select name=\"$name\">";
 	$lstuser.="<option value=\"0\">Aucun</option>";
 	for($i=0; $i<$sql->rows; $i++)
-	  { 
+	{
 		$sql->GetRow($i);
-		$sql->data["nom"]=strtoupper($sql->data["nom"]);
-		$sql->data["prenom"]=ucwords($sql->data["prenom"]);
-		$fullname=AffFullName($sql->data["prenom"],$sql->data["nom"]);
-		$lstuser.="<option value=\"".$sql->data["id"]."\" ".(($form_uid==$sql->data["id"]) ? "selected" : "").">".$fullname."</option>";
-	  }
+
+		if ( ((isset($sql->data["nb"])) && ($sql->data["nb"]>0)) || (!is_array($tabtype)) || (count($tabtype)==0))
+		{
+			$sql->data["nom"]=strtoupper($sql->data["nom"]);
+			$sql->data["prenom"]=ucwords($sql->data["prenom"]);
+			$fullname=AffFullName($sql->data["prenom"],$sql->data["nom"]);
+			$lstuser.="<option value=\"".$sql->data["id"]."\" ".(($form_uid==$sql->data["id"]) ? "selected" : "").">".$fullname."</option>";
+		}
+	}
 	$lstuser.="</select>";
 	return $lstuser;
 }
