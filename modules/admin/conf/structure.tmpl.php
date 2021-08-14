@@ -101,8 +101,8 @@ $tabTmpl=Array
 	"forums_lus" => Array
 	(
 		"id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
-		"forum_id" => Array("Type" => "mediumint(8) unsigned"),
-		"forum_msg" => Array("Type" => "mediumint(8) unsigned", "Index" => "1", ),
+		"forum_id" => Array("Type" => "int(10) unsigned"),
+		"forum_msg" => Array("Type" => "int(10) unsigned", "Index" => "1", ),
 		"forum_usr" => Array("Type" => "int(10) unsigned", "Index" => "1", ),
 		"forum_date" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
 	),
