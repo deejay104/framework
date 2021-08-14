@@ -1033,7 +1033,13 @@ function ListeObjets($sql,$table,$champs=array(),$crit=array(),$order=array())
 	for($i=0; $i<$sql->rows; $i++)
 	{ 
 		$sql->GetRow($i);
-		$lst[$sql->data["id"]]=$sql->data;
+		foreach($sql->data as $k=>$v)
+		{
+			if (!is_numeric($k))
+			{
+				$lst[$sql->data["id"]][$k]=$v;
+			}
+		}
 	}
 	return $lst;
 }

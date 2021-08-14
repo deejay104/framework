@@ -72,7 +72,9 @@
 		$tabValeur[$i]["module"]["val"]=$d["module"];
 		$tabValeur[$i]["module"]["aff"]=$d["module"];
 		$tabValeur[$i]["creat"]["val"]=$d["uid_creat"];
-		$tabValeur[$i]["creat"]["aff"]=$d["creat"];
+
+		$usr=new user_core($d["uid_creat"],$sql);
+		$tabValeur[$i]["creat"]["aff"]=$usr->aff("fullname");
 	}
 
 	if ((!isset($order)) || ($order=="")) { $order="status"; }

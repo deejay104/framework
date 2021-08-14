@@ -12,10 +12,16 @@
 	
 	$res=array();
 
-	$lst=ListeObjets($sql,"ameliorations",array("id"),array("actif"=>"oui","uid_creat"=>$gl_uid));
+	// $lst=ListeObjets($sql,"ameliorations",array("id"),array("actif"=>"oui","uid_creat"=>$gl_uid));
+	$lst=ListActiveAmeliorations($sql);
+
 	foreach($lst as $i=>$d)
 	{
-		$res["lst"][$i]=$d;
+		if ($d["uid_creat"]==$gl_uid)
+		{
+			$res["lst"][$i]=$d;
+			$res["lst"][$i]["uid_creat"]=$d["uid_dist"];
+		}
 	}
 
 	// Send JSON to the client.

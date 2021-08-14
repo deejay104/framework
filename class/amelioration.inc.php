@@ -355,7 +355,7 @@ class amelioration_core extends objet_core
 
 function ListActiveAmeliorations($sql)
 {
-	global $MyOpt;
+	global $MyOpt,$gl_uid;
 	if ((isset($MyOpt["amelioration"]["url"])) && ($MyOpt["amelioration"]["url"]!=""))
 	{
 		$url=$MyOpt["amelioration"]["url"]."/api.php?mod=ameliorations&rub=getlist";
@@ -393,7 +393,24 @@ function ListActiveAmeliorations($sql)
 	}
 	else
 	{
-		return ListeObjets($sql,"ameliorations",array("id","titre","status","version","module","uid_creat"),array("actif"=>"oui"));
+		$lst=ListeObjets($sql,"ameliorations",array("id"),array("actif"=>"oui"));
+		$res=array();
+		foreach($lst as $i=>$d)
+		{
+			$pb = new amelioration_core($i,$sql);
+			$res[$i]=array();
+			$res[$i]["id"]=$i;
+			$res[$i]["test"]="ok";
+			$res[$i]["titre"]=$pb->val("titre");
+			$res[$i]["status"]=$pb->val("status");
+			$res[$i]["affstatus"]=$pb->aff("status","read","form_data");
+			$res[$i]["version"]=$pb->val("version");
+			$res[$i]["module"]=$pb->val("module");
+			$res[$i]["uid_creat"]=$pb->uid_creat;
+			// $res[$i]["creat"]=$pb->aff("uid_creat");
+		}
+
+		return $res;
 	}
 }
 ?>
