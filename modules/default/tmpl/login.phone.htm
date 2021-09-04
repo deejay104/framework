@@ -98,8 +98,7 @@
 						if (response.auth=="OK")
 						{
 							console.log("credentials confirmed");
-							localStorage.setItem("myid",response.myid);
-							localStorage.setItem("mytoken",response.mytoken);
+							localStorage.setItem("token",response.token);
 							document.location="{url}";
 						}
 						else
@@ -121,8 +120,7 @@
 		if (localStorage)
 		{
 			console.log("load local storage");
-			var myid=localStorage.getItem("myid");
-			var mytoken=localStorage.getItem("mytoken");
+			var mytoken=localStorage.getItem("token");
 
 			$(function() {
 				$.ajax({
@@ -136,6 +134,11 @@
 						if (response.auth=="OK")
 						{
 							console.log("token confirmed");
+							if (response.token)
+							{
+								console.log("Token updated");
+								localStorage.setItem("token",response.token);
+							}
 							document.location="{url}";
 						}
 						else
