@@ -160,6 +160,47 @@
 	{
 		$debug["init"]=microtime();
 	}
+
+// ---- Gestion des thèmes
+
+// Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_2 like Mac OS X; fr-fr) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8H7 Safari/6533.18.5
+// Mozilla/5.0 (Linux; U; Android 2.2.1; fr-fr; HTC_Wildfire-orange-LS Build/FRG83D) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1
+// Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; XBLWP7; ZuneWP7)
+// Mozilla/5.0 (iPad; U; CPU OS 4_3_3 like Mac OS X; en-us) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8J3 Safari/6533.18.5
+// Mozilla/5.0 (Android 11; Mobile; rv:90.0) Gecko/90.0 Firefox/90.0
+// Mozilla/5.0 (Linux; Android 11; SM-A025G) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Mobile Safari/537.36
+
+	$theme=checkVar("theme","varchar",10);
+	$settheme=checkVar("settheme","varchar");
+	if ($settheme!="")
+	{	
+		$themes["default"]="";
+		$themes["phone"]="phone";
+		
+		$theme=$themes[$_REQUEST["settheme"]];
+		$_SESSION['mytheme']=$theme;
+	}
+	else if ($theme!="")
+	{
+	}
+	else if (isset($_SESSION['mytheme']))
+	{
+		$theme=$_SESSION['mytheme'];
+	}
+	else if ((!isset($_SESSION['mytheme'])) || ($_SESSION['mytheme']==""))
+	{
+		if ((preg_match("/CPU iPhone OS/",$_SERVER["HTTP_USER_AGENT"])) ||
+			(preg_match("/iPad; U; CPU OS/",$_SERVER["HTTP_USER_AGENT"])) ||
+			(preg_match("/Linux; U; Android/",$_SERVER["HTTP_USER_AGENT"])) ||
+			(preg_match("/Linux; Android/",$_SERVER["HTTP_USER_AGENT"])) ||
+			(preg_match("/Android 11; Mobile;/",$_SERVER["HTTP_USER_AGENT"]))
+		   )
+		{
+			$theme="phone";
+			$_SESSION['mytheme']=$theme;
+		}
+		
+	}
 	
 // ---- Gestion des droits
 	if ($fonc=="logout")
@@ -169,23 +210,9 @@
 	}
 	if ($gl_uid==0)
 	{
-		// $data=array();
-		// $data["sessid"]=isset($_SESSION['sessid']) ? $_SESSION['sessid'] : "na";
-		// $data["tokenexpire"]=$MyOpt["tokenexpire"];
-
-		// $query="INSERT INTO ".$MyOpt["tbl"]."_login SET username='na',dte_maj='".now()."',header='".substr(addslashes($_SERVER["HTTP_USER_AGENT"]),0,200)."',type='".json_encode($data)."'";
-		// $sql->Insert($query);
-// $_SESSION['sessid']=0;
-		// if ( ((isset($_SESSION['sessid'])) && ($_SESSION['sessid']==-1)) || ($MyOpt["tokenexpire"]==0) )
-		// {
 			include "login.php";
 			exit;
-		// }
-		// else
-		// {
-			// include "auth.php";
-			// exit;
-		// }
+
 	}
 
 // ---- Header de la page
@@ -237,47 +264,7 @@
 	}
 
   
-// ---- Gestion des thèmes
 
-// Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_2 like Mac OS X; fr-fr) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8H7 Safari/6533.18.5
-// Mozilla/5.0 (Linux; U; Android 2.2.1; fr-fr; HTC_Wildfire-orange-LS Build/FRG83D) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1
-// Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; XBLWP7; ZuneWP7)
-// Mozilla/5.0 (iPad; U; CPU OS 4_3_3 like Mac OS X; en-us) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8J3 Safari/6533.18.5
-// Mozilla/5.0 (Android 11; Mobile; rv:90.0) Gecko/90.0 Firefox/90.0
-// Mozilla/5.0 (Linux; Android 11; SM-A025G) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Mobile Safari/537.36
-
-
-	$theme=checkVar("theme","varchar",10);
-	$settheme=checkVar("settheme","varchar");
-	if ($settheme!="")
-	{	
-		$themes["default"]="";
-		$themes["phone"]="phone";
-		
-		$theme=$themes[$_REQUEST["settheme"]];
-		$_SESSION['mytheme']=$theme;
-	}
-	else if ($theme!="")
-	{
-	}
-	else if (isset($_SESSION['mytheme']))
-	{
-		$theme=$_SESSION['mytheme'];
-	}
-	else if ($_SESSION['mytheme']="")
-	{
-		if ((preg_match("/CPU iPhone OS/",$_SERVER["HTTP_USER_AGENT"])) ||
-			(preg_match("/iPad; U; CPU OS/",$_SERVER["HTTP_USER_AGENT"])) ||
-			(preg_match("/Linux; U; Android/",$_SERVER["HTTP_USER_AGENT"])) ||
-			(preg_match("/Linux; Android/",$_SERVER["HTTP_USER_AGENT"])) ||
-			(preg_match("/Android 11; Mobile;/",$_SERVER["HTTP_USER_AGENT"]))
-		   )
-		{
-			$theme="phone";
-			$_SESSION['mytheme']=$theme;
-		}
-		
-	}
 
 // ---- Charge les variables et fonctions
 	$module="static/modules";

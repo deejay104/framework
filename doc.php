@@ -21,25 +21,31 @@
 // ---- Gestion des droits
 	session_start();
 
-	if ((isset($_SESSION['uid'])) && ($_SESSION['uid']>0))
-	  { $gl_uid = $_SESSION['uid']; }
-	else
-	  { header("HTTP/1.0 401 Unauthorized"); exit; }
-
 // ---- Fonctions communes  
    	require ("lib/fonctions.inc.php");
+
+	$id=checkVar("id","numeric");
+
+	if ((isset($_SESSION['uid'])) && ($_SESSION['uid']>0))
+	{
+		$gl_uid = $_SESSION['uid'];
+	}
+	else
+	{
+		header("HTTP/1.0 302 Unauthorized"); 
+		header("Location: ".$MyOpt["host"]."?redirect=/doc.php?id=".$id);
+		exit;
+	}
+
 
 // ---- Variables
 	$MyOpt["tbl"]=$gl_tbl;
 
-	if ((is_numeric($_REQUEST["id"])) && ($_REQUEST["id"]>0))
-	{
-		$id=$_REQUEST["id"];
-	}
-	else
+	if ($id==0)
 	{
 		$ret=array();
-		$ret["result"]="id incorrect";
+		$ret["result"]="incorrect id";
+		$ret["status"]=500;
 		echo json_encode($ret);
 		exit;
 	}
@@ -48,6 +54,7 @@
 	{
 		$ret=array();
 		$ret["result"]="Fichier de configuration introuvable";
+		$ret["status"]=500;
 		echo json_encode($ret);
 		exit;
 	}
