@@ -201,6 +201,14 @@ $tabTmpl=Array
 	$obj=new amelioration_core(0,$sql);
 	$obj->genSqlTab($tabTmpl);
 
+	require_once ("class/folder.inc.php");
+	$obj=new folder_core(0,$sql);
+	$obj->genSqlTab($tabTmpl);
+	$obj=new paper_core(0,$sql);
+	$obj->genSqlTab($tabTmpl);
+	$obj=new comment_core(0,$sql);
+	$obj->genSqlTab($tabTmpl);
+
 	require_once ("class/echeance.inc.php");
 	$obj=new echeance_core(0,$sql);
 	$obj->genSqlTab($tabTmpl);

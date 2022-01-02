@@ -5,27 +5,277 @@
 <!-- END: infos -->
 
 
+
 <!-- BEGIN: corps -->
-  <!-- BEGIN: nomforum -->
-	<div class="forum_Index_Liste"  OnMouseOver="document.getElementById('del_{numsforum}').style.display='block';" OnMouseOut="document.getElementById('del_{numsforum}').style.display='none';">
-		<div class="forum_Index_Nom"><a href="index.php?mod=docs&rub=liste&fid={numsforum}&prec=index">{titreforum}</a></div>
-<!-- BEGIN: editforum -->
-		<div id='del_{numsforum}' class="forum_Index_Edite" style='display:none;'>
-			<a href="index.php?mod=docs&rub=editer&fid={numsforum}&fpars={numsforum}&mid={numsforum}&fprec=liste&fonc=edit" class='imgDelete'><img src="{path_module}/img/icn16_editer.png"/></a>
-			<a href="index.php?mod=docs&fid={numsforum}&fonc=delete" class='imgDelete'><img src="{path_module}/img/icn16_supprimer.png"/></a>
-		</div>
-<!-- END: editforum -->
-		<div class="forum_Index_Nombre">({nbmessages} messages)</div>
-		<div class="forum_Index_Intitule">{intitule}</div>
-	</div>
-		
-	<!-- BEGIN: msgnonlu -->
-	<div class="forum_Index_Message forum_Index_NouveauMessage"><a href="index.php?mod=docs&rub=detail&fid={id_forum}&mid={id_msg}">{titremsg} <i>(par {usertxt} {datemsg})</i></a></div>
-	<!-- END: msgnonlu -->
+<style>
+.folderBox {
+	width: 450px; 
+	margin-bottom:10px;
+}
+.folderTitle { 
+	display: flex; 
+	height:36px; 
+	padding-top:6px; 
+	padding-left: 15px;
+	background-color:#{FormulaireBackgroundNormal}; 
+	font-weight: bold; 
+	border-bottom: 1px solid #{BorderBlack}
+}
+.folderTitle p { width:450px; }
+.folderTitle img{ border:1px solid #{FormulaireBackgroundNormal}; }
+.folderTitle img:hover{ border:1px solid #000000!important; background-color:#ffffff; }
+.folderTitle:hover { background-color:#{LineBackgroundHover}; color:#{TextBackgroundHover};}
+
+.folderDescription {
+	padding-left: 15px;
 	
-	<!-- BEGIN: msgnonlu2 -->
-	<!-- END: msgnonlu2 -->
-	<br />
-<!-- END: nomforum -->
+}
+.contentTitle { padding:10px; height: 48px; background-color:#{FormulaireBackgroundNormal}; border-top-left-radius: 5px;border-top-right-radius: 5px;}
+.contentTitle p { display:inline-block; font-weight: bold;  }
+.contentTitle img{ border:1px solid #{FormulaireBackgroundNormal}; }
+.contentTitle img:hover{ border:1px solid #000000!important; background-color:#ffffff; }
+
+.createFolder { position: absolute; top: 140px; left:5px; width: 470px; margin-left:5px; display: none; border:1px solid #{FormulaireBackgroundDark}; background-color: #ffffff; border-radius:5px; }
+.createFolder label { display: inline-block; width: 150px; }
+.createFolder input { border: 1px solid #{FormulaireBackgroundDark}; }
+.createFolder textarea { border: 1px solid #{FormulaireBackgroundDark}; }
+.contentDescription { height:100px; }
+.createTitle { width:420px; }
+.createInput { width:445px; }
+
+.searchBox { position: absolute; top: 110px; width: 450px; min-height:120px; display: none; border:1px solid #{FormulaireBackgroundDark}; background-color: #f8f8f8; border-radius:5px; }
+.searchBoxInput { border: 1px solid #{FormulaireBackgroundDark}; margin-left:10px; width:430px; }
+.searchBox p { display: inline-block; margin-left:10px; margin-top:2px; width:400px; }
+
+.lstPapers { display: inline-block;  margin-bottom:10px;}
+
+@media (min-width: 714px) and (min-device-width: 714px) {
+	/* Screen larger than 714px */
+	.folderBox { width: 650px; }
+	.createFolder { width: 640px; }
+	.createTitle { width:590px; }
+	.folderTitle p { width:610px; }
+	.createInput { width:615px; }
+	.searchBox { width: 550px; }
+	.searchBoxInput { width:530px; }
+	.searchBox p { width:520px; }
+}
+
+@media (min-width: 1024px) and (min-device-width: 1024px) {
+	/* Screen larger than 1024px */
+	.createFolder { top: 90px; left:220px; }
+	.searchBox { top:70px; }
+}
+
+@media (min-width: 1200px) and (min-device-width: 1200px) {
+	/* Screen larger than 1200px */
+	.createFolder { left:260px; }
+}
+
+@media (min-width: 1420px) and (min-device-width: 1420px) {
+	/* Screen larger than 1420px */
+}
+
+
+</style>
+
+<div id='lstfolders'>
+</div>
+
+<div id='createFolder' class='createFolder'>
+		<div class='contentTitle'>
+			<p class='createTitle'>Créer un nouveau dossier</p>
+			<img src='/core/static/modules/docs/img/icn16_supprimer.png' onClick='cancelContent();' style='border: 1px solid #bbbbbb; border-radius:4px;'>
+		</div>
+		<div style='padding:10px;'>
+			<p>Titre :</p>
+			<p><input type='text' id='contentNewTitle' class='createInput'></p>
+			<p>Description :</p>
+			<textarea id='contentNewComment' class='contentDescription'></textarea>
+
+			<p><label>Groupe de lecture :</label> 
+				<select id='group_read'>
+					<option value="ALL">ALL</option>
+<!-- BEGIN: lst_group_read -->
+					<option value="{aff_group}">{aff_group}</option>
+<!-- END: lst_group_read -->
+				</select>
+			</p>
+			<p><label>Groupe d'écriture :</label> 
+				<select id='group_write'>
+					<option value="ALL">ALL</option>
+<!-- BEGIN: lst_group_write -->
+					<option value="{aff_group}">{aff_group}</option>
+<!-- END: lst_group_write -->
+				</select>
+			</p>
+
+			<br />
+			<input type='submit' value='Enregistrer' onClick='saveContent();'>
+			<input type='submit' value='Annuler' onClick='cancelContent();'>
+		</div>
+</div>
+
+<div id='search' class='searchBox'>
+	<p>Rechercher un document :</p>
+	<input type='text' id='crit' class='searchBoxInput' OnKeyUp="searchkey(event);" autocomplete="off"/>
+	<div style='text-align: right; margin-top:5px; margin-right:10px; margin-bottom:10px;'>
+		<input type='submit' value='Afficher' onClick='searchApply();'>
+		<input type='submit' value='Annuler' onClick='searchCancel();'>
+	</div>
+	<div id='lstPapers' class='lstPapers'></div>
+</div>
+
+<script>
+$(document).ready(function() {
+	loadContent();
+});
+
+var	currentFolder=0;
+
+function loadContent()
+{
+	$.get('/api/v1/docs/lstfolder').done(function(data)
+	{
+		divFolder=document.getElementById("lstfolders");
+		divFolder.innerHTML="";
+
+		for (var key in data.data)
+		{
+			var txt="";
+			txt=txt+"<div class='folderBox'>";
+			txt=txt+"<div class='folderTitle' onmouseover='document.getElementById(\"edit_"+key+"\").style.display=\"block\";' onmouseout='document.getElementById(\"edit_"+key+"\").style.display=\"none\";'><p><a href='/docs/folder?id="+data.data[key].id+"'>"+data.data[key].title+"</a></p>";
+
+			txt=txt+"<div id='edit_"+key+"' style='display:none;'>";
+
+			txt=txt+"<img src='/core/static/modules/docs/img/icn16_editer.png' onclick='editFolder("+key+");'>";
+
+			txt=txt+"</div>";
+			txt=txt+"</div>";
+			txt=txt+"<div class='folderDescription'><p>"+data.data[key].description+"</p></div>";
+			divFolder.innerHTML=divFolder.innerHTML+txt;
+		}
+	});
+}
+function createFolder()
+{
+	console.log("Create Folder");
+	$("#createFolder").css({"display":"inline-block"});
+	$("#lstfolders").css({"opacity":0.25});
+	currentFolder=0;
+}
+
+
+function editFolder(id)
+{
+	console.log("Edit Folder "+id);
+
+	$.get('/api/v1/docs/getfolder?id='+id).done(function(data)
+	{
+console.log(data);
+		$("#contentNewTitle").val(data.data.title);
+		$("#contentNewComment").val(data.data.description);
+		$("#group_read").val(data.data.group_read);
+		$("#group_write").val(data.data.group_write);
+		$("#createFolder").css({"display":"inline-block"});
+		$("#lstfolders").css({"opacity":0.25});
+		currentFolder=id;
+	});
+}
+
+function cancelContent()
+{
+	$("#createFolder").css({"display":"none"});
+	$("#lstfolders").css({"opacity":1});
+}
+
+function saveContent()
+{
+	$.post( "/api/v1/docs/postfolder", { id: currentFolder, title:$("#contentNewTitle").val(), description:$("#contentNewComment").val(), group_read:$("#group_read").val(), group_write:$("#group_write").val()} ).done(function(data) {
+		console.log("Paper archived");
+		loadContent();
+	});
+
+	$("#createFolder").css({"display":"none"});
+	$("#lstfolders").css({"opacity":1});
+}
+
+function showSearch()
+{
+	$("#search").css({"display":"inline-block"});
+	$("#lstPapers").html("");
+	$("#crit").focus();
+
+}
+
+function searchApply()
+{
+	window.location.replace("/docs/folder?crit="+$("#crit").val());
+}
+function searchCancel()
+{
+	$("#crit").val("");
+	$("#lstPapers").html("");
+	$("#search").css({"display":"none"});
+}
+
+var timer=null;
+var searchTxt="";
+function searchkey(e) {
+	text="";
+
+	if (window.event)
+	{
+		key = window.event.keyCode;
+	} //IE
+	else
+	{
+		key = e.which;
+	} //firefox
+
+	if (key==13)
+	{
+		window.location.replace("/docs/folder?crit="+$("#crit").val());
+		return false;
+	}
+
+	searchTxt=$("#crit").val();
+
+	if (timer) {
+		window.clearTimeout(timer);
+	}
+	timer = window.setTimeout( function() {
+		timer = null;
+		searchList();
+	}, 300 );
+
+	console.log(searchTxt);
+}
+
+function searchList()
+{
+	console.log("GET:"+searchTxt);
+
+	var crit=$("#crit").val();
+	var sort="dte_creat";
+	var limit=20;
+	$.get('/api/v1/docs/lstpaper?sort='+sort+'&crit='+crit+'&limit='+limit).done(function(data)
+	{
+		var txtFiles="";
+		for (var key in data.data)
+		{
+			txtFiles=txtFiles+"<div class='paperBox'>";
+			for (var ii in data.data[key].doc)
+			{
+				txtFiles=txtFiles+"<div class='paperDocument'>"+data.data[key].doc[ii]+"</div>";
+			}
+			txtFiles=txtFiles+"</div>";
+		}
+		$("#lstPapers").html(txtFiles);
+	});
+
+}
+
+</script>
 
 <!-- END: corps -->

@@ -20,6 +20,7 @@
 ?>
 
 <?php
+	require_once ("class/folder.inc.php");
 	require_once ("class/document.inc.php");
 
 // ---- Vérifie les variables
@@ -89,14 +90,14 @@
 
 
 	// <p><A href="index.php?mod=docs&rub=liste&fid={fid}" class=clsLien><IMG src="{path_module}/img/icn32_retour.png">Retour</A></p>
-	addPageMenu($corefolder,$mod,"Retour",geturl("docs","liste","fid=".$fid),"icn32_retour.png");
+	addPageMenu($corefolder,$mod,"Retour",geturl("forum","liste","fid=".$fid),"icn32_retour.png");
 
 	// <!-- BEGIN: ecrire -->
 	// <p><A href="index.php?mod=docs&rub=editer&fid={fid}&fpars={mid}&fprec=detail" title="Répondre à ce message."><IMG src="{path_module}/img/icn32_comment.png" />Répondre</A></p>
 	// <!-- END: ecrire -->
 	if (GetDroit($resb["droit"]))
 	{
-		addPageMenu($corefolder,$mod,"Ecrire",geturl("docs","editer","fid=".$fid."&fpars=".$mid."&fprec=detail"),"icn32_comment.png");
+		addPageMenu($corefolder,$mod,"Ecrire",geturl("forum","editer","fid=".$fid."&fpars=".$mid."&fprec=detail"),"icn32_comment.png");
 	}
 
 	// <!-- BEGIN: modifier -->
@@ -104,7 +105,7 @@
 	// <!-- END: modifier -->
 	if ((($res["uid_creat"] == $uid) && ($uid>0)) || (GetDroit("ModifMessage")))
 	{
-		addPageMenu($corefolder,$mod,"Modifier",geturl("docs","editer","fid=".$fid."&fpars=".$mid."&mid=".$mid."&fprec=detail"),"icn32_modifier.png");
+		addPageMenu($corefolder,$mod,"Modifier",geturl("forum","editer","fid=".$fid."&fpars=".$mid."&mid=".$mid."&fprec=detail"),"icn32_modifier.png");
 	}
 
 	// <!-- BEGIN: supprimer -->
@@ -115,8 +116,27 @@
 	// Boutons de réponse à un message
 	if (GetDroit("SupprimeMessage"))
 	{
-		addPageMenu($corefolder,$mod,"Supprimer",geturl("docs","liste","fid=".$fid."&opt=".$mid."&anc=visu"),"icn32_supprimer.png");
+		addPageMenu($corefolder,$mod,"Supprimer",geturl("forum","liste","fid=".$fid."&opt=".$mid."&anc=visu"),"icn32_supprimer.png");
 	}
+
+	if (GetDroit("AccesMigrateDocuments"))
+	{
+
+		$lst=ListActiveFolders($sql);
+
+		foreach($lst as $i=>$d)
+		{
+			$tmpl_x->assign("folder_id",$d["id"]);
+			$tmpl_x->assign("folder_name",$d["title"]);
+
+			$tmpl_x->parse("corps.migrate.lst_folder");
+		}
+
+
+		 $tmpl_x->parse("corps.migrate");
+	}
+
+
 
 // ---- Affiche le corps du message
 	if ((!preg_match("/<BR>/i",$res["corps"])) && (!preg_match("/<P>/i",$res["corps"])) && (!preg_match("/<DIV>/i",$res["corps"])) && (!preg_match("/<IMG/i",$res["corps"])) && (!preg_match("/<TABLE/i",$res["corps"])))

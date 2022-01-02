@@ -328,6 +328,7 @@ function convertSize(size) {
 		return;
 	}
 
+	var timer=null;
 	function CapturePost(e) {
 		text="";
 	
@@ -342,11 +343,16 @@ function convertSize(size) {
 			return false;
 	 	 }
 
-		$("#news").text("");
-		searchTxt=document.getElementById("search").value;
-		loadNews(0,4,searchTxt);
-	console.log(searchTxt);
+		if (timer) {
+			window.clearTimeout(timer);
+		}
+		timer = window.setTimeout( function() {
+			timer = null;
+			$("#news").text("");
+			loadNews(0,4,$("#search").val());
+		}, 300 );
 	}
+
 
 	
 </script>

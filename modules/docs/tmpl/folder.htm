@@ -1,0 +1,567 @@
+<!-- BEGIN: icone -->
+	<img src="{path_module}/img/icn48_titre.png" alt="" border=0 />
+<!-- END: icone -->
+<!-- BEGIN: infos -->
+<!-- END: infos -->
+
+
+<!-- BEGIN: corps -->
+<style>
+.paperBox {
+	width:450px;
+	margin-bottom:10px;
+}
+.paperTitle { 
+	display: flex; 
+	height:36px; 
+	padding-top:6px; 
+	padding-left: 15px;
+	background-color:#{FormulaireBackgroundNormal}; 
+	font-weight: bold; 
+	border-bottom: 1px solid #{BorderBlack}
+}
+.paperAuthor {
+	height:16px; 
+	font-size:10px;
+	padding-left: 15px;
+}
+.paperTitle:hover { background-color:#{LineBackgroundHover}; color:#{TextBackgroundHover};}
+.paperDocument { padding-left: 15px; padding-top:5px; }
+.paperContent { position: absolute; top:70px; left: 0px; background-color:#ffffff; width: 440px; min-height:40px; margin-left:5px; display: none; vertical-align:top; border:1px solid #{FormulaireBackgroundDark}; border-radius:5px; }
+.paperContent label { display: inline-block; width: 150px; }
+.paperContent input { border: 1px solid #{FormulaireBackgroundNormal}; }
+.paperContent textarea { border: 1px solid #{FormulaireBackgroundNormal}; }
+.contentTitle { padding:10px; height: 48px; background-color:#{FormulaireBackgroundNormal}; color:#{TextBackgroundHover}; border-top-left-radius: 5px;border-top-right-radius: 5px; }
+.contentTitle img{ border:1px solid #{FormulaireBackgroundNormal}; }
+.contentTitle img:hover{ border:1px solid #{FormulaireBackgroundDark}!important; background-color:#ffffff; }
+.contentTitle input { background-color:#{FormulaireBackgroundNormal}; width:330px; }
+.contentEditable { border:1px solid #{FormulaireBackgroundDark}!important; }
+.contentFiles { min-height:32px; padding-top:5px; border:1px solid #{FormulaireBackgroundDark}; text-align: center; margin-bottom:5px;}
+.contentFiles:hover { background-color:#{LineBackgroundHover}; color:#{TextBackgroundHover};}
+
+.commentTxt { display:inline-block; vertical-align: top; padding-left:10px; width: 350px;}
+.contentComment { vertical-align: top; }
+.contentComment p { width:340px; padding-left:10px; border:1px solid #{FormulaireBackgroundNormal}; background-color: #{FormulaireBackgroundNormal}; border-radius: 5px; padding: 5px; }
+.contentComment img { border-radius:32px; }
+
+.searchBox { position: absolute; top: 110px; width: 450px; height:95px; display: none; border:1px solid #{FormulaireBackgroundDark}; background-color: #f8f8f8; border-radius:5px; }
+.searchBoxInput { border: 1px solid #{FormulaireBackgroundDark}; margin-left:10px; width:430px; }
+.searchBox p { display: inline-block; margin-left:10px; margin-top:2px; width:520px; }
+
+.blurBackground { opacity: 0.2; }
+.button { margin-bottom:5px; }
+.button label { display: inline-block;width:82px; }
+
+@media (min-width: 714px) and (min-device-width: 714px) {
+	/* Screen larger than 714px */
+	.paperBox { min-width:645px; }
+	.paperContent { width: 560px; left:40px; top:120px; }
+	.contentTitle input { width:450px; }
+	.searchBox { width: 550px; }
+	.searchBoxInput { width:530px; }
+	.button { display: inline-block; margin-bottom:10px;}
+
+	.commentTxt { width: 450px;}
+	.contentComment p { width:440px; }
+
+}
+
+@media (min-width: 1024px) and (min-device-width: 1024px) {
+	/* Screen larger than 1024px */
+	.paperContent { left:240px; }
+	.searchBox { top:70px; }
+}
+
+@media (min-width: 1200px) and (min-device-width: 1200px) {
+	/* Screen larger than 1200px */
+	.paperContent { left:240px; }
+}
+
+@media (min-width: 1420px) and (min-device-width: 1420px) {
+	/* Screen larger than 1420px */
+	.paperContent { width: 550px; margin-left:15px; position: static; }
+	.blurBackground { opacity: 1; }
+	.contentTitle input { width:440px; }
+}
+
+
+
+</style>
+<div>
+	<div id='paperList' style='display:inline-block;'>
+		<div class='button'>
+		<label>Filtrer par</label><select id='selectFilter' onChange='loadPapers();'>
+			<option value="active">Documents actifs</option>
+			<option value="all">Tous</option>
+		</select>
+		</div>
+		<div class='button'>
+		<label>en date du</label><input id='selectDate' type="date" value='{form_today}'  onChange='loadPapers();'>
+		</div>
+		<div class='button'>
+		<label>Trier par</label><select id='selectSort' onChange='loadPapers();'>
+			<option value="dte_creat">Date</option>
+			<option value="title">Titre</option>
+			<option value="uid_creat">Auteur</option>
+		</select>
+		</div>
+
+<!-- BEGIN: createdoc -->
+		<div id='newContentFile' class='contentFiles'>
+			<label for='newFile' style='display: inline-block;'><p id='newContentText'>Nouveau Document</p></label>
+			<input id='newFile' type='file' style='display:none'>
+		</div>
+<!-- END: createdoc -->
+		<div id='lstPapers'>
+		</div>
+	</div>
+
+	<div id='paperContent' class='paperContent'>
+		<div class='contentTitle'>
+			<input type="text" id='contentTitle' readonly>
+
+<!-- BEGIN: edit -->
+			<img src='/core/static/modules/docs/img/icn16_editer.png' onClick='toggleContent();'>
+			<img src='/core/static/modules/docs/img/icn16_archive.png' onClick='archiveContent();'>
+<!-- END: edit -->
+<!-- BEGIN: noedit -->
+			<div style='display: inline-block; width:32px;'></div>
+<!-- END: noedit -->
+			<img src='/core/static/modules/docs/img/icn16_supprimer.png' onClick='closeContent();' style='border: 1px solid #bbbbbb; border-radius:4px; margin-left:20px;'>
+		</div>
+		<div style='padding:10px;'>
+			<p><label>Auteur :</label> <input type="text" id='contentAuthor' readonly></p>
+			<p><label>Date de création :</label> <input type="text" id='contentDateCreate' readonly></p>
+			<p><label>Date de début :</label> <input type="date" id='contentDateStart' readonly></p>
+			<p><label>Date d'échéance :</label> <input type="date" id='contentDateEnd' readonly></p>
+		</div>
+
+<!-- BEGIN: adddoc -->
+		<div style='padding-left:10px;padding-right:10px;'>
+			<div id='addContentFile' class='contentFiles' >
+				<label for='addFile' style='display: inline-block;'><p id='addContentText'>Ajouter Document</p></label>
+				<input id='addFile' type='file' style='display:none'>
+			</div>
+		</div>
+<!-- END: adddoc -->
+		<div style='padding:10px;'>
+			<p>Commentaires :</p>
+			<div id='contentComment' class='contentComment'></div>
+			<textarea id='contentNewComment' style='border: 1px solid #{FormulaireBackgroundDark}'></textarea>
+			<br />
+			<input type='submit' value='Enregistrer' onClick='saveContent();'>
+			<input type='submit' value='Annuler' onClick='cancelContent();'>
+		</div>
+	</div>
+</div>
+<div id='search' class='searchBox'>
+	<p>Rechercher un document :</p>
+	<input type='text' id='crit' value='{crit}' class='searchBoxInput' OnKeyUp="searchkey(event);" autocomplete="off"/>
+	<div style='position:absolute; right:10px; margin-top:4px; '>
+		<input type='submit' value='Chercher' onClick='searchApply();'>
+		<input type='submit' value='Annuler' onClick='searchCancel();'>
+	</div>
+</div>
+
+
+<script>
+
+$(document).ready(function() {
+
+	loadPapers();
+});
+
+
+function loadPapers()
+{
+	var filter=$("#selectFilter").val();
+	var date=$("#selectDate").val();
+	var crit=$("#crit").val();
+	var sort=$("#selectSort").val();
+	$.get('/api/v1/docs/lstpaper?id={id}&filter='+filter+'&date='+date+'&sort='+sort+'&crit='+crit).done(function(data)
+	{
+		divPaper=document.getElementById("lstPapers");
+		divPaper.innerHTML="";
+		<!-- divDescription=document.getElementById("lstDescription"); -->
+		<!-- divDescription.innerHTML=""; -->
+
+		for (var key in data.data)
+		{
+			var txtFiles="<div class='paperBox'>";
+			txtFiles=txtFiles+"<div id='paperTitle_"+data.data[key].id+"' onclick='loadContent("+data.data[key].id+");' class='paperTitle'><p>"+data.data[key].title+"</p></div>";
+			txtFiles=txtFiles+"<div class='paperAuthor'><p>par "+data.data[key].author+", "+data.data[key].created+"</p></div>";
+			txtFiles=txtFiles+"<div id='paperDocument_"+data.data[key].id+"'>";
+			for (var ii in data.data[key].doc)
+			{
+				txtFiles=txtFiles+"<div class='paperDocument'>"+data.data[key].doc[ii]+"</div>";
+			}
+			txtFiles=txtFiles+"</div>";
+			divPaper.innerHTML=divPaper.innerHTML+txtFiles;
+		}
+	});
+}
+
+$(function() {
+
+    // preventing page from redirecting
+    $("html").on("dragover", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        <!-- $("h1").text("Drag here"); -->
+    });
+
+    $("html").on("drop", function(e) { e.preventDefault(); e.stopPropagation(); });
+
+    // Drag enter
+    $('#newContentFile').on('dragenter', function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        $("#newContentFile").css({"border":"1px dashed #{FormulaireBackgroundDark}"});
+    });
+
+    // Drag over
+    $('#newContentFile').on('dragover', function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        $("#newContentFile").css({"border":"1px dashed #{FormulaireBackgroundDark}"});
+    });
+
+    // Drag leave
+    $('#newContentFile').on('dragleave', function (e) {
+        $("#newContentFile").css({"border":"1px solid #{FormulaireBackgroundNormal}"});
+    });
+
+    // Drop
+    $('#newContentFile').on('drop', function (e) {
+		console.log("drop");
+        e.stopPropagation();
+        e.preventDefault();
+
+        $("#newContentFile").css({"border":"1px solid #{FormulaireBackgroundNormal}"});
+
+        var file = e.originalEvent.dataTransfer.files;
+        var fd = new FormData();
+        fd.append('file', file[0]);
+
+        uploadData(0,fd);
+    });
+
+    // Open file selector on div click
+    <!-- $("#uploadfile").click(function(){ -->
+		<!-- console.log("click"); -->
+        <!-- $("#file").click(); -->
+    <!-- }); -->
+
+    // file selected
+    $("#newFile").change(function(){
+        var fd = new FormData();
+        var files = $('#newFile')[0].files[0];
+        fd.append('file',files);
+		console.log(files);
+        uploadData(0,fd);
+    });
+
+
+
+    // Drag enter
+    $('#addContentFile').on('dragenter', function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        $("#addContentFile").css({"border":"1px dashed #{FormulaireBackgroundDark}"});
+    });
+
+    // Drag over
+    $('#addContentFile').on('dragover', function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        $("#addContentFile").css({"border":"1px dashed #{FormulaireBackgroundDark}"});
+    });
+
+    // Drag leave
+    $('#addContentFile').on('dragleave', function (e) {
+        $("#addContentFile").css({"border":"1px solid #{FormulaireBackgroundNormal}"});
+    });
+
+    // Drop
+    $('#addContentFile').on('drop', function (e) {
+		console.log("addFile drop");
+        e.stopPropagation();
+        e.preventDefault();
+
+        $("#addContentFile").css({"border":"1px solid #{FormulaireBackgroundNormal}"});
+
+        var file = e.originalEvent.dataTransfer.files;
+        var fd = new FormData();
+        fd.append('file', file[0]);
+       uploadData(currentPaper,fd);
+    });
+
+    // file selected
+    $("#addFile").change(function(){
+        var fd = new FormData();
+        var files = $('#addFile')[0].files[0];
+        fd.append('file',files);
+		console.log(files);
+
+        uploadData(currentPaper,fd);
+    });
+});
+
+
+var currentPaper=0;
+var editable=false;
+
+function loadContent(id)
+{
+	$("#contentComment").html("");
+
+	if (currentPaper!=id)
+	{
+		$("#paperList").addClass('blurBackground');	
+		$(".navigation").addClass('blurBackground');	
+
+		currentPaper=id;
+		editContent(true);
+		$.get('/api/v1/docs/getpaper?id='+id).done(function(data)
+		{
+			$("#contentTitle").val(data.data.title);
+			<!-- $("#contentDescription").html(data.data.description); -->
+			$("#contentAuthor").val(data.data.author);
+			$("#contentDateCreate").val(data.data.dte_create);
+			$("#contentDateStart").val(data.data.dte_start);
+			$("#contentDateEnd").val(data.data.dte_end);
+			$("#paperContent").css({"display":"inline-block"});
+		});
+		$.get('/api/v1/docs/lstcomment?id='+id).done(function(data)
+		{
+			for (var key in data.data)
+			{
+				showComment(data.data[key].avatar,data.data[key].description,data.data[key].author,data.data[key].created);
+			}
+		});
+	}
+	else
+	{
+		closeContent();
+	}
+}
+
+function toggleContent()
+{
+	editContent();
+	if (!editable)
+	{
+		savePaper();
+	}
+}
+
+function archiveContent()
+{
+	today = new Date();
+	$.post( "/api/v1/docs/postpaper", { id: currentPaper, dte_end:  today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate()} ).done(function(data) {
+		console.log("Paper archived");
+	});
+}
+
+function editContent(setEditable)
+{
+	if (typeof setEditable!=='undefined')
+	{
+		editable=setEditable;
+	}
+
+	if (editable)
+	{
+		editable=false;
+		$("#contentSubmit").css({"display":"none"});
+
+		$("#contentTitle").prop('readonly', true);	
+		$("#contentDateStart").prop('readonly', true);	
+		$("#contentDateEnd").prop('readonly', true);	
+
+		$("#contentTitle").css({"background-color":"#{FormulaireBackgroundNormal}"});
+
+		$("#contentTitle").removeClass('contentEditable');	
+		$("#contentDateStart").removeClass('contentEditable');	
+		$("#contentDateEnd").removeClass('contentEditable');	
+	}
+	else
+	{
+		editable=true;
+		$("#contentSubmit").css({"display":"inline-block"});
+
+		$("#contentTitle").prop('readonly', false);	
+		$("#contentDateStart").prop('readonly', false);	
+		$("#contentDateEnd").prop('readonly', false);	
+
+		$("#contentTitle").css({"background-color":"#ffffff"});
+
+		$("#contentTitle").addClass('contentEditable');	
+		$("#contentDateStart").addClass('contentEditable');	
+		$("#contentDateEnd").addClass('contentEditable');
+
+	}
+}
+
+function closeContent()
+{
+	currentPaper=0;
+	$("#paperContent").css({"display":"none"});
+	$("#contentSubmit").css({"display":"none"});
+	$("#paperList").removeClass('blurBackground');	
+	$(".navigation").removeClass('blurBackground');	
+}
+
+function cancelContent()
+{
+	$("#contentNewComment").val("");
+	closeContent();
+}
+
+function saveContent()
+{
+	if (editable)
+	{
+		savePaper();
+		editContent();
+	}
+	if ($("#contentNewComment").val()!="")
+	{
+		$.post( "/api/v1/docs/postcomment", { id: currentPaper, comment:$("#contentNewComment").val() } ).done(function(data) {
+			console.log("Comment saved");
+			$("#contentComment").html($("#contentComment").html()+$("#contentNewComment").val());
+			showComment(data.avatar,data.description,data.author,data.created);
+		});
+	}
+	$("#contentNewComment").val("");
+}
+
+function showComment(avatar,txt,author,created)
+{
+	var newComment="<div style=''>";
+	newComment=newComment+"<div style='display:inline-block; vertical-align: top;'><img src='/"+avatar+"'></div>";
+	newComment=newComment+"<div class='commentTxt'><p>"+txt+"</p>";
+	newComment=newComment+"<div style='font-size:8px; text-decoration:italic; padding-left:5px;'>par "+author+" "+created+"</div></div>";
+	newComment=newComment+"</div>";
+	$("#contentComment").html($("#contentComment").html()+newComment);
+}
+
+function savePaper()
+{
+	$.post( "/api/v1/docs/postpaper", { id: currentPaper, title:$("#contentTitle").val(), dte_start:$("#contentDateStart").val(), dte_end:$("#contentDateEnd").val() } ).done(function(data) {
+		console.log("Paper saved");
+		$("#paperTitle_"+currentPaper).html("<p>"+$("#contentTitle").val()+"</p>");
+	});
+}
+
+function showSearch()
+{
+	$("#search").css({"display":"inline-block"});
+	$("#crit").focus();
+}
+
+function searchApply()
+{
+	console.log("search");
+	$("#search").css({"display":"none"});
+	loadPapers();
+}
+function searchCancel()
+{
+	$("#crit").val("");
+	$("#search").css({"display":"none"});
+	loadPapers();
+}
+
+var timer=null;
+function searchkey(e) {
+	if (window.event)
+	{
+		key = window.event.keyCode;
+	} //IE
+	else
+	{
+		key = e.which;
+	} //firefox
+
+	if (key==13)
+	{ 
+		searchApply();
+		return false;
+	}
+	if (key==27)
+	{
+		searchCancel();
+		return false;
+	}
+
+
+	if (timer) {
+		window.clearTimeout(timer);
+	}
+	timer = window.setTimeout( function() {
+		timer = null;
+		loadPapers();
+	}, 300 );
+}
+
+
+// Sending AJAX request and upload file
+function uploadData(id,formdata){
+	<!-- $("#uploadProgress").css({"display":"block"}); -->
+	<!-- $("#uploadProgress").text("{lang_upload}"); -->
+
+	folder={id};
+	if (folder==0)
+	{
+		return;
+	}
+
+	if (id==0)
+	{
+		$("#newContentText").html("Téléversement en cours");
+	}
+	else
+	{
+		$("#addContentText").html("Téléversement en cours");
+	}
+	
+	console.log("upload file "+id);
+	
+    $.ajax({
+        url: '/api/v1/docs/postdoc?id='+id+'&folder='+folder,
+        type: 'post',
+        data: formdata,
+        contentType: false,
+        processData: false,
+        dataType: 'json',
+        success: function(response){
+            <!-- addThumbnail(response); -->
+			$("#newContentText").html("Nouveau Document");
+			$("#addContentText").html("Ajouter Document");
+
+			if (id==0)
+			{
+				console.log(response);
+				divPaper=document.getElementById("lstPapers");
+				divPaper.innerHTML=divPaper.innerHTML+"<div class='paperBox'>";
+				divPaper.innerHTML=divPaper.innerHTML+"<div onclick='loadContent("+response.id+");' class='paperTitle'><p>"+response.title+"</p></div>";
+				divPaper.innerHTML=divPaper.innerHTML+"<div class='paperAuthor'><p>par "+response.author+", "+response.created+"</p></div>";
+				divPaper.innerHTML=divPaper.innerHTML+"<div class='paperDocument'><p>"+response.link+"</p><div id='doc_del_"+response.id+"'></div></div>";
+			}
+			else
+			{
+				$("#paperDocument_"+id).html($("#paperDocument_"+id).html()+"<div class='paperDocument'><p>"+response.link+"</p><div id='doc_del_"+response.id+"'></div></div>");
+
+			}
+        },
+		error: function(response){
+			$("#newContentText").html("Nouveau Document");
+			$("#addContentText").html("Ajouter Document");
+        }
+    });
+}
+
+</script>
+
+<!-- END: corps -->

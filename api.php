@@ -51,6 +51,7 @@
 		$ret=array();
 		
 		$ret["auth"]="NOK";
+		$ret["status"]=401;
 
 		$payload=checkToken($mykey);
 
@@ -67,6 +68,7 @@
 			$_SESSION['sessid']=$myid;
 
 			$ret["auth"]="OK";
+			$ret["status"]=200;
 			$ret["uid"]=$gl_uid;
 
 			$query = "SELECT prenom,nom FROM ".$MyOpt["tbl"]."_utilisateurs WHERE id='".$gl_uid."'";
@@ -100,6 +102,8 @@
 			$sql->Insert($query);
 		}
 
+		$ret["payload"]=$payload;
+		$ret["data"]=$data;
 		echo json_encode($ret);
 		exit;
 	}
@@ -172,6 +176,8 @@
 			$ret["error"]="Bad password";
 		}
 
+		$ret["data"]=$data;
+
 		echo json_encode($ret);
 		exit;
 		
@@ -232,7 +238,8 @@
 	header("Pragma: no-cache");
 
 	// Charset
-	header('Content-type: text/html; charset=UTF-8');
+	// header('Content-type: text/html; charset=UTF-8');
+	header('Content-type: application/json; charset=utf-8');
 
 // ---- Charge les informations standards
 

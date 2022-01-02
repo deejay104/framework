@@ -92,7 +92,7 @@
 
 
 	// <p><A href="index.php?mod=docs" ><IMG src="{path_module}/img/icn32_retour.png">Liste</A></p>
-	addPageMenu($corefolder,$mod,"Liste",geturl("docs","",""),"icn32_retour.png");
+	addPageMenu($corefolder,$mod,"Liste",geturl("forum","",""),"icn32_retour.png");
 
 	// <!-- BEGIN: ecrire -->
 	// <p><A href="index.php?mod=docs&rub=editer&fid={fid}&fpars={fid}&fprec=liste" ><IMG src="{path_module}/img/icn32_nouveau.png" title="Ajouter un document à ce classeur." align="absmiddle">Nouveau</A></p>
@@ -101,14 +101,14 @@
 	// Boutons de réponse à un message
 	if ((GetDroit($res["droit"])) && ($critere==""))
 	{
-		addPageMenu($corefolder,$mod,"Nouveau",geturl("docs","editer","fid=".$fid."&fpars=".$fid."&fprec=liste"),"icn32_nouveau.png");
+		addPageMenu($corefolder,$mod,"Nouveau",geturl("forum","editer","fid=".$fid."&fpars=".$fid."&fprec=liste"),"icn32_nouveau.png");
 			// $tmpl_x->parse("infos.ecrire");
 	}
 
 	// <p><A href="index.php?mod=docs&rub=liste&fid={fid}&fprec=index&fonc=marquer"><IMG src="{path_module}/img/icn32_valider.png" title="Marquer tous les messages de ce forum comme lus." align="absmiddle">Marquer comme lus</A></p>
-	addPageMenu($corefolder,$mod,"Marquer comme lus",geturl("docs","liste","fid=".$fid."&fprec=index&fonc=marquer"),"icn32_valider.png");
+	addPageMenu($corefolder,$mod,"Marquer comme lus",geturl("forum","liste","fid=".$fid."&fprec=index&fonc=marquer"),"icn32_valider.png");
 	// <p><A href="index.php?mod=docs&rub=recherche&critere={critere}&fid={fid}" ><IMG src="{path_module}/img/icn32_rechercher.png" title="Effectuer une recherche sur l'ensemble des messages des forums." align="absmiddle">Rechercher</A></p>
-	addPageMenu($corefolder,$mod,"Rechercher",geturl("docs","recherche","critere=".$critere."&fid=".$fid),"icn32_rechercher.png");
+	addPageMenu($corefolder,$mod,"Rechercher",geturl("forum","recherche","critere=".$critere."&fid=".$fid),"icn32_rechercher.png");
 
 
 // ---- Affiche la liste des messages

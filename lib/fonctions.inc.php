@@ -90,7 +90,7 @@ function getip()
 	return $ip;
 }
 
-function addPageMenu($path,$mod,$title,$url,$img,$selected=false,$confirm="")
+function addPageMenu($path,$mod,$title,$url,$img,$selected=false,$confirm="",$onclick="")
 {
 	global $tmpl_prg,$module,$MyOpt;
 	
@@ -99,6 +99,11 @@ function addPageMenu($path,$mod,$title,$url,$img,$selected=false,$confirm="")
 	{
 		$tmpl_prg->assign("pagemenu_url","#");
 		$tmpl_prg->assign("pagemenu_confirm","OnClick=\"ConfirmeClick('".$url."','".$confirm."')\"");
+	}
+	else if ($onclick!="")
+	{
+		$tmpl_prg->assign("pagemenu_url","#");
+		$tmpl_prg->assign("pagemenu_confirm","OnClick=\"".$onclick."\"");
 	}
 	else
 	{
@@ -191,7 +196,23 @@ function checkVar($var,$type,$len=256,$default="")
 	
 	if (!isset($_REQUEST[$var]))
 	{
-		$v=$default;
+		$content=file_get_contents('php://input');
+
+		if ($content!="")
+		{
+			$data=json_decode($content,true);
+			if ($data === null && json_last_error() !== JSON_ERROR_NONE) {
+			   $v=$default;
+			}
+		}
+		if (isset($data[$var]))
+		{
+			$v=$data[$var];
+		}
+		else
+		{
+			$v=$default;
+		}
 	}
 	else
 	{
@@ -222,6 +243,14 @@ function checkVar($var,$type,$len=256,$default="")
 		$v=preg_replace("/[^a-z0-9]*/","",$v);
 		return substr($v,0,$len);
 	}
+	else if ($type=="uuid")
+	{
+		// 655d2981-0b41-4da5-b31c-f7c2266ccf89
+		if (preg_match("/[a-z0-9]+-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]+/",$v))
+		{
+			return substr($v,0,40);
+		}
+	}
 	else if ($type=="date")
 	{
 		if (preg_match("/[0-9]{4}-[0-9]{2}-[0-9]{2}/",$v))
@@ -235,6 +264,17 @@ function checkVar($var,$type,$len=256,$default="")
 		else
 		{
 			return "0000-00-00";
+		}
+	}
+	else if ($type=="bool")
+	{
+		if ($v=="true")
+		{
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
 	else if ($type=="array")
@@ -254,6 +294,9 @@ function checkVar($var,$type,$len=256,$default="")
 	}
 }
   
+
+
+
 function GetDroit($droit)
 {
 	global $myuser;
@@ -313,9 +356,11 @@ function checkToken($token)
 	$result["tid"]=isset($payload["tid"]) ? $payload["tid"] : 0;
 	$result["uid"]=0;
 	$result["expire"]=0;
+	$result["signed"]=0;
 
 	if (($my_sign==$b64_sign) && ($result["tid"]>0))
 	{
+		$result["signed"]=1;
 		$query = "SELECT id,uid,token,dte_expire FROM ".$MyOpt["tbl"]."_token WHERE id='".$result["tid"]."' AND active='oui' AND dte_expire<>'0000-00-00 00:00:00' AND dte_expire>'".now()."'";
 		$res = $sql->QueryRow($query);
 

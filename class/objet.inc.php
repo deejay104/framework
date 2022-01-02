@@ -53,6 +53,8 @@ class objet_core
 			"en"=>"No",
 		)
 	);
+
+	public $settime=true;
 	
 	# Constructor	
 	function __construct($id=0,$sql)
@@ -67,6 +69,7 @@ class objet_core
 
 		$this->id=0;
 		$this->actif="oui";
+		// $this->settime=true;
 		$this->uid_creat=$gl_uid;
 		$this->dte_creat=date("Y-m-d H:i:s");
 		$this->uid_maj=$gl_uid;
@@ -684,6 +687,7 @@ class objet_core
 			// }
 		}
 		$td["actif"]=$this->actif;
+		
 		$td["uid_maj"]=$gl_uid;
 		$td["dte_maj"]=now();
 		$this->uid_maj=$gl_uid;
@@ -691,10 +695,13 @@ class objet_core
 
 		if ($this->id==0)
 		{
-			$td["uid_creat"]=$gl_uid;
-			$td["dte_creat"]=now();
-			$this->uid_creat=$gl_uid;
-			$this->uid_creat=now();
+			if ($this->settime)			// Can be removed once migration from forum to document is done
+			{
+				$this->uid_creat=$gl_uid;
+				$this->uid_creat=now();
+			}
+			$td["uid_creat"]=$this->uid_creat;
+			$td["dte_creat"]=$this->dte_creat;
 		}
 
 		$this->id=$sql->Edit($this->table,$this->tbl."_".$this->table,$this->id,$td);
@@ -832,6 +839,23 @@ class objet_core
 		}
 		return md5($s);
 	}
+
+	# Export as JSON
+	function export()
+	{
+		$ret=array();
+		
+		$ret["id"]=$this->id;
+		$ret["type"]=$this->table;
+		$ret["data"]=array();
+		foreach($this->data as $k=>$v)
+		{
+			$ret["data"][$k]=$this->val($k);
+		}
+		
+		return $ret;
+	}
+
 	
 	function genSqlTab(&$tab)
 	{

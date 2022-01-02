@@ -25,8 +25,8 @@ $tabRoles["SupprimeMessage"]="Supprimer un message dans le module document";
 $tabRoles["SupprimeGroupe"]="Supprimer un groupe";
 
 // ---- Documents
-$tabRoles["CreeClasseur"]="Créer un nouveau classeur dans le module document";
-$tabRoles["ModifClasseur"]="Modification d'un classeur dans le module document";
+$tabRoles["CreeDossier"]="Créer un nouveau dossier dans le module document";
+$tabRoles["ModifDossier"]="Modification d'un classeur dans le module document";
 $tabRoles["AccesDocuments"]="Accès au module de documents";
 $tabRoles["AccesDocument"]="Accès au détail d'un document";
 $tabRoles["VisuDocument"]="Visualisation de tous les documents";

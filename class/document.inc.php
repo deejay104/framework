@@ -21,7 +21,8 @@
 // Class Document
 
 class document_core{
-
+	protected $table="document";
+	
  	# Constructor
 	function __construct($id="",$sql,$type="document"){
 		global $MyOpt;
@@ -32,7 +33,7 @@ class document_core{
 		$this->myuid=$gl_uid;
 		$this->expire=$MyOpt["expireCache"];
 
-		$this->id="";
+		$this->id=0;
 		$this->name="";
 		$this->filename="";
 		$this->uid="";
@@ -40,7 +41,7 @@ class document_core{
 		$this->dossier="";
 		$this->droit="";
 		$this->actif="";
-		$this->uid_creat="";
+		$this->uid_creat=0;
 		$this->dte_creat="";
 		$this->editmode="std";
 		$this->filepath="../documents";
@@ -71,16 +72,19 @@ class document_core{
 		$query = "SELECT * FROM ".$this->tbl."_document WHERE id='$id'";
 		$res = $sql->QueryRow($query);
 
-		// Charge les variables
-		$this->name=$res["name"];
-		$this->filename=$res["filename"];
-		$this->uid=$res["uid"];
-		$this->type=$res["type"];
-		$this->dossier=$res["dossier"];
-		$this->droit=$res["droit"];
-		$this->actif=$res["actif"];
-		$this->uid_creat=$res["uid_creat"];
-		$this->dte_creat=$res["dte_creat"];
+		if ((isset($res["id"])) && ($res["id"]>0))
+		{
+			// Charge les variables
+			$this->name=$res["name"];
+			$this->filename=$res["filename"];
+			$this->uid=$res["uid"];
+			$this->type=$res["type"];
+			$this->dossier=$res["dossier"];
+			$this->droit=$res["droit"];
+			$this->actif=$res["actif"];
+			$this->uid_creat=$res["uid_creat"];
+			$this->dte_creat=$res["dte_creat"];
+		}
 	}
 
 	function Valid($k,$v) 
@@ -130,6 +134,23 @@ class document_core{
 		return $ret;
 	}
 
+	function Update()
+	{ global $gl_uid;
+		$sql=$this->sql;
+
+		$td["uid"]=$this->uid;
+		$td["type"]=$this->type;
+		$td["droit"]=$this->droit;
+		$td["uid_maj"]=$gl_uid;
+		$td["dte_maj"]=now();
+		$this->uid_maj=$gl_uid;
+		$this->dte_maj=now();
+
+		$this->id=$sql->Edit($this->table,$this->tbl."_".$this->table,$this->id,$td);
+
+		return $ret;
+	}
+
 	function Import($id,$name,$filename="",$droit="")
 	{ global $gl_uid;
 		$sql=$this->sql;
@@ -167,7 +188,7 @@ class document_core{
 		$sql=$this->sql;
 		$ret="";
 
-		if ( ($this->uid==$gl_uid) || (GetDroit("SupprimeDocument")) || ((isset($myuser->groupe[$this->droit])) && ($myuser->groupe[$this->droit])) )
+		if ( ($this->uid_creat==$gl_uid) || (GetDroit("SupprimeDocument")) || ((isset($myuser->groupe[$this->droit])) && ($myuser->groupe[$this->droit])) )
 		{
 			if (file_exists($this->filepath."/".$this->filename))
 			{
@@ -191,9 +212,15 @@ class document_core{
 
 		if ($myext=="xls")
 		  { $icon="excel"; }
+		else if ($myext=="xlsx")
+		  { $icon="excel"; }
 		else if ($myext=="doc")
 		  { $icon="word"; }
+		else if ($myext=="docx")
+		  { $icon="word"; }
 		else if ($myext=="ppt")
+		  { $icon="powerpoint"; }
+		else if ($myext=="pptx")
 		  { $icon="powerpoint"; }
 		else if ($myext=="pps")
 		  { $icon="powerpoint"; }
@@ -283,12 +310,12 @@ class document_core{
 	}
 
 	function Download($mode)
-	{ global $myuser;
-		$myext=GetExtension($this->name);
+	{
+		global $myuser,$gl_uid;
 
-		if ( ($this->myuid!=$this->uid) && (!$myuser->role[$this->droit]) && ($this->droit!="ALL") && (!GetDroit("VisuDocument")) )
+		if ( ($this->uid_creat!=$gl_uid) && (!GetDroit($this->droit)) && ($this->droit!="ALL") && (!GetDroit("VisuDocument")) )
 		{
-			echo "Access denied!";
+			header("HTTP/1.1 401 Unauthorized"); 
 			exit;
 		}
 
@@ -305,6 +332,7 @@ class document_core{
 			$mode="";
 		}
 
+		$myext=GetExtension($this->name);
 		$fname=$this->filepath."/".$this->filename;
 		if (!file_exists($fname))
 		{
