@@ -14,12 +14,14 @@
 	
 	$lst=ListActiveFolders($sql);
 
+	$ii=0;
 	foreach($lst as $i=>$d)
 	{
 		if (GetDroit($d["group_read"]))
 		{
-			$result["data"][$i]=$d;
-			$result["data"][$i]["description"]=nl2br($d["description"]);
+			$result["data"][$ii]=$d;
+			$result["data"][$ii]["description"]=nl2br($d["description"]);
+			$ii++;
 		}
 	}
 	
