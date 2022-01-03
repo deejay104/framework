@@ -125,6 +125,7 @@ class mysql_core{
 			$s=",";
 		}
 
+		$res=array();
 		$res["id"]=0;
 		if ($id>0)
 		{

@@ -27,7 +27,7 @@
 	if ($description!="") { $folder->valid("description",$description); }
 	if ($group_read!="") 
 	{
-		if ($group_read!=$folder->val("group_read"))
+		if (($id>0) && ($group_read!=$folder->val("group_read")))
 		{
 			$result["group_read"]=$group_read;
 
@@ -55,7 +55,7 @@
 
 	$folder->Save();
 
-	$result["id"]=$id;
+	$result["id"]=$folder->id;
 	$result["status"]="ok";
 
 	echo json_encode($result);	

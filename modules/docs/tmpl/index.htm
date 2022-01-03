@@ -192,7 +192,7 @@ function cancelContent()
 function saveContent()
 {
 	$.post( "/api/v1/docs/postfolder", { id: currentFolder, title:$("#contentNewTitle").val(), description:$("#contentNewComment").val(), group_read:$("#group_read").val(), group_write:$("#group_write").val()} ).done(function(data) {
-		console.log("Paper archived");
+		console.log("Folder created");
 		loadContent();
 	});
 

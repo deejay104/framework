@@ -698,7 +698,7 @@ class objet_core
 			if ($this->settime)			// Can be removed once migration from forum to document is done
 			{
 				$this->uid_creat=$gl_uid;
-				$this->uid_creat=now();
+				$this->dte_creat=now();
 			}
 			$td["uid_creat"]=$this->uid_creat;
 			$td["dte_creat"]=$this->dte_creat;
