@@ -1,4 +1,4 @@
- <IfModule mod_expires.c>
+<IfModule mod_expires.c>
   ExpiresActive On
   ExpiresDefault "access plus 1 seconds"
   ExpiresByType image/gif "access plus 240 minutes"

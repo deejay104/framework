@@ -324,7 +324,7 @@
 
 	if (file_exists($appfolder."/custom/".$MyOpt["site_logo"]))
 	{
-		$tmpl_prg->assign("site_logo", "custom/".$MyOpt["site_logo"]);
+		$tmpl_prg->assign("site_logo", "/custom/".$MyOpt["site_logo"]);
 	}
 	else
 	{
