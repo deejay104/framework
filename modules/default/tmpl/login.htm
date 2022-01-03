@@ -135,7 +135,10 @@
 						if (response.auth=="OK")
 						{
 							console.log("token confirmed");
-							if (response.token!="")
+							if (typeof response.token==="undefined")
+							{
+							}
+							else
 							{
 								console.log("Token updated");
 								localStorage.setItem("token",response.token);
