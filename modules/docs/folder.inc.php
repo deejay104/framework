@@ -49,6 +49,7 @@
 	$tmpl_x->assign("TitleBackgroundNormal",$MyOpt["styleColor"]["TitleBackgroundNormal"]);
 	$tmpl_x->assign("FormulaireBackgroundDark",$MyOpt["styleColor"]["FormulaireBackgroundDark"]);
 	$tmpl_x->assign("FormulaireBackgroundNormal",$MyOpt["styleColor"]["FormulaireBackgroundNormal"]);
+	$tmpl_x->assign("FormulaireBackgroundLight",$MyOpt["styleColor"]["FormulaireBackgroundLight"]);
 
 	if (GetDroit($folder->val("group_write")))
 	{

@@ -33,6 +33,7 @@
 
 	$tmpl_x->assign("FormulaireBackgroundDark",$MyOpt["styleColor"]["FormulaireBackgroundDark"]);
 	$tmpl_x->assign("FormulaireBackgroundNormal",$MyOpt["styleColor"]["FormulaireBackgroundNormal"]);
+	$tmpl_x->assign("FormulaireBackgroundLight",$MyOpt["styleColor"]["FormulaireBackgroundLight"]);
 	$tmpl_x->assign("LineBackgroundHover",$MyOpt["styleColor"]["LineBackgroundHover"]);
 	$tmpl_x->assign("TextBackgroundHover",$MyOpt["styleColor"]["TextBackgroundHover"]);
 

@@ -9,23 +9,24 @@
 <style>
 .paperBox {
 	width:450px;
-	margin-bottom:10px;
+	margin-top:20px;
 }
 .paperTitle { 
 	display: flex; 
 	height:36px; 
 	padding-top:6px; 
 	padding-left: 15px;
-	background-color:#{FormulaireBackgroundNormal}; 
 	font-weight: bold; 
-	border-bottom: 1px solid #{BorderBlack}
+	border-bottom: 1px solid #{FormulaireBackgroundNormal};
+	background-color:#{FormulaireBackgroundLight};
+
 }
 .paperAuthor {
 	height:16px; 
 	font-size:10px;
 	padding-left: 15px;
 }
-.paperTitle:hover { background-color:#{LineBackgroundHover}; color:#{TextBackgroundHover};}
+.paperTitle:hover { background-color:#{LineBackgroundHover}; color:#{TextBackgroundHover}; cursor: pointer;}
 .paperDocument { padding-left: 15px; padding-top:5px; }
 .paperContent { position: absolute; top:70px; left: 0px; background-color:#ffffff; width: 440px; min-height:40px; margin-left:5px; display: none; vertical-align:top; border:1px solid #{FormulaireBackgroundDark}; border-radius:5px; }
 .paperContent label { display: inline-block; width: 150px; }
@@ -36,8 +37,9 @@
 .contentTitle img:hover{ border:1px solid #{FormulaireBackgroundDark}!important; background-color:#ffffff; }
 .contentTitle input { background-color:#{FormulaireBackgroundNormal}; width:330px; }
 .contentEditable { border:1px solid #{FormulaireBackgroundDark}!important; }
-.contentFiles { min-height:32px; padding-top:5px; border:1px solid #{FormulaireBackgroundDark}; text-align: center; margin-bottom:5px;}
-.contentFiles:hover { background-color:#{LineBackgroundHover}; color:#{TextBackgroundHover};}
+.contentFiles { min-height:32px; padding-top:5px; border:1px solid #{FormulaireBackgroundDark}; background-color:#{FormulaireBackgroundLight}; text-align: center; margin-bottom:5px;}
+.contentFiles:hover { background-color:#{LineBackgroundHover}; color:#{TextBackgroundHover}; }
+.contentFiles label { cursor: pointer; }
 
 .commentTxt { display:inline-block; vertical-align: top; padding-left:10px; width: 350px;}
 .contentComment { vertical-align: top; }

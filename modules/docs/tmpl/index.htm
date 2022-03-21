@@ -17,14 +17,16 @@
 	height:36px; 
 	padding-top:6px; 
 	padding-left: 15px;
-	background-color:#{FormulaireBackgroundNormal}; 
+	border: 1px solid #{FormulaireBackgroundNormal};
+	background-color:#{FormulaireBackgroundLight};
 	font-weight: bold; 
-	border-bottom: 1px solid #{BorderBlack}
 }
+
+
 .folderTitle p { width:450px; }
 .folderTitle img{ border:1px solid #{FormulaireBackgroundNormal}; }
 .folderTitle img:hover{ border:1px solid #000000!important; background-color:#ffffff; }
-.folderTitle:hover { background-color:#{LineBackgroundHover}; color:#{TextBackgroundHover};}
+.folderTitle:hover { background-color:#{LineBackgroundHover}; color:#{TextBackgroundHover}; cursor: pointer;}
 
 .folderDescription {
 	padding-left: 15px;
