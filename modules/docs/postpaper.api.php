@@ -34,7 +34,7 @@
 
 	if ($title!="") { $paper->valid("title",$title); }
 	if ($dte_start!='0000-00-00') { $paper->valid("dte_start",$dte_start); }
-	if ($dte_end!='0000-00-00') { $paper->valid("dte_end",$dte_end); }
+	if ($dte_end!='0000-00-00') {  $paper->valid("dte_end",$dte_end); }
 
 	$paper->Save();
 

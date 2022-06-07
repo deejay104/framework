@@ -253,7 +253,7 @@ function checkVar($var,$type,$len=256,$default="")
 	}
 	else if ($type=="date")
 	{
-		if (preg_match("/[0-9]{4}-[0-9]{2}-[0-9]{2}/",$v))
+		if (preg_match("/[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}/",$v))
 		{
 			return $v;
 		}
@@ -1034,11 +1034,14 @@ function TrieValInv ($a, $b)
 
 */
 
-function AfficheTableauRemote($tabTitre="",$url,$order="",$trie="d",$search,$nbline=25)
+function AfficheTableauRemote($tabTitre="",$url,$order="",$trie="d",$search,$nbline=25,$idtbl="")
 {
 	global $mod,$rub,$corefolder,$MyOpt,$tabLang;
 
-	$idtbl=uniqid("tbl_");
+	if ($idtbl=="")
+	{
+		$idtbl=uniqid("tbl_");
+	}
 	$ret ="\n<table id='".$idtbl."' class='tableauAff'>\n";
 
 	$ret.="<thead><tr>";
