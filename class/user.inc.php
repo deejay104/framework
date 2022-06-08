@@ -724,6 +724,75 @@ function ListActiveUsers($sql,$order="",$tabtype=array(),$virtuel="non",$type=""
 	return $lstuser;
 }
 
+function ListUsers($sql,$fields=array(),$crit=array(),$perm=array(),$order=array("prenom","nom"))
+{
+	global $MyOpt;
+ 
+	$lstuser=array();
+
+	$query ="SELECT id";
+
+	if (count($fields)>0)
+	{
+		$query.=",".implode(",",$fields);
+	}
+	if ((is_array($perm)) && (count($perm)>0))
+	{
+		$type="";
+		$s="";
+		foreach($perm as $i=>$t)
+		{
+			$type.=$s."'".$t."'";
+			$s=",";
+		}
+		$query.=", (SELECT COUNT(*) FROM ".$MyOpt["tbl"]."_droits AS droits LEFT JOIN ".$MyOpt["tbl"]."_roles AS roles ON droits.groupe=roles.groupe OR roles.groupe='ALL' WHERE roles.role IN (".$type.") AND droits.uid=usr.id) AS nb ";
+	}
+
+	$query.=" FROM ".$MyOpt["tbl"]."_utilisateurs AS usr ";
+
+	$query.="WHERE (";
+	$query.="actif='oui'";
+	if ((GetDroit("ListeUserDesactive")) && ($MyOpt["showDesactive"]=="on"))
+	{
+		$query.=" OR actif='off' ";
+	}
+	if ((GetDroit("ListeUserSupprime")) && ($MyOpt["showSupprime"]=="on"))
+	{
+		$query.="OR actif='non' ";
+	}
+	$query.=") ";
+
+	if ((is_array($crit)) && (count($crit)>0))
+	{
+		foreach($crit as $c=>$v)
+		{
+			$query.=" AND ".$c."='".$v."'";
+		}
+	}
+	
+	if ($order!="")
+	{
+		$query.=" ORDER BY ".implode(",",$order);
+	}
+
+	$sql->Query($query);
+
+	for($i=0; $i<$sql->rows; $i++)
+	{ 
+		$sql->GetRow($i);
+
+		if ( ((isset($sql->data["nb"])) && ($sql->data["nb"]>0)) || (!is_array($perm)) || (count($perm)==0))
+		{
+			$lstuser[$i]["id"]=$sql->data["id"];
+			foreach($fields as $n)
+			{
+				$lstuser[$i][$n]=$sql->data[$n];
+			}
+		}
+	}
+	return $lstuser;
+}
+
 function ListActiveMails($sql)
 {
 	global $MyOpt;
@@ -786,6 +855,9 @@ function AffListeMembres($sql,$form_uid,$name,$type="",$sexe="",$order="std",$vi
 	$lstuser.="</select>";
 	return $lstuser;
 }
+
+
+
 
 function AffFullname($prenom,$nom)
 {
