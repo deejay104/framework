@@ -8,13 +8,120 @@
 
 
 <!-- BEGIN: corps -->
-<script>
-function Update()
-{
-	document.getElementById("form_update").style.backgroundColor = "";
-	document.getElementById("form_update").innerHTML = "{lang_processing}...";
 
-	$(function() {
+
+
+
+<div class="row">
+	<div class="grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+				<div class="form-inline"><button id="update" class="btn btn-light col-md-3">{lang_update}</button><div id="form_update" class="ml-2 p-2"></div></div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12 grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+				<div class="form-inline"><button id="reindex" class="btn btn-light col-md-3">{lang_reindex}</button><div id="form_reindex" class="ml-2 p-2"></div></div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+				<div class="form-inline"><button id="reloademails" class="btn btn-light col-md-3">{lang_updateemailtmpl}</button><div id="form_reloademails" class="ml-2 p-2"></div></div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+				<div class="form-inline"><button id="resetemails" class="btn btn-light col-md-3">{lang_resetemailtmpl}</button><div id="form_resetemails" class="ml-2 p-2"></div></div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+				<div class="form-inline"><button id="exportconf" class="btn btn-light col-md-3">{lang_exportconfig}</button><div id="form_exportconf" class="ml-2 p-2"></div></div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+				<div class="form-inline"><button id="importconf" class="btn btn-light col-md-3">{lang_importconfig}</button><div id="form_importconf" class="ml-2 p-2"></div></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="dialogForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="display: none;" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Importer</h5>
+				<button id='close' type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<form id="formdata" class="forms-sample">
+						<input id="import_id" name="import_id" type="hidden" value="">
+						
+						<div class="form-group">
+							<input type="file" id="form_file" class="file-upload-default" name="form_file" >
+							<div class="input-group col-xs-12">
+								<input type="text" class="form-control file-upload-info" disabled="" placeholder="Fichier de configuration">
+								<span class="input-group-append">
+								  <button class="file-upload-browse btn btn-sm btn-primary" type="button">Upload</button>
+								</span>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="form-check">
+								<label class="form-check-label"><input id="importconf" name="importconf" type="checkbox" class="form-check-input">Importer la configuration<i class="input-helper"></i></label>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="form-check">
+								<label class="form-check-label"><input id="importgroup" name="importgroup" type="checkbox" class="form-check-input">Importer les groupes<i class="input-helper"></i></label>
+							</div>
+						</div>
+						
+					</div>
+					<br />
+					<div class="form-inline"><label></label>
+						<a class="btn btn-primary" id="save">Enregistrer</a>&nbsp;
+						<a class="btn btn-light" id="cancel">Annuler</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script>
+$(document).ready(function() {
+	$("#update").click(function (event) {
+		$("#form_update").css("background-color","");
+		$("#form_update").html("Re-Index en cours");
+
 		$.ajax({
 			url:'{path_root}/api.php?mod=admin&rub=update',
 			type: 'html',
@@ -25,31 +132,27 @@ function Update()
 
 				if (response.result=="OK")
 				{
-					document.getElementById("form_update").style.backgroundColor = "#BBFFAA";
+					$("#form_update").css("background-color","#BBFFAA");
 				}
 				else
 				{
-					document.getElementById("form_update").style.backgroundColor = "#FFBBAA";
+					$("#form_update").css("background-color","#FFBBAA");
 				}
-				document.getElementById("form_update").innerHTML = response.data;
+				$("#form_update").html(response.data);
 			},
 			error : function(response)
 			{
-				document.getElementById("form_update").style.backgroundColor = "#FFBBAA";
-				document.getElementById("form_update").innerHTML = response;
+				$("#form_update").css("background-color","#FFBBAA");
+				$("#form_update").html(response);
 			}
 		});
-	})
+	});
+	
+	
+	$("#reindex").click(function (event) {
+		$("#form_reindex").css("background-color","");
+		$("#form_reindex").html("Re-Index en cours");
 
-}
-
-
-function ReIndex()
-{
-	document.getElementById("form_reindex").style.backgroundColor = "";
-	document.getElementById("form_reindex").innerHTML = "En cours...";
-
-	$(function() {
 		$.ajax({
 			url:'{path_root}/api.php?mod=admin&rub=reindex',
 			type: 'html',
@@ -60,184 +163,143 @@ function ReIndex()
 
 				if (response.result=="OK")
 				{
-					document.getElementById("form_reindex").style.backgroundColor = "#BBFFAA";
+					$("#form_reindex").css("background-color","#BBFFAA");
 				}
 				else
 				{
-					document.getElementById("form_reindex").style.backgroundColor = "#FFBBAA";
+					$("#form_reindex").css("background-color","#FFBBAA");
 				}
-				document.getElementById("form_reindex").innerHTML = response.data;
+				$("#form_reindex").html(response.data);
 			},
 			error : function(response)
 			{
-				document.getElementById("form_reindex").style.backgroundColor = "#FFBBAA";
-				document.getElementById("form_reindex").innerHTML = response;
+				$("#form_reindex").css("background-color","#FFBBAA");
+				$("#form_reindex").html(response.data);
 			}
 		});
-	})
+	});
 
-}
+	$("#reloademails").click(function (event) {
+		applyConf("form_reloademails",'{path_root}/api.php?mod=admin&rub=emails&fonc=');
+	});
+	$("#resetemails").click(function (event) {
+		applyConf("form_resetemails",'{path_root}/api.php?mod=admin&rub=emails&fonc=init');
+	});
 
-function ReloadEmails(init)
-{
-	document.getElementById("form_emails").style.backgroundColor = "";
-	document.getElementById("form_emails").innerHTML = "En cours...";
+	$("#exportconf").click(function (event) {
+		var link = document.createElement("a");
+		link.download = "config.json";
+		link.href = '{path_root}/api.php?mod=admin&rub=exportconf';
+		link.click();
+	});
 
-	$(function() {
+	$("#importconf").click(function (event) {
+		$("#dialogForm").css("display","block");
+		$("#dialogForm").css("opacity",100);
+    });	
+	$( "#close" ).on( "click", function() {
+		$("#dialogForm").css("opacity",0);
+		$("#dialogForm").css("display","none");
+    });
+	$( "#save" ).on( "click", function() {
+		ImportConf();
+    });
+	$( "#cancel" ).on( "click", function() {
+		$("#dialogForm").css("opacity",0);
+		$("#dialogForm").css("display","none");
+    });
+
+    $('.file-upload-browse').on('click', function() {
+      var file = $(this).parent().parent().parent().find('.file-upload-default');
+      file.trigger('click');
+    });
+    $('.file-upload-default').on('change', function() {
+      $(this).parent().find('.form-control').val($(this).val().replace(/C:\\fakepath\\/i, ''));
+    });	
+	
+	function applyConf(form,url)
+	{
+		$("#"+form).css("background-color","");
+		$("#"+form).html("En cours...");
+
 		$.ajax({
-			url:'{path_root}/api.php?mod=admin&rub=emails&fonc='+init,
+			url: url,
 			type: 'html',
 			dataType: 'JSON',
 			success: function(response)
 			{
-				console.log(response);
-
 				if (response.result=="OK")
 				{
-					document.getElementById("form_emails").style.backgroundColor = "#BBFFAA";
+					$("#"+form).css("background-color","#BBFFAA");
 				}
 				else
 				{
-					document.getElementById("form_emails").style.backgroundColor = "#FFBBAA";
+					$("#"+form).css("background-color","#FFBBAA");
 				}
-				document.getElementById("form_emails").innerHTML = response.data;
+				$("#"+form).html(response.data);
 			},
 			error : function(response)
 			{
-				document.getElementById("form_emails").style.backgroundColor = "#FFBBAA";
-				document.getElementById("form_emails").innerHTML = response;
+				$("#"+form).css("background-color","#FFBBAA");
+				$("#"+form).html(response.data);
 			}
 		});
-	})
+	}
 
-}
 
-function ExportConf()
-{
-
-	<!-- uriContent = "data:plain/text;filename=filename.txt," + encodeURIComponent('api.php?mod=admin&rub=exportconf');		   -->
-<!-- console.log(uriContent); -->
-	<!-- document.getElementById('download').src = uriContent; -->
-	<!-- newWindow=window.open(uriContent, 'filename.txt'); -->
-	
-	var link = document.createElement("a");
-    link.download = "config.json";
-    link.href = '{path_root}/api.php?mod=admin&rub=exportconf';
-    link.click();
-}
-
-function ImportConf()
-{
-	var valid = true;
-
-	if (document.getElementById('form_file').value=="")
+	function ImportConf()
 	{
-		document.getElementById('msgbox').innerHTML="<div class='msgbox-std msgbox-error'>Aucun fichier n'a été sélectionné</div>";
-		valid = false;
-	}
-	
-	if ( valid ) {
-		importDialog.dialog( "close" );
+		var valid = true;
 
-		var form = document.getElementById('formdata');
-		var formData = new FormData(form);
+		if (document.getElementById('form_file').value=="")
+		{
+			showToast("","Aucun fichier n'a été sélectionné","error");
+			valid = false;
+		}
+		
+		if ( valid ) {
+			$("#dialogForm").css("opacity",0);
+			$("#dialogForm").css("display","none");
 
-		$.ajax({
-			url:'{path_root}/api.php?mod=admin&rub=importconf',
-			type: 'POST',
-			data: formData,
-			dataType: 'JSON',
-			processData: false,
-			contentType: false,
-			success: function(response)
-			{
-				if (response.result=="OK")
+			var form = document.getElementById('formdata');
+			var formData = new FormData(form);
+
+			$.ajax({
+				url:'{path_root}/api.php?mod=admin&rub=importconf',
+				type: 'POST',
+				data: formData,
+				dataType: 'JSON',
+				processData: false,
+				contentType: false,
+				success: function(response)
 				{
-					console.log("ok");
-					document.getElementById("form_import").innerHTML = response.data;
-					document.getElementById('msgbox').innerHTML="<div id='msgbox_import' class='msgbox-std msgbox-ok'>Import de configuration terminé</div>";
-					<!-- document.location="index.php"; -->
-				}
-				else
+					if (response.result=="OK")
+					{
+						$("#form_import").css("background-color","#BBFFAA");
+						$("#form_import").html(response.data);
+
+						showToast("","Import de configuration terminé","ok");
+					}
+					else
+					{
+						$("#form_import").css("background-color","#FFBBAA");
+						$("#form_import").html(response.data);
+
+						showToast("","Erreur lors de l'import ("+response.result+")","error");
+					}
+				},
+				error : function(response)
 				{
-					console.log("nok");
-					document.getElementById("form_import").innerHTML = response.data;
-					document.getElementById('msgbox').innerHTML="<div class='msgbox-std msgbox-error'>Erreur lors de l'import ("+response.result+")</div>";
 				}
-			},
-			error : function(response)
-			{
-			}
-		});
+			});
+		}
+		return valid;
 	}
-	return valid;
-}
 
-function uploadConfig()
-{
-}
+});
 
-
-$(function() {
-	importDialog = $( "#import-form" ).dialog({
-      autoOpen: false,
-      height: 220,
-      width: 420,
-	  top: 10,
-      modal: true,
-      buttons: {
-        "Importer": ImportConf,
-        Cancel: function() {
-          importDialog.dialog( "close" );
-        }
-      },
-    });
-})
 
 </script>
 
-<div id="import-form" title="Importer la configuration" class="formulaire" style="display:none;">
-<form id="formdata">
-	<input id="import_id" name="import_id" type="hidden" value="">
-	<input type="file" id="form_file" name="form_file" style='width:390px!important; border: 0px;'>
-	<input id="importconf" name="importconf" type="checkbox"> Importer la configuration<br />
-	<input id="importconf" name="importgroup" type="checkbox"> Importer les groupes<br />
-	<input type="submit" tabindex="-1" value="Enregistrer" style="position:absolute; top:-1000px">
-</form>
-</div>
-
-
-<table class="tableauAff">
-	<tr>
-		<th width=250>{lang_action}</th>
-		<th width=600>{lang_result}</th>
-	</tr>
-	<tr>
-		<td><input type="submit" value="{lang_update}" OnClick="Update();" style="width:240px;"></td>
-		<td><div id="form_update" style="padding:4px;"></div>
-	</tr>
-	<tr>
-		<td><input type="submit" value="{lang_reindex}" OnClick="ReIndex();" style="width:240px;"></td>
-		<td><div id="form_reindex" style="padding:4px;"></div>
-	</tr>
-	<tr>
-		<td><input type="submit" value="{lang_updateemailtmpl}" OnClick="ReloadEmails('');" style="width:240px;"></td>
-		<td><div id="form_emails" style="padding:4px;"></div>
-	</tr>
-	<tr>
-		<td><input type="submit" value="{lang_resetemailtmpl}" OnClick="ReloadEmails('init');" style="width:240px;"></td>
-		<td><div id=""style=" padding:4px;"></div>
-	</tr>
-	<tr>
-		<td><input type="submit" value="{lang_exportconfig}" OnClick="ExportConf();" style="width:240px;"></td>
-		<td><div id=""style=" padding:4px;"></div>
-	</tr>
-	<tr>
-		<td><input type="submit" value="{lang_importconfig}" OnClick="importDialog.dialog('open');" style="width:240px;"></td>
-		<td><div id="form_import" style=" padding:4px;"></div>
-	</tr>
-</table>
-
-<iframe id="download" style="display:none;"></iframe>
 
 <!-- END: corps -->

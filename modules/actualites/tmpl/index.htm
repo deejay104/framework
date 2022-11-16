@@ -28,51 +28,65 @@
 }
 </style>
 
-<div class="cadreinfos">
 
-	<div class="encadreInfos">
-		<div class="encadreTitre">{lang_information}</div>
-  		<p style='padding-bottom: 5px;'><A href="{path_root}/docs">{lang_nbdocs}</A> : <A href="index.php?mod=docs" class="{color_nonlus}">{nb_nonlus}</A></p>
-		<!-- BEGIN: lst_echeance -->
-		<p>{form_echeance}</p>
-		<!-- END: lst_echeance -->
+<div class="row">
+	<div class="col-md-8 grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+				<div id="actualitesNouveau">
+					<form name="actualites" method="post" action="{path_root}/index.php" enctype="multipart/form-data">
+						<input type="hidden" name="mod" value="actualites">
+						<input type="hidden" name="id" id="id" value="{form_id}">
+						<input type="hidden" name="checktime" value="{form_checktime}">
+				
+						<input type="text" class='form-control' name="form_titre" value="" placeholder="{news_title_clear}"  ><br />
+						<textarea name="form_message" class='form-control' placeholder="{news_message}" rows=4></textarea>
+						<p>
+						<label for='file' class="btn btn-primary" style="margin:0px; height:42px;"><i class="mdi mdi-camera	 menu-icon"></i></label>
+							<input id='file' class="btn btn-primary mr-2" type='file' style='display:none'>
+							<input name='fonc' class="btn btn-primary mr-2" type='submit' value='{lang_post}' style="margin:0px; height:42px;">
+						</p>
+					</form>
+
+					<div id="uploadDoc" class="upload">
+						<div id="uploadProgress" style="display:none; text-align: center;"></div>
+					</div>
+				</div>
+
+				<div id="news" class="border-top profile-feed">
+				</div>
+			</div>
+		</div>
 	</div>
 
-	<div class="encadreInfos">
-		<div class="encadreTitre">{lang_search}</div>
-		<form name="recherche" method="post" action="{path_root}/index.php" enctype="multipart/form-data">
-			<input type="hidden" name="mod" value="actualites">
-			<p><input id="search" type="text" name="search" OnClick="ClearText(event,'{lang_searchterms}');" value="{lang_searchterms}" OnKeyUp="CapturePost(event);" style="color:#bbbbbb;"></p>
-		</form>
-	</div>
-	{aff_custom}
-</div>
 
-			
-<div id="actualites" class="actualites">
-	<div id="actualitesNouveau" class="actualitesNouveau">
-		<form name="actualites" method="post" action="{path_root}/index.php" enctype="multipart/form-data">
-			<input type="hidden" name="mod" value="actualites">
-			<input type="hidden" name="id" id="id" value="{form_id}">
-			<input type="hidden" name="checktime" value="{form_checktime}">
-	
-			<input type="text" name="form_titre" value="{news_title}" OnFocus="ClearText(event,'{news_title_clear}');"  style="color:#{new_color};"><br />
-			<textarea name="form_message" OnFocus="ClearText(event,'{news_message_clear}');"  style="color:#{new_color}; height:51px;">{news_message}</textarea>
-			<p>
-				<label for='file' style='display: inline-block; width:46px; height:36px; background:#{FormulaireBackgroundNormal}; border: 1px solid #{FormulaireBackgroundDark}; padding-top:2px; padding-left:2px; border-radius: 5px; text-align:center;'><img src='{path_core}/{path_module}/img/icn32_picture.png' style='vertical-align:middle;'></label>
-				<input id='file' type='file' style='display:none'>
-				<input name='fonc' type='submit' value='{lang_post}'>
-			</p>
-		</form>
+	<div class="col-md-4 grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+				<div class="align-items-start profile-feed-item">
+					<h4>{lang_information}</h4>
+					<A href="{path_root}/docs">{lang_nbdocs}</A> : <A href="index.php?mod=docs" class="{color_nonlus}">{nb_nonlus}</A>
+					<!-- BEGIN: lst_echeance -->
+					{form_echeance}
+					<!-- END: lst_echeance -->
+				</div>
 
-		<div id="uploadDoc" class="upload">
-			<div id="uploadProgress" style="display:none; text-align: center;"></div>
+				<div class="align-items-start profile-feed-item">
+					<h4>{lang_search}</h4>
+					<form name="recherche" method="post" action="{path_root}/index.php" enctype="multipart/form-data">
+						<input type="hidden" name="mod" value="actualites">
+						<p><input id="search" class='form-control' type="text" name="search" OnClick="ClearText(event,'{lang_searchterms}');" value="{lang_searchterms}" OnKeyUp="CapturePost(event);" style="color:#bbbbbb;"></p>
+					</form>
+				</div>
+				<div class="align-items-start profile-feed-item">
+					{aff_custom}
+				</div>
+			</div>
 		</div>
 
-	</div>
 
-	<div id="news">
 	</div>
+		
 </div>
 
 
@@ -245,27 +259,38 @@ function convertSize(size) {
 				{
 					$.each(response.news, function (index, value) {
 
-						txt="<div id='news_"+value.id+"' class='actualitesBloc'>";
-						txt=txt+"	<div class='actualitesPhoto' >";
-						txt=txt+"		<img src='{path_root}/"+value.avatar+"' alt=''>";
-						txt=txt+"	</div>";
-						txt=txt+"	<div class='actualitesMessage'>";
-						txt=txt+"		<div class='actualitesTitre' OnMouseOver='document.getElementById(\"icone_"+value.id+"\").style.display=\"block\";' OnMouseOut='document.getElementById(\"icone_"+value.id+"\").style.display=\"none\";'>";
-						txt=txt+"			<div class='actualitesTitreMsg'>";
-						txt=txt+"				<a name='id"+value.id+"'></a>";
-						txt=txt+"				<p>"+value.title+"</p>";
-						txt=txt+"				<span>par "+value.author+", "+value.date+"</span>";
-						txt=txt+"			</div>";
-						txt=txt+"			<div id='icone_"+value.id+"' class='actualitesIcones' style='display:none;'>";
-						txt=txt+"				<a href='index.php?mod=actualites&fonc=editer&id="+value.id+"' class='imgDelete'><img src='{path_root}/{path_module}/img/icn16_editer.png' /></a>";
-						txt=txt+"				<a href='' class='imgDelete' OnClick='return delNews("+value.id+");'><img src='{path_root}/{path_module}/img/icn16_supprimer.png' /></a>";
-						txt=txt+"			</div>";
-						txt=txt+"		</div>";
-						txt=txt+"		<div class='actualitesTexte'>";
-						txt=txt+"<p>"+value.message+"</p>";
-						txt=txt+"</div>";
-						txt=txt+"	</div>";
-						txt=txt+"</div>";
+						<!-- txt="<div id='news_"+value.id+"' class='actualitesBloc'>"; -->
+						<!-- txt=txt+"	<div class='actualitesPhoto' >"; -->
+						<!-- txt=txt+"		<img src='{path_root}/"+value.avatar+"' alt=''>"; -->
+						<!-- txt=txt+"	</div>"; -->
+						<!-- txt=txt+"	<div class='actualitesMessage'>"; -->
+						<!-- txt=txt+"		<div class='actualitesTitre' OnMouseOver='document.getElementById(\"icone_"+value.id+"\").style.display=\"block\";' OnMouseOut='document.getElementById(\"icone_"+value.id+"\").style.display=\"none\";'>"; -->
+						<!-- txt=txt+"			<div class='actualitesTitreMsg'>"; -->
+						<!-- txt=txt+"				<a name='id"+value.id+"'></a>"; -->
+						<!-- txt=txt+"				<p>"+value.title+"</p>"; -->
+						<!-- txt=txt+"				<span>par "+value.author+", "+value.date+"</span>"; -->
+						<!-- txt=txt+"			</div>"; -->
+						<!-- txt=txt+"			<div id='icone_"+value.id+"' class='actualitesIcones' style='display:none;'>"; -->
+						<!-- txt=txt+"				<a href='index.php?mod=actualites&fonc=editer&id="+value.id+"' class='imgDelete'><img src='{path_root}/{path_module}/img/icn16_editer.png' /></a>"; -->
+						<!-- txt=txt+"				<a href='' class='imgDelete' OnClick='return delNews("+value.id+");'><img src='{path_root}/{path_module}/img/icn16_supprimer.png' /></a>"; -->
+						<!-- txt=txt+"			</div>"; -->
+						<!-- txt=txt+"		</div>"; -->
+						<!-- txt=txt+"		<div class='actualitesTexte'>"; -->
+						<!-- txt=txt+"<p>"+value.message+"</p>"; -->
+						<!-- txt=txt+"</div>"; -->
+						<!-- txt=txt+"	</div>"; -->
+						<!-- txt=txt+"</div>"; -->
+
+
+						txt='<div id="news_'+value.id+'" class="d-flex align-items-start profile-feed-item">';
+						txt=txt+'<img src="{path_root}/'+value.avatar+'" alt="profile" class="img-sm rounded-circle">';
+						txt=txt+'<div class="ml-4">';
+						txt=txt+"<h5>"+value.title+"</h5>";
+						txt=txt+'<h6>'+value.author+'<small class="ml-4 text-muted"><i class="mdi mdi-clock mr-1"></i>'+value.date+'</small></h6>';
+						txt=txt+'<p style="text-align:justify;">'+value.message+'</p></div>';
+						txt=txt+'</div>';
+						txt=txt+'</div>';
+
 						$("#news").append(txt);
 						lastid=value.id;
 						console.log("lastid:"+lastid);

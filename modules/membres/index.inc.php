@@ -42,13 +42,14 @@
 	}
 
 // ---- Trombino
+
 	if ($fonc=="trombi")
 	{
 		$lstusr=ListActiveUsers($sql,"nom","");
 
-		$col=0;
+
 		foreach($lstusr as $i=>$id)
-		  {
+		{
 			$usr = new user_core($id,$sql,false);
 
 			$lstdoc=ListDocument($sql,$id,"avatar");
@@ -63,24 +64,8 @@
 			}	
 			$tmpl_x->assign("id_membre",$id);
 
-			$tmpl_x->parse("corps.trombino.aff_ligne.aff_colonne");
-			$col++;
-			if (($col>1) && ($theme=="phone"))
-			{
-				$tmpl_x->parse("corps.trombino.aff_ligne");
-				$col=0;
-			}
-			else if ($col>3)
-			{
-				$tmpl_x->parse("corps.trombino.aff_ligne");
-				$col=0;
-			}
+			$tmpl_x->parse("corps.trombino.aff_picture");
  		}
-		if ($col>0)
-		{
-			$tmpl_x->parse("corps.trombino.aff_ligne");
-			$col=0;
-		}
 		$tmpl_x->parse("corps.trombino");
 	}
 // ---- Liste les membres

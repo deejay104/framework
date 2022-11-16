@@ -10,59 +10,17 @@
 <!-- BEGIN: corps -->
 <script>
 $( function() {
-    var dialog, form,
- 
-    // From http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#e-mail-state-%28type=email%29
-    timeRegex = /^(([0-9])+)?([:h])?([0-9])+$/i,
-
-	form_titre = $( "#form_titre" ),
-	form_corps = $("#form_corps"),
-	allFields = $( [] ).add( form_titre ).add( form_corps ),
-
-	tips = $( ".validateTips" );
- 
-    function updateTips( t ) {
-      tips
-        .text( t )
-        .addClass( "ui-state-highlight" );
-		setTimeout(function() {
-			tips.removeClass( "ui-state-highlight", 1500 );
-		}, 500 );
-    }
- 
-    function checkLength( o, n, min, max ) {
-      if ( o.val().length > max || o.val().length < min ) {
-        o.addClass( "ui-state-error" );
-        updateTips( "Length of " + n + " must be between " +
-          min + " and " + max + "." );
-        return false;
-      } else {
-        return true;
-      }
-    }
- 
-    function checkRegexp( o, regexp, n ) {
-      if ( !( regexp.test( o.val() ) ) ) {
-        o.addClass( "ui-state-error" );
-        updateTips( n );
-        return false;
-      } else {
-        return true;
-      }
-    }
  
     function editMail() {
 		var valid = true;
-		allFields.removeClass( "ui-state-error" );
 
 		if ( valid ) {
-			dialog.dialog( "close" );
 
 			var id=document.getElementById('form_id').value;
 			console.log("edit "+id);
 			data = {};
-			data["titre"]=document.getElementById('form_titre').value;
-			data["corps"]=document.getElementById('form_corps').value;
+			data["titre"]=$('#form_titre').val();
+			data["corps"]=$('#form_corps').val();
 
 			$.ajax({
 				url:'{path_root}/api.php?mod=admin&rub=updemail&fonc=post&id='+id,
@@ -74,12 +32,12 @@ $( function() {
 					if (response.result=="OK")
 					{
 						console.log("ok");
-						document.getElementById('msgbox').innerHTML="<div id='msgbox_"+id+"' class='msgbox-std msgbox-ok'>Le template a été enregistré</div>";
+						showToast("","Le template a été enregistré","ok");
 					}
 					else
 					{
 						console.log("nok");
-						document.getElementById('msgbox').innerHTML="<div class='msgbox-std msgbox-error'>Erreur lors de la sauvegarde ("+response.result+")</div>";
+						showToast("","Erreur lors de la sauvegarde ("+response.result+")","error");
 					}
 				},
 				error : function(response)
@@ -97,10 +55,10 @@ $( function() {
 			dataType: 'JSON',
 
 			success: function(response) {
-				document.getElementById('form_id').value=response.id;
-				document.getElementById('form_balise').innerHTML=response.balise;
-				document.getElementById('form_titre').value=response.titre;
-				document.getElementById('form_corps').value=response.corps;
+				$('#form_id').val(response.id);
+				$('#form_balise').html(response.balise);
+				$('#form_titre').val(response.titre);
+				$('#form_corps').val(response.corps);
 			},
 			error: function(response) {
 				console.log("error");
@@ -108,47 +66,77 @@ $( function() {
 			}
 		});   
 	}
+
+
+	$( "#close" ).on( "click", function() {
+		$("#dialogForm").css("opacity",0);
+		$("#dialogForm").css("display","none");
+    });
+	$( "#save" ).on( "click", function() {
+		editMail();
+		$("#dialogForm").css("opacity",0);
+		$("#dialogForm").css("display","none");
+    });
+	$( "#cancel" ).on( "click", function() {
+		$("#dialogForm").css("opacity",0);
+		$("#dialogForm").css("display","none");
+    });
 	
-    dialog = $( "#dialog-form" ).dialog({
-      autoOpen: false,
-      height: 400,
-      width: 800,
-	  top: 10,
-      modal: true,
-      buttons: {
-        "Enregistrer": editMail,
-        Cancel: function() {
-          dialog.dialog( "close" );
-        }
-      },
-      close: function() {
-        <!-- form[ 0 ].reset(); -->
-        allFields.removeClass( "ui-state-error" );
-      }
-    });
- 
-    form = dialog.find( "form" ).on( "submit", function( event ) {
-      event.preventDefault();
-      editMail();
-    });
  
 <!-- BEGIN: lst_edit -->
 	$( "#edit_{lst_id}" ).on( "click", function() {
 		loadMail({lst_id});
-		dialog.dialog( "open" );
+		$("#dialogForm").css("display","block");
+		$("#dialogForm").css("opacity",100);
     });
 <!-- END: lst_edit -->
 });
 </script>
 
-<div id="dialog-form" title="Ajouter un vol" class="formulaire" style="display:none;">
-	<input id="form_id" type="hidden" value="">
-	<p><label>Balises</label><span id='form_balise'></span></p>
-	<p><label>Titre</label><input id="form_titre" value=""></p>
-	<textarea id="form_corps" style="height:200px;"></textarea>
-	<input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+<div class="modal fade" id="dialogForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="display: none;" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Livret de formation</h5>
+				<button id='close' type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<input id="form_id" type="hidden" value="0">
+
+					<div class="form-group row">
+						<label class="col-lg-2  col-form-label">Balises</label>
+						<div class="col-lg-8"><span id='form_balise'></span></div>
+					</div>		
+					<div class="form-group row">
+						<label class="col-lg-2  col-form-label">Titre</label>
+						<div class="col-lg-8"><input id='form_titre' value="" class="form-control" ></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-lg-2  col-form-label"></label>
+						<div class="col-lg-8"><textarea id="form_corps" class="form-control" rows=20></textarea></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-lg-2  col-form-label"></label>
+						<div class="col-lg-8">
+							<button class="btn btn-primary" id="save">Enregistrer</button>&nbsp;
+							<button class="btn btn-light" id="cancel">Annuler</button>
+						</div>
+					</div>	
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
+
 	
-<br />
-{aff_tableau}
+<div class="row">
+	<div class="grid-margin stretch-card">
+		<div class="card-body">	
+			{aff_tableau}
+		</div>
+	</div>
+</div>
 <!-- END: corps -->

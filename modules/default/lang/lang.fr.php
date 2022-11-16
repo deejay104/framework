@@ -91,6 +91,16 @@
 	$tabLang["lang_tab_info"]="Lignes de _START_ à _END_ sur un total de _TOTAL_";
 	$tabLang["lang_tab_lengthmenu"]="Affiche _MENU_ ligne(s)";
 
+	
+	$tabLang["lang_configuration"]="Configuration";
+	$tabLang["lang_database"]="Base de données";
+	$tabLang["lang_groups"]="Groupes";
+	$tabLang["lang_deadline"]="Echéances";
 	$tabLang["lang_echeance"]="Echéance";
+	$tabLang["lang_userdata"]="Données Utilisateurs";
+	$tabLang["lang_crontab"]="Taches Planifiées";
+	$tabLang["lang_emails"]="Emails";
+
+
 
 ?>

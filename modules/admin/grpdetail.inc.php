@@ -132,21 +132,15 @@
 	require_once("modules/".$mod."/menu.inc.php");
 	$tmpl_x->assign("aff_menu",$aff_menu);
 
-// <div class="pagetitle pagemenu">
-	// <p><A href="index.php?mod=admin&rub=groupes"><IMG src="{path_module}/img/icn32_retour.png" border=0 alt="">{lang_list}</A></p>
-	// <p><A href="index.php?mod=admin&rub=grpdetail"><IMG src="{path_module}/img/icn32_groupeadd.png" border=0 alt="">{lang_new}</A></p>
-	// <p><A href="index.php?mod=admin&rub=grpdetail&grp={form_grp}&fonc=copier"><IMG src="{path_module}/img/icn32_groupecopy.png" border=0 alt="">{lang_copy}</A></p>
-	// <p><A href="#" OnClick="ConfirmeClick('index.php?mod=admin&rub=grpdetail&grp={form_grp}&fonc=supprimer','Souhaitez-vous supprimer ce groupe ?');"><IMG src="{path_module}/img/icn32_groupesup.png" border=0 alt="">{lang_delete}</A></p>
-// </div>
-	addSubMenu("",$tabLang["lang_list"],geturl("admin","groupes",""),"icn32_retour.png",false);
-	addSubMenu("",$tabLang["lang_new"],geturl("admin","grpdetail",""),"icn32_groupeadd.png",false);
-	addSubMenu("",$tabLang["lang_copy"],geturl("admin","grpdetail","grp=".$grp."&fonc=copier"),"icn32_groupecopy.png",false);
-	addSubMenu("",$tabLang["lang_delete"],geturl("admin","grpdetail","grp=".$grp."&fonc=supprimer"),"icn32_groupesup.png",false,"Souhaitez-vous supprimer ce groupe ?");
-	affSubMenu();
+	addPageMenu("","admin",$tabLang["lang_list"],geturl("admin","groupes",""),"mdi-backburger");
+	addPageMenu("","admin",$tabLang["lang_new"],geturl("admin","grpdetail",""),"");
+	addPageMenu("","admin",$tabLang["lang_copy"],geturl("admin","grpdetail","grp=".$grp."&fonc=copier"),"");
+	addPageMenu("","admin",$tabLang["lang_delete"],geturl("admin","grpdetail","grp=".$grp."&fonc=supprimer"),"",false,"Voulez-vous supprimer ce groupe ?");
 
 
 // ---- Affiche les informations
 	$tmpl_x->assign("form_grp",$grp);
+	$tmpl_x->assign("txtsearch",$search);
 
 	$query="SELECT description,principale FROM ".$MyOpt["tbl"]."_groupe WHERE groupe='$grp' LIMIT 1";
 	$res=$sql->QueryRow($query);
@@ -203,9 +197,9 @@
 	
 		if (GetDroit("ModifUserDroits"))
 		  {
-				$tmpl_x->parse("corps.aff_config.lst_user.aff_sup");
+				$tmpl_x->parse("corps.lst_user.aff_sup");
 		  }
-		$tmpl_x->parse("corps.aff_config.lst_user");
+		$tmpl_x->parse("corps.lst_user");
 	}
 
 	if ($grp!="")

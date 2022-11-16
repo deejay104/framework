@@ -242,9 +242,10 @@
 
 	$tmpl_x->parse("corps.type");
 
-
 	if (GetDroit("ModifUserDroits"))
-	  { $tmpl_x->parse("corps.droits"); }
+	{
+		$tmpl_x->parse("corps.droits");
+	}
 
   	if ( GetDroit("ModifUserVirtuel") )
 	{

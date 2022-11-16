@@ -71,7 +71,7 @@
 						$result["id"]=$doc->id;
 						$result["width"]=$w;
 						$result["height"]=$h;
-						$txt.="<div class='thumbnail' ><img src='".$MyOpt["host"]."/doc.php?id=".$doc->id."&type=image&width=".$w."&height=".$h."' ".(($w<500) ? "style='width:".$w."px!important'" : "")."></div>";
+						$txt.="<img src='".$MyOpt["host"]."/doc.php?id=".$doc->id."&type=image&width=".$w."&height=".$h."' class='rounded mw-100'>";
 					}
 					else
 					{

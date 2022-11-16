@@ -90,7 +90,7 @@ function getip()
 	return $ip;
 }
 
-function addPageMenu($path,$mod,$title,$url,$img,$selected=false,$confirm="",$onclick="")
+function addPageMenu($path="",$mod,$title,$url,$img,$selected=false,$confirm="",$onclick="")
 {
 	global $tmpl_prg,$module,$MyOpt;
 	
@@ -115,7 +115,7 @@ function addPageMenu($path,$mod,$title,$url,$img,$selected=false,$confirm="",$on
 	$tmpl_prg->assign("pagemenu_name",$title);
 	if ($img!="")
 	{
-		$tmpl_prg->assign("pagemenu_image","<IMG src='".$MyOpt["host"]."/".(($path!="") ? $path."/" : "").$module."/".$mod."/img/".$img."' border=0 alt=''>");
+		$tmpl_prg->assign("pagemenu_image",$img);
 	}
 	else
 	{
@@ -124,11 +124,11 @@ function addPageMenu($path,$mod,$title,$url,$img,$selected=false,$confirm="",$on
 
 	if ($selected)
 	{
-		$tmpl_prg->assign("pagemenu_class","class='pageTitleSelected'");
+		$tmpl_prg->assign("pagemenu_class","btn-primary");
 	}
 	else
 	{
-		$tmpl_prg->assign("pagemenu_class","");
+		$tmpl_prg->assign("pagemenu_class","btn-outline-primary");
 	}
 
 	$tmpl_prg->parse("main.lst_pagemenu");
@@ -560,7 +560,7 @@ function SendMailFromFile($from,$to,$tabcc,$subject="",$tabvar,$name,$files="",$
 	$q="SELECT * FROM ".$MyOpt["tbl"]."_mailtmpl WHERE nom='".$name."'";
 	$res=$sql->QueryRow($q);
 
-	if ($res["id"]>0)
+	if ((isset($res["id"])) && ($res["id"]>0))
 	{
 	}
 	else
@@ -766,7 +766,7 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 	// $ret ="\n<table id='mytable' class='tableauAff' width'100%'>\n";
 	$idtbl=uniqid("tbl_");
 	$ret ="\n";
-	$ret.="<table id='".$idtbl."' class='tableauAff' style='opacity:0;' width='100%'>\n";
+	$ret.="<div class='table-responsive'><table id='".$idtbl."' class='table table-hover'>\n";
 
 	$ret.="<thead><tr>";
 	$nb=1;
@@ -906,7 +906,7 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 		$ret.="</tfoot>";
 	}
 	$ret.="</tbody>\n";
-	$ret.="</table>\n";
+	$ret.="</table></div>\n";
 
 	$ret.="<link rel='stylesheet' type='text/css' href='".$MyOpt["host"]."/core/external/jquery/css/dataTables.min.css' />";
 	$ret.="<script type='text/javascript' src='".$MyOpt["host"]."/core/external/jquery/jquery.dataTables.min.js'></script>";
@@ -1042,7 +1042,7 @@ function AfficheTableauRemote($tabTitre="",$url,$order="",$trie="d",$search,$nbl
 	{
 		$idtbl=uniqid("tbl_");
 	}
-	$ret ="\n<table id='".$idtbl."' class='tableauAff'>\n";
+	$ret ="\n<table id='".$idtbl."' class='table table-hover'>\n";
 
 	$ret.="<thead><tr>";
 
@@ -1211,7 +1211,7 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 		}
 	}
 
-	$ret ="\n<table class='tableauAff'>\n";
+	$ret ="\n<table class='table table-striped'>\n";
 
 	$ret.="<tr>";
 	$ret.="<th width=20>&nbsp;</th>";
@@ -1932,14 +1932,14 @@ function getCompassDirection( $bearing )
 }
 
 
-function affInformation($txt,$res)
+function affInformation($txt,$type)
 {
 	global $tmpl_prg;
 
 	if ($txt!="")
 	{
 		$tmpl_prg->assign("msg_infos", $txt);
-		$tmpl_prg->assign("msg_class", $res);
+		$tmpl_prg->assign("msg_type", $type);
 		$tmpl_prg->parse("main.aff_infos");
 	}
 }
@@ -1985,7 +1985,7 @@ function GenereStyle($name)
 		$s.="\n\n".$tmpl_style->text("main");
 	}
 	
-	$s=Purge($s);
+	// $s=Purge($s);
 	
 	$fd=fopen("../".$sfile,"w");
 	fwrite($fd,$s);

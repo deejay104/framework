@@ -232,7 +232,7 @@
 	
 // ---- Header ----------------------------------------------------------------------------------------
   	// HTTP/1.1
-	header("Cache-Control: no-store, no-cache, must-revalidate");
+	// header("Cache-Control: no-store, no-cache, must-revalidate");
 	
 	// HTTP/1.0
 	header("Pragma: no-cache");
@@ -240,6 +240,18 @@
 	// Charset
 	// header('Content-type: text/html; charset=UTF-8');
 	header('Content-type: application/json; charset=utf-8');
+
+
+	header('access-control-allow-credentials: true');
+	header('access-control-allow-headers: token');
+	header('access-control-allow-methods: GET,HEAD,PUT,PATCH,POST,DELETE');
+	header('access-control-allow-origin: *');
+	header('Strict-Transport-Security: max-age=31536000;includeSubdomains');
+	header("Content-Security-Policy: frame-ancestors 'none'; default-src 'self', script-src '".$MyOpt["host"].":*'");
+	header('X-Content-Type-Options: nosniff');
+	header('X-Frame-Options: DENY');
+	header('Referrer-Policy: no-referrer');
+
 
 // ---- Charge les informations standards
 

@@ -81,51 +81,89 @@
 
 </style>
 
+<div class='row mt-2'>
+	<div class='grid-margin stretch-card'>
+		<input type='text' id='crit' placeholder='Rechercher' class='form-control' OnKeyUp="searchkey(event);" autocomplete="off">
+	</div>
+</div>
+
+<div id='lstPapersOutbox' class="row" style="display:none;">
+	<div class="grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">	
+				<div id='lstPapers' class='lstPapers'></div>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div id='lstfolders'>
 </div>
 
-<div id='createFolder' class='createFolder'>
-		<div class='contentTitle'>
-			<p class='createTitle'>Créer un nouveau dossier</p>
-			<img src='/core/static/modules/docs/img/icn16_supprimer.png' onClick='cancelContent();' style='border: 1px solid #bbbbbb; border-radius:4px;'>
-		</div>
-		<div style='padding:10px;'>
-			<p>Titre :</p>
-			<p><input type='text' id='contentNewTitle' class='createInput'></p>
-			<p>Description :</p>
-			<textarea id='contentNewComment' class='contentDescription'></textarea>
 
-			<p><label>Groupe de lecture :</label> 
-				<select id='group_read'>
-					<option value="ALL">ALL</option>
-<!-- BEGIN: lst_group_read -->
-					<option value="{aff_group}">{aff_group}</option>
-<!-- END: lst_group_read -->
-				</select>
-			</p>
-			<p><label>Groupe d'écriture :</label> 
-				<select id='group_write'>
-					<option value="ALL">ALL</option>
-<!-- BEGIN: lst_group_write -->
-					<option value="{aff_group}">{aff_group}</option>
-<!-- END: lst_group_write -->
-				</select>
-			</p>
+<div id='createFolder' class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="display: none;" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Créer un nouveau dossier</h5>
+				<button id='close' type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
 
-			<br />
-			<input type='submit' value='Enregistrer' onClick='saveContent();'>
-			<input type='submit' value='Annuler' onClick='cancelContent();'>
+					<div class="form-group row">
+						<label class="col-lg-2  col-form-label">Titre</label>
+						<div class="col-lg-7"><input type='text' id='contentNewTitle' class='form-control'></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-lg-2  col-form-label">Description</label>
+						<div class="col-lg-7"><textarea id='contentNewComment' class='form-control' rows=5></textarea></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-lg-2  col-form-label">Groupe de lecture</label>
+						<div class="col-lg-7">
+							<select id='group_read' class="form-control">
+								<option value="ALL">ALL</option>
+								<!-- BEGIN: lst_group_read -->
+								<option value="{aff_group}">{aff_group}</option>
+								<!-- END: lst_group_read -->
+							</select>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-lg-2  col-form-label">Groupe d'écriture</label>
+						<div class="col-lg-7">
+							<select id='group_write' class="form-control">
+								<option value="ALL">ALL</option>
+								<!-- BEGIN: lst_group_write -->
+								<option value="{aff_group}">{aff_group}</option>
+								<!-- END: lst_group_write -->
+							</select>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-lg-2  col-form-label"></label>
+						<div class="col-lg-7">
+							<button class="btn btn-primary" id="save">Enregistrer</button>&nbsp;
+							<button class="btn btn-light" id="cancel">Annuler</button>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
+	</div>
 </div>
+
 
 <div id='search' class='searchBox'>
 	<p>Rechercher un document :</p>
-	<input type='text' id='crit' class='searchBoxInput' OnKeyUp="searchkey(event);" autocomplete="off"/>
+	<input type='text' id='crit2' class='searchBoxInput' OnKeyUp="searchkey(event);" autocomplete="off"/>
 	<div style='text-align: right; margin-top:5px; margin-right:10px; margin-bottom:10px;'>
 		<input type='submit' value='Afficher' onClick='searchApply();'>
 		<input type='submit' value='Annuler' onClick='searchCancel();'>
 	</div>
-	<div id='lstPapers' class='lstPapers'></div>
 </div>
 
 <script>
@@ -145,16 +183,19 @@ function loadContent()
 		for (var key in data.data)
 		{
 			var txt="";
-			txt=txt+"<div class='folderBox'>";
-			txt=txt+"<div class='folderTitle' onmouseover='document.getElementById(\"edit_"+key+"\").style.display=\"block\";' onmouseout='document.getElementById(\"edit_"+key+"\").style.display=\"none\";'><p><a href='/docs/folder?id="+data.data[key].id+"'>"+data.data[key].title+"</a></p>";
+			txt=txt+"<div class='row'><div class='grid-margin stretch-card'><div class='card'><div class='card-body'>";
 
-			txt=txt+"<div id='edit_"+key+"' style='display:none;'>";
+			txt=txt+"<div class='form-inline' onmouseover='document.getElementById(\"edit_"+key+"\").style.display=\"inline-block\";' onmouseout='document.getElementById(\"edit_"+key+"\").style.display=\"none\";'><h4><a href='/docs/folder?id="+data.data[key].id+"'>"+data.data[key].title+"</a>";
 
-			txt=txt+"<img src='/core/static/modules/docs/img/icn16_editer.png' onclick='editFolder("+data.data[key].id+");'>";
+			<!-- txt=txt+"<div id='edit_"+key+"' style='display:none; cursor: pointer;'>"; -->
+			txt=txt+"<a href='#' id='edit_"+key+"' style='display:none;' onclick='editFolder("+data.data[key].id+");'><i class='mdi mdi-pencil'></i></a>";
+			<!-- txt=txt+"</div>"; -->
+			txt=txt+"</h4></div>";
 
-			txt=txt+"</div>";
-			txt=txt+"</div>";
 			txt=txt+"<div class='folderDescription'><p>"+data.data[key].description+"</p></div>";
+
+
+			txt=txt+"</div></div></div></div>";
 			divFolder.innerHTML=divFolder.innerHTML+txt;
 		}
 	});
@@ -162,7 +203,12 @@ function loadContent()
 function createFolder()
 {
 	console.log("Create Folder");
-	$("#createFolder").css({"display":"inline-block"});
+	$("#contentNewTitle").val("");
+	$("#contentNewComment").val("");
+	$("#group_read").val("");
+	$("#group_write").val("");
+	$("#createFolder").css({"display":"block"});
+	$("#createFolder").css("opacity",1);
 	$("#lstfolders").css({"opacity":0.25});
 	currentFolder=0;
 }
@@ -179,29 +225,35 @@ console.log(data);
 		$("#contentNewComment").val(data.data.description);
 		$("#group_read").val(data.data.group_read);
 		$("#group_write").val(data.data.group_write);
-		$("#createFolder").css({"display":"inline-block"});
+		$("#createFolder").css({"display":"block"});
+		$("#createFolder").css("opacity",1);
 		$("#lstfolders").css({"opacity":0.25});
 		currentFolder=id;
 	});
 }
 
-function cancelContent()
-{
+$( "#cancel" ).on( "click", function() {
 	$("#createFolder").css({"display":"none"});
+	$("#createFolder").css("opacity",0);
 	$("#lstfolders").css({"opacity":1});
-}
+});
 
-function saveContent()
-{
+$( "#save" ).on( "click", function() {
 	$.post( "/api/v1/docs/postfolder", { id: currentFolder, title:$("#contentNewTitle").val(), description:$("#contentNewComment").val(), group_read:$("#group_read").val(), group_write:$("#group_write").val()} ).done(function(data) {
 		console.log("Folder created");
 		loadContent();
 	});
 
 	$("#createFolder").css({"display":"none"});
+	$("#createFolder").css("opacity",0);
 	$("#lstfolders").css({"opacity":1});
-}
+});
 
+$( "#close" ).on( "click", function() {
+	$("#createFolder").css("opacity",0);
+	$("#createFolder").css("display","none");
+});
+	
 function showSearch()
 {
 	$("#search").css({"display":"inline-block"});
@@ -259,23 +311,37 @@ function searchList()
 	console.log("GET:"+searchTxt);
 
 	var crit=$("#crit").val();
-	var sort="dte_creat";
-	var limit=20;
-	$.get('/api/v1/docs/lstpaper?sort='+sort+'&crit='+crit+'&limit='+limit).done(function(data)
-	{
-		var txtFiles="";
-		for (var key in data.data)
-		{
-			txtFiles=txtFiles+"<div class='paperBox'>";
-			for (var ii in data.data[key].doc)
-			{
-				txtFiles=txtFiles+"<div class='paperDocument'>"+data.data[key].doc[ii]+"</div>";
-			}
-			txtFiles=txtFiles+"</div>";
-		}
-		$("#lstPapers").html(txtFiles);
-	});
 
+	if (crit!="")
+	{
+		var sort="dte_creat";
+		var limit=20;
+		$.get('/api/v1/docs/lstpaper?sort='+sort+'&crit='+crit+'&limit='+limit).done(function(data)
+		{
+			var txtFiles="";
+			i=0
+			for (var key in data.data)
+			{
+				txtFiles=txtFiles+"<div class='paperBox'>";
+				for (var ii in data.data[key].doc)
+				{
+					txtFiles=txtFiles+"<div class='paperDocument'>"+data.data[key].doc[ii]+"</div>";
+					i=i+1;
+				}
+				txtFiles=txtFiles+"</div>";
+			}
+			$("#lstPapers").html(txtFiles);
+			if (i>0)
+			{
+				$("#lstPapersOutbox").css("display","block");
+			}
+		});
+	}
+	else
+	{
+		$("#lstPapersOutbox").css("display","none");
+		$("#lstPapers").html("");
+	}
 }
 
 </script>

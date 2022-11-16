@@ -239,14 +239,14 @@ class user_core extends objet_core
 					$sql->GetRow($i);
 					if ($sql->data["groupe"]!="SYS")
 					{
-						$ret.="<input type='checkbox' name='form_droits[".$sql->data["groupe"]."]' ".(((isset($this->groupe[$sql->data["groupe"]])) && ($this->groupe[$sql->data["groupe"]]>0)) ? "checked" : "")." value='".$sql->data["groupe"]."' /> ".$sql->data["description"]." (".$sql->data["groupe"].")<br />";
+						$ret.="<div class='form-check form-check-success'><label class='form-check-label'><input type='checkbox' class='form-control' name='form_droits[".$sql->data["groupe"]."]' ".(((isset($this->groupe[$sql->data["groupe"]])) && ($this->groupe[$sql->data["groupe"]]>0)) ? "checked" : "")." value='".$sql->data["groupe"]."' /> ".$sql->data["description"]." (".$sql->data["groupe"].")<i class='input-helper'></i></label></div>";
 					}
 				}
 				if (GetDroit("SYS"))
 				{
-					$ret.="<input type='checkbox' name='form_droits[SYS]' ".(((isset($this->groupe["SYS"])) && ($this->groupe["SYS"])) ? "checked" : "")." value='SYS' /> Super Administrateur (SYS)<br />";
+					$ret.="<div class='form-check form-check-success'><label class='form-check-label'><input type='checkbox' class='form-control' name='form_droits[SYS]' ".(((isset($this->groupe["SYS"])) && ($this->groupe["SYS"])) ? "checked" : "")." value='SYS' /> Super Administrateur (SYS)<i class='input-helper'></i></label></div>";
 				}
-				$ret="<span>".$ret."</span>";
+				$ret="<div class='form-group'>".$ret."</div>";
 			}
 			else if ($key=="groupe")
 			{
@@ -256,7 +256,7 @@ class user_core extends objet_core
 				$query="SELECT id,groupe, description FROM ".$this->tbl."_groupe WHERE principale='oui' ORDER BY description";
 				$sql->Query($query);
 		
-		  	  	$ret ="<select id='".$key."'  name=\"".$formname."[$key]\">";
+		  	  	$ret ="<select id='".$key."' class='form-control' name=\"".$formname."[$key]\">";
 				$ret.="<option value=\"\" ".(($txt=="") ? "selected" : "").">Aucun</option>";
 				for($i=0; $i<$sql->rows; $i++)
 				{ 
@@ -391,7 +391,7 @@ class user_core extends objet_core
  	
 		if ($render=="form")
 		{
-			$ret="<label>".$this->donnees[$i]["nom"]."</label><input name='form_donnees[".$i."]' value='".$this->donnees[$i]["valeur"]."'></br>";
+			$ret="<label>".$this->donnees[$i]["nom"]."</label><input name='form_donnees[".$i."]' class='form-control' value='".$this->donnees[$i]["valeur"]."'></br>";
 		}
 		else
 		{
@@ -838,7 +838,7 @@ function AffListeMembres($sql,$form_uid,$name,$type="",$sexe="",$order="std",$vi
 	$query.=(($order!="") ? " ORDER BY $order" : "");
 	
 	$sql->Query($query);
-	$lstuser ="<select name=\"$name\">";
+	$lstuser ="<select name='".$name."' class='form-control form-control-lg'>";
 	$lstuser.="<option value=\"0\">Aucun</option>";
 	for($i=0; $i<$sql->rows; $i++)
 	{

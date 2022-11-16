@@ -36,14 +36,15 @@
 
 		if ($res["id"]>0)
 		{
-			$ret["data"].=AjoutLog("- Update: ".$name);
 			if ($fonc=="init")
 			{
+				$ret["data"].=AjoutLog("- Reset: ".$name);
 				$q="UPDATE ".$MyOpt["tbl"]."_mailtmpl SET titre='".addslashes($d["titre"])."', corps='".addslashes($d["mail"])."', balise='".$d["balise"]."',uid_maj='".$gl_uid."', dte_maj='".now()."' WHERE id=".$res["id"];
 				$sql->Update($q);
 			}
 			else
 			{
+				$ret["data"].=AjoutLog("- Update: ".$name);
 				$q="UPDATE ".$MyOpt["tbl"]."_mailtmpl SET balise='".$d["balise"]."',uid_maj='".$gl_uid."', dte_maj='".now()."' WHERE id=".$res["id"];
 				$sql->Update($q);
 			}

@@ -235,12 +235,14 @@ class document_core{
 		else if ($myext=="pdf")
 		  { $icon="pdf"; }
 		else if ($myext=="mp3")
-		  { $icon="sound"; }
+		  { $icon="music"; }
 		else if ($myext=="zip")
-		  { $icon="compressed"; }
+		  { $icon="multiple"; }
 		else if ($myext=="rar")
-		  { $icon="compressed"; }
+		  { $icon="multiple"; }
 		else if ($myext=="xml")
+		  { $icon="xml"; }
+		else if ($myext=="json")
 		  { $icon="document"; }
 		else if ($myext=="css")
 		  { $icon="document"; }
@@ -273,11 +275,12 @@ class document_core{
 			if (file_exists($this->filepath."/".$this->filename))
 			{
 					$fsize=CalcSize(filesize($this->filepath."/".$this->filename));
-					$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><img src='".$MyOpt["host"]."/".$corefolder."/static/images/icn16_".$icon.".png' width=16 height=16 border=0> ".$this->name." ($fsize) </a>";
+					// $txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><img src='".$MyOpt["host"]."/".$corefolder."/static/images/icn16_".$icon.".png' width=16 height=16 border=0> ".$this->name." ($fsize) </a>";
+					$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><i class='mdi mdi-file-".$icon."'></i> ".$this->name." ($fsize) </a>";
 			}
 			else
 			{
-					$txt.="<img src='".$MyOpt["host"]."/".$corefolder."/static/images/icn16_".$icon.".png' style='vertical-align:middle; border: 0px; height: 16px; width: 16px;'> <s>".$this->name."</s>";
+					$txt.="<i class='mdi mdi-file-hidden'></i> <s>".$this->name."</s>";
 			}
 			$txt.="</p>";
 			$txt.="</div>";
@@ -289,11 +292,11 @@ class document_core{
 			if (file_exists($this->filepath."/".$this->filename))
 			{
 					$fsize=CalcSize(filesize($this->filepath."/".$this->filename));
-					$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><img src='".$MyOpt["host"]."/".$corefolder."/static/images/icn16_".$icon.".png' width=16 height=16 border=0> ".$this->name." ($fsize) </a>";
+					$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><i class='mdi mdi-file-".$icon."'></i> ".$this->name." ($fsize) </a>";
 			}
 			else
 			{
-					$txt.="<img src='".$MyOpt["host"]."/".$corefolder."/static/images/icn16_".$icon.".png' style='vertical-align:middle; border: 0px; height: 16px; width: 16px;'> <s>".$this->name."</s>";
+					$txt.="<i class='mdi mdi-file-hidden'></i> <s>".$this->name."</s>";
 			}
 
 			// Si mode édition

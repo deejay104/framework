@@ -9,9 +9,6 @@
 
 <!-- BEGIN: corps -->
 
-<!-- BEGIN: msgok -->
-<div class="msgok">{msg_ret}</div>
-<!-- END: msgok -->
 
 <script type="text/javascript">
 	$(function() {
@@ -37,30 +34,37 @@
 <input type="hidden" name="mod" value="admin">
 <input type="hidden" name="rub" value="index">
 
-<input type="submit" name="fonc" value="{lang_save}">
 
-<div class="formulaire">
-	<ul class="formulaireMulti tableauTitre">
-		<li>
-			<label>{lang_parameter}</label>
-			<span>{lang_variable}</span>
-			<span>{lang_value}</span>
-			<span>{lang_default}</span>
-		</li>
-	</ul>
-	<ul class="formulaireMulti">
+<div class="col-md-14 grid-margin stretch-card">
+	<div class="card">
+		<div class="card-body">
+
+<input type="submit" class="btn btn-primary mr-2" name="fonc" id="enregistrer" value="{lang_save}">
+
+	<div class="form-group ">
+		<div class="row">
+			<label class="col-sm-2 col-form-label">{lang_parameter}</label>
+			<label class="col-sm-2 col-form-label">{lang_variable}</label>
+			<label class="col-sm-3 col-form-label">{lang_value}</label>
+			<label class="col-sm-4 col-form-label">{lang_default}</label>
+		</div>
+
 <!-- BEGIN: lst_param -->
-		<li class="{param_class}">
-			<label>{param_nom}</label>
-			<span>{param_var}</span>
-			<span><input name="MyOptTab[{param_var1}][{param_var2}]" value="{param_txt}"  title="{param_help}"/></span>
-			<span>{param_default}</span>
-		</li>
+		<div class="row">
+			<label class="col-sm-2 col-form-label">{param_nom}</label>
+			<label class="col-sm-2 col-form-label">{param_var}</label>
+			<div class="col-sm-3"><input class="form-control" name="MyOptTab[{param_var1}][{param_var2}]" value="{param_txt}"  title="{param_help}"/></div>
+			<div class="col-sm-4">{param_default}</div>
+		</div>
 <!-- END: lst_param -->
-	</ul>
+	</div>
+<input type="submit" class="btn btn-primary mr-2" name="fonc" id="enregistrer" value="{lang_save}">
+
 </div>
+</div>
+</div>
+
 <br />
-<input type="submit" name="fonc" value="{lang_save}">
 
 </form>
 <!-- END: corps -->

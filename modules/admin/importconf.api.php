@@ -12,6 +12,7 @@
 	
 // ---- Import de la config
 	$ret=array();
+	$ret["status"]=200;
 	$ret["result"]="OK";
 	$ret["data"]="";
 

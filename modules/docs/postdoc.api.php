@@ -50,6 +50,8 @@
 	$result["title"]=$paper->val("title");
 	$result["docid"]=$doc->id;
 	$result["link"]=$doc->Affiche();
+	$result["author"]=$myuser->fullname;
+	$result["created"]=now;
 
 	echo json_encode($result);	
 ?>

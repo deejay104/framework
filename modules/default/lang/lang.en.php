@@ -92,5 +92,12 @@
 	$tabLang["lang_tab_info"]="Showing _START_ to _END_ of _TOTAL_ entries";
 	$tabLang["lang_tab_lengthmenu"]="Show _MENU_ entries";
 
+	$tabLang["lang_configuration"]="Configuration";
+	$tabLang["lang_database"]="Database";
+	$tabLang["lang_groups"]="Groups";
+	$tabLang["lang_deadline"]="Deadlines";
 	$tabLang["lang_echeance"]="Deadline";
+	$tabLang["lang_userdata"]="User data";
+	$tabLang["lang_crontab"]="Crontab";
+	$tabLang["lang_emails"]="Emails";
 ?>

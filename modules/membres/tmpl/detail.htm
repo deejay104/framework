@@ -6,131 +6,198 @@
 <!-- END: infos -->
 
 <!-- BEGIN: corps -->
-<FORM name="form_detail" method="post" action="index.php" enctype="multipart/form-data">
-<INPUT type="hidden" name="mod" value="membres">
-<INPUT type="hidden" name="rub" value="detail">
+
+<div class="row">
+	<div class="col-md-12 border-top">
+		<div class="d-flex ">
+			<div class="ml-4 small">
+				{lang_lastupdate} : {info_maj}<br />{lang_lastconnection} : {info_connect}
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<FORM name="form_detail" method="post" action="{path_root}/membres/detail" enctype="multipart/form-data">
 <INPUT type="hidden" name="id" value="{id}">
 <INPUT type="hidden" name="checktime" value="{form_checktime}">
 
-<p class="lastupdate">{lang_lastupdate} : {info_maj}<br />{lang_lastconnection} : {info_connect}</p>
+<div class="row">
+	<div class="col-md-4 grid-margin stretch-card">
+		<div class="row flex-grow">
+
+			<div class="col-12 grid-margin stretch-card">
+				<div class="card">
+					<div class="card-body">
+						<h4>{lang_informations}</h4>
+
+						<div class="form-group">
+							<IMG src="{aff_avatar}" alt="" width=200 height=240>
+
+							<!-- BEGIN: photos -->
+							<div class="form-group">
+									<INPUT id="form_photo" name="form_photo" class="file-upload-default" type="file">
+
+									<div class="input-group col-xs-12">
+										<input type="text" class="form-control file-upload-info" disabled="" placeholder="Image">
+										<span class="input-group-append">
+											<button class="file-upload-browse btn btn-sm btn-primary" type="button">Upload</button>
+										</span>
+								  </div>
+							</div>
+							<div class="form-group">
+								{lang_selectpicture}
+								{lang_selectpicture2}
+							</div>
+							<!-- END: photos -->
+						</div>
 
 
-<div class="formulaireTitre">{lang_informations}</div>
+						<div class="form-group">
+							<label class="col-form-label"  for="prenom">{lang_firstname}</label>{form_prenom}
+						</div>
+						<div class="form-group">
+							<label class="col-form-label"  for="nom">{lang_name}</label>{form_nom}
+						</div>
+			
+						<div class="form-group">
+							<label class="col-form-label"  for="initiales">{lang_nickname}</label>{form_initiales}
+						</div>
+						<div class="form-group">
+							<label class="col-form-label"  for="mail">{lang_email}</label>{form_mail}
+						</div>
+						<!-- BEGIN: virtuel -->
+						<div class="form-group">
+							<label class="col-form-label" >{lang_virtual}</label>{form_virtuel}
+						</div>
+						<!-- END: virtuel -->
+						
+						<div class="form-group">
+							<label class="col-form-label" >{lang_notification}</label>{form_notification}
+						</div>
+						<div class="form-group">
+							<label class="col-form-label" >{lang_maingroup}</label>{form_groupe}
+						</div>
+						<div class="form-group">
+							<label class="col-form-label" >{lang_language}</label>{form_language}
+						</div>
 
-<table width='100%'>
-	<tr>
-		<td width="220">
-			<div class="formulairePhoto">
-				<IMG src="{aff_avatar}" alt="" width=200 height=240>
+
+
+						<div class="form-group">
+						<h4>{lang_comments}</h4>
+						{form_commentaire}
+						</div>
+					</div>
+				</div>
 			</div>
-		</td>
-		<td>
-			<div class="formulaire" style='width:100%; min-height:240px; padding-left: 20px;'>
-				<p>
-					<label for="prenom">{lang_firstname}</label>{form_prenom}
-				</p>
-				<p>
-					<label for="nom">{lang_name}</label>{form_nom}
-				</p>
 	
-				<p>
-					<label for="initiales">{lang_nickname}</label>{form_initiales}
-				</p>
-				<p>
-					<label for="mail">{lang_email}</label>{form_mail}
-				</p>
-				<!-- BEGIN: virtuel -->
-				<p>
-					<label>{lang_virtual}</label>{form_virtuel}
-				</p>
-				<!-- END: virtuel -->
-				
-				<p>
-					<label>{lang_notification}</label>{form_notification}
-				</p>
-				<p>
-					<label>{lang_maingroup}</label>{form_groupe}
-				</p>
-				<p>
-					<label>{lang_language}</label>{form_language}
-				</p>
-
-				<!-- BEGIN: photos -->
-				<p>
-					<label>{lang_picture}</label><INPUT name="form_photo" type="file" size=60><br />
-				</p>
-				<p><label></label>{lang_selectpicture}</p>
-				<p><label></label>{lang_selectpicture2}</p>
-				<!-- END: photos -->
+			<!-- BEGIN: submit -->
+			<div class="col-12 grid-margin stretch-card">
+				<div class="card">
+					<div class="card-body">
+						<input type="submit" class="btn btn-primary mr-2" name="fonc" id="enregistrer" value="{lang_save}">
+						<input type="submit" class="btn btn-light"  name="fonc" id="annuler" value="{lang_cancel}">
+					</div>
+				</div>
 			</div>
-		</td>
-	</tr>
-</table>
-
-
-<table width='100%'>
-<tr>
-	<td width='50%' valign="top" style='padding: 5px;'>
-		<div class="formulaireTitre">{lang_comments}</div>
-		<div class='formulaire'>
-			{form_commentaire}
+			<!-- END: submit -->
 		</div>
+	</div>
 
-		<!-- BEGIN: aff_donnees -->
-		<div class="formulaireTitre">{lang_data}</div>
-		<!-- BEGIN: aff_donnees_left -->
-		<div class="formulaire">
-		{aff_data_left}
-		</div>
-		<!-- END: aff_donnees_left -->
-
-		<!-- BEGIN: aff_donnees_util -->
-		<div class="formulaire">
-			<!-- BEGIN: lst_donnees -->
-				<p>{form_donnees}</p>
-			<!-- END: lst_donnees -->
+	<!-- BEGIN: aff_donnees -->
+	<div class="col-md-4 grid-margin stretch-card">
+		<div class="row flex-grow">
+			<div class="col-12 grid-margin stretch-card">
+				<div class="card">
+					<div class="card-body">
+						<h4>{lang_data}</h4>
+						<!-- BEGIN: aff_donnees_left -->
+						{aff_data_left}
+						<!-- END: aff_donnees_left -->
+					</div>
+				</div>
 			</div>
-		<!-- END: aff_donnees_util -->
-		<!-- END: aff_donnees -->
-	
-	</td>
-	<td width='50%' valign="top" style='padding: 5px;'>
-		{aff_data_right}
-		<div class="formulaireTitre">{lang_documents}</div>
-		<div class="formulaire">
-			<!-- BEGIN: lst_document -->
-			{form_document}
-			<!-- END: lst_document -->
+
+			<!-- BEGIN: aff_donnees_util -->
+			<div class="col-12 grid-margin stretch-card">
+				<div class="card">
+					<div class="card-body">
+					<!-- BEGIN: lst_donnees -->
+							<div class="form-group">
+							{form_donnees}
+							</div>
+							<!-- END: lst_donnees -->
+					</div>
+				</div>
+			</div>
+			<!-- END: aff_donnees_util -->
 		</div>
+	</div>
+	<!-- END: aff_donnees -->
 
-		<!-- BEGIN: aff_echeances -->
-		<div class="formulaireTitre">{lang_deadline}</div>
-		<div class="formulaire">
-			<!-- BEGIN: lst_echeance -->
-			<p>{form_echeance}</p>
-			<!-- END: lst_echeance -->
+	<div class="col-md-4 grid-margin stretch-card">
+		<div class="row flex-grow">
+			<div class="col-12 grid-margin stretch-card">
+				<div class="card">
+					<div class="card-body">
+						{aff_data_right}
+					</div>
+				</div>
+			</div>
+
+			<div class="col-12 grid-margin stretch-card">
+				<div class="card">
+					<div class="card-body">
+
+						<h4>{lang_documents}</h4>
+						<!-- BEGIN: lst_document -->
+						{form_document}
+						<!-- END: lst_document -->
+					</div>
+				</div>
+			</div>
+
+			<!-- BEGIN: aff_echeances -->
+			<div class="col-12 grid-margin stretch-card">
+				<div class="card">
+					<div class="card-body">
+						<h4>{lang_deadline}</h4>
+						<!-- BEGIN: lst_echeance -->
+						<p>{form_echeance}</p>
+						<!-- END: lst_echeance -->
+					</div>
+				</div>
+			</div>
+			<!-- END: aff_echeances -->
+			<!-- BEGIN: droits -->
+			<div class="col-12 grid-margin stretch-card">
+				<div class="card">
+					<div class="card-body">
+						<h4>{lang_rights}</h4>
+						{form_droits}
+					</div>
+				</div>
+			</div>
+			<!-- END: droits -->
 		</div>
-		<!-- END: aff_echeances -->
-
-		<!-- BEGIN: droits -->
-		<div class="formulaireTitre">{lang_rights}</div>
-		<div  class="formulaire">
-			{form_droits}
-		</div>
-		<!-- END: droits -->
-	
-	</td>
-</tr>
-</table>
-
-
-<!-- BEGIN: submit -->
-<div class="formulaireSubmit">
-	<input type="submit" name="fonc" id="enregistrer" value="{lang_save}">
-	<input type="submit" name="fonc" id="annuler" value="{lang_cancel}">
+	</div>
 </div>
-<!-- END: submit -->
+
+
 
 </FORM>
 
+<script>
+$(function() {
+    $('.file-upload-browse').on('click', function() {
+      var file = $(this).parent().parent().parent().find('#form_photo');
+      file.trigger('click');
+    });
+    $('.file-upload-default').on('change', function() {
+      $(this).parent().find('.form-control').val($(this).val().replace(/C:\\fakepath\\/i, ''));
+    });
+});
+</script>
 <!-- END: corps -->

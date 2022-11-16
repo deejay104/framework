@@ -8,106 +8,17 @@
 
 
 <!-- BEGIN: corps -->
-<form name="echeance" method="post" action="{path_root}/index.php" enctype="multipart/form-data">
+<form name="echeance" method="post" action="{path_root}/admin/echeances" enctype="multipart/form-data">
 	<input type="hidden" name="checktime" value="{form_checktime}">
-	<input type="hidden" name="mod" value="admin">
-	<input type="hidden" name="rub" value="echeances">
-	<br />
-	{aff_tableau}
 
-	<br />
-	<INPUT type="submit" name="fonc" value="Enregistrer"> <INPUT type="submit" name="fonc" value="Annuler">
+<div class="row">
+	<div class="grid-margin stretch-card">
+		<div class="card-body">	
+			{aff_tableau}
+			<INPUT type="submit" class="btn btn-primary" name="fonc" value="Enregistrer"> <INPUT type="submit" class="btn btn-light" name="fonc" value="Annuler">
+		</div>
+	</div>
+</div>
+
 </form>
 <!-- END: corps -->
-
-	<table class="tableauAff tableauAffLight">
-	  <TR>
-		<th width="20">&nbsp;</th>
-		<th width="260">{lang_description}</th>
-		<th width="120">{lang_calendar}</th>
-		<th width="60">{lang_right}</th>
-		<th width="60">{lang_multi}</th>
-		<th width="60">{lang_notif}</th>
-		<th width="60">{lang_delay}</th>
-		<th width="24">&nbsp;</th>
-	  </TR>
-	<!-- BEGIN: lst_echeance -->
-	<tr OnMouseOver="document.getElementById('del_{form_id}').style.display='block';" OnMouseOut="document.getElementById('del_{form_id}').style.display='none';">
-		<td width=20>&nbsp;</TD>
-		<td>
-			<INPUT type="text" name="form_description[{form_id}]" style="width:250px;" value="{form_description}">
-		</td>
-		<td>
-			<select name="form_resa[{form_id}]">
-			<option value="facultatif" {select_resa_facultatif}>Facultatif</option>
-			<option value="instructeur" {select_resa_instructeur}>Instructeur</option>
-			<option value="obligatoire" {select_resa_obligatoire}>Obligatoire</option>
-			</select>
-		</td>
-		<td>
-			<select name="form_droit[{form_id}]">
-				<option value="">Tout le monde</option>
-	<!-- BEGIN: lst_groupe -->
-				<option value="{form_groupe}" {select_groupe}>{form_groupe}</option>
-	<!-- END: lst_groupe -->
-			</select>
-		</td>
-		<td>
-			<select name="form_multi[{form_id}]">
-			<option value="non" {select_multi_non}>Non</option>
-			<option value="oui" {select_multi_oui}>Oui</option>
-			</select>
-		</td>
-		<td>
-			<select name="form_notif[{form_id}]">
-			<option value="non" {select_notif_non}>Non</option>
-			<option value="oui" {select_notif_oui}>Oui</option>
-			</select>
-		</td>
-		<td>
-			<INPUT type="text" name="form_delai[{form_id}]" style="width:50px;" value="{form_delai}" maxlength="3">
-		</td>
-		<td>
-			<a id='del_{form_id}' href="{path_root}/index.php?mod=admin&rub=echeances&fonc=delete&id={form_id}" class='imgDelete' style='display:none;'><img src="{path_root}/{path_module}/img/icn16_supprimer.png" border=0 /></a>
-		</td>
-	</tr>
-	<!-- END: lst_echeance -->
-	<tr>
-		<td width=20>&nbsp;</TD>
-		<td>
-			<INPUT type="text" name="form_description[0]" style="width:250px;" value="">
-		</td>
-		<td>
-			<select name="form_resa[0]">
-			<option value="facultatif">Facultatif</option>
-			<option value="instructeur">Instructeur</option>
-			<option value="obligatoire">Obligatoire</option>
-			</select>
-		</td>
-		<td>
-			<select name="form_droit[0]">
-				<option value="">Tout le monde</option>
-	<!-- BEGIN: lst_groupe -->
-				<option value="{form_groupe}" {select_groupe}>{form_groupe}</option>
-	<!-- END: lst_groupe -->
-			</select>
-		</td>
-		<td>
-			<select name="form_multi[0]">
-			<option value="non">Non</option>
-			<option value="oui">Oui</option>
-			</select>
-		</td>
-		<td>
-			<select name="form_notif[0]">
-			<option value="non">Non</option>
-			<option value="oui">Oui</option>
-			</select>
-		</td>
-		<td>
-			<INPUT type="text" name="form_delai[0]" style="width:50px;" value="30" maxlength="3">
-		</td>
-		<td>
-		</td>
-	</tr>
-	</table>

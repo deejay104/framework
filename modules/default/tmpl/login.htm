@@ -9,6 +9,9 @@
 	</head>
 
 <body onload="setFormFocus();">
+	<style>
+		#loginbox { display:none; }
+	</style>
 
 <!-- BEGIN: logout -->
 	<script language="javascript">
@@ -19,55 +22,6 @@
 		}
 	</script>
 <!-- END: logout -->
-
-	<div id='load' class="preloader5">
-		<span></span>
-		<span></span>
-		<span></span>
-	</div>
-
-	<style>
-		.preloader5 {
-		   display:inline-block;
-		   font-size:0px;
-		   padding:0px;
-		   left:50%;
-		   top:50%;
-		   position: fixed;
-		}
-		.preloader5 span {
-		   vertical-align:middle;
-		   border-radius:100%;
-		   background:#000000;
-		   display:inline-block;
-		   width:10px;
-		   height:10px;
-		   margin:3px 2px;
-		   -webkit-animation:preloader5 0.8s linear infinite alternate;
-		   animation:preloader5 0.8s linear infinite alternate;
-		}
-		.preloader5 span:nth-child(1) {
-		   -webkit-animation-delay:-0.8s;
-		   animation-delay:-0.8s;
-		}
-		.preloader5 span:nth-child(2) {
-		   -webkit-animation-delay:-0.53333s;
-		   animation-delay:-0.53333s;
-		}
-		.preloader5 span:nth-child(3) {
-		   -webkit-animation-delay:-0.26666s;
-		   animation-delay:-0.26666s;
-		}
-		@keyframes preloader5 {
-		   from {transform: scale(0, 0);}
-		   to {transform: scale(1, 1);}
-		}
-		@-webkit-keyframes preloader5 {
-		   from {-webkit-transform: scale(0, 0);}
-		   to {-webkit-transform: scale(1, 1);}
-		}
-	</style>
-
 
 	<script type="text/javascript" src="{rootfolder}/{corefolder}/external/jquery/jquery.min.js"></script>
 	<script type="text/JavaScript" src="{rootfolder}/{corefolder}/static/js/_md5.js"></script>
@@ -80,7 +34,7 @@
 			document.forms[0].username.select();
 		}
 
-		function checkCredrential()
+		function checkCredentials()
 		{
 			username=document.getElementById("username").value;
 			password=MD5(document.getElementById("mypassword").value);
@@ -111,7 +65,7 @@
 					},
 					error : function(response)
 					{
-						console.log("Cannot access authentication api");	
+						console.log("Cannot access authentication api ");	
 					}
 				});
 			});
@@ -169,57 +123,57 @@
 	
 		function loadIndex()
 		{
-			var myload=document.getElementById("load");
-			var mytxt=document.getElementById("authcontent");
-
 			console.log('{var}');
 			<!-- document.location='{var}'; -->
-			document.getElementById("load").style.display='none';
-			document.getElementById("loginbox").style.display='block';
+			$("#load").css("display","none");
+			$("#loginbox").css("display","block");
 			setFormFocus();
 		}
 	</script>
 
-<form METHOD="post" NAME="FormLogin" OnSubmit="checkCredrential(); return false;">
-	<div id='loginbox' style="display:none;">
-		<div class='head'>
-			<a href="/"><img src="{rootfolder}/{site_logo}" alt="Home" border="0"/></a>
-		</div>
-	  
-		<div class="login">
+	<div class="container-scroller">
+		<div class="container-fluid page-body-wrapper full-page-wrapper">
+			<div class="content-wrapper d-flex align-items-center auth px-0">
+				<div class="row w-100 mx-0">
+					<div class="col-lg-4 mx-auto">
 
-			<div class="loginAuthBox">
-				<div class="loginAuthLogo">
-					<ul>
-						<li><img src="{rootfolder}/{corefolder}/static/images/icn64_login.png"></li>
-					  <li><h1>{core_authenticate}</h1></li>
-					</ul>
-				</div>
-			</div>
-				
-			<div class="loginAuthDesc">
-					
-					{core_authtxt}<br />
-					<div id="errormsg" style='color: #ff0000;'></div>
-			</div>
+						<div class="pt-3" id="loginbox">
 
-			<div class="loginIdent">
-				<p><label for="login">{core_user}</label> <input name="username" value="{username}" id="username" maxlength=256></p>
-				<p><label for="pwd">{core_password}</label> <input name="mypassword" value="" type="password" id="mypassword" maxlength=256 /></p>
-			</div>
+							<div class="form-group form-inline">
+							<h1><img src="{rootfolder}/{site_logo}" alt="Home" border="0"/> {core_authenticate}</h1>
+							</div>
 
-			<div id="loginSubmit" class="loginSubmit">
-				<input type="submit" id="fonc" name="fonc" value="{core_connect}">
+							<div class="form-group">
+								{core_authtxt}<br />
+								<div id="errormsg" style='color: #ff0000;'></div>
+							</div>
+
+							<form METHOD="post" NAME="FormLogin" OnSubmit="checkCredentials(); return false;" class="pt-3">
+							<div class="form-group">
+								<input name="username" value="{username}" id="username" class="form-control form-control-lg" maxlength=256 placeholder="{core_user}">
+							</div>
+							<div class="form-group">
+								<input name="mypassword" value="" type="password" id="mypassword" class="form-control form-control-lg" maxlength=256  placeholder="{core_password}">
+							</div>
+
+
+							<div class="mt-3">
+							  <input type="submit" id="fonc" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" name="fonc" value="{core_connect}">
+							</div>
+
+
+							</form>
+						</div>
+						<div id="load" class="row">
+							<div class="circle-loader"></div>		
+						</div>
+
+					</div>
+
 			</div>
 		</div>
-		
-		<div class='footer'>
-			<div class='lastmod'>Version {version}&nbsp;&nbsp;</div>
-		</div>
-	
 	</div>
   
-</form>
 </body>
 </html>
 

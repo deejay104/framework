@@ -13,3 +13,5 @@ function ConfirmeClick(url,texte)
 	var is_confirmed = confirm(texte);
 	if (is_confirmed) { document.location=url; }
   }
+
+

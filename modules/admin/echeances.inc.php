@@ -30,6 +30,7 @@
 					affInformation($err,"error");
 				}
 				$ech->Save();
+				affInformation("Echéances saubegardées","ok");
 			}
 		}
 	}

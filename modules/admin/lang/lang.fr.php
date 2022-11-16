@@ -1,13 +1,4 @@
 <?
-
-$tabLang["lang_configuration"]="Configuration";
-$tabLang["lang_database"]="Base de données";
-$tabLang["lang_groups"]="Groupes";
-$tabLang["lang_deadline"]="Echéances";
-$tabLang["lang_userdata"]="Données Utilisateurs";
-$tabLang["lang_crontab"]="Taches Planifiées";
-$tabLang["lang_emails"]="Emails";
-
 $tabLang["lang_parameter"]="Paramètre";
 $tabLang["lang_variable"]="Variable";
 $tabLang["lang_value"]="Valeur";

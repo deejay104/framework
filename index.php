@@ -381,19 +381,33 @@
 	if ($MyOpt["module"]["ameliorations"]=="on")
 	{
 		$tabMenu["amelioration"]["icone"]=$MyOpt["host"]."/".$corefolder."/static/modules/ameliorations/img/icn32_titre.png";
+		$tabMenu["amelioration"]["icone"]="mdi-bug";
 		$tabMenu["amelioration"]["nom"]=$tabLang["core_improve"];
 		$tabMenu["amelioration"]["droit"]="AccesAmeliorations";
 		$tabMenu["amelioration"]["url"]=geturl("ameliorations","","");
 		$tabMenuPhone["amelioration"]["icone"]=$MyOpt["host"]."/".$corefolder."/static/modules/ameliorations/img/icn48_titre.png";
+		$tabMenuPhone["amelioration"]["icone"]="mdi-bug";
 		$tabMenuPhone["amelioration"]["nom"]="";
 		$tabMenuPhone["amelioration"]["droit"]="AccesAmeliorations";
 		$tabMenuPhone["amelioration"]["url"]=geturl("ameliorations","","");
 	}
 
-	$tabMenu["configuration"]["icone"]=$MyOpt["host"]."/".$corefolder."/static/modules/admin/img/icn32_titre.png";
-	$tabMenu["configuration"]["nom"]=$tabLang["core_configure"];
-	$tabMenu["configuration"]["droit"]="AccesConfiguration";
-	$tabMenu["configuration"]["url"]=geturl("admin","","");
+	$tabMenu["configuration"]=array(
+		"icone"=>$MyOpt["host"]."/".$corefolder."/static/modules/admin/img/icn32_titre.png",
+		"icone"=>"mdi-settings",
+		"nom"=>$tabLang["core_configure"],
+		"droit"=>"AccesConfiguration",
+		"url"=>geturl("admin","",""),
+		"submenu"=>array(
+			array("nom"=>$tabLang["lang_configuration"],"url"=>geturl("admin","config",""),"droit"=>"AccesConfigVar"),
+			array("nom"=>$tabLang["lang_database"],"url"=>geturl("admin","base",""),"droit"=>"AccesConfigBase"),
+			array("nom"=>$tabLang["lang_groups"],"url"=>geturl("admin","groupes",""),"droit"=>"AccesConfigGroupes"),
+			array("nom"=>$tabLang["lang_deadline"],"url"=>geturl("admin","echeances",""),"droit"=>"AccesConfigEcheances"),
+			array("nom"=>$tabLang["lang_userdata"],"url"=>geturl("admin","utildonnees",""),"droit"=>"AccesConfigDonneesUser"),
+			array("nom"=>$tabLang["lang_crontab"],"url"=>geturl("admin","crontab",""),"droit"=>"AccesConfigCrontab"),
+			array("nom"=>$tabLang["lang_emails"],"url"=>geturl("admin","emails",""),"droit"=>"AccesConfigEmails"),
+		),
+	);
 
 
 	if ($theme=="phone")
@@ -405,9 +419,33 @@
 	{
 		if (GetDroit($d["droit"]))
 		{
+			$tmpl_prg->assign("menu_id", $m);
 			$tmpl_prg->assign("menu_icone", $d["icone"]);
 			$tmpl_prg->assign("menu_nom", $d["nom"]);
-			$tmpl_prg->assign("menu_url", $d["url"]);
+	
+			if (isset($d["submenu"]))
+			{
+				$tmpl_prg->assign("menu_url", $d["url"]."#ui-".$m);
+				$tmpl_prg->assign("menu_collapse", 'data-bs-toggle="collapse" aria-expanded="false" aria-controls="ui-'.$m.'"');
+
+				foreach ($d["submenu"] as $mm=>$dd)
+				{
+					if (GetDroit($d["droit"]))
+					{
+						$tmpl_prg->assign("submenu_nom", $dd["nom"]);
+						$tmpl_prg->assign("submenu_url", $dd["url"]);
+						$tmpl_prg->parse("main.menu_lst.menu_lst_sub.menu_lst_sub_item");
+					}
+				}
+				$tmpl_prg->parse("main.menu_lst.menu_lst_sub");
+				$tmpl_prg->parse("main.menu_lst.menu_expand");
+			}
+			else
+			{
+				$tmpl_prg->assign("menu_url", $d["url"]);
+				$tmpl_prg->assign("menu_collapse", "");
+			}
+// $tmpl_prg->assign("menu_url", $d["url"]);
 			$tmpl_prg->parse("main.menu_lst");
 			$tmpl_prg->parse("main.menu_lst_sm");
 		}
@@ -418,7 +456,18 @@
 	{
 		$debug["menu"]=microtime();
 	}
-		
+
+	$lstdoc=ListDocument($sql,$gl_uid,"avatar");
+	if (count($lstdoc)>0)
+	{
+		$doc=new document_core($lstdoc[0],$sql);
+		$tmpl_prg->assign("aff_avatar",$MyOpt["host"]."/".$doc->GenerePath(200,240));
+	}
+	else
+	{
+		$tmpl_prg->assign("aff_avatar",$MyOpt["host"]."/".$corefolder."/static/images/none.gif");
+	}	
+
 // ---- Charge la rubrique
 	$affrub=$rub;
 	while ($affrub!="")

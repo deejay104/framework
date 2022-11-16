@@ -8,27 +8,135 @@
 
 
 <!-- BEGIN: corps -->
+
+
+<form name="form_route" method="post" action="{path_root}/admin/grpdetail" enctype="multipart/form-data">
+<input type="hidden" name="grp" value="{form_grp}">
+<input type="hidden" name="checktime" value="{form_checktime}">
+
+<div class="row">
+	<div class="col-md-7 grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+
+				<div class="form-group row">
+					<label class="col-lg-2  col-form-label">{lang_code}</label>
+					<div class="col-lg-7"><input name="form_grp" class="form-control" value="{form_grp}"></div>
+				</div>
+				<div class="form-group row">
+					<label class="col-lg-2  col-form-label">{lang_description}</label>
+					<div class="col-lg-7"><input name="form_grp" class="form-control" value="{form_desc}"></div>
+				</div>
+				<div class="form-group row">
+					<label class="col-lg-2 col-form-label">{lang_main}</label>
+					<div class="col-lg-2">
+						<div class="form-check">
+						  <label class="form-check-label">
+							<input type="radio" class="form-check-input" name="form_princ" value="oui" {form_princ_oui}>{lang_yes}<i class="input-helper"></i></label>
+						</div>
+                    </div>
+					<div class="col-lg-2">
+						<div class="form-check">
+						  <label class="form-check-label">
+							<input type="radio" class="form-check-input" name="form_princ" value="non" {form_princ_non}>{lang_no}<i class="input-helper"></i></label>
+						</div>
+                    </div>
+				</div>
+
+				<div class="form-group">
+					<input type="submit" class="btn btn-primary" name="fonc" value="{lang_save}">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-5 grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+				<h6>{lang_grpmembers}</h6>
+				<!-- BEGIN: lst_user -->
+				<p>{aff_user}
+				<!-- BEGIN: aff_sup -->
+				<a href="{path_root}/admin/grpdetail?grp={form_grp}&sup={aff_uid}"><i class="mdi mdi-close"></i></a>
+				<!-- END: aff_sup -->
+				</p>
+				<!-- END: lst_user -->
+			</div>
+		</div>
+	</div>
+</div>
+</form>
+
+<style>
+	.adminRouge { background-color:#FFBBAA!important; background-image:none; }		
+
+	.dropBox { display: inline-block; list-style-type: none; margin: 0px; padding: 5px; width: 220px; border: 1px solid #cdd4e0; border-radius: 5px;  margin-right: 10px; vertical-align: top; }
+	.dropBox li { margin: 5px; padding: 2px 5px 2px 5px; width: 200px; background: #{FormulaireBackgroundLight}; font-size:14px; color: #000000; border: 1px solid #cccccc; }
+
+	.dropDisable {  width: 100%!important; }
+	.dropDisable li { margin: 1px; float: left; }
+
+	.ui-tooltip { background-image: none; }
+	
+	.tag-group { background-color: #cdd4e0; font-size:12px!important;  }
+
+</style>
+
+<!-- BEGIN: aff_config -->
+
+<div class="row">
+	<div class="col-md-3 grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+				<h6>{lang_allow} :</h6>
+				<ul id="DropAllow" class="dropBox">
+				<!-- BEGIN: lst_roles_oui -->
+						<li id="id_{aff_role}" class="tag-group" title="{aff_help}">{aff_role}</li>
+				<!-- END: lst_roles_oui -->
+				</ul>
+			</div>
+		</div>
+	</div>
+			
+	<div class="col-md-3 grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+				<h6>{lang_deny} :</h6>
+				<ul id="DropDeny" class="dropBox">
+				<!-- BEGIN: lst_roles_non -->
+						<li id="id_{aff_role}" class="tag-group" title="{aff_help}">{aff_role}</li>
+				<!-- END: lst_roles_non -->
+				</ul>
+			</div>
+		</div>
+	</div>
+		
+	<div class="col-md-6 grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+				<input type="text" id="searchtxt" class="form-control" value="{txtsearch}" placeholder="{lang_txtsearch}" OnKeyPress="CapturePost(event);">
+
+				<ul id="DropDisable" class="dropBox dropDisable">
+					<!-- BEGIN: lst_roles_nok2 -->
+					<span class="tag" id="id_{aff_role}"><span>{aff_role}</span></span>
+					<!-- END: lst_roles_nok2 -->
+					<!-- BEGIN: lst_roles_nok -->
+					<li id="id_{aff_role}" class="tag-group {aff_couleur}" title="{aff_help}">{aff_role}</li>
+					<!-- END: lst_roles_nok -->
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- END: aff_config -->
+
+
 <script type="text/javascript">
 $(function() {
 
-	$(document).tooltip({
-		hide: { duration:0 },
-		show: { duration:0 },
-		position: {
-			my: "center bottom-8",
-			at: "center top-2",
-			using: function( position, feedback ) {
-				$( this ).css( position );
-				$( "<div>" )
-				.addClass( "arrow" )
-				.addClass( feedback.vertical )
-				.addClass( feedback.horizontal )
-				.appendTo( this );
-			}
-		},
-	});
-
-    $( "#DropAllow" ).sortable({
+    $("#DropAllow").sortable({
 		connectWith: "ul",
 		update: function (event, ui) {
 	        var order = $(this).sortable('serialize');
@@ -42,7 +150,7 @@ $(function() {
 		}
     });
 
-    $( "#DropDeny" ).sortable({
+    $("#DropDeny").sortable({
 		connectWith: "ul",
 		update: function (event, ui) {
 	        var order = $(this).sortable('serialize');
@@ -59,8 +167,7 @@ $(function() {
  
 
     $( "#DropDisable" ).sortable({
-      connectWith: "ul"
-
+		connectWith: "ul"
     });
 
  
@@ -69,23 +176,6 @@ $(function() {
 
 
   });
-
-	function ClearText(e,txt) {
-	
-		if(window.event)
-	          {
-	          	//IE
-	          	var t = window.event.srcElement;
-	          } 
-		else
-	          { //firefox
-	          	var t = e.target;
-	          } 
-			
-		if (t.value==txt)
-		  { t.value=''; t.style.color="#000000"; }
-		return;
-	}
 
 	function CapturePost(e) {
 		text="";
@@ -97,79 +187,10 @@ $(function() {
 	
 		if (key==13)
 		 { 
-		 	document.location="{path_root}/index.php?mod=admin&rub=grpdetail&grp={form_grp}&search="+document.getElementById("search").value; 
+		 	document.location="{path_root}/admin/grpdetail?grp={form_grp}&search="+document.getElementById("searchtxt").value; 
 	 	 }
 	}
 
+
 </script>
-
-<form name="form_route" method="post" action="{path_root}/index.php" enctype="multipart/form-data">
-<input type="hidden" name="mod" value="admin">
-<input type="hidden" name="rub" value="grpdetail">
-<input type="hidden" name="grp" value="{form_grp}">
-<input type="hidden" name="checktime" value="{form_checktime}">
-
-<div class="formulaire">
-	<p><label>{lang_code}</label><input name="form_grp" value="{form_grp}" style="width:100px;"></p>
-	<p><label>{lang_description}</label><input name="form_desc" value="{form_desc}" style="width:500px;"></p>
-	<p><label>{lang_main}</label><input type="radio" name="form_princ" value="oui" {form_princ_oui}>{lang_yes} <input type="radio" name="form_princ" value="non" {form_princ_non}> {lang_no}</p>
-	<input type="submit" name="fonc" value="{lang_save}">
-</div>
-</form>
-
-<style>
-	.adminRouge { background-color:#FFBBAA!important; background-image:none; }		
-
-	.dropBox { display: inline-block; list-style-type: none; margin: 0px; padding: 5px; width: 220px; border: 1px solid #000000; border-radius: 5px;  margin-right: 10px; vertical-align: top; }
-	.dropBox li { margin: 5px; padding: 2px 5px 2px 5px; width: 200px; background: #{FormulaireBackgroundLight}; font-size:14px; color: #000000; border: 1px solid #{FormulaireBackgroundNormal}; }
-	.dropBox p { margin: 0px; padding: 2px 5px 2px 5px; width: 100%; font-size:14px; }
-
-	.dropDisable { width: 620px!important; }
-	.dropDisable li { margin: 1px; float: left; }
-
-	.ui-tooltip { background-image: none; }
-</style>
-
-<!-- BEGIN: aff_config -->
-
-<br />
-<div>
-	
-
-
-<ul id="DropAllow" class="dropBox">
-{lang_allow} :<br/>
-<!-- BEGIN: lst_roles_oui -->
-		<li id="id_{aff_role}" class="ui-state-default" title="{aff_help}">{aff_role}</li>
-<!-- END: lst_roles_oui -->
-</ul>
-
-<ul id="DropDeny" class="dropBox">
-{lang_deny} :<br />
-<!-- BEGIN: lst_roles_non -->
-		<li id="id_{aff_role}" class="ui-state-default" title="{aff_help}">{aff_role}</li>
-<!-- END: lst_roles_non -->
-</ul>
-
-<ul id="DropDisable" class="dropBox dropDisable" style="width:620px!important;">
-	<p><input type="text" id="search" value="{lang_txtsearch}"  OnClick="ClearText(event,'{lang_txtsearch}');"  OnKeyPress="CapturePost(event);" style="color:#bbbbbb;"></p>
-<!-- BEGIN: lst_roles_nok -->
-		<li id="id_{aff_role}" class="ui-state-default {aff_couleur}" title="{aff_help}">{aff_role}</li>
-<!-- END: lst_roles_nok -->
-</ul>
-
-<div class="dropBox">
-<p>{lang_grpmembers}</p>
-<!-- BEGIN: lst_user -->
-<p>{aff_user}
-<!-- BEGIN: aff_sup -->
-<a href="{path_root}/index.php?mod=admin&rub=grpdetail&grp={form_grp}&sup={aff_uid}" class='imgDelete'><img src="{path_module}/img/icn16_supprimer.png"></a>
-<!-- END: aff_sup -->
-</p>
-<!-- END: lst_user -->
-</div>
-
-</div>
-<!-- END: aff_config -->
-
 <!-- END: corps -->

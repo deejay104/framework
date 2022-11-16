@@ -239,16 +239,16 @@ class objet_core
 		{
 			if ($type=="text")
 		  	{
-				$ret="<textarea id='".(($formid!="") ? $formid : "").$key."'  name=\"".$formname."[$key]\" rows=5>".$txt."</textarea>";
+				$ret="<textarea id='".(($formid!="") ? $formid : "").$key."' class='form-control' name=\"".$formname."[$key]\" rows=8>".$txt."</textarea>";
 			}
 			else if ($type=="bool")
 		  	{
-				$ret ="<input id='".$key."' type='radio' name=\"".$formname."[$key]\" value='oui' ".(($txt=="oui") ? "checked" : "")."> ".$this->tabLang["yes"][$lang]." ";
-				$ret.="<input id='".$key."' type='radio' name=\"".$formname."[$key]\" value='non' ".(($txt=="non") ? "checked" : "")."> ".$this->tabLang["no"][$lang];
+				$ret="<label class='toggle-switch toggle-switch-success'><input id='".$key."'type='checkbox' ".(($txt=="oui") ? "checked" : "")."><span class='toggle-slider round'></span></label>";
+
 			}
 			else if (($type=="enum") && (isset($this->tabList[$key][$lang])) && (is_array($this->tabList[$key][$lang])))
 			{
-		  	  	$ret ="<select id='".(($formid!="") ? $formid : "").$key."'  name=\"".$formname."[$key]\">";
+		  	  	$ret ="<select id='".(($formid!="") ? $formid : "").$key."' class='form-control form-control-lg' name=\"".$formname."[$key]\">";
 				foreach($this->tabList[$key][$lang] as $k=>$v)
 				{
 					$ret.="<option value=\"".$k."\" ".(($txt==$k) ? "selected" : "").">".$this->tabList[$key][$lang][$k]."</option>";
@@ -258,7 +258,7 @@ class objet_core
 			}
 			else if (($type=="enum") && (isset($this->tabList[$key])) && (is_array($this->tabList[$key])))
 			{
-		  	  	$ret ="<select id='".(($formid!="") ? $formid : "").$key."'  name=\"".$formname."[$key]\">";
+		  	  	$ret ="<select id='".(($formid!="") ? $formid : "").$key."' class='form-control form-control-lg' name=\"".$formname."[$key]\">";
 				foreach($this->tabList[$key] as $k=>$v)
 				{
 					$ret.="<option value=\"".$k."\" ".(($txt==$k) ? "selected" : "").">".$this->tabList[$key][$k]."</option>";
@@ -268,12 +268,17 @@ class objet_core
 			}
 			else if (($type=="radio") && (is_array($this->tabList[$key][$lang])))
 			{
-		  	  	$ret ="";
+		  	  	$ret ="<div class='form-inline'>";
 				foreach($this->tabList[$key][$lang] as $k=>$v)
 				{
-					$ret.="<input id='".(($formid!="") ? $formid : "").$key."_".$k."' type='radio' name=\"".$formname."[$key]\" value=\"".$k."\" ".(($txt==$k) ? "checked" : "").">".$this->tabList[$key][$lang][$k]." ";
-				}
+					// $ret.="<input id='".(($formid!="") ? $formid : "").$key."_".$k."' type='radio' class='form-control'  name=\"".$formname."[$key]\" value=\"".$k."\" ".(($txt==$k) ? "checked" : "").">".$this->tabList[$key][$lang][$k]." ";
 
+
+					$ret.="<div class='form-check'>";
+					$ret.='<label class="form-check-label"><input id="'.(($formid!="") ? $formid : "").$key."_".$k.'" type="radio" class="form-check-input" name="'.$formname.'['.$key.']" value="'.$k.'" '.(($txt==$k) ? "checked" : "").'>'.$this->tabList[$key][$lang][$k].'<i class="input-helper"></i></label>&nbsp;';
+					$ret.="</div>";
+				}
+				$ret.="</div>";
 			}
 			else if (($type=="multi") && (isset($this->tabList[$key][$lang])) && (is_array($this->tabList[$key][$lang])))
 			{
@@ -287,7 +292,8 @@ class objet_core
 				$ret="<span>";
 				foreach($this->tabList[$key][$lang] as $k=>$v)
 				{
-					$ret.="<input type='checkbox' name='".$formname."[".$key."][".$k."]' value='".$k."' ".(((isset($tt[$k])) && ($tt[$k]=="on")) ? "checked" : "")."> ".$this->tabList[$key][$lang][$k]."<br />";
+					// $ret.="<input type='checkbox' class='form-check-input'  name='".$formname."[".$key."][".$k."]' value='".$k."' ".(((isset($tt[$k])) && ($tt[$k]=="on")) ? "checked" : "")."> ".$this->tabList[$key][$lang][$k]."<br />";
+					$ret.="<div class='form-check form-check-primary'><label class='form-check-label'><input type='checkbox' class='form-control' name='".$formname."[".$key."][".$k."]' ".(((isset($tt[$k])) && ($tt[$k]=="on")) ? "checked" : "")." value='".$k."' /> ".$this->tabList[$key][$lang][$k]."<i class='input-helper'></i></label></div>";
 				}
 				$ret.="</span>";
 			}
@@ -303,7 +309,7 @@ class objet_core
 				$ret="<span>";
 				foreach($this->tabList[$key] as $k=>$v)
 				{
-					$ret.="<input type='checkbox' name='".$formname."[".$key."][".$k."]' value='".$k."' ".(((isset($tt[$k])) && ($tt[$k]=="on")) ? "checked" : "")."> ".$v."<br />";
+					$ret.="<input type='checkbox' class='form-control' name='".$formname."[".$key."][".$k."]' value='".$k."' ".(((isset($tt[$k])) && ($tt[$k]=="on")) ? "checked" : "")."> ".$v."<br />";
 				}
 				$ret.="</span>";
 			}
@@ -311,21 +317,21 @@ class objet_core
 			{
 				// $ret=sql2date($ret);
 				$type="date";
-				$ret="<INPUT id='".(($formid!="") ? $formid : "").$key."_jour'  name=\"".$formname."[$key][date]\" value=\"".date2sql(sql2date($txt,"jour"))."\" type=\"date\"> ";
-				$ret.="<INPUT id='".(($formid!="") ? $formid : "").$key."_heure'  name=\"".$formname."[$key][time]\" value=\"".sql2time($txt)."\" type=\"time\" style=\"width:110px!important;\">";
+				$ret="<INPUT id='".(($formid!="") ? $formid : "").$key."_jour' class='form-control'  name=\"".$formname."[$key][date]\" value=\"".date2sql(sql2date($txt,"jour"))."\" type=\"date\" style=\"width:160px!important;\"> ";
+				$ret.="<INPUT id='".(($formid!="") ? $formid : "").$key."_heure' class='form-control'  name=\"".$formname."[$key][time]\" value=\"".sql2time($txt)."\" type=\"time\" style=\"width:140px!important;\">";
 			}
 			else if ($type=="date")
 			{
-				$ret="<INPUT id='".(($formid!="") ? $formid : "").$key."'  name=\"".$formname."[$key]\" value=\"".date2sql(sql2date($txt,"jour"))."\" type=\"date\">";
+				$ret="<INPUT id='".(($formid!="") ? $formid : "").$key."' class='form-control'  name=\"".$formname."[$key]\" value=\"".date2sql(sql2date($txt,"jour"))."\" type=\"date\" style=\"width:160px!important;\">";
 			}
 			else if ($type=="price")
 			{
-				$ret="<INPUT id='".(($formid!="") ? $formid : "").$key."'  name=\"".$formname."[$key]\" value=\"".$txt."\" type=\"number\" step=\"0.01\" style='width:80px!important;'>";
+				$ret="<INPUT id='".(($formid!="") ? $formid : "").$key."' class='form-control'  name=\"".$formname."[$key]\" value=\"".$txt."\" type=\"number\" step=\"0.01\" style='width:150px!important;'>";
 			}
 			else if ($type=="duration")
 			{
 				$len=80;
-				$ret="<INPUT id='".(($formid!="") ? $formid : "").$key."'  name=\"".$formname."[$key]\" value=\"".$txt."\" style='width:80px!important;'>";
+				$ret="<INPUT id='".(($formid!="") ? $formid : "").$key."' class='form-control'  name=\"".$formname."[$key]\" value=\"".$txt."\" style='width:80px!important;'>";
 			}
 			else if (is_array($txt))
 			{
@@ -334,7 +340,7 @@ class objet_core
 			else
 			{
 				$type=(isset($type)) ? $type : "text";
-				$ret="<INPUT id='".(($formid!="") ? $formid : "").$key."' name=\"".$formname."[$key]\" value=\"".$txt."\" ".(($type!="") ? "type=\"".$type."\"" : "")." ".((($len>0) && ($theme!="phone")) ? "style='width:".$len."px!important;'" : "")." ".((isset($this->fields[$key]["len"]) && ($this->fields[$key]["len"]>0)) ? "maxlength='".$this->fields[$key]["len"]."'" : "").">";
+				$ret="<INPUT id='".(($formid!="") ? $formid : "").$key."' name=\"".$formname."[$key]\" value=\"".$txt."\" ".(($type!="") ? "type=\"".$type."\"" : "")." class='form-control' ".((isset($this->fields[$key]["len"]) && ($this->fields[$key]["len"]>0)) ? "maxlength='".$this->fields[$key]["len"]."'" : "").">";
 			}
 		}
 		else
@@ -419,7 +425,7 @@ class objet_core
 			{
 				$link=false;
 				$type=(isset($type)) ? $type : "text";
-				$ret="<INPUT value=\"".$ret."\" ".(($type!="") ? "type=\"".$type."\"" : "")." ".(($len>0) ? "style='width:".$len."px!important;'" : "")." readonly style='background-color:#eeeeee;'>";
+				$ret="<INPUT class='form-control' value=\"".$ret."\" ".(($type!="") ? "type=\"".$type."\"" : "")." ".(($len>0) ? "style='width:".$len."px!important;'" : "")." readonly style='background-color:#eeeeee;'>";
 			}
 
 			

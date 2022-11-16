@@ -25,10 +25,10 @@
 
 
 // ---- Affiche les bouttons
-	addPageMenu($corefolder,$mod,"Rechercher",geturl("docs","recherche",""),"icn32_rechercher.png",false,"","showSearch();");
+	// addPageMenu($corefolder,$mod,"Rechercher",geturl("docs","recherche",""),"icn32_rechercher.png",false,"","showSearch();");
 	if (GetDroit("CreeDossier"))
 	{
-		addPageMenu($corefolder,$mod,"Nouveau dossier",geturl("docs","editer","fid=0&fpars=0&fprec=liste"),"icn32_nouveau.png",false,"","createFolder();");
+		addPageMenu($corefolder,$mod,"Nouveau dossier","","",false,"","createFolder();");
 	}
 
 	$tmpl_x->assign("FormulaireBackgroundDark",$MyOpt["styleColor"]["FormulaireBackgroundDark"]);

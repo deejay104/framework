@@ -186,7 +186,7 @@ class echeance_core extends objet_core
 			}
 			$ret.="r=r+\"</select>&nbsp;\";\n";
 
-			$ret.="r=r+\"<input name='form_echeance[a\"+i+\"]' value='' type='date' style='width: 140px;' OnChange='AddEcheance(\"+(i+1)+\");'><div id='echeance_\"+(i+1)+\"'></div>\";\n";
+			$ret.="r=r+\"<input name='form_echeance[a\"+i+\"]' class='form-control' value='' type='date' style='width: 140px;' OnChange='AddEcheance(\"+(i+1)+\");'><div id='echeance_\"+(i+1)+\"'></div>\";\n";
 			$ret.="var d=document.getElementById('echeance_'+i);\n";
 			$ret.="d.innerHTML=r;\n";
 				
@@ -202,10 +202,10 @@ class echeance_core extends objet_core
 		}
 		else if ( ($this->editmode=="edit") && (GetDroit($this->droit)) )
 		{
-			$ret.="<div id='aff_echeance".$this->id."' OnMouseOver='document.getElementById(\"echeance_del_".$this->id."\").style.visibility=\"visible\";' OnMouseOut='document.getElementById(\"echeance_del_".$this->id."\").style.visibility=\"hidden\";'>";
+			$ret.="<div id='aff_echeance".$this->id."' OnMouseOver='document.getElementById(\"echeance_del_".$this->id."\").style.display=\"inline-block\";' OnMouseOut='document.getElementById(\"echeance_del_".$this->id."\").style.display=\"none\";'>";
 			$ret.="<p>";
-			$ret.=$tabLang["lang_echeance"]." ".$this->description." ".$tabLang["core_the"]." <input name='form_echeance[".$this->id."]' id='form_echeance".$this->id."' value='".$this->dte_echeance."' type='date' style='width: 165px;'>&nbsp;";
-			$ret.="<a href=\"#\" OnClick=\"document.getElementById('form_echeance".$this->id."').value=''; document.getElementById('aff_echeance".$this->id."').style.display='none';\" class='imgDelete'><img  id='echeance_del_".$this->id."' src='".$MyOpt["host"]."/".$corefolder."/static/images/icn16_supprimer.png' style='visibility:hidden;'></a>";
+			$ret.=$tabLang["lang_echeance"]." ".$this->description." ".$tabLang["core_the"]." <input name='form_echeance[".$this->id."]' id='form_echeance".$this->id."' class='form-control' value='".$this->dte_echeance."' type='date' style='width: 165px;'>&nbsp;";
+			$ret.="<a href=\"#\" OnClick=\"document.getElementById('form_echeance".$this->id."').value=''; document.getElementById('aff_echeance".$this->id."').style.display='none';\" class='imgDelete'><img  id='echeance_del_".$this->id."' src='".$MyOpt["host"]."/".$corefolder."/static/images/icn16_supprimer.png' style='display:none;'></a>";
 			$ret.="</p>";
 			$ret.="</div>";
 		}

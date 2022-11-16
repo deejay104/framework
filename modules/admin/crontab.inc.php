@@ -113,7 +113,7 @@
 		$tabValeur[$i]["actif"]["val"]=$sql->data["actif"];
 		$tabValeur[$i]["actif"]["aff"]="<div id='actif_".$sql->data["id"]."' class='fieldAdmin'><a id='actif_".$sql->data["id"]."_val' onClick='SwitchOn(\"actif\",".$sql->data["id"].")'>".$sql->data["actif"]."</a></div>";
 		$tabValeur[$i]["action"]["val"]="Démarrer";
-		$tabValeur[$i]["action"]["aff"]="<div class='fieldAdmin'><a href='index.php?mod=admin&rub=crontab&id=".$sql->data["id"]."&fonc=start'>Démarrer</a></div>";
+		$tabValeur[$i]["action"]["aff"]="<div class='fieldAdmin'><a href='/admin/crontab?id=".$sql->data["id"]."&fonc=start'>Démarrer</a></div>";
 	}
 	
 	if ((!isset($order)) || ($order=="")) { $order="groupe"; }
