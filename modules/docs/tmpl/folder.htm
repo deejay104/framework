@@ -8,56 +8,72 @@
 <!-- BEGIN: corps -->
 <style>
 
-.contentFiles { min-height:32px; padding-top:5px; border:1px solid #{FormulaireBackgroundDark}; background-color:#{FormulaireBackgroundLight}; text-align: center; margin-bottom:5px;}
+.contentFiles { text-align: center;}
 .contentFiles:hover { background-color:#{LineBackgroundHover}; color:#{TextBackgroundHover}; }
+.contentFiles { cursor: pointer; }
 .contentFiles label { cursor: pointer; }
 
-
-
-
 </style>
+
 <div class="row">
 	<div class="grid-margin stretch-card">
 		<div class="card">
 			<div class="card-body">	
-				<div class='form-inline'>
-					<label class="col-lg-2  col-form-label">Filtrer par</label>
-					<select id='selectFilter' class='form-control' onChange='loadPapers();'>
-						<option value="active">Documents actifs</option>
-						<option value="all">Tous</option>
-					</select>
+				<div class="row">	
+					<div class="col-lg-3">
+							<label class="col-lg-4">Filtrer par</label>
+							<select id='selectFilter' class='col-lg-7 form-control' onChange='loadPapers();'>
+								<option value="active">Documents actifs</option>
+								<option value="all">Tous</option>
+							</select>
 
-					<label class="col-lg-2  col-form-label">en date du</label><input id='selectDate' class='form-control' type="date" value='{form_today}'  onChange='loadPapers();'>
+					</div>
 
-					<label class="col-lg-2  col-form-label">Trier par</label>
-					<select id='selectSort' class='form-control' onChange='loadPapers();'>
-						<option value="dte_creat">Date</option>
-						<option value="title">Titre</option>
-						<option value="uid_creat">Auteur</option>
-					</select>
+					<div class="col-lg-3">
+
+							<label class="col-lg-4">en date du</label>
+							<input id='selectDate' class='col-lg-7 form-control' type="date" value='{form_today}'  onChange='loadPapers();'>
+
+					</div>
+
+					<div class="col-lg-3">
+							<label class="col-lg-4">Trier par</label>
+							<select id='selectSort' class='col-lg-7 form-control' onChange='loadPapers();'>
+								<option value="dte_creat">Date</option>
+								<option value="title">Titre</option>
+								<option value="uid_creat">Auteur</option>
+							</select>
+					</div>
+
+					<div class="col-lg-3">
+							<input type='text' id='crit' value='{crit}' class="form-control" OnKeyUp="searchkey(event);" autocomplete="off" placeholder="Rechercher"/>
+					</div>
 				</div>
 			</div>
-		</div>
-	</div>
-</div>
 
 <!-- BEGIN: createdoc -->
-<div class="row">
-	<div class="grid-margin stretch-card">
-		<div class="card">
 			<div class="card-body">	
-
-				<div id='newContentFile' class='contentFiles'>
-					<label for='newFile' style='display: inline-block;'><p id='newContentText'>Nouveau Document</p></label>
-					<input id='newFile' type='file' style='display:none'>
+				<div class="row">	
+					<div id='newContentFile' class='contentFiles form-control'>
+						<label for='newFile'><p id='newContentText'><i class="mdi mdi-cloud-upload"></i> Nouveau Document</p></label>
+						<input id='newFile' type='file' style='display:none'>
+					</div>
 				</div>
 			</div>
+<!-- END: createdoc -->
+
 		</div>
 	</div>
 </div>
-<!-- END: createdoc -->
 
-<div id='lstPapers'>
+<div class="row">
+	<div class="grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body row">	
+				<div id='lstPapers'></div>
+			</div>
+		</div>
+	</div>
 </div>
 	
 
@@ -107,8 +123,8 @@
 					<div class="form-group row">
 						<label class="col-lg-2  col-form-label"></label>
 						<div class="col-lg-7">
-							<div id='addContentFile'>
-								<label for='addFile' style='display: inline-block;'><p id='addContentText' class='form-control'>Ajouter Document</p></label>
+							<div id='addContentFile' class='contentFiles form-control'>
+								<label for='addFile' style='display: inline-block;'><p id='addContentText'>Ajouter Document</p></label>
 								<input id='addFile' type='file' style='display:none'>
 							</div>
 						</div>
@@ -129,24 +145,15 @@
 					</div>
 
 					<div class="form-group row">
-						<label class="col-lg-2  col-form-label"></label>
-						<div class="col-lg-7" id="contentComment">
+						<label class="col-lg-2 col-form-label"></label>
+						<div class="col-lg-7">
+							<div class="profile-feed" id="contentComment"></div>
 						</div>
-					</div>
+					</div>	
 
 				</div>
 			</div>
 		</div>
-	</div>
-</div>
-
-
-<div id='search' class='searchBox'>
-	<p>Rechercher un document :</p>
-	<input type='text' id='crit' value='{crit}' class='searchBoxInput' OnKeyUp="searchkey(event);" autocomplete="off"/>
-	<div style='position:absolute; right:10px; margin-top:4px; '>
-		<input type='submit' value='Chercher' onClick='searchApply();'>
-		<input type='submit' value='Annuler' onClick='searchCancel();'>
 	</div>
 </div>
 
@@ -171,19 +178,10 @@ function loadPapers()
 		//divPaper.innerHTML="";
 		<!-- divDescription=document.getElementById("lstDescription"); -->
 		<!-- divDescription.innerHTML=""; -->
+		$("#lstPapers").html("");
 
 		for (var key in data.data)
 		{
-			var txtFiles="<div class='paperBox'>";
-			txtFiles=txtFiles+"<div id='paperTitle_"+data.data[key].id+"' onclick='loadContent("+data.data[key].id+");' class='paperTitle'><p>"+data.data[key].title+"</p></div>";
-			txtFiles=txtFiles+"<div class='paperAuthor'><p>par "+data.data[key].author+", "+data.data[key].created+"</p></div>";
-			txtFiles=txtFiles+"<div id='paperDocument_"+data.data[key].id+"'>";
-			for (var ii in data.data[key].doc)
-			{
-				txtFiles=txtFiles+"<div class='paperDocument'>"+data.data[key].doc[ii]+"</div>";
-			}
-			txtFiles=txtFiles+"</div>";
-
 			txt='<div class="d-flex align-items-start profile-feed-item">';
 			txt=txt+'<div class="ml-4">';
 			txt=txt+"<div id='paperTitle_"+data.data[key].id+"' onclick='loadContent("+data.data[key].id+");' class='link-hover'><h5>"+data.data[key].title+"</h5></div>";
@@ -459,14 +457,42 @@ function closeContent()
 
 function showComment(avatar,txt,author,created)
 {
-	var newComment="<div style=''>";
-	newComment=newComment+"<div style='display:inline-block; vertical-align: top;'><img src='/"+avatar+"'></div>";
-	newComment=newComment+"<div class='commentTxt'><p>"+txt+"</p>";
-	newComment=newComment+"<div style='font-size:8px; text-decoration:italic; padding-left:5px;'>par "+author+" "+created+"</div></div>";
+	var newComment="<div class='d-flex align-items-start profile-feed-item'>";
+	newComment=newComment+"<img src='/"+avatar+"' class='img-sm rounded-circle'>";
+	newComment=newComment+"<div class='ml-2'>";
+	newComment=newComment+"<h6>"+author+" <small class='ml-4 text-muted'><i class='mdi mdi-clock mr-1'></i>"+created+"</small></h6>";
+	newComment=newComment+"<p>"+txt+"</p>";
 	newComment=newComment+"</div>";
+	newComment=newComment+"</div>";
+
 	$("#contentComment").html($("#contentComment").html()+newComment);
 }
 
+/*
+<div class="d-flex align-items-start profile-feed-item">
+                          <img src="../../../../images/faces/face13.jpg" alt="profile" class="img-sm rounded-circle">
+                          <div class="ml-4">
+                            <h6>
+                              Mason Beck
+                              <small class="ml-4 text-muted"><i class="mdi mdi-clock mr-1"></i>10 hours</small>
+                            </h6>
+                            <p>
+                              There is no better advertisement campaign that is low cost and also successful at the same time.
+                            </p>
+                            <p class="small text-muted mt-2 mb-0">
+                              <span>
+                                <i class="mdi mdi-star mr-1"></i>4
+                              </span>
+                              <span class="ml-2">
+                                <i class="mdi mdi-comment mr-1"></i>11
+                              </span>
+                              <span class="ml-2">
+                                <i class="mdi mdi-reply"></i>
+                              </span>
+                            </p>
+                          </div>
+                        </div>
+						*/
 
 
 function showSearch()

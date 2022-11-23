@@ -1042,7 +1042,7 @@ function AfficheTableauRemote($tabTitre="",$url,$order="",$trie="d",$search,$nbl
 	{
 		$idtbl=uniqid("tbl_");
 	}
-	$ret ="\n<table id='".$idtbl."' class='table table-hover'>\n";
+	$ret ="\n<div class='table-responsive'><table id='".$idtbl."' class='table table-hover'>\n";
 
 	$ret.="<thead><tr>";
 
@@ -1109,7 +1109,7 @@ function AfficheTableauRemote($tabTitre="",$url,$order="",$trie="d",$search,$nbl
 		// $ret.=$subb;
 		// $ret.="</tfoot>";
 	// }
-	$ret.="</table>\n";
+	$ret.="</table></div>\n";
 
 	$ret.="<link rel='stylesheet' type='text/css' href='".$MyOpt["host"]."/core/external/jquery/css/dataTables.min.css' />";
 	$ret.="<script type='text/javascript' src='".$MyOpt["host"]."/core/external/jquery/jquery.dataTables.min.js'></script>";

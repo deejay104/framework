@@ -45,21 +45,25 @@
 	<INPUT type="hidden" name="id" value="{form_id}">
 	<INPUT type="hidden" name="checktime" value="{form_checktime}">
 
-	<p class="lastupdate">Dernière mise à  jour : {form_usr_maj} {form_dte_maj}</p>
-
-	<div class='actualitesBloc'>
-		<div class="actualitesPhoto" >
-			<img src="{form_avatar}" alt="">
+<div class="row">
+	<div class="col-md-12 border-top">
+		<div class="d-flex ">
+			<div class="ml-4 small">
+				Dernière mise à  jour : {form_usr_maj} {form_dte_maj}
+			</div>
 		</div>
-		<div class="actualitesMessage">
-			<div class="actualitesTitre">
-				<div class="actualitesTitreMsg">
+	</div>
+</div>
+
+<div class="row">
+	<div class="grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+
 					<a name="id{msg_id}"></a>
 					<p>{form_titre}</p>
 					<span>par {form_usr_maj}, {form_dte_maj}</span>
-				</div>
-			</div>
-			<div class='formulaire' style='border: 0px; padding-left:30px;'>
+
 			<p><label>Numéro</label>{form_numid}</p>
 			<p><label>Status</label>{form_status}</p>
 			<p><label>Version</label>{form_version}</p>
@@ -67,24 +71,30 @@
 			</div>
 		</div>
 	</div>
-	<div style='margin-left:72px; width:80%;'>
+</div>
+<div class="row">
+	<div class="grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
 			{form_description}
+			</div>
+		</div>
 	</div>
-
-
+</div>
 
 <!-- BEGIN: submit -->
-	<div class="formulaireSubmit" style="padding-left:55px;">
-		<input type="submit" name="fonc" id="enregistrer" value="Enregistrer">
-		<input type="submit" name="fonc" id="annuler" value="Annuler">
+<div class="row">
+	<div class="grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+				<input type="submit" name="fonc" class="btn btn-primary" id="enregistrer" value="Enregistrer">
+				<input type="submit" name="fonc" class="btn btn-light" id="annuler" value="Annuler">
+			</div>
+		</div>
 	</div>
-<!-- END: submit -->
+</div><!-- END: submit -->
 
 </form>
-<br />
-
-
-
 
 <!-- BEGIN: aff_commentaire -->
 	<div class='actualitesBloc'>
@@ -114,18 +124,24 @@
 <!-- END: aff_commentaire -->
 
 <!-- BEGIN: aff_commentaire_vide -->
-<div id="form_reponse" class="actualitesNouveau">
-	<form name="form_reponse" method="post" action="{path_root}/index.php" enctype="multipart/form-data">
-		<input type="hidden" name="mod" value="ameliorations">
-		<input type="hidden" name="rub" value="detail">
-		<input type="hidden" name="id" value="{form_id}">
-		<input type="hidden" name="checktime" value="{form_checktime}">
+<div class="row">
+	<div class="grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+				<form name="form_reponse" method="post" action="{path_root}/index.php" enctype="multipart/form-data">
+					<input type="hidden" name="mod" value="ameliorations">
+					<input type="hidden" name="rub" value="detail">
+					<input type="hidden" name="id" value="{form_id}">
+					<input type="hidden" name="checktime" value="{form_checktime}">
 				
-		<textarea name="form_desc" OnClick="ClearText(event,'{reponse_vide}');"  style="color:#bbbbbb; height:51px;">{reponse_vide}</textarea>
-		<p>
-		<input type="submit" name="fonc" value="Poster">
-		</p>
-	</form>
+					<textarea name="form_desc" class="form-control" placeholder="{reponse_vide}" rows="4"></textarea>
+					<p>
+					<input type="submit" name="fonc" class="btn btn-light" value="Poster">
+					</p>
+				</form>
+			</div>
+		</div>
+	</div>
 </div>
 <!-- END: aff_commentaire_vide -->
 
