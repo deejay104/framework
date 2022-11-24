@@ -21,13 +21,16 @@
 	<script src="{corefolder}/static/js/template.js"></script>
 	<script src="{corefolder}/static/js/off-canvas.js"></script>
 
+
   <div class="container-scroller">
 
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-      <div class="text-center navbar-brand-wrapper d-flex align-items-center">
+      <div id="navbar-icon" class="text-center navbar-brand-wrapper align-items-center">
         <a class="navbar-brand brand-logo" href="/"><img src="{site_logo}" alt="logo"/></a>
         <a class="navbar-brand brand-logo-mini" href="/"><img src="{site_logo}" alt="logo"/></a>
       </div>
+
+
       <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
         <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
           <span class="mdi mdi-menu"></span>
@@ -40,13 +43,21 @@
                   <i class="mdi mdi-magnify"></i>
                 </span>
               </div>
-              <input type="text" class="form-control" placeholder="Search for anything..." aria-label="search" aria-describedby="search">
+              <input type="text" class="form-control" placeholder="Rechercher sur le site..." aria-label="search" aria-describedby="search">
             </div>
           </li>
+
+          <li class="align-self-left d-block d-sm-none" style="width: 320px; z-index:999;">
+			<div class='icone'><a href="{rootfolder}/"><i class="mdi mdi-home menu-icon"></i></a></div>
+<!-- BEGIN: menu_lst_phone -->
+			<div class='icone'><a href="{menu_url}"><i class="mdi {menu_icone}"></i></a></div>
+<!-- END: menu_lst_phone -->
+			</li>
+
         </ul>
-        <ul class="navbar-nav navbar-nav-right">
+        <ul id="navbar-profile" class="navbar-nav navbar-nav-right d-none">
           <li class="nav-item dropdown">
-            <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center" id="notificationDropdown" href="#" data-toggle="dropdown">
+            <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
               <i class="mdi mdi-bell-outline mx-0"></i>
               <span class="count"></span>
             </a>
@@ -55,14 +66,27 @@
 
               <a class="dropdown-item preview-item">
                 <div class="preview-thumbnail">
-                  <div class="preview-icon bg-success">
-                    <i class="mdi mdi-information mx-0"></i>
+                  <div class="preview-icon bg-warning">
+                    <i class="mdi mdi-alert mx-0"></i>
                   </div>
                 </div>
                 <div class="preview-item-content">
-                  <h6 class="preview-subject font-weight-normal">Application Error</h6>
+                  <h6 class="preview-subject font-weight-normal">Echéance CEN F-ZZZZ</h6>
                   <p class="font-weight-light small-text mb-0 text-muted">
-                    Just now
+                    31/07/2019
+                  </p>
+                </div>
+              </a>
+              <a class="dropdown-item preview-item">
+                <div class="preview-thumbnail">
+                  <div class="preview-icon bg-danger">
+                    <i class="mdi mdi-close-circle mx-0"></i>
+                  </div>
+                </div>
+                <div class="preview-item-content">
+                  <h6 class="preview-subject font-weight-normal">Echéance CEN F-YYYY</h6>
+                  <p class="font-weight-light small-text mb-0 text-muted">
+                    31/07/2019
                   </p>
                 </div>
               </a>

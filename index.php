@@ -385,6 +385,7 @@
 		$tabMenu["amelioration"]["nom"]=$tabLang["core_improve"];
 		$tabMenu["amelioration"]["droit"]="AccesAmeliorations";
 		$tabMenu["amelioration"]["url"]=geturl("ameliorations","","");
+
 		$tabMenuPhone["amelioration"]["icone"]=$MyOpt["host"]."/".$corefolder."/static/modules/ameliorations/img/icn48_titre.png";
 		$tabMenuPhone["amelioration"]["icone"]="mdi-bug";
 		$tabMenuPhone["amelioration"]["nom"]="";
@@ -410,10 +411,10 @@
 	);
 
 
-	if ($theme=="phone")
-	{
-		$tabMenu=$tabMenuPhone;
-	}
+	// if ($theme=="phone")
+	// {
+		// $tabMenu=$tabMenuPhone;
+	// }
 
 	foreach ($tabMenu as $m=>$d)
 	{
@@ -447,7 +448,15 @@
 			}
 // $tmpl_prg->assign("menu_url", $d["url"]);
 			$tmpl_prg->parse("main.menu_lst");
-			$tmpl_prg->parse("main.menu_lst_sm");
+		}
+	}
+	foreach ($tabMenuPhone as $m=>$d)
+	{
+		if (GetDroit($d["droit"]))
+		{
+			$tmpl_prg->assign("menu_icone", $d["icone"]);
+			$tmpl_prg->assign("menu_url", $d["url"]);
+			$tmpl_prg->parse("main.menu_lst_phone");
 		}
 	}
 	

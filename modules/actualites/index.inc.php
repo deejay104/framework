@@ -122,13 +122,13 @@
 	}
 	else
 	{
-		$tmpl_x->assign("news_title", $langTab["lang_newpost"]);
-		$tmpl_x->assign("news_message", $langTab["lang_newmsg"]);
+		$tmpl_x->assign("news_title", $tabLang["lang_newpost"]);
+		$tmpl_x->assign("news_message", $tabLang["lang_newmsg"]);
 		$tmpl_x->assign("new_color", "bbbbbb");	
 	}
 
-	$tmpl_x->assign("news_title_clear", $langTab["lang_newpost"]);
-	$tmpl_x->assign("news_message_clear", $langTab["lang_newmsg"]);
+	$tmpl_x->assign("news_title_clear", $tabLang["lang_newpost"]);
+	$tmpl_x->assign("news_message_clear", $tabLang["lang_newmsg"]);
 	$tmpl_x->assign("form_id", $id);
 	
 // ---- Personalisation

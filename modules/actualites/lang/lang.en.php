@@ -4,9 +4,9 @@
 	$tabLang["lang_search"]="Search";
 	$tabLang["lang_searchterms"]="Words to search";
 	$tabLang["lang_post"]="Post";
-	$langTab["lang_newpost"]="New post";
-	$langTab["lang_newmsg"]="Write your message...";
-	$langTab["lang_delpost"]="Do you wantto delete this post ?";
+	$tabLang["lang_newpost"]="New post";
+	$tabLang["lang_newmsg"]="Write your message...";
+	$tabLang["lang_delpost"]="Do you wantto delete this post ?";
 	$tabLang["lang_upload"]="Upload in progress";
 
 ?>

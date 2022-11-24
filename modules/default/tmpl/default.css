@@ -29900,7 +29900,7 @@ div.tagsinput span.tag a {
 .navbar .navbar-brand-wrapper {
   background: #{TitleBackgroundNormal};
   border-right: 1px solid #{TitleBackgroundNormal};
-  padding: 0.6rem 1.25rem;
+  padding: 0px;
   transition: width 0.25s ease, background 0.25s ease;
   -webkit-transition: width 0.25s ease, background 0.25s ease;
   -moz-transition: width 0.25s ease, background 0.25s ease;
@@ -29916,7 +29916,7 @@ div.tagsinput span.tag a {
 
 @media (max-width: 991px) {
   .navbar .navbar-brand-wrapper {
-    padding: .9rem;
+    padding: 0px;
   }
 }
 
@@ -29924,7 +29924,7 @@ div.tagsinput span.tag a {
   color: #27367f;
   font-size: 1.5rem;
   margin-right: 0;
-  padding: .25rem 0;
+  padding: 0px;
 }
 
 .navbar .navbar-brand-wrapper .navbar-brand.brand-logo-mini {
@@ -29948,8 +29948,8 @@ div.tagsinput span.tag a {
 }
 
 .navbar .navbar-brand-wrapper .brand-logo-mini img {
-  width: calc(70px - 30px);
-  height: 22px;
+  /* width: calc(70px - 30px); */
+  /* height: 22px; */
   max-width: 100%;
   margin: auto;
 }
@@ -29970,9 +29970,15 @@ div.tagsinput span.tag a {
 
 @media (max-width: 991px) {
   .navbar .navbar-menu-wrapper {
-    width: calc(100% - 55px);
+    width: calc(100% - 240px);
     padding-left: 15px;
     padding-right: 15px;
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar .navbar-menu-wrapper {
+    width: calc(100% - 0px);
   }
 }
 
@@ -30645,7 +30651,7 @@ div.tagsinput span.tag a {
     flex-direction: row;
   }
   .navbar .navbar-brand-wrapper {
-    width: 55px;
+    width: 240px;
   }
   .navbar .navbar-brand-wrapper .navbar-brand.brand-logo {
     display: none;
@@ -31375,6 +31381,23 @@ div.tagsinput span.tag a {
 }
 .link-hover:hover {
 	color: #{TextBackgroundHover};
+}
+.icone { display: inline-block; background-color: #f4f4f4; border-radius: 4px; width:50px; height:50px; margin: 0px; font-size:48px; line-height:48px;}
+.icone i { color: #267CB9; }
+
+#navbar-profile {
+  display: none !important;
+}
+#navbar-icon {
+  display: none !important;
+}
+@media (min-width: 576px) {
+	#navbar-profile {
+	  display: flex !important;
+	}	
+	#navbar-icon {
+	  display: block !important;
+	}
 }
 
 <!-- END: main -->

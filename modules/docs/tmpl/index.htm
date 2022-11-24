@@ -188,7 +188,7 @@ function loadContent()
 			txt=txt+"<div class='form-inline' onmouseover='document.getElementById(\"edit_"+key+"\").style.display=\"inline-block\";' onmouseout='document.getElementById(\"edit_"+key+"\").style.display=\"none\";'><h4><a href='/docs/folder?id="+data.data[key].id+"'>"+data.data[key].title+"</a>";
 
 			<!-- txt=txt+"<div id='edit_"+key+"' style='display:none; cursor: pointer;'>"; -->
-			txt=txt+"<a href='#' id='edit_"+key+"' style='display:none;' onclick='editFolder("+data.data[key].id+");'><i class='mdi mdi-pencil'></i></a>";
+			txt=txt+"<a href='#' id='edit_"+key+"' style='display:none; margin-left:10px;' onclick='editFolder("+data.data[key].id+");'><i class='mdi mdi-pencil'></i></a>";
 			<!-- txt=txt+"</div>"; -->
 			txt=txt+"</h4></div>";
 
@@ -220,7 +220,7 @@ function editFolder(id)
 
 	$.get('/api/v1/docs/getfolder?id='+id).done(function(data)
 	{
-console.log(data);
+		console.log(data);
 		$("#contentNewTitle").val(data.data.title);
 		$("#contentNewComment").val(data.data.description);
 		$("#group_read").val(data.data.group_read);

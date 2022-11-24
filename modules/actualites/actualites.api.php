@@ -50,6 +50,7 @@
 			$lstdoc=ListDocument($sql,$d["id"],"actualite");
 			if (is_array($lstdoc))
 			{
+				$txt.="<p>";
 				foreach($lstdoc as $i=>$did)
 				{
 					$doc = new document_core($did,$sql);
@@ -78,6 +79,7 @@
 						$txt.=$doc->Affiche();
 					}
 				}
+				$txt.="</p>";
 			}
 
 
