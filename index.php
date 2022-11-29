@@ -539,7 +539,7 @@
 	}
 	else
 	{
-		$tmpl_prg->assign("style_url", $MyOpt["host"]."/".GenereStyle(($theme=="phone") ? "phone" : "default"));
+		$tmpl_prg->assign("style_url", $MyOpt["host"]."/".GenereStyle("default"));
 	}
 
 	$tmpl_prg->assign("icone", $icone);

@@ -67,7 +67,7 @@
 					<h4>{lang_information}</h4>
 					<A href="{path_root}/docs">{lang_nbdocs}</A> : <A href="index.php?mod=docs" class="{color_nonlus}">{nb_nonlus}</A>
 					<!-- BEGIN: lst_echeance -->
-					{form_echeance}
+					<p>{form_echeance}</p>
 					<!-- END: lst_echeance -->
 				</div>
 
@@ -283,8 +283,9 @@ function convertSize(size) {
 						txt='<div id="news_'+value.id+'" class="d-flex align-items-start profile-feed-item">';
 						txt=txt+'<img src="{path_root}/'+value.avatar+'" alt="profile" class="img-sm rounded-circle">';
 						txt=txt+'<div class="ml-4">';
-						txt=txt+"<div onmouseover='document.getElementById(\"edit_"+value.id+"\").style.display=\"inline-block\";' onmouseout='document.getElementById(\"edit_"+value.id+"\").style.display=\"none\";'><h5>"+value.title;
-						
+
+						txt=txt+"<div onmouseover='document.getElementById(\"edit_"+value.id+"\").style.display=\"inline-block\";' onmouseout='document.getElementById(\"edit_"+value.id+"\").style.display=\"none\";'>";
+						txt=txt+"<h5>"+value.title;
 						if ((value.edit=="ok") || (value.delete=="ok"))
 						{
 							txt=txt+"<div id='edit_"+value.id+"' style='display:none; margin-left:10px;'>";
@@ -298,11 +299,14 @@ function convertSize(size) {
 							}
 							txt=txt+"</div>";
 						}
-						txt=txt+"</h5></div>"
+						txt=txt+"</h5>";
+						txt=txt+"</div>";
+
 						txt=txt+'<h6>'+value.author+'<small class="ml-4 text-muted"><i class="mdi mdi-clock mr-1"></i>'+value.date+'</small></h6>';
-						txt=txt+'<p style="text-align:justify;">'+value.message+'</p></div>';
+						txt=txt+'<p style="text-align:justify;">'+value.message+'</p>';
 						txt=txt+'</div>';
 						txt=txt+'</div>';
+						//txt=txt+'</div>';
 
 						$("#news").append(txt);
 						lastid=value.id;

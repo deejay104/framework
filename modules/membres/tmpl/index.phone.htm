@@ -8,16 +8,26 @@
 
 <!-- BEGIN: corps -->
 
+<div class="row">
+	<div class="grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
 
 	<!-- BEGIN: lst_ligne -->
-	<div class="membreLigne">
-		<div class="membrePhoto"><a href="{url_detail}"><img src="{path_root}/{aff_avatar}" alt=""></a></div>
-		<div class="membreInfos">
-			<div class="membreFullname">{aff_membre}</div>
-			<div class="membreTel">{tel_membre}</div>
-			<div class="membreMail">{mail_membre}</div>
+	<div class="d-flex align-items-start profile-feed-item">
+		<a href="{url_detail}"><img src="{path_root}/{aff_avatar}" alt="" class="img-mi rounded-circle"></a>
+		<div class="pl-2">
+			<h4>{aff_membre}</h4>
+			<h4>{tel_membre}</h4>
+			<h6>{mail_membre}</h6>
 		</div>
 	</div>
 	<!-- END: lst_ligne -->
+
+
+			</div>
+		</div>
+	</div>
+</div>
 
 <!-- END: corps -->

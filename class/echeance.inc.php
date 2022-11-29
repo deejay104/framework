@@ -215,10 +215,9 @@ class echeance_core extends objet_core
 		}
 		else
 		{
-			$ret ="<p>";
-			$ret.="<img src='".$MyOpt["host"]."/".$corefolder."/static/images/icn16_".TestDate($this->dte_echeance).".png' style='vertical-align:middle; border: 0px;  height: 16px; width: 16px;'>&nbsp;";
-			$ret.=$tabLang["lang_echeance"]." ".$this->description." ".$tabLang["core_the"]." ".AffDate($this->dte_echeance);
-			$ret.="</p>";
+			$tabIcon=array("ok"=>array("icon"=>"mdi-checkbox-marked-outline","color"=>"green"),"nok"=>array("icon"=>"mdi-close-box-outline","color"=>"red"));
+			$r=TestDate($this->dte_echeance);
+			$ret="<i class='mdi ".$tabIcon[$r]["icon"]."' style='font-size:20px; color:".$tabIcon[$r]["color"].";'></i> ".$tabLang["lang_echeance"]." ".$this->description." ".$tabLang["core_the"]." ".AffDate($this->dte_echeance);
 		}
 		return $ret;
 	}
