@@ -1,6 +1,6 @@
 <?php
 // ---- Affiche les menus
-	addPageMenu($corefolder,$mod,$tabLang["lang_list"],geturl("membres","",""),"mdi-backburger");
+	addPageMenu($corefolder,$mod,$tabLang["lang_list"],geturl("membres","",""),"mdi-keyboard-backspace");
 
 	// if (GetDroit("CreeUser"))
 	// {

@@ -132,7 +132,7 @@
 	require_once("modules/".$mod."/menu.inc.php");
 	$tmpl_x->assign("aff_menu",$aff_menu);
 
-	addPageMenu("","admin",$tabLang["lang_list"],geturl("admin","groupes",""),"mdi-backburger");
+	addPageMenu("","admin",$tabLang["lang_list"],geturl("admin","groupes",""),"mdi-keyboard-backspace");
 	addPageMenu("","admin",$tabLang["lang_new"],geturl("admin","grpdetail",""),"");
 	addPageMenu("","admin",$tabLang["lang_copy"],geturl("admin","grpdetail","grp=".$grp."&fonc=copier"),"");
 	addPageMenu("","admin",$tabLang["lang_delete"],geturl("admin","grpdetail","grp=".$grp."&fonc=supprimer"),"",false,"Voulez-vous supprimer ce groupe ?");

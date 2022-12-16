@@ -241,13 +241,14 @@ function convertSize(size) {
 
 	});
 
-	function loadNews(id,limit,search) {
+	function loadNews(id,limit,search,mid=0)
+	{
 		console.log("load:"+id+"-"+limit);
 		console.log("lastid:"+lastid);
 
 		$.ajax({
 			type: 'GET',
-			url: '{apiurlget}&id='+id+'&limit='+limit+'&search='+search,
+			url: '{apiurlget}&id='+id+'&mid='+mid+'&limit='+limit+'&search='+search,
 			dataType: 'JSON',
 
 			success: function(response) {
@@ -344,7 +345,7 @@ function convertSize(size) {
 		window.location.replace("/?id="+id);
 	}
 	
-	loadNews(0,5,"");
+	loadNews(0,5,"",{idstart});
 		
 	$(window).scroll(function() {
 		if($(window).scrollTop() + $(window).height() >= $(document).height()-50) {

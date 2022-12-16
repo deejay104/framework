@@ -58,16 +58,35 @@
 <div class="row">
 	<div class="grid-margin stretch-card">
 		<div class="card">
-			<div class="card-body">
+			<div class="card-body row">
 
+				<div class="col-lg-12">
 					<a name="id{msg_id}"></a>
-					<p>{form_titre}</p>
-					<span>par {form_usr_maj}, {form_dte_maj}</span>
+					<h5>{form_titre}</h5>
+				</div>
+				<div class="col-lg-12">
+					<div class="ml-4 small">
+						par {form_usr_maj}, {form_dte_maj}
+					</div>
+				</div>
+				
 
-			<p><label>Numéro</label>{form_numid}</p>
-			<p><label>Status</label>{form_status}</p>
-			<p><label>Version</label>{form_version}</p>
-			<p><label>Module</label>{form_module}</p>
+				<div class="form-group row">
+					<label class="col-lg-1 col-form-label">Numéro</label>
+					<div class="col-lg-4">{form_numid}</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-lg-1 col-form-label">Status</label>
+					<div class="col-lg-4">{form_status}</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-lg-1 col-form-label">Version</label>
+					<div class="col-lg-4">{form_version}</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-lg-1 col-form-label">Module</label>
+					<div class="col-lg-4">{form_module}</div>
+				</div>
 			</div>
 		</div>
 	</div>

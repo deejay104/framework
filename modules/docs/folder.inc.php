@@ -37,7 +37,7 @@
 
 
 // ---- Affiche les bouttons
-	// addPageMenu($corefolder,$mod,"Liste",geturl("docs","",""),"icn32_retour.png");
+	addPageMenu($corefolder,$mod,"Liste",geturl("docs","",""),"mdi-keyboard-backspace");
 	// addPageMenu($corefolder,$mod,"Rechercher",geturl("docs","recherche",""),"icn32_rechercher.png",false,"","showSearch();");
 
 	$tmpl_x->assign("id",$id);

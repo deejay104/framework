@@ -1,6 +1,4 @@
-(function($) {
-  'use strict';
-  $(function() {
+$(function() {
     $(".nav-settings").on("click", function() {
       $("#right-sidebar").toggleClass("open");
     });
@@ -57,5 +55,6 @@
       $(".tiles").removeClass("selected");
       $(this).addClass("selected");
     });
-  });
-})(jQuery);
+
+});
+

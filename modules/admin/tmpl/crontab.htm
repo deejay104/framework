@@ -26,7 +26,7 @@ function SwitchHtml(champ,id)
 {
 	$(function() {
 		$.ajax({
-			url:'{path_root}/api.php?mod=admin&rub=updcron&id='+id+'&var='+champ+'&val='+document.getElementById(champ+"_"+id+"_val").value,
+			url:'{path_root}/api/v1/admin/updcron?id='+id+'&var='+champ+'&val='+document.getElementById(champ+"_"+id+"_val").value,
 			type: 'html',
 			dataType: 'JSON',
 			success: function(response)
@@ -58,7 +58,7 @@ function SwitchOn(champ,id)
 {
 	$(function() {
 		$.ajax({
-			url:'{path_root}/api.php?mod=admin&rub=updcron&id='+id+'&var='+champ+'&val='+document.getElementById(champ+"_"+id+"_val").innerHTML,
+			url:'{path_root}/api/v1/admin/updcron?id='+id+'&var='+champ+'&val='+document.getElementById(champ+"_"+id+"_val").innerHTML,
 			type: 'html',
 			dataType: 'JSON',
 			success: function(response)

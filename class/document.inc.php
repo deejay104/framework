@@ -259,7 +259,7 @@ class document_core{
 			$txt.="<script>";
 			$txt.="function AddDocument(i) {";
 
-			$txt.="var r=\"<input name='form_adddocument[\"+i+\"]' type='file' size='60' OnChange='AddDocument(\"+(i+1)+\");'/>\";\n";
+			$txt.="var r=\"<input name='form_adddocument[\"+i+\"]' type='file' size='60' class='form-control' OnChange='AddDocument(\"+(i+1)+\");'/>\";\n";
 			$txt.="r=r+\"<div id='doc_\"+(i+1)+\"'></div>\";\n";
 			$txt.="var d=document.getElementById('doc_'+i);\n";
 			$txt.="d.innerHTML=r;\n";
@@ -274,16 +274,28 @@ class document_core{
 			$txt.="<p>";
 			if (file_exists($this->filepath."/".$this->filename))
 			{
-					$fsize=CalcSize(filesize($this->filepath."/".$this->filename));
-					// $txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><img src='".$MyOpt["host"]."/".$corefolder."/static/images/icn16_".$icon.".png' width=16 height=16 border=0> ".$this->name." ($fsize) </a>";
-					$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><i class='mdi mdi-file-".$icon."'></i> ".$this->name." ($fsize) </a>";
+				$fsize=CalcSize(filesize($this->filepath."/".$this->filename));
+				// $txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><img src='".$MyOpt["host"]."/".$corefolder."/static/images/icn16_".$icon.".png' width=16 height=16 border=0> ".$this->name." ($fsize) </a>";
+				$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><i class='mdi mdi-list mdi-file-".$icon."'></i> ".$this->name." ($fsize) </a>";
 			}
 			else
 			{
-					$txt.="<i class='mdi mdi-file-hidden'></i> <s>".$this->name."</s>";
+				$txt.="<i class='mdi mdi-list mdi-file-hidden'></i> <s>".$this->name."</s>";
 			}
 			$txt.="</p>";
 			$txt.="</div>";
+		}
+		else if ($this->editmode=="read")
+		{
+			if (file_exists($this->filepath."/".$this->filename))
+			{
+				$fsize=CalcSize(filesize($this->filepath."/".$this->filename));
+				$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><i class='mdi mdi-list mdi-file-".$icon."'></i> ".$this->name." ($fsize) </a>";
+			}
+			else
+			{
+				$txt.="<i class='mdi mdi-list mdi-file-hidden'></i> <s>".$this->name."</s>";
+			}
 		}
 		else
 		{
@@ -292,11 +304,11 @@ class document_core{
 			if (file_exists($this->filepath."/".$this->filename))
 			{
 					$fsize=CalcSize(filesize($this->filepath."/".$this->filename));
-					$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><i class='mdi mdi-file-".$icon."'></i> ".$this->name." ($fsize) </a>";
+					$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><i class='mdi mdi-list mdi-file-".$icon."'></i> ".$this->name." ($fsize) </a>";
 			}
 			else
 			{
-					$txt.="<i class='mdi mdi-file-hidden'></i> <s>".$this->name."</s>";
+					$txt.="<i class='mdi mdi-list mdi-file-hidden'></i> <s>".$this->name."</s>";
 			}
 
 			// Si mode édition

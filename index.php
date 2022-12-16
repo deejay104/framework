@@ -384,13 +384,13 @@
 		$tabMenu["amelioration"]["icone"]="mdi-bug";
 		$tabMenu["amelioration"]["nom"]=$tabLang["core_improve"];
 		$tabMenu["amelioration"]["droit"]="AccesAmeliorations";
-		$tabMenu["amelioration"]["url"]=geturl("ameliorations","","");
+		$tabMenu["amelioration"]["url"]=geturl("ameliorations","index","");
 
 		$tabMenuPhone["amelioration"]["icone"]=$MyOpt["host"]."/".$corefolder."/static/modules/ameliorations/img/icn48_titre.png";
 		$tabMenuPhone["amelioration"]["icone"]="mdi-bug";
 		$tabMenuPhone["amelioration"]["nom"]="";
 		$tabMenuPhone["amelioration"]["droit"]="AccesAmeliorations";
-		$tabMenuPhone["amelioration"]["url"]=geturl("ameliorations","","");
+		$tabMenuPhone["amelioration"]["url"]=geturl("ameliorations","index","");
 	}
 
 	$tabMenu["configuration"]=array(
@@ -410,6 +410,10 @@
 		),
 	);
 
+	if (file_exists($appfolder."/modules/admin/mainmenu.inc.php"))
+	{
+		require($appfolder."/modules/admin/mainmenu.inc.php");
+	}
 
 	// if ($theme=="phone")
 	// {

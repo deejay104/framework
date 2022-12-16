@@ -43,8 +43,9 @@
                   <i class="mdi mdi-magnify"></i>
                 </span>
               </div>
-              <input type="text" class="form-control" placeholder="Rechercher sur le site..." aria-label="search" aria-describedby="search">
+              <input id="searchsite" type="text" class="form-control" placeholder="Rechercher sur le site..."  OnKeyUp="SearchSite(event);" autocomplete="off">
             </div>
+			<div id="searchresult" class="dropdown-menu navbar-dropdown preview-list "></div>
           </li>
 
           <li class="align-self-left d-block d-sm-none" style="width: 320px; z-index:999;">
@@ -53,10 +54,11 @@
 			<div class='icone'><a href="{menu_url}"><i class="mdi {menu_icone}"></i></a></div>
 <!-- END: menu_lst_phone -->
 			</li>
-
         </ul>
+
         <ul id="navbar-profile" class="navbar-nav navbar-nav-right d-none">
-          <li class="nav-item dropdown">
+ <!-- BEGIN: notification -->
+         <li class="nav-item dropdown">
             <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
               <i class="mdi mdi-bell-outline mx-0"></i>
               <span class="count"></span>
@@ -92,6 +94,7 @@
               </a>
             </div>
           </li>
+<!-- END: notification -->
 
           <li class="nav-item nav-profile dropdown">
             <a class="nav-link" href="#profileDropdown" data-bs-toggle="dropdown" id="profileDropdown">
@@ -170,6 +173,97 @@
 showToast("","{msg_infos}","{msg_type}");
 </script>
 <!-- END: aff_infos -->
+
+<script>
+	var timer=null;
+	function SearchSite(e) {
+		text="";
+	
+		if(window.event)
+	          { key = window.event.keyCode;	} //IE
+		else
+	          { key = e.which;  } //firefox
+	
+		if (key==13)
+		 { 
+		 	<!-- document.forms["recherche"].submit();  -->
+			return false;
+	 	 }
+
+		if (timer) {
+			window.clearTimeout(timer);
+		}
+		timer = window.setTimeout( function() {
+			timer = null;
+
+			var crit=$("#searchsite").val();
+			console.log(crit);
+
+			$("#searchresult").html("");
+			if (crit!="")
+			{
+				var limit=5;
+				var sort="dte_creat";
+				$.get('/api/v1/docs/lstpaper?sort='+sort+'&crit='+crit+'&limit='+limit).done(function(data)
+				{
+					console.log(data);
+					i=0
+					for (var key in data.data)
+					{
+						for (var ii in data.data[key].doc)
+						{
+							i=i+1;
+							console.log(data.data[key]);
+							$("#searchresult").html($("#searchresult").html()+"<p>"+data.data[key].doc[ii].url+"</p>");
+						}
+					}
+					if (i>0)
+					{
+						$("#searchresult").css("display","block");
+					}
+				});
+				$.get('/api/v1/actualites/actualites/get?id=0&search='+crit+'&limit=5').done(function(data)
+				{
+					console.log(data);
+					i=0
+					for (var key in data.news)
+					{
+						i=i+1;
+						console.log(data.news[key]);
+						$("#searchresult").html($("#searchresult").html()+"<p><a href='/actualites?idstart="+data.news[key].id+"'><i class='mdi mdi-list mdi-comment'></i>"+data.news[key].title+"</a></p>");
+					}
+					if (i>0)
+					{
+						$("#searchresult").css("display","block");
+					}
+				});
+				$.get('/api/v1/membres/lstmembre/get?id=0&crit='+crit+'&limit=5').done(function(data)
+				{
+					console.log(data);
+					i=0
+					for (var key in data.data)
+					{
+						i=i+1;
+						console.log(data.data[key]);
+						$("#searchresult").html($("#searchresult").html()+"<p><a href='/membres/detail?id="+data.data[key].id+"'><i class='mdi mdi-list mdi-account'></i>"+data.data[key].name+"</a></p>");
+					}
+					if (i>0)
+					{
+						$("#searchresult").css("display","block");
+					}
+				});
+
+			}
+			else
+			{
+				console.log("no criteria");
+				$("#searchresult").css("display","none");
+			}
+
+		}, 400 );
+	}
+
+</script>
 
 </body>
 </html>

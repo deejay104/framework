@@ -88,7 +88,7 @@
 	$tmpl_prg->assign("corefolder", $corefolder);
 	$tmpl_prg->assign("rootfolder", $MyOpt["host"]);
 
-	$tmpl_prg->assign("style_url", GenereStyle(($theme=="phone") ? "phone" : "default"));
+	$tmpl_prg->assign("style_url", $MyOpt["host"]."/".GenereStyle("default"));
 
 	if (file_exists($appfolder."/custom/".$MyOpt["site_logo"]))
 	{

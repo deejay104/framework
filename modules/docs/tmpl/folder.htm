@@ -55,7 +55,7 @@
 			<div class="card-body">	
 				<div class="row">	
 					<div id='newContentFile' class='contentFiles form-control'>
-						<label for='newFile'><p id='newContentText'><i class="mdi mdi-cloud-upload"></i> Nouveau Document</p></label>
+						<label for='newFile'><p id='newContentText'><i class="mdi mdi-cloud-upload" style="font-size:20px;"></i> Nouveau Document</p></label>
 						<input id='newFile' type='file' style='display:none'>
 					</div>
 				</div>
@@ -124,7 +124,7 @@
 						<label class="col-lg-2  col-form-label"></label>
 						<div class="col-lg-7">
 							<div id='addContentFile' class='contentFiles form-control'>
-								<label for='addFile' style='display: inline-block;'><p id='addContentText'>Ajouter Document</p></label>
+								<label for='addFile' style='display: inline-block;'><p id='addContentText'><i class="mdi mdi-cloud-upload" style="font-size:20px;"></i> Ajouter Document</p></label>
 								<input id='addFile' type='file' style='display:none'>
 							</div>
 						</div>
@@ -190,7 +190,7 @@ function loadPapers()
 			txt=txt+"<div id='paperDocument_"+data.data[key].id+"'>";
 			for (var ii in data.data[key].doc)
 			{
-				txt=txt+"<p'>"+data.data[key].doc[ii]+"</p>";
+				txt=txt+"<p'>"+data.data[key].doc[ii].url+"</p>";
 			}
 			txt=txt+'</div>';
 			txt=txt+'</div>';

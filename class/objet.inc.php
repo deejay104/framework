@@ -248,7 +248,7 @@ class objet_core
 			}
 			else if (($type=="enum") && (isset($this->tabList[$key][$lang])) && (is_array($this->tabList[$key][$lang])))
 			{
-		  	  	$ret ="<select id='".(($formid!="") ? $formid : "").$key."' class='form-control form-control-lg' name=\"".$formname."[$key]\">";
+		  	  	$ret ="<select id='".(($formid!="") ? $formid : "").$key."' class='form-control' name=\"".$formname."[$key]\">";
 				foreach($this->tabList[$key][$lang] as $k=>$v)
 				{
 					$ret.="<option value=\"".$k."\" ".(($txt==$k) ? "selected" : "").">".$this->tabList[$key][$lang][$k]."</option>";
@@ -258,7 +258,7 @@ class objet_core
 			}
 			else if (($type=="enum") && (isset($this->tabList[$key])) && (is_array($this->tabList[$key])))
 			{
-		  	  	$ret ="<select id='".(($formid!="") ? $formid : "").$key."' class='form-control form-control-lg' name=\"".$formname."[$key]\">";
+		  	  	$ret ="<select id='".(($formid!="") ? $formid : "").$key."' class='form-control' name=\"".$formname."[$key]\">";
 				foreach($this->tabList[$key] as $k=>$v)
 				{
 					$ret.="<option value=\"".$k."\" ".(($txt==$k) ? "selected" : "").">".$this->tabList[$key][$k]."</option>";

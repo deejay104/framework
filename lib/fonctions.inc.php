@@ -483,6 +483,10 @@ function CalcTemps($tps,$short=true)
 	{
 		$t=$m[1]*60;
 	}
+	else if (preg_match("/^([0-9]*?[0-9])m(in)?$/",$tps,$m))
+	{
+		$t=$m[1];
+	}
 	else if (is_numeric($tps))
 	{
 		$t=$tps;
@@ -1211,13 +1215,13 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 		}
 	}
 
-	$ret ="\n<table class='table table-striped'>\n";
+	$ret ="\n<div class='table-responsive'><table class='table table-hover'>\n";
 
 	$ret.="<tr>";
-	$ret.="<th width=20>&nbsp;</th>";
+	// $ret.="<th width=20>&nbsp;</th>";
 	$nb=1;
 	
-	$page=$_SERVER["SCRIPT_NAME"]."?mod=$mod&rub=$rub";
+	$page=$MyOpt["host"]."/".$mod."/".$rub;
 
 	if (!is_array($tabTitre))
 	{
@@ -1228,11 +1232,11 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 	  	}
 	}
 
-	$sub="<tr><th></th>";
+	$sub="<tr>";
 	$affsub=0;
-	$subb="<tr><th></th>";
+	$subb="<tr>";
 	$affsubb=0;
-	$search="<tr><th></th>";
+	$search="<tr>";
 
   	foreach($tabTitre as $name=>$v)
 	{
@@ -1257,7 +1261,7 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 			$ret.="<th width='".$v["width"]."'".(($v["align"]!="") ? " align='".$v["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").">";
 			if ($sort)
 			{
-				$ret.="<b><a href='$page&order=$name&trie=".(($trie=="d") ? "i" : "d").(($url!="") ? "&$url" : "")."&ts=0".$ls."'>".$v["aff"]."</a></b>";
+				$ret.="<b><a href='".$page."?order=$name&trie=".(($trie=="d") ? "i" : "d").(($url!="") ? "&$url" : "")."&ts=0".$ls."'>".$v["aff"]."</a></b>";
 			}
 			else
 			{
@@ -1266,7 +1270,7 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 		  	$ret.=" <img src='".$MyOpt["host"]."/".$corefolder."/static/images/sens_$trie.gif' border=0><input type='hidden' name='trie' value='".$trie."'><input type='hidden' name='order' value='".$order."'>";
 			$sub.="<th align='".$v["align"]."'>".((isset($v["sub"])) ? $v["sub"] : "").(($v["mobile"]=="no") ? " class='noMobile'" :"")."</th>";
 			$subb.="<th align='".$v["align"]."'>".((isset($v["bottom"])) ? $v["bottom"] : "").(($v["mobile"]=="no") ? " class='noMobile'" :"")."</th>";
-			$search.="<th><input type='text' style='width:".$v["width"]."px;' name='tabsearch[".$name."]' value='".((isset($tabsearch[$name])) ? $tabsearch[$name] : '').(($v["mobile"]=="no") ? " class='noMobile'" :"")."' OnChange='document.getElementById(\"form_tableau\").submit();'></th>";
+			$search.="<th><input type='text' class='form-control'  name='tabsearch[".$name."]' value='".((isset($tabsearch[$name])) ? $tabsearch[$name] : '').(($v["mobile"]=="no") ? " class='noMobile'" :"")."' OnChange='document.getElementById(\"form_tableau\").submit();'></th>";
 		}
 		else if ($v["aff"]=="<line>")
 		{
@@ -1280,7 +1284,7 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 			$ret.="<th width='".$v["width"]."'".(($v["align"]!="") ? " align='".$v["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").">";
 			if ($sort)
 			{
-				$ret.="<b><a href='$page&order=$name&trie=d".(($url!="") ? "&$url" : "")."&ts=0".$ls."'>".$v["aff"]."</a></b>";
+				$ret.="<b><a href='".$page."?order=$name&trie=d".(($url!="") ? "&$url" : "")."&ts=0".$ls."'>".$v["aff"]."</a></b>";
 			}
 			else
 			{
@@ -1288,7 +1292,7 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 			}
 			$sub.="<th align='".$v["align"]."'>".((isset($v["sub"])) ? $v["sub"] : "").(($v["mobile"]=="no") ? " class='noMobile'" :"")."</th>";
 			$subb.="<th align='".$v["align"]."'>".((isset($v["bottom"])) ? $v["bottom"] : "").(($v["mobile"]=="no") ? " class='noMobile'" :"")."</th>";
-			$search.="<th><input type='text' style='width:".($v["width"]-5)."px;' name='tabsearch[".$name."]' value='".((isset($tabsearch[$name])) ? $tabsearch[$name] : '').(($v["mobile"]=="no") ? " class='noMobile'" :"")."' OnChange='document.getElementById(\"form_tableau\").submit();'></th>";
+			$search.="<th><input type='text' class='form-control'  name='tabsearch[".$name."]' value='".((isset($tabsearch[$name])) ? $tabsearch[$name] : '').(($v["mobile"]=="no") ? " class='noMobile'" :"")."' OnChange='document.getElementById(\"form_tableau\").submit();'></th>";
 		}
 		if (isset($v["sub"]))
 		{
@@ -1339,7 +1343,7 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 				}
 				$ret.=">";
 
-				$ret.="<td>&nbsp;</td>";
+				// $ret.="<td>&nbsp;</td>";
 
 				foreach($tabTitre as $name=>$v)
 				  {
@@ -1362,7 +1366,7 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 	{
 		$ret.=$subb;
 	}
-	$ret.="</table>\n";
+	$ret.="</table></div>\n";
 
 	// Affiche la liste des pages
 	$nbtot=($nbline>0) ? $nbline : count($tabValeur);

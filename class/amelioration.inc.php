@@ -198,7 +198,11 @@ class amelioration_core extends objet_core
 		global $MyOpt;
 		$ret=parent::aff($key,$typeaff,$formname,$render,$formid);
 
-		if ($key=="id")
+		if (($key=="id") && ($render!="form"))
+		{
+			$ret="<input value='#".CompleteTxt($this->id,4,"0")."' class='form-control' readonly>";
+		}
+		else if ($key=="id")
 		{
 			$ret="<a href='".geturl("ameliorations","detail","id=".$this->id)."'>#".CompleteTxt($this->id,4,"0")."</a>";
 		}

@@ -7,6 +7,7 @@
 	$sql->show=false;
 	
 	$id=checkVar("id","numeric");
+	$mid=checkVar("mid","numeric");
 	$fonc=checkVar("fonc","varchar");
 	$type=checkVar("type","varchar");
 
@@ -26,7 +27,7 @@
 			$q=" AND (titre LIKE '%".$search."%' OR message LIKE '%".$search."%') ";
 		  }
 
-		$query="SELECT * FROM `".$MyOpt["tbl"]."_actualites` WHERE actif='oui' ".(($id>0) ? "AND id<'".$id."'" : "")." ".$q." ORDER BY dte_creat DESC LIMIT 0,$limit";
+		$query="SELECT * FROM `".$MyOpt["tbl"]."_actualites` WHERE actif='oui' ".(($mid>0) ? "AND id='".$mid."'" : "")." ".(($id>0) ? "AND id<'".$id."'" : "")." ".$q." ORDER BY dte_creat DESC LIMIT 0,$limit";
 		$sql->Query($query);
 		$news=array();
 		for($i=0; $i<$sql->rows; $i++)

@@ -94,8 +94,9 @@
 			foreach($lstdoc as $ii=>$did)
 			{
 				$doc = new document_core($did,$sql);
-				$doc->editmode="regular";
-				$line["doc"][$did]=$doc->Affiche();
+				$doc->editmode="read";
+				$line["doc"][$did]["url"]=$doc->Affiche();
+				$line["doc"][$did]["name"]=$doc->name;
 
 				if (preg_match("/".$crit."/i",$doc->name))
 				{
