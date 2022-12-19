@@ -119,17 +119,10 @@
 		$res = $sql->QueryRow($query);
 		$tmpl_x->assign("news_title", $res["titre"]);
 		$tmpl_x->assign("news_message", $res["message"]);
-		// $tmpl_x->assign("new_color", "000000");	
-	}
-	else
-	{
-		// $tmpl_x->assign("news_title", $tabLang["lang_newpost"]);
-		// $tmpl_x->assign("news_message", $tabLang["lang_newmsg"]);
-		// $tmpl_x->assign("new_color", "bbbbbb");	
 	}
 
 	// $tmpl_x->assign("news_title_clear", $tabLang["lang_newpost"]);
-	// $tmpl_x->assign("news_message_clear", $tabLang["lang_newmsg"]);
+	$tmpl_x->assign("news_message_clear", $tabLang["lang_newmsg"]);
 	$tmpl_x->assign("form_id", $id);
 	$tmpl_x->assign("idstart", $idstart);
 	

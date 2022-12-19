@@ -34,13 +34,12 @@
 		<div class="card">
 			<div class="card-body">
 				<div id="actualitesNouveau">
-					<form name="actualites" method="post" action="{path_root}/index.php" enctype="multipart/form-data">
-						<input type="hidden" name="mod" value="actualites">
+					<form name="actualites" method="post" action="{path_root}/actualites" enctype="multipart/form-data">
 						<input type="hidden" name="id" id="id" value="{form_id}">
 						<input type="hidden" name="checktime" value="{form_checktime}">
 				
-						<input type="text" class='form-control' name="form_titre" value="" placeholder="{news_title_clear}"  ><br />
-						<textarea name="form_message" class='form-control' placeholder="{news_message}" rows=4></textarea>
+						<input type="text" class='form-control' name="form_titre" value="" placeholder="{lang_newpost}"  ><br />
+						<textarea name="form_message" class='form-control' placeholder="{lang_newmsg}" rows=4></textarea>
 						<p>
 						<label for='file' class="btn btn-primary" style="margin:0px; height:42px;"><i class="mdi mdi-camera	 menu-icon"></i></label>
 							<input id='file' class="btn btn-primary mr-2" type='file' style='display:none'>
