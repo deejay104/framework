@@ -173,12 +173,6 @@ class objet_core
 	{
 		global $MyOpt,$lang,$theme;
 
-		if ($key=="dte_creat")
-		{
-			return "<A href=\"".geturl($this->mod,$this->rub,"id=".$this->id)."\">".sql2date($this->dte_creat,"jour")."</A>";
-		}
-		
-		
 		if ($render=="")
 		{
 			$render=$typeaff;
@@ -235,6 +229,12 @@ class objet_core
 			}
 		}
 
+		if ($key=="dte_creat")
+		{
+			// return "<A href=\"".geturl($this->mod,$this->rub,"id=".$this->id)."\">".sql2date($this->dte_creat,"jour")."</A>";
+			$txt=sql2date($this->dte_creat,"jour");
+		}
+		
 		if ($render=="form")
 		{
 			if ($type=="text")
