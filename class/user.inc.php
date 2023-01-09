@@ -730,7 +730,7 @@ function ListUsers($sql,$fields=array(),$crit=array(),$perm=array(),$order=array
  
 	$lstuser=array();
 
-	$query ="SELECT id";
+	$query ="SELECT id ";
 
 	if (count($fields)>0)
 	{
@@ -808,7 +808,7 @@ function ListActiveMails($sql)
 	return $lstuser;
 }
 
-function AffListeMembres($sql,$form_uid,$name,$type="",$sexe="",$order="std",$virtuel="non",$tabtype=array())
+function AffListeMembres($sql,$form_uid,$name,$type="",$sexe="",$order="std",$virtuel="non",$tabrole=array(),$AffNone="")
 {
 	global $MyOpt;
 	if ($order=="std")
@@ -816,11 +816,11 @@ function AffListeMembres($sql,$form_uid,$name,$type="",$sexe="",$order="std",$vi
 	$query ="SELECT id,prenom,nom ";
 
 
-	if ((is_array($tabtype)) && (count($tabtype)>0))
+	if ((is_array($tabrole)) && (count($tabrole)>0))
 	{
 		$type="";
 		$s="";
-		foreach($tabtype as $i=>$t)
+		foreach($tabrole as $i=>$t)
 		{
 			$type.=$s."'".$t."'";
 			$s=",";
@@ -838,16 +838,18 @@ function AffListeMembres($sql,$form_uid,$name,$type="",$sexe="",$order="std",$vi
 	$query.=(($order!="") ? " ORDER BY $order" : "");
 	
 	$sql->Query($query);
-	$lstuser ="<select name='".$name."' class='form-control form-control-lg'>";
-	$lstuser.="<option value=\"0\">Aucun</option>";
+	$lstuser ="<select id='".$name."' name='".$name."' class='form-control form-control-lg'>";
+
+	if ($AffNone!="")
+	{
+		$lstuser.="<option value=\"0\">".$AffNone."</option>";
+	}
 	for($i=0; $i<$sql->rows; $i++)
 	{
 		$sql->GetRow($i);
 
-		if ( ((isset($sql->data["nb"])) && ($sql->data["nb"]>0)) || (!is_array($tabtype)) || (count($tabtype)==0))
+		if ( ((isset($sql->data["nb"])) && ($sql->data["nb"]>0)) || (!is_array($tabrole)) || (count($tabrole)==0))
 		{
-			$sql->data["nom"]=strtoupper($sql->data["nom"]);
-			$sql->data["prenom"]=ucwords($sql->data["prenom"]);
 			$fullname=AffFullName($sql->data["prenom"],$sql->data["nom"]);
 			$lstuser.="<option value=\"".$sql->data["id"]."\" ".(($form_uid==$sql->data["id"]) ? "selected" : "").">".$fullname."</option>";
 		}
