@@ -435,7 +435,7 @@
 
 				foreach ($d["submenu"] as $mm=>$dd)
 				{
-					if (GetDroit($d["droit"]))
+					if (GetDroit($dd["droit"]))
 					{
 						$tmpl_prg->assign("submenu_nom", $dd["nom"]);
 						$tmpl_prg->assign("submenu_url", $dd["url"]);

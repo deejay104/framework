@@ -813,9 +813,8 @@ function AffListeMembres($sql,$form_uid,$name,$type="",$sexe="",$order="std",$vi
 	global $MyOpt;
 	if ($order=="std")
 	  { $order=(($MyOpt["globalTrie"]=="nom") ? "nom,prenom" : "prenom,nom"); }
+
 	$query ="SELECT id,prenom,nom ";
-
-
 	if ((is_array($tabrole)) && (count($tabrole)>0))
 	{
 		$type="";
@@ -831,12 +830,12 @@ function AffListeMembres($sql,$form_uid,$name,$type="",$sexe="",$order="std",$vi
 
 	$query.="FROM ".$MyOpt["tbl"]."_utilisateurs AS usr ";
 	$query.="WHERE actif='oui' ";
-	$query.=(($virtuel!="") ? "AND virtuel='$virtuel' " : "");
+	$query.=(($virtuel=="non") ? "AND virtuel='non' " : "");
 	// $query.=(($type!="") ? "AND type='$type' " : "");
 	$query.=(($sexe!="") ? "AND sexe='$sexe' " : "");
 
 	$query.=(($order!="") ? " ORDER BY $order" : "");
-	
+
 	$sql->Query($query);
 	$lstuser ="<select id='".$name."' name='".$name."' class='form-control form-control-lg'>";
 

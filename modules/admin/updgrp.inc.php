@@ -4,46 +4,56 @@
 	  { header("HTTP/1.0 401 Unauthorized"); exit; }
 
 // ---- Vérifie les paramètres
-	if (!isset($_GET["grp"]))
+
+	$grp=checkVar("grp","varchar",5);
+	$aut=checkVar("aut","varchar",3);
+
+	if ($grp=="")
 	{
-	  	echo "GRP not provided.";
+		$ret["status"]=500;
+		$ret["result"]=utf8_encode("GRP not provided");
+		echo json_encode($ret);
 		error_log("GRP not provided.");
 	  	exit;
 	}
-	$grp=$_GET["grp"];
-	$grp=substr($grp,0,5);
-	$aut=$_GET["aut"];
+
 
 	if (($aut!="oui") && ($aut!="non"))
 	{
 		$aut="oui";
 	}
 
+	$ret=array();
+	$ret["status"]=200;
+
 	if (GetDroit("ModifGroupe"))
 	{
-		if (is_array($_POST['id']))
+		$id=checkVar("id","array");
+$ret["query"]=array();
+
+		if (count($id)>0)
 		{
-			$q="DELETE FROM ".$MyOpt["tbl"]."_roles WHERE groupe='$grp' AND autorise='".$aut."'";
+			$q="DELETE FROM ".$MyOpt["tbl"]."_roles WHERE groupe='".$grp."' AND autorise='".$aut."'";
 			$res=$sql->Delete($q);
+				$ret["query"][]=$q;
 
 			foreach ($_POST['id'] as $role)
 			{
-				$q="INSERT INTO ".$MyOpt["tbl"]."_roles SET groupe='$grp',role='$role',autorise='".$aut."'";
+				$q="INSERT INTO ".$MyOpt["tbl"]."_roles SET groupe='$grp',role='$role',autorise='".$aut."', uid_creat=".$gl_uid.",uid_maj='".$gl_uid."',dte_creat='".now()."',dte_maj='".now()."'";
 				$sql->Insert($q);
+				$ret["query"][]=$q;
 			}
 		}
 		else
 		{
-			$res=array();
-			$res["result"]=utf8_encode("Pas de données à mettre à jour");
-			echo json_encode($res);
+			$ret["result"]=utf8_encode("Pas de données à mettre à jour");
 		}
 	}
 	else
 	{
-		$res=array();
-		$res["result"]=utf8_encode("Accès non authorisé");
-	  	echo json_encode($res);
+		$ret["status"]=401;
+		$ret["result"]=utf8_encode("Accès non authorisé");
 	}
+  	echo json_encode($ret);
 
 ?>

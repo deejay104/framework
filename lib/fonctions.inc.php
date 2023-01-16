@@ -1499,10 +1499,10 @@ function FatalError($txt,$msg="")
   { global $MyOpt,$tmpl_prg,$corefolder,$theme;
   	if (isset($tmpl_prg))
   	{
-		$tmpl_prg->assign("style_url", $MyOpt["host"]."/".GenereStyle(($theme=="phone") ? "phone" : "default"));
-		$tmpl_prg->assign("icone","<IMG src=\"".$corefolder."/static/images/icn48_erreur.png\">");
+		$tmpl_prg->assign("style_url", $MyOpt["host"]."/".GenereStyle("default"));
 		$tmpl_prg->assign("infos","$txt");
-		$tmpl_prg->assign("corps","$msg");
+		$tmpl_prg->assign("error_message","<p>".$txt."</p><p>".$msg."</p>");
+		$tmpl_prg->parse("main.aff_fatalerror");
 		$tmpl_prg->parse("main");
 		echo $tmpl_prg->text("main");
 	}

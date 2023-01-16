@@ -153,12 +153,25 @@
         <div class="content-wrapper">
 			<div class="row">
 				<div class="mt-4 mt-md-0">
-			<!-- BEGIN: lst_pagemenu -->
+					<!-- BEGIN: lst_pagemenu -->
 					<a href="{pagemenu_url}" {pagemenu_confirm}><button class="btn btn-sm {pagemenu_class}"><i class="mdi {pagemenu_image} menu-icon"></i>{pagemenu_name}</button></a>
-			<!-- END: lst_pagemenu -->
+					<!-- END: lst_pagemenu -->
 				</div>
 			</div>
 			{corps}
+
+
+			<!-- BEGIN: aff_fatalerror -->
+			<div class="row" id="page-content">
+				<div class="grid-margin stretch-card">
+					<div class="card">	
+						<div class="card-body">	
+							{error_message}
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- END: aff_fatalerror -->
         </div>
         <footer class="footer">
 			{username}&nbsp;-&nbsp;{core_version} {version}
