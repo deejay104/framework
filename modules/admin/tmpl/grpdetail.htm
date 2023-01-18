@@ -70,15 +70,18 @@
 <style>
 	.adminRouge { background-color:#FFBBAA!important; background-image:none; }		
 
-	.dropBox { display: inline-block; list-style-type: none; margin: 0px; padding: 5px; width: 220px; border: 1px solid #cdd4e0; border-radius: 5px;  margin-right: 10px; vertical-align: top; }
-	.dropBox li { margin: 5px; padding: 2px 5px 2px 5px; width: 200px; background: #{FormulaireBackgroundLight}; font-size:14px; color: #000000; border: 1px solid #cccccc; }
+	.dropBox { display: block; list-style-type: none; margin-bottom: 10px; padding: 5px; width: 220px; border: 1px solid #cdd4e0; border-radius: 5px;  margin-right: 10px; vertical-align: top; }
+	.dropBox li { display:inline-block; margin: 2px; padding: 2px 5px 2px 5px; width: 200px; color: #000000; border: 1px solid #cccccc; background-color: #cdd4e0; font-size:12px!important; }
+	.dropBox li:hover {  background-color: #fdd4e0; cursor: pointer; }
 
+	.dropSelected { background-color:#fdf4e0!important; }
+
+	.dropEnable { height:100%; }
 	.dropDisable {  width: 100%!important; }
-	.dropDisable li { margin: 1px; float: left; }
+	.dropDisable li {  }
 
 	.ui-tooltip { background-image: none; }
 	
-	.tag-group { background-color: #cdd4e0; font-size:12px!important;  }
 
 </style>
 
@@ -86,12 +89,12 @@
 
 <div class="row">
 	<div class="col-md-3 grid-margin stretch-card">
-		<div class="card">
+		<div class="card" style="min-width:250px;">
 			<div class="card-body">
 				<h6>{lang_allow} :</h6>
-				<ul id="DropAllow" class="dropBox">
+				<ul id="DropAllow" class="dropBox dropEnable">
 				<!-- BEGIN: lst_roles_oui -->
-						<li id="id_{aff_role}" class="tag-group" title="{aff_help}">{aff_role}</li>
+						<li id="id_{aff_role}" class="tagline" title="{aff_help}">{aff_role}</li>
 				<!-- END: lst_roles_oui -->
 				</ul>
 			</div>
@@ -99,12 +102,12 @@
 	</div>
 			
 	<div class="col-md-3 grid-margin stretch-card">
-		<div class="card">
+		<div class="card" style="min-width:250px;">
 			<div class="card-body">
 				<h6>{lang_deny} :</h6>
-				<ul id="DropDeny" class="dropBox">
+				<ul id="DropDeny" class="dropBox dropEnable">
 				<!-- BEGIN: lst_roles_non -->
-						<li id="id_{aff_role}" class="tag-group" title="{aff_help}">{aff_role}</li>
+						<li id="id_{aff_role}" class="tagline" title="{aff_help}">{aff_role}</li>
 				<!-- END: lst_roles_non -->
 				</ul>
 			</div>
@@ -113,15 +116,12 @@
 		
 	<div class="col-md-6 grid-margin stretch-card">
 		<div class="card">
-			<div class="card-body">
+			<div class="card-body" style="min-width:250px;">
 				<input type="text" id="searchtxt" class="form-control" value="{txtsearch}" placeholder="{lang_txtsearch}" OnKeyPress="CapturePost(event);">
 
 				<ul id="DropDisable" class="dropBox dropDisable">
-					<!-- BEGIN: lst_roles_nok2 -->
-					<span class="tag" id="id_{aff_role}"><span>{aff_role}</span></span>
-					<!-- END: lst_roles_nok2 -->
 					<!-- BEGIN: lst_roles_nok -->
-					<li id="id_{aff_role}" class="tag-group {aff_couleur}" title="{aff_help}">{aff_role}</li>
+					<li id="id_{aff_role}" class="tagline" title="{aff_help}">{aff_role}</li>
 					<!-- END: lst_roles_nok -->
 				</ul>
 			</div>
@@ -145,7 +145,7 @@ $(function() {
 	        $.ajax({
 				data: order,
 	            type: 'post',
-	            url: '{path_root}/api.php?mod=admin&rub=updgrp&grp={form_grp}&aut=oui'
+	            url: '{path_root}/api/v1/admin/updgrp?grp={form_grp}&aut=oui'
 	        });
 		}
     });
@@ -159,7 +159,7 @@ $(function() {
 	        $.ajax({
 				data: order,
 	            type: 'post',
-	            url: '{path_root}/api.php?mod=admin&rub=updgrp&grp={form_grp}&aut=non'
+	            url: '{path_root}/api/v1/admin/updgrp?grp={form_grp}&aut=non'
 	        });
 		}
     });
@@ -184,11 +184,30 @@ $(function() {
 	          { key = e.which;  } //firefox
 	
 		if (key==13)
-		 { 
-		 	document.location="{path_root}/admin/grpdetail?grp={form_grp}&search="+document.getElementById("searchtxt").value; 
-	 	 }
+		{ 
+			//document.location="{path_root}/admin/grpdetail?grp={form_grp}&search="+document.getElementById("searchtxt").value; 
+			console.log($("#searchtxt").val());
+
+$('li[class*=tagline]:visible').each(function() {
+   $(this).removeClass("dropSelected");
+});
+
+			$('li[id*='+$("#searchtxt").val()+']:visible').each(function() {
+				$(this).addClass("dropSelected");
+			});
+			//$("#id_"+$("#searchtxt").val()).css("border","2px solid #ff0000");
+			//$('li[id* = '+$("#searchtxt").val()+']' ).css("background-color","#ff0000");
+			$( 'li[id]' ).filter(function(){
+                    return $(this).attr('id').toLowerCase()==$("#searchtxt").val().toLowerCase();
+                }).css('border','2px solid red');
+	 	}
 	}
 
 
+
+			$( 'li[title]' ).filter(function(){
+                    return $(this).attr('id').toLowerCase()=="abonnements";
+                }).css('border','2px solid red');
+				
 </script>
 <!-- END: corps -->
