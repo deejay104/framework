@@ -18,6 +18,13 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+	if ((isset($MyOpt["debug"])) && ($MyOpt["debug"]=="on"))
+	{
+		// $starttime=microtime();
+		error_reporting(E_ALL); 
+		ini_set("display_errors", 1); 
+	}
+
   	require ("lib/fonctions.inc.php");
 
 // ---- Connexion à la base de données
@@ -25,6 +32,8 @@
 	require ("class/mysql.inc.php");
 	$sql = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db,$port);
 	$sql->show=false;
+
+
 
 // ---- Variables
 	$MyOpt["tbl"]=$gl_tbl;

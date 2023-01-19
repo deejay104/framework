@@ -251,10 +251,10 @@ class document_core{
 		else
 		  { $icon="file"; }
 
-
+		$txt="";
 		if ($this->editmode=="form")
 		{
-			$txt ="<div id='doc_0'></div>";
+			$txt.="<div id='doc_0'></div>";
 
 			$txt.="<script>";
 			$txt.="function AddDocument(i) {";
@@ -270,7 +270,7 @@ class document_core{
 		}
 		else if ($this->editmode=="regular")
 		{
-			$txt ="<div id='doc_".$this->id."' class='docLink'>";
+			$txt.="<div id='doc_".$this->id."' class='docLink'>";
 			$txt.="<p>";
 			if (file_exists($this->filepath."/".$this->filename))
 			{
@@ -299,7 +299,7 @@ class document_core{
 		}
 		else
 		{
-			$txt ="<div id='doc_".$this->id."' OnMouseOver='document.getElementById(\"doc_del_".$this->id."\").style.visibility=\"visible\";' OnMouseOut='document.getElementById(\"doc_del_".$this->id."\").style.visibility=\"hidden\";'>";
+			$txt.="<div id='doc_".$this->id."' OnMouseOver='document.getElementById(\"doc_del_".$this->id."\").style.visibility=\"visible\";' OnMouseOut='document.getElementById(\"doc_del_".$this->id."\").style.visibility=\"hidden\";'>";
 			$txt.="<p>";
 			if (file_exists($this->filepath."/".$this->filename))
 			{
