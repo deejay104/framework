@@ -63,7 +63,7 @@ class echeance_core extends objet_core
 	# Charge une échéance par son type
 	function loadtype($tid){
 		$sql=$this->sql;
-		$query = "SELECT echeance.*, echeancetype.context, echeancetype.poste, echeancetype.description, echeancetype.droit, echeancetype.multi, echeancetype.resa FROM ".$this->tbl."_echeance AS echeance LEFT JOIN ".$this->tbl."_echeancetype AS echeancetype ON echeance.typeid=echeancetype.id WHERE echeance.typeid='$tid' AND echeance.uid='".$this->uid."'";
+		$query = "SELECT echeance.*, echeancetype.context, echeancetype.poste, echeancetype.description, echeancetype.droit, echeancetype.multi, echeancetype.resa FROM ".$this->tbl."_echeance AS echeance LEFT JOIN ".$this->tbl."_echeancetype AS echeancetype ON echeance.typeid=echeancetype.id WHERE echeance.actif='oui' AND echeance.typeid='".$tid."' AND echeance.uid='".$this->uid."'";
 		$res = $sql->QueryRow($query);
 		
 		if (is_array($res))
