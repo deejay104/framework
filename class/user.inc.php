@@ -837,7 +837,7 @@ function AffListeMembres($sql,$form_uid,$name,$type="",$sexe="",$order="std",$vi
 	$query.=(($order!="") ? " ORDER BY $order" : "");
 
 	$sql->Query($query);
-	$lstuser ="<select id='".$name."' name='".$name."' class='form-control form-control-lg'>";
+	$lstuser ="<select id='".$name."' name='".$name."' class='form-control form-control-lg form-input'>";
 
 	if ($AffNone!="")
 	{
