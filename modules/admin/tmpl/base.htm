@@ -122,11 +122,9 @@ $(document).ready(function() {
 		$("#form_update").css("background-color","");
 		$("#form_update").html("Re-Index en cours");
 
-		$.ajax({
-			url:'{path_root}/api.php?mod=admin&rub=update',
-			type: 'html',
-			dataType: 'JSON',
-			success: function(response)
+
+		$.get('{path_root}/api.php?mod=admin&rub=update')
+			.done(function(response)
 			{
 				console.log(response);
 
@@ -139,13 +137,12 @@ $(document).ready(function() {
 					$("#form_update").css("background-color","#FFBBAA");
 				}
 				$("#form_update").html(response.data);
-			},
-			error : function(response)
+			})
+			.fail(function(response)
 			{
 				$("#form_update").css("background-color","#FFBBAA");
 				$("#form_update").html(response);
-			}
-		});
+			});
 	});
 	
 	
@@ -153,11 +150,8 @@ $(document).ready(function() {
 		$("#form_reindex").css("background-color","");
 		$("#form_reindex").html("Re-Index en cours");
 
-		$.ajax({
-			url:'{path_root}/api.php?mod=admin&rub=reindex',
-			type: 'html',
-			dataType: 'JSON',
-			success: function(response)
+		$.get('{path_root}/api.php?mod=admin&rub=reindex')
+			.done(function(response)
 			{
 				console.log(response);
 
@@ -170,17 +164,16 @@ $(document).ready(function() {
 					$("#form_reindex").css("background-color","#FFBBAA");
 				}
 				$("#form_reindex").html(response.data);
-			},
-			error : function(response)
+			})
+			.fail(function(response)
 			{
 				$("#form_reindex").css("background-color","#FFBBAA");
 				$("#form_reindex").html(response.data);
-			}
-		});
+			});
 	});
 
 	$("#reloademails").click(function (event) {
-		applyConf("form_reloademails",'{path_root}/api.php?mod=admin&rub=emails&fonc=');
+		applyConf("form_reloademails",'{path_root}/api.php?mod=admin&rub=emails');
 	});
 	$("#resetemails").click(function (event) {
 		applyConf("form_resetemails",'{path_root}/api.php?mod=admin&rub=emails&fonc=init');
@@ -222,11 +215,8 @@ $(document).ready(function() {
 		$("#"+form).css("background-color","");
 		$("#"+form).html("En cours...");
 
-		$.ajax({
-			url: url,
-			type: 'html',
-			dataType: 'JSON',
-			success: function(response)
+		$.get(url)
+			.done(function(response)
 			{
 				if (response.result=="OK")
 				{
@@ -237,13 +227,12 @@ $(document).ready(function() {
 					$("#"+form).css("background-color","#FFBBAA");
 				}
 				$("#"+form).html(response.data);
-			},
-			error : function(response)
+			})
+			.fail(function(response)
 			{
 				$("#"+form).css("background-color","#FFBBAA");
 				$("#"+form).html(response.data);
-			}
-		});
+			});
 	}
 
 

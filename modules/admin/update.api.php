@@ -180,6 +180,10 @@ function AjoutLog($txt)
 			foreach($tabTmpl[$tab] as $field=>$d)
 			{
 // echo $tab.":".$field."=".$tabTmpl[$tab][$field]["Type"]." ".$tabProd[$MyOpt["tbl"]."_".$tab][$field]["Type"]."<br>\n";
+				if (!isset($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Default"]))
+				{
+					$tabProd[$MyOpt["tbl"]."_".$tab][$field]["Default"]="";
+				}
 
 				// Le champ n'existe pas
 				if (!isset($tabProd[$MyOpt["tbl"]."_".$tab][$field]))
@@ -259,6 +263,23 @@ function AjoutLog($txt)
 					else
 					{
 						$ret["data"].=AjoutLog(" - ".$tabLang["lang_modify"]." ".$MyOpt["tbl"]."_".$tab.":".$field." -> ".$tabTmpl[$tab][$field]["Type"]." ".$tabTmpl[$tab][$field]["Default"]."!=".$tabProd[$MyOpt["tbl"]."_".$tab][$field]["Default"]);
+					}
+				}
+				else if ( (!isset($tabTmpl[$tab][$field]["Default"])) || (!isset($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Default"])) )
+				{
+					$p1="";
+					if (isset($tabTmpl[$tab][$field]["Default"]))
+					{
+						$p1=$tabTmpl[$tab][$field]["Default"];
+					}
+					$p2="";
+					if (isset($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Default"]))
+					{
+						$p2=$tabProd[$MyOpt["tbl"]."_".$tab][$field]["Default"];
+					}
+					if (($p1!="") || ($p2!=""))
+					{
+						$ret["data"].=AjoutLog(" - error ".$MyOpt["tbl"]."_".$tab.":".$field." -> \$tabTmpl['".$tab."']['".$field."']['Default']='".$p1."' - \$tabProd['".$tab."']['".$field."']['Default']='".$p2."'");
 					}
 				}
 				else if ( ($field=="id") && ($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Extra"]!="auto_increment") )

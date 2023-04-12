@@ -1008,7 +1008,7 @@ class objet_core
 		}
 		if (!isset($tabobj["uid_creat"]))
 		{
-			$tabobj["uid_creat"]=Array("Type" => "int(10) unsigned");
+			$tabobj["uid_creat"]=Array("Type" => "int(10) unsigned", "Default" => "0");
 		}
 		if (!isset($tabobj["dte_creat"]))
 		{
@@ -1016,7 +1016,7 @@ class objet_core
 		}
 		if (!isset($tabobj["uid_maj"]))
 		{
-			$tabobj["uid_maj"]=Array("Type" => "int(10) unsigned");
+			$tabobj["uid_maj"]=Array("Type" => "int(10) unsigned", "Default" => "0");
 		}
 		if (!isset($tabobj["dte_maj"]))
 		{

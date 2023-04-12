@@ -44,9 +44,11 @@
 
 			$(function() {
 				$.ajax({
-					url:'{rootfolder}/api.php?fonc=login&myusr='+username+'&mypwd='+password,
-					type: 'html',
-					dataType: 'JSON',
+					url:'{rootfolder}/api.php',
+					type: 'POST',
+					dataType: 'json',
+					data: '{"fonc":"login","myusr":"'+username+'","mypwd":"'+password+'"}',
+					contentType: "application/json; charset=utf-8",
 					success: function(response)
 					{
 						console.log(response);
@@ -80,9 +82,11 @@
 
 			$(function() {
 				$.ajax({
-					url:'{rootfolder}/api.php?fonc=login&mykey='+mytoken,
-					type: 'html',
-					dataType: 'JSON',
+					url:'{rootfolder}/api.php',
+					type: 'POST',
+					dataType: 'json',
+					data: '{"fonc":"login","mykey":"'+mytoken+'"}',
+					contentType: "application/json; charset=utf-8",
 					success: function(response)
 					{
 						<!-- console.log(response); -->

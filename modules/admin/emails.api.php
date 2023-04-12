@@ -34,7 +34,7 @@
 		$query="SELECT id FROM ".$MyOpt["tbl"]."_mailtmpl WHERE nom='".$name."'";
 		$res=$sql->QueryRow($query);
 
-		if ($res["id"]>0)
+		if ((isset($res["id"])) && ($res["id"]>0))
 		{
 			if ($fonc=="init")
 			{
