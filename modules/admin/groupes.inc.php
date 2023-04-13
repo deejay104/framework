@@ -35,7 +35,7 @@
 	require_once("modules/".$mod."/menu.inc.php");
 	$tmpl_x->assign("aff_menu",$aff_menu);
 
-	addPageMenu("","admin",$tabLang["lang_new"],geturl("admin","grpdetail",""),"");
+	addPageMenu("","admin",$tabLang["lang_new"],geturl("admin","groupes/gdetail",""),"");
 
 
 // ---- Liste les groupes
@@ -54,9 +54,9 @@
 		{
 			$sql->GetRow($i);
 			$tabValeur[$i]["groupe"]["val"]=$sql->data["groupe"];
-			$tabValeur[$i]["groupe"]["aff"]="<a href='/admin/grpdetail?grp=".$sql->data["groupe"]."'>".$sql->data["groupe"]."</a>";
+			$tabValeur[$i]["groupe"]["aff"]="<a href='/admin/groupes/gdetail?grp=".$sql->data["groupe"]."'>".$sql->data["groupe"]."</a>";
 			$tabValeur[$i]["description"]["val"]=$sql->data["description"];
-			$tabValeur[$i]["description"]["aff"]="<a href='/admin/grpdetail?grp=".$sql->data["groupe"]."'>".$sql->data["description"]."</a>";
+			$tabValeur[$i]["description"]["aff"]="<a href='/admin/groupes/gdetail?grp=".$sql->data["groupe"]."'>".$sql->data["description"]."</a>";
 	  }
 
 	if ($order=="") { $order="groupe"; }

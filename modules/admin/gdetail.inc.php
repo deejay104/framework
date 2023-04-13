@@ -133,9 +133,9 @@
 	$tmpl_x->assign("aff_menu",$aff_menu);
 
 	addPageMenu("","admin",$tabLang["lang_list"],geturl("admin","groupes",""),"mdi-keyboard-backspace");
-	addPageMenu("","admin",$tabLang["lang_new"],geturl("admin","grpdetail",""),"");
-	addPageMenu("","admin",$tabLang["lang_copy"],geturl("admin","grpdetail","grp=".$grp."&fonc=copier"),"");
-	addPageMenu("","admin",$tabLang["lang_delete"],geturl("admin","grpdetail","grp=".$grp."&fonc=supprimer"),"",false,"Voulez-vous supprimer ce groupe ?");
+	addPageMenu("","admin",$tabLang["lang_new"],geturl("admin","groupes/gdetail",""),"");
+	addPageMenu("","admin",$tabLang["lang_copy"],geturl("admin","groupes/gdetail","grp=".$grp."&fonc=copier"),"");
+	addPageMenu("","admin",$tabLang["lang_delete"],geturl("admin","groupes/gdetail","grp=".$grp."&fonc=supprimer"),"",false,"Voulez-vous supprimer ce groupe ?");
 
 
 // ---- Affiche les informations
@@ -144,8 +144,12 @@
 
 	$query="SELECT description,principale FROM ".$MyOpt["tbl"]."_groupe WHERE groupe='$grp' LIMIT 1";
 	$res=$sql->QueryRow($query);
-	$tmpl_x->assign("form_desc",$res["description"]);
-	$tmpl_x->assign("form_princ_".$res["principale"],"checked");
+	
+	if (isset($res["description"]))
+	{
+		$tmpl_x->assign("form_desc",$res["description"]);
+		$tmpl_x->assign("form_princ_".$res["principale"],"checked");
+	}
 
 // ---- Liste les roles
 	$tabRolesNok=$tabRoles;
