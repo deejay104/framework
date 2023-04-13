@@ -415,6 +415,11 @@
 		require($appfolder."/modules/admin/mainmenu.inc.php");
 	}
 
+	$tabMenu["logout"]["icone"]="mdi-logout";
+	$tabMenu["logout"]["nom"]=$tabLang["core_logout"];
+	$tabMenu["logout"]["droit"]="";
+	$tabMenu["logout"]["url"]=geturl("","","fonc=logout");
+
 	// if ($theme=="phone")
 	// {
 		// $tabMenu=$tabMenuPhone;
