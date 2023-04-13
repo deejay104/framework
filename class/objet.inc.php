@@ -635,7 +635,7 @@ class objet_core
 		}
 		else if ($this->type[$key]=="varchar")
 		{
-			if ($this->fields[$key]["len"]>0)
+			if ((isset($this->fields[$key]["len"])) && ($this->fields[$key]["len"]>0))
 			{
 				$vv=substr($v,0,$this->fields[$key]["len"]);
 			}

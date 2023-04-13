@@ -101,8 +101,9 @@ class document_core{
 		$myext=GetExtension($name);
 		if (strlen($name)>100)
 		{
-			$filename=substr(GetFilename($name),0,96).".".$myext;
+			$name=substr(GetFilename($name),0,96).".".$myext;
 		}
+		$name=addslashes($name);
 
 	  	$query="INSERT INTO ".$this->tbl."_document SET name='$name', uid='$id', droit='$this->droit', type='$this->type', actif='oui', uid_creat='$gl_uid',dte_creat='".now()."', uid_maj='$gl_uid',dte_maj='".now()."'";
 		$this->id=$sql->Insert($query);
@@ -464,7 +465,12 @@ class document_core{
 	{
 		$file=$this->filepath."/".$this->filename;
 	  	list($newwidth, $newheight) = getimagesize($file);
-		
+
+		if (!is_numeric($newwidth))
+		{
+			return;
+		}
+
 		if (!file_exists($file))
 		{
 		  	return;
