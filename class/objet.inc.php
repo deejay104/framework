@@ -244,7 +244,7 @@ class objet_core
 			}
 			else if ($type=="bool")
 		  	{
-				$ret="<label class='toggle-switch toggle-switch-success'><input id='".$key."'type='checkbox' ".(($txt=="oui") ? "checked" : "")."><span class='toggle-slider round'></span></label>";
+				$ret="<label class='toggle-switch toggle-switch-success'><input id='".$key."'type='checkbox' name=\"".$formname."[$key]\" ".(($txt=="oui") ? "checked" : "")." value='oui'><span class='toggle-slider round'></span></label>";
 
 			}
 			else if (($type=="enum") && (isset($this->tabList[$key][$lang])) && (is_array($this->tabList[$key][$lang])))
@@ -528,6 +528,10 @@ class objet_core
 		{
 			$ret=$txt;
 		}
+		else if ($type=="bool")
+		{
+			$ret=$txt;
+		}
 		else if ($type=="enum")
 		{
 			$ret=$txt;
@@ -591,6 +595,17 @@ class objet_core
 		else if ($this->type[$key]=="text")
 		{
 			$vv=$v;
+		}
+		else if ($this->type[$key]=="bool")
+		{
+			if (($v=="on") || ($v=="oui"))
+			{
+				$vv="oui";
+			}
+			else
+			{
+				$vv="non";
+			}
 		}
 	  	else if ($this->type[$key]=="date")
 		{
@@ -684,12 +699,14 @@ class objet_core
 		$sql=$this->sql;
 		
 		$td=array();
-		foreach($this->data as $k=>$v)
+		// foreach($this->data as $k=>$v)
+		foreach($this->fields as $k=>$v)
 		{
 			// A réactiver après test
 			// if ( ((isset($this->droit[$k])) && (GetDroit($this->droit[$k]))) || (!isset($this->droit[$k])) || ($this->droit[$k]=="") )
 			// {
-				$vv=$this->Valid($k,$v,true);
+				//$vv=$this->Valid($k,$v,true);
+				$vv=$this->Valid($k,$this->data[$k],true);
 				$td[$k]=$vv;
 			// }
 		}
@@ -715,6 +732,10 @@ class objet_core
 		return $sql->a_rows;
 	}
 
+	function getFields()
+	{
+		return $this->fields;
+	}
 	function GetDroit($key)
 	{
 		if (!isset($this->droit[$key]))

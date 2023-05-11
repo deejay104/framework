@@ -63,10 +63,21 @@
 		// Sauvegarde les données
 		if (count($form_data)>0)
 		{
-			foreach($form_data as $k=>$v)
+			foreach($usr->getFields() as $k=>$v)
 		  	{
-		  		$err=$usr->Valid($k,$v);
-				affInformation($err,"error");
+				if (isset($form_data[$k]))
+				{
+					//$err=$usr->Valid($k,$v);
+					$err=$usr->Valid($k,$form_data[$k]);
+					if ($err!="")
+					{
+						affInformation($err,"error");
+					}
+				}
+				else if ($v["type"]=="bool")
+				{
+					$err=$usr->Valid($k,"non");
+				}
 		  	}
 		}
 		$usr->Save();
