@@ -63,9 +63,9 @@
 		// Sauvegarde les données
 		if (count($form_data)>0)
 		{
-			foreach($usr->getFields() as $k=>$v)
+			foreach($form_data as $k=>$v)
 		  	{
-				if (isset($form_data[$k]))
+				if ($usr->isFields($k))
 				{
 					//$err=$usr->Valid($k,$v);
 					$err=$usr->Valid($k,$form_data[$k]);
@@ -73,10 +73,6 @@
 					{
 						affInformation($err,"error");
 					}
-				}
-				else if ($v["type"]=="bool")
-				{
-					$err=$usr->Valid($k,"non");
 				}
 		  	}
 		}
@@ -87,25 +83,28 @@
 		}
 
 		// Sauvegarde la photo
-		$form_photo=$_FILES["form_photo"];
-		if ((isset($form_photo["name"][0])) && ($form_photo["name"][0]!=""))
+		if (isset($_FILES["form_photo"]))
 		{
-			$lstdoc=ListDocument($sql,$id,"avatar");
-		  	
-			if (count($lstdoc)>0)
+			$form_photo=$_FILES["form_photo"];
+			if ((isset($form_photo["name"][0])) && ($form_photo["name"][0]!=""))
 			{
-				foreach($lstdoc as $i=>$did)
+				$lstdoc=ListDocument($sql,$id,"avatar");
+				
+				if (count($lstdoc)>0)
 				{
-					$doc = new document_core($did,$sql);
-					$doc->Delete();
+					foreach($lstdoc as $i=>$did)
+					{
+						$doc = new document_core($did,$sql);
+						$doc->Delete();
+					}
 				}
-			}
-		  	$doc = new document_core(0,$sql,"avatar");
-		  	$doc->droit="ALL";
-		  	$err=$doc->Save($id,$_FILES["form_photo"]["name"],$_FILES["form_photo"]["tmp_name"]);
-			$doc->Resize(200,240);
+				$doc = new document_core(0,$sql,"avatar");
+				$doc->droit="ALL";
+				$err=$doc->Save($id,$_FILES["form_photo"]["name"],$_FILES["form_photo"]["tmp_name"]);
+				$doc->Resize(200,240);
 
-			affInformation($err,"error");
+				affInformation($err,"error");
+			}			
 		}
 
 		// Sauvegarde un document
@@ -194,17 +193,17 @@
 
 // ---- Modifie les infos
 	if (($fonc=="modifier") && ((GetMyId($id)) || (GetDroit("ModifUser"))))
-	  {
+	{
 		$typeaff="form";
-	  }
+	}
 	else
-	  {
+	{
 		$typeaff="html";
-	  }
+	}
 	
 // ---- Affiche les infos
 	if ((is_numeric($id)) && ($id>0))
-	  {
+	{
 		$usr = new user_core($id,$sql,((GetMyId($id)) ? true : false));
 		$usr->LoadDonneesComp();
 
@@ -213,9 +212,9 @@
 		$usrmaj = new user_core($usr->uid_maj,$sql);
 		$tmpl_x->assign("info_maj", $usrmaj->aff("fullname")." ".$usr->LastUpdate());
 		$tmpl_x->assign("info_connect", sql2date($usr->data["dte_login"]));
-	  }
+	}
 	else if (GetDroit("CreeUser"))
-	  {
+	{
 		$tmpl_x->assign("titre", "Saisie d'un nouvel utilisateur");
 
 		$usr = new user_core("0",$sql,false);
@@ -227,15 +226,17 @@
 		$tmpl_x->assign("info_maj", $usrmaj->aff("fullname")." ".$usr->LastUpdate());
 
 		$typeaff="form";
-	  }
+	}
 	else
-	  {
+	{
 		FatalError("Paramètre d'id non valide");
-	  }
+	}
 
 // ---- Affiche toutes les donnees
 	foreach($usr->data as $k=>$v)
-	  { $tmpl_x->assign("form_$k", $usr->aff($k,$typeaff)); }
+	{
+		$tmpl_x->assign("form_".$k, $usr->aff($k,$typeaff));
+	}
 
 	if ($typeaff=="form")
 	{

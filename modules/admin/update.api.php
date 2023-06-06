@@ -81,10 +81,7 @@ function AjoutLog($txt)
                         $tabProd[$tab][$sql->data["Field"]]["Type"]=$sql->data["Type"];
                         $tabProd[$tab][$sql->data["Field"]]["Null"]=$sql->data["Null"];
                         $tabProd[$tab][$sql->data["Field"]]["Extra"]=$sql->data["Extra"];
-                        if ($sql->data["Default"]!="")
-                        {
-                                $tabProd[$tab][$sql->data["Field"]]["Default"] = $sql->data["Default"];
-                        }
+                        $tabProd[$tab][$sql->data["Field"]]["Default"] = $sql->data["Default"];
                 }
 
                 // Get Index
@@ -245,10 +242,9 @@ function AjoutLog($txt)
                                         }
                                 }
                                 //
-                                else if ( (isset($tabTmpl[$tab][$field]["Default"])) && ($tabTmpl[$tab][$field]["Default"]!=$tabProd[$MyOpt["tbl"]."_".$tab][$field]["Default"]) )
+                                else if ( (isset($tabTmpl[$tab][$field]["Default"])) && (isset($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Default"])) && ($tabTmpl[$tab][$field]["Default"]!=$tabProd[$MyOpt["tbl"]."_".$tab][$field]["Default"]) )
                                 {
 // ALTER TABLE `core_roles` CHANGE `dte_maj` `dte_maj` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00';
-
                                         $q="ALTER TABLE `".$MyOpt["tbl"]."_".$tab."` CHANGE `".$field."` `".$field."` ".$tabTmpl[$tab][$field]["Type"]." DEFAULT ".(isset($tabTmpl[$tab][$field]["Default"]) ? " '".$tabTmpl[$tab][$field]["Default"]."' NOT NULL" : "NULL");
                                         $res=$sql->Update($q);
                                         if ($res==-1)
@@ -258,7 +254,7 @@ function AjoutLog($txt)
                                         }
                                         else
                                         {
-                                                $ret["data"].=AjoutLog(" - ".$tabLang["lang_modify"]." ".$MyOpt["tbl"]."_".$tab.":".$field." -> ".$tabTmpl[$tab][$field]["Type"]." ".$tabTmpl[$tab][$field]["Default"]."!=".$tabProd[$MyOpt["tbl"]."_".$tab][$field]["Default"]);
+                                                $ret["data"].=AjoutLog(" - ".$tabLang["lang_modify"]." ".$MyOpt["tbl"]."_".$tab.":".$field." -> ".$tabTmpl[$tab][$field]["Type"]." '".$tabTmpl[$tab][$field]["Default"]."'!='".(isset($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Default"]) ? $tabProd[$MyOpt["tbl"]."_".$tab][$field]["Default"] : "")."'");
                                         }
                                 }
                                 else if ( ($field=="id") && ($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Extra"]!="auto_increment") )

@@ -60,6 +60,8 @@ class user_core extends objet_core
 	// );
 
 	protected $droit=array(
+		"password"=>"ModifUserPassword",
+		"creds"=>"ModifUserPassword",
 		"prenom"=>"ModifUserInfos",
 		"nom"=>"ModifUserInfos",
 		"droits"=>"ModifUserDroits",
@@ -67,6 +69,8 @@ class user_core extends objet_core
 		"groupe"=>"ModifUserGroupe",
 		"virtuel"=>"ModifUserVirtuel",
 		"initiales"=>array("ownerid","ModifUserInfos"),
+		"language"=>array("ownerid","ModifUserInfos"),
+		"commentaire"=>array("ownerid","ModifUserInfos"),
 		"mail"=>array("ownerid","ModifUserInfos"),
 		"notification"=>array("ownerid","ModifUserInfos"),
 	);
