@@ -90,7 +90,7 @@ function getip()
 	return $ip;
 }
 
-function addPageMenu($path="",$mod,$title,$url,$img,$selected=false,$confirm="",$onclick="")
+function addPageMenu($path,$mod,$title,$url,$img,$selected=false,$confirm="",$onclick="")
 {
 	global $tmpl_prg,$module,$MyOpt;
 	
@@ -431,7 +431,8 @@ function LoadTemplate($tmpl,$mymod="",$custom=true)
 }
 
 // Affiche un temps en minute en heures/minutes
-function AffTemps($tps,$short="yes") {
+function AffTemps($tps=0,$short="yes") {
+	$tps=intval($tps);
 	$th=floor(abs($tps)/60);
 	$tm=abs($tps)-$th*60;
 	$tm=substr("00",0,2-strlen($tm)).$tm;
@@ -559,7 +560,7 @@ function CalcDate($dte, $n)
 
 
   
-function SendMailFromFile($from,$to,$tabcc,$subject="",$tabvar,$name,$files="",$dest="mail")
+function SendMailFromFile($from,$to,$tabcc,$subject="",$tabvar=array(),$name="",$files="",$dest="mail")
 { global $sql,$mod,$appfolder,$MyOpt,$gl_uid;
 	$q="SELECT * FROM ".$MyOpt["tbl"]."_mailtmpl WHERE nom='".$name."'";
 	$res=$sql->QueryRow($q);
@@ -1038,7 +1039,7 @@ function TrieValInv ($a, $b)
 
 */
 
-function AfficheTableauRemote($tabTitre="",$url,$order="",$trie="d",$search,$nbline=25,$idtbl="")
+function AfficheTableauRemote($tabTitre,$url,$order="",$trie="d",$search="",$nbline=25,$idtbl="")
 {
 	global $mod,$rub,$corefolder,$MyOpt,$tabLang;
 
