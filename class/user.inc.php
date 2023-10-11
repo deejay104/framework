@@ -102,7 +102,7 @@ class user_core extends objet_core
 	);
 	
 	# Constructor
-	function __construct($id=0,$sql,$me=false)
+	function __construct($id=0,$sql="",$me=false)
 	{
 		$this->id=$id;
 		$this->me=$me;
@@ -146,7 +146,7 @@ class user_core extends objet_core
 		$this->prenom=($this->data["prenom"]!="") ? ucwords($this->data["prenom"]) : "";
 		$this->nom=($this->data["nom"]!="") ? strtoupper($this->data["nom"]) : "";
 		$this->virtuel=$this->data["virtuel"];
-		$this->mail=strtolower($this->data["mail"]);
+		$this->mail=isset($this->data["mail"]) ? strtolower($this->data["mail"]) : "";
 		$this->fullname=AffFullName($this->prenom,$this->nom);
 		$this->data["droits"]="";
 	
@@ -322,7 +322,7 @@ class user_core extends objet_core
 			}
 			else if (($key=="nom") && ($render!="read"))
 			{
-				$ret=strtoupper($this->data[$key]);
+				$ret=isset($this->data[$key]) ? strtoupper($this->data[$key]) : "";
 				if ($ret=="")
 				{
 					$ret="<i>NA</i>";
@@ -338,7 +338,10 @@ class user_core extends objet_core
 			{
 				if ($this->actif!="oui")
 				{
-					$ret="<a href='".geturl("membres","detail","id=".$this->id)."'><s>".ucwords($this->data[$key])."</s></a>";
+					if ($this->data[$key])
+					{
+						$ret="<a href='".geturl("membres","detail","id=".$this->id)."'><s>".ucwords($this->data[$key])."</s></a>";
+					}
 				}
 
 			}
@@ -906,7 +909,7 @@ class groupe_core extends objet_core
 		"principale" => Array("type" => "bool", "default" => "non", "index" => "1", ),
 	);
 
-	function __construct($id=0,$sql,$grp="")
+	function __construct($id=0,$sql="",$grp="")
 	{
 		parent::__construct($id,$sql);
 		if ($grp!="")

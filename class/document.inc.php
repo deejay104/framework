@@ -24,7 +24,7 @@ class document_core{
 	protected $table="document";
 	
  	# Constructor
-	function __construct($id="",$sql,$type="document"){
+	function __construct($id=0,$sql="",$type="document"){
 		global $MyOpt;
 		global $gl_uid;
 

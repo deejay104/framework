@@ -57,7 +57,7 @@ class objet_core
 	public $settime=true;
 	
 	# Constructor	
-	function __construct($id=0,$sql)
+	function __construct($id=0,$sql="")
 	{
 		global $MyOpt;
 		global $gl_uid;

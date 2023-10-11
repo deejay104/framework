@@ -16,7 +16,7 @@ class echeance_core extends objet_core
 
 
  	# Constructor
-	function __construct($id="",$sql,$uid=0){
+	function __construct($id=0,$sql="",$uid=0){
 		global $MyOpt;
 		global $gl_uid;
 
