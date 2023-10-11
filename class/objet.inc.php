@@ -114,6 +114,10 @@ class objet_core
 					{
 						$this->data[$key]=0;
 					}
+					if (!(isset($field["default"])))
+					{
+						$this->fields[$key]["default"]=0;
+					}
 				}
 				else if (isset($field["default"]))
 				{
@@ -238,6 +242,25 @@ class objet_core
 		
 		if ($render=="form")
 		{
+			$placeholder="";
+			if ((isset($this->fields[$key]["placeholder"])) && ($this->fields[$key]["placeholder"]))
+			{
+				$defaultaff=(isset($this->fields[$key]["default"])) ? $this->fields[$key]["default"] : "";
+
+				if (($type=="number") && ($txt=="0"))
+				{
+					$txt="";
+				}
+				else if (($type=="duration") && ($txt=="0h 00"))
+				{
+					$txt="";
+				}
+
+				$placeholder="placeholder='".$defaultaff."'";
+			}
+
+
+
 			if ($type=="text")
 		  	{
 				$ret="<textarea id='".(($formid!="") ? $formid : "").$key."' class='form-control form-input' name=\"".$formname."[$key]\" rows=8>".$txt."</textarea>";
@@ -330,12 +353,12 @@ class objet_core
 			}
 			else if ($type=="price")
 			{
-				$ret="<INPUT id='".(($formid!="") ? $formid : "").$key."' class='form-control form-input'  name=\"".$formname."[$key]\" value=\"".$txt."\" type=\"number\" step=\"0.01\" style='width:150px!important;'>";
+				$ret="<INPUT id='".(($formid!="") ? $formid : "").$key."' class='form-control form-input'  name=\"".$formname."[$key]\" value=\"".$txt."\" type=\"number\" step=\"0.01\" style='width:150px!important;' placeholder='0'>";
 			}
 			else if ($type=="duration")
 			{
 				$len=80;
-				$ret="<INPUT id='".(($formid!="") ? $formid : "").$key."' class='form-control form-input'  name=\"".$formname."[$key]\" value=\"".$txt."\" style='width:80px!important;'>";
+				$ret="<INPUT id='".(($formid!="") ? $formid : "").$key."' class='form-control form-input'  name=\"".$formname."[$key]\" value=\"".$txt."\" style='width:80px!important;' placeholder='0h 00'>";
 			}
 			else if (is_array($txt))
 			{
@@ -344,7 +367,7 @@ class objet_core
 			else
 			{
 				$type=(isset($type)) ? $type : "text";
-				$ret="<INPUT id='".(($formid!="") ? $formid : "").$key."' name=\"".$formname."[$key]\" value=\"".$txt."\" ".(($type!="") ? "type=\"".$type."\"" : "")." class='form-control form-input' ".((isset($this->fields[$key]["len"]) && ($this->fields[$key]["len"]>0)) ? "maxlength='".$this->fields[$key]["len"]."'" : "").">";
+				$ret="<INPUT id='".(($formid!="") ? $formid : "").$key."' name=\"".$formname."[$key]\" value=\"".$txt."\" ".(($type!="") ? "type=\"".$type."\"" : "").$placeholder." class='form-control form-input' ".((isset($this->fields[$key]["len"]) && ($this->fields[$key]["len"]>0)) ? "maxlength='".$this->fields[$key]["len"]."'" : "").">";
 			}
 		}
 		else
@@ -591,6 +614,10 @@ class objet_core
 				$vv="";
 			}
 		}
+		else if ($this->type[$key]=="number")
+		{
+			$vv=intval($v);
+		}		
 		else if ($this->type[$key]=="duration")
 		{
 			$vv=CalcTemps($v,false);
