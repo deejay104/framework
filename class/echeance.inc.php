@@ -47,6 +47,12 @@ class echeance_core extends objet_core
 		$sql=$this->sql;
 		$query = "SELECT echeance.*, echeancetype.context, echeancetype.poste, echeancetype.description, echeancetype.droit, echeancetype.multi, echeancetype.resa FROM ".$this->tbl."_echeance AS echeance LEFT JOIN ".$this->tbl."_echeancetype AS echeancetype ON echeance.typeid=echeancetype.id WHERE echeance.id='$id'";
 		$res = $sql->QueryRow($query);
+
+		if (!isset($res["id"]))
+		{
+			return false;
+		}
+
 		// Charge les variables
 		$this->context=$res["context"];
 		$this->typeid=$res["typeid"];

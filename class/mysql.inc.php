@@ -133,7 +133,7 @@ class mysql_core{
 			$res=$this->QueryRow($query);
 		}
 
-		if ($res["id"]>0)
+		if ((isset($res["id"])) && ($res["id"]>0))
 		{
 			$query="UPDATE ".$tab." SET ".$v." WHERE id='".$id."'";
 			$this->Update($query);
