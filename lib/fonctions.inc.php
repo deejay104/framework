@@ -1519,6 +1519,10 @@ function FatalError($txt,$msg="")
 function AffMontant($val)
   {
   	global $MyOpt;
+	if (!is_numeric($val))
+	{
+		$val=0;
+	}
   	preg_match("/([\-0-9]*)\.?([0-9]*)/i",round($val,2),$m);
 	$ret=$m[1].",".$m[2].substr("00",0,2-strlen($m[2]));
 	

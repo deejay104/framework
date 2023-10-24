@@ -30,7 +30,7 @@ class mysql_core{
 	function Delete($query){
 		$this->result=@mysqli_query($this->id,$query) or
 			$this->mysql_ErrorMsg("Unable to perform Delete: $query");
-		$this->a_rows=@mysqli_affected_rows($this->result);
+		$this->a_rows=@mysqli_affected_rows($this->id);
 	}
 
 	# Update elements in database

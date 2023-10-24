@@ -41,13 +41,8 @@
 	{
 		$_SESSION['tab_checkpost'][$checktime]=$checktime;
 
-		if (($form_message!=$langTab["lang_newmsg"]) || ($id>0))
+		if (($form_message!="") || ($id>0))
 		{
-			if ($form_message==$langTab["lang_newmsg"])
-			{
-				$form_message="";
-			}
-			
 			$td=array(
 				"titre"=>addslashes(strip_tags($form_titre)),
 				"message"=>addslashes(strip_tags($form_message)),
