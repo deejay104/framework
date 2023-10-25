@@ -870,6 +870,16 @@ function AffListeMembres($sql,$form_uid,$name,$type="",$sexe="",$order="std",$vi
 function AffFullname($prenom,$nom)
 {
 	global $MyOpt;
+
+	if (!isset($nom))
+	{
+		$nom="";
+	}
+	if (!isset($prenom))
+	{
+		$prenom="";
+	}
+
 	$fullname="";
 	$nom=strtoupper($nom);
 	$prenom=preg_replace("/-/"," ",$prenom);

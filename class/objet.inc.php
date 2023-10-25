@@ -603,6 +603,11 @@ class objet_core
 			return "";
 		}
 
+		if (!isset($v))
+		{
+			$v="";
+		}
+
 		if (!isset($this->type[$key]))
 		{
 			if (!is_array($v))

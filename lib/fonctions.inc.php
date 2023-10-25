@@ -1,4 +1,12 @@
 <?php
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+require 'external/phpmailer/src/Exception.php';
+require 'external/phpmailer/src/PHPMailer.php';
+require 'external/phpmailer/src/SMTP.php';
+
+
 // ---------------------------------------------------------------------------------------------
 //   Fonctions
 // ---------------------------------------------------------------------------------------------
@@ -641,8 +649,6 @@ function MyMail($from,$to,$tabcc,$subject,$message,$headers="",$files="")
 	}
 
 	if ($MyOpt["sendmail"]!="on") { myPrint("From:".$txtfrom." - To:".$to." - Cc:".$txtcc." - Subject:".$subject); return false; }
-
-	require_once 'external/PHPMailer/PHPMailerAutoload.php';
 	
 	//Create a new PHPMailer instance
 	$mail = new PHPMailer;
