@@ -11816,6 +11816,7 @@ fieldset:disabled .wizard > .actions a,
 .btn-outline-primary {
   color: #267CB9;
   border-color: #267CB9;
+  background-color: #ffffff;
 }
 
 .btn-outline-primary:hover {
@@ -12169,6 +12170,7 @@ fieldset:disabled .wizard > .actions a,
   font-size: 0.875rem;
   line-height: 1.5;
   border-radius: 0;
+  margin-bottom:4px;
 }
 
 .btn-block {
