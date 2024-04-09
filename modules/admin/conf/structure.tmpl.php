@@ -133,7 +133,7 @@ $tabTmpl=Array
 	(
 		"id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
 		"nom" => Array("Type" => "varchar(12)","Index"=>"1"),
-		"titre" => Array("Type" => "varchar(50)"),
+		"titre" => Array("Type" => "varchar(100)"),
 		"corps" => Array("Type" => "text"),
 		"balise" => Array("Type" => "varchar(100)"),
 		"uid_creat" => Array("Type" => "int(10) unsigned", "Default" => "0"),
