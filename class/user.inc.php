@@ -38,6 +38,8 @@ class user_core extends objet_core
 		"virtuel" => Array("type" => "bool", "default" => "non", "index" => "1", ),
 		"language" => Array("type" => "enum", "default" => "fr" ),
 		"aff_msg" => Array("type" => "number", "default" => "0", ),
+		"aff_mail" => Array("type" => "bool", "default" => "oui", ),
+		"aff_infos" => Array("type" => "bool", "default" => "oui", ),
 		"dte_login" => Array("type" => "datetime", "default" => "0000-00-00 00:00:00"),
 		"uid_creat" => Array("type" => "number", "default" => "0"),
 		"dte_creat" => Array("type" => "date", "default" => "0000-00-00"),
@@ -72,7 +74,8 @@ class user_core extends objet_core
 		"language"=>array("ownerid","ModifUserInfos"),
 		"commentaire"=>array("ownerid","ModifUserInfos"),
 		"mail"=>array("ownerid","ModifUserInfos"),
-		"notification"=>array("ownerid","ModifUserInfos"),
+		"aff_mail"=>array("ownerid"),
+		"aff_infos"=>array("ownerid"),
 	);
 
 	protected $tabList=array(

@@ -27,6 +27,9 @@
 	$tabLang["lang_nickname"]="Nickname";
 	$tabLang["lang_virtual"]="Virtual user";
 	$tabLang["lang_notification"]="Notify by email";
+	$tabLang["lang_aff_mail"]="Show email";
+	$tabLang["lang_aff_infos"]="Show personal data";
+
 	$tabLang["lang_maingroup"]="Main group";
 	$tabLang["lang_language"]="Language";
 

@@ -27,6 +27,9 @@
 	$tabLang["lang_nickname"]="Initiales";
 	$tabLang["lang_virtual"]="Utilisateur virtuel";
 	$tabLang["lang_notification"]="Notifier par email";
+	$tabLang["lang_aff_mail"]="Afficher email";
+	$tabLang["lang_aff_infos"]="Afficher données";
+
 	$tabLang["lang_maingroup"]="Groupe principal";
 	$tabLang["lang_language"]="Langue";
 
@@ -36,7 +39,7 @@
 	$tabLang["lang_picture2"]="Celle-ci sera transférée sur le serveur et remplacera la photo existante";
 	
 	$tabLang["lang_comments"]="Commentaires";
-	$tabLang["lang_data"]="Données";
+	$tabLang["lang_data"]="Données Personnelles";
 	$tabLang["lang_documents"]="Documents";
 	$tabLang["lang_deadline"]="Echéances";
 	$tabLang["lang_rights"]="Droits";

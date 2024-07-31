@@ -22,7 +22,7 @@
 <?
 	$id=checkVar("id","numeric");
 	if ( (!GetDroit("AccesMembre")) && (!GetMyId($id)) )
-	  { FatalError("Accès non autorisé (AccesMembre)"); }
+	  { FatalError("Accï¿½s non autorisï¿½ (AccesMembre)"); }
 
 	require_once ("class/document.inc.php");
 	require_once ("class/echeance.inc.php");
@@ -60,7 +60,7 @@
 
 	if (($fonc==$tabLang["lang_save"]) && ((GetMyId($id)) || (GetDroit("ModifUser"))) && (!isset($_SESSION['tab_checkpost'][$checktime])))
 	{
-		// Sauvegarde les données
+		// Sauvegarde les donnï¿½es
 		if (count($form_data)>0)
 		{
 			foreach($form_data as $k=>$v)
@@ -120,7 +120,7 @@
 			}
 		}
 
-		// Sauvegarde des échéances
+		// Sauvegarde des ï¿½chï¿½ances
 		if ((isset($form_echeance)) && (is_array($form_echeance)))
 		{
 			foreach($form_echeance as $i=>$d)
@@ -159,7 +159,7 @@
 		affInformation($err,"error");
 	}
 
-	// Sauvegarde les données utilisateurs
+	// Sauvegarde les donnï¿½es utilisateurs
 	if (($fonc==$tabLang["lang_save"]) && ($id>0) && (GetDroit("ModifUserDonnees")) && (is_array($form_donnees)))
 	{
 		$usr->LoadDonneesComp();
@@ -229,7 +229,7 @@
 	}
 	else
 	{
-		FatalError("Paramètre d'id non valide");
+		FatalError("ParamÃ¨tre d'id non valide");
 	}
 
 // ---- Affiche toutes les donnees
@@ -278,61 +278,7 @@
 			$tmpl_x->assign("aff_avatar",$MyOpt["host"]."/".$corefolder."/static/images/none.gif");
 		}	
 
-
-		// Affiche les documents
-		$lstdoc=ListDocument($sql,$id,"document");
-
-		if (($typeaff=="form") && ((GetMyId($id)) || (GetDroit("ModifUserDocument")) || (GetDroit("ModifUserAll"))))
-		{
-			$doc = new document_core(0,$sql);
-			$doc->editmode="form";
-			$tmpl_x->assign("form_document",$doc->Affiche());
-			$tmpl_x->parse("corps.lst_document");
-		}
-		  	
-		if (is_array($lstdoc))
-		{
-			foreach($lstdoc as $i=>$did)
-			{
-				$doc = new document_core($did,$sql);
-				$doc->editmode=($typeaff=="form") ? "edit" : "std";
-				$tmpl_x->assign("form_document",$doc->Affiche());
-				$tmpl_x->parse("corps.lst_document");
-			}
-		}
-
-		// Echéances
-		if ($MyOpt["module"]["echeances"]=="on")
-		{
-			$lstdte=ListEcheance($sql,$id);
-
-			if ((is_numeric($id)) && ($id>0))
-			{ 
-				if ($typeaff=="form")
-				{
-					$dte = new echeance_core(0,$sql,$id);
-					$dte->editmode="form";
-					$dte->context="utilisateurs";
-					$tmpl_x->assign("form_echeance",$dte->Affiche());
-					$tmpl_x->parse("corps.aff_echeances.lst_echeance");
-				}
-					
-				if (is_array($lstdte))
-				{
-					foreach($lstdte as $i=>$did)
-					{
-						$dte = new echeance_core($did,$sql,$id);
-						$dte->editmode=($typeaff=="form") ? "edit" : "html";
-						$tmpl_x->assign("form_echeance",$dte->Affiche());
-						$tmpl_x->parse("corps.aff_echeances.lst_echeance");
-					}
-				}
-			}
-			
-			$tmpl_x->parse("corps.aff_echeances");			
-		}
-			
-		// Affiche les données utilisateurs
+		// Affiche les donnÃ©es utilisateurs
 		if (count($usr->donnees)>0)
 		{
 			foreach($usr->donnees as $i=>$d)
@@ -344,7 +290,73 @@
 		}
 	}
 
-// ---- Données spécifique
+		// Affiche les documents
+		if ( (GetMyId($id)) || (GetDroit("ModifUserAll")) || (GetDroit("ModifUserInfos")) )
+		{
+			if ($typeaff=="form")
+			{
+				$doc = new document_core(0,$sql);
+				$doc->editmode="form";
+				$tmpl_x->assign("form_document",$doc->Affiche());
+				$tmpl_x->parse("corps.aff_documents.lst_document");
+			}
+
+			if ((is_numeric($id)) && ($id>0))
+			{
+				$lstdoc=ListDocument($sql,$id,"document");
+			
+				if (is_array($lstdoc))
+				{
+					foreach($lstdoc as $i=>$did)
+					{
+						$doc = new document_core($did,$sql);
+						$doc->editmode=($typeaff=="form") ? "edit" : "std";
+						$tmpl_x->assign("form_document",$doc->Affiche());
+						$tmpl_x->parse("corps.aff_documents.lst_document");
+					}
+				}	
+			}
+
+			$tmpl_x->parse("corps.aff_documents");
+			
+		}
+
+		// EchÃ©ances
+		if ($MyOpt["module"]["echeances"]=="on")
+		{
+			if ( (GetMyId($id)) || (GetDroit("ModifUserAll")) || (GetDroit("ModifUserInfos")) )
+			{
+
+				if ($typeaff=="form")
+				{
+					$dte = new echeance_core(0,$sql,$id);
+					$dte->editmode="form";
+					$dte->context="utilisateurs";
+					$tmpl_x->assign("form_echeance",$dte->Affiche());
+					$tmpl_x->parse("corps.aff_echeances.lst_echeance");
+				}
+					
+				$lstdte=ListEcheance($sql,$id);
+				if ((is_numeric($id)) && ($id>0))
+				{ 
+					if (is_array($lstdte))
+					{
+						foreach($lstdte as $i=>$did)
+						{
+							$dte = new echeance_core($did,$sql,$id);
+							$dte->editmode=($typeaff=="form") ? "edit" : "html";
+							$tmpl_x->assign("form_echeance",$dte->Affiche());
+							$tmpl_x->parse("corps.aff_echeances.lst_echeance");
+						}
+					}
+				}
+				
+				$tmpl_x->parse("corps.aff_echeances");			
+	
+			}
+		}
+
+// ---- DonnÃ©es spÃ©cifique
 
 	if (file_exists($appfolder."/modules/membres/custom.inc.php"))
 	{
@@ -363,12 +375,21 @@
 		}
 	}
 
-// ---- Affiche le bloc de données		
-	if (((isset($left)) && ($left!='')) || (count($usr->donnees)>0))
+// ---- Affiche le bloc de donnÃ©es		
+	if ( (((isset($left)) && ($left!='')) || (count($usr->donnees)>0)) && (($usr->data["aff_infos"]=="oui") || (GetMyId($id)) || (GetDroit("ModifUserAll")) || (GetDroit("ModifUserInfos")) ) )
 	{
 		$tmpl_x->parse("corps.aff_donnees");
 	}
-	
+
+	if ( (($usr->data["aff_mail"]=="oui") || (GetMyId($id)) || (GetDroit("ModifUserAll")) || (GetDroit("ModifUserInfos")) ) )
+	{
+		$tmpl_x->parse("corps.aff_mail");
+	}
+	if ( (GetMyId($id)) || (GetDroit("ModifUserAll")) || (GetDroit("ModifUserInfos")) )
+	{
+		$tmpl_x->parse("corps.aff_infos");
+	}
+
 // ---- Messages
 	if ($msg_erreur!="")
 	{
