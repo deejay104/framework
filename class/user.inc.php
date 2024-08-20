@@ -275,12 +275,26 @@ class user_core extends objet_core
 				}
 				$ret.="</select>";
 			}
+			else if ($key=="mail")
+			{
+				if (($this->data["aff_mail"]=="non") && (!GetDroit("ModifUserInfos")))
+				{
+					$ret="-";
+				}
+			}
 		}
 		else if ($render=="val")
 		{
 			if ($key=="fullname")
 			{
 				$ret=$this->fullname;
+			}
+			else if ($key=="mail")
+			{
+				if (($this->data["aff_mail"]=="non") && (!GetDroit("ModifUserInfos")))
+				{
+					$ret="-";
+				}
 			}
 		}
 		else
@@ -357,6 +371,13 @@ class user_core extends objet_core
 				else
 				{
 					$ret="<a href='".geturl("membres","detail","id=".$this->id)."'>".$this->fullname."</a>";
+				}
+			}
+			else if ($key=="mail")
+			{
+				if (($this->data["aff_mail"]=="non") && (!GetDroit("ModifUserInfos")))
+				{
+					$ret="-";
 				}
 			}
 		}
