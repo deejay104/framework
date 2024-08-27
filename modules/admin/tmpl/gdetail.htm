@@ -134,46 +134,41 @@
 
 
 <script type="text/javascript">
-$(function() {
+	$(function() {
+		$("#DropAllow").sortable({
+			connectWith: "ul",
+			update: function (event, ui) {
+				var order = $(this).sortable('serialize');
+		
+				// POST to server using $.post or $.ajax
+				$.ajax({
+					data: order,
+					type: 'post',
+					url: '{path_root}/api/v1/admin/updgrp?grp={form_grp}&aut=oui'
+				});
+			}
+		});
 
-    $("#DropAllow").sortable({
-		connectWith: "ul",
-		update: function (event, ui) {
-	        var order = $(this).sortable('serialize');
-	
-	        // POST to server using $.post or $.ajax
-	        $.ajax({
-				data: order,
-	            type: 'post',
-	            url: '{path_root}/api/v1/admin/updgrp?grp={form_grp}&aut=oui'
-	        });
-		}
-    });
+		$("#DropDeny").sortable({
+			connectWith: "ul",
+			update: function (event, ui) {
+				var order = $(this).sortable('serialize');
+		
+				// POST to server using $.post or $.ajax
+				$.ajax({
+					data: order,
+					type: 'post',
+					url: '{path_root}/api/v1/admin/updgrp?grp={form_grp}&aut=non'
+				});
+			}
+		});
 
-    $("#DropDeny").sortable({
-		connectWith: "ul",
-		update: function (event, ui) {
-	        var order = $(this).sortable('serialize');
-	
-	        // POST to server using $.post or $.ajax
-	        $.ajax({
-				data: order,
-	            type: 'post',
-	            url: '{path_root}/api/v1/admin/updgrp?grp={form_grp}&aut=non'
-	        });
-		}
-    });
+		$( "#DropDisable" ).sortable({
+			connectWith: "ul"
+		});
 
-    $( "#DropDisable" ).sortable({
-		connectWith: "ul"
-    });
-
- 
-
-    $( "#DropEnable, #DropDisable" ).disableSelection();
-
-
-  });
+		$( "#DropEnable, #DropDisable" ).disableSelection();
+	});
 
 	function CapturePost(e) {
 		text="";
@@ -188,26 +183,17 @@ $(function() {
 			//document.location="{path_root}/admin/grpdetail?grp={form_grp}&search="+document.getElementById("searchtxt").value; 
 			console.log($("#searchtxt").val());
 
-$('li[class*=tagline]:visible').each(function() {
-   $(this).removeClass("dropSelected");
-});
-
-			$('li[id*='+$("#searchtxt").val()+']:visible').each(function() {
-				$(this).addClass("dropSelected");
+			$('li[id^="id_"]').each(function()
+			{
+				$(this).removeClass("dropSelected");
+				if ($(this)[0].outerText.toLowerCase().includes($("#searchtxt").val().toLowerCase()))
+				{
+					console.log("match");
+					$(this).addClass("dropSelected");
+				}
 			});
-			//$("#id_"+$("#searchtxt").val()).css("border","2px solid #ff0000");
-			//$('li[id* = '+$("#searchtxt").val()+']' ).css("background-color","#ff0000");
-			$( 'li[id]' ).filter(function(){
-                    return $(this).attr('id').toLowerCase()==$("#searchtxt").val().toLowerCase();
-                }).css('border','2px solid red');
-	 	}
+		}
 	}
-
-
-
-			$( 'li[title]' ).filter(function(){
-                    return $(this).attr('id').toLowerCase()=="abonnements";
-                }).css('border','2px solid red');
 				
 </script>
 <!-- END: corps -->

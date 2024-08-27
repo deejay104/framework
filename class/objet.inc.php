@@ -88,6 +88,10 @@ class objet_core
 					{
 						$this->data[$key]=date("Y-m-d");
 					}
+					else if (isset($field["default"]))
+					{
+						$this->data[$key]=date("Y-m-d");
+					}
 					else
 					{
 						$this->data[$key]="0000-00-00";

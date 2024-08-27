@@ -9340,6 +9340,7 @@ h5, .h5 {
 }
 
 h6, .h6 {
+  font-style: italic;
   font-size: 1rem;
 }
 
@@ -20003,29 +20004,6 @@ p {
   line-height: 1.3rem;
 }
 
-h1, .h1 {
-  font-size: 2.1875rem;
-}
-
-h2, .h2 {
-  font-size: 1.75rem;
-}
-
-h3, .h3 {
-  font-size: 1.53125rem;
-}
-
-h4, .h4 {
-  font-size: 1.225rem;
-}
-
-h5, .h5 {
-  font-size: 1.09375rem;
-}
-
-h6, .h6 {
-  font-size: 0.875rem;
-}
 
 small,
 .small {
