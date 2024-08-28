@@ -29,6 +29,7 @@
 // ---- Menu
 	addPageMenu($corefolder,$mod,$tabLang["lang_list"],geturl("membres","","fonc=&aff=".$aff),"icn32_liste.png",($fonc!="trombi") ? true : false);
 	addPageMenu($corefolder,$mod,$tabLang["lang_pictures"],geturl("membres","","fonc=trombi&aff=".$aff),"icn32_trombi.png",($fonc=="trombi") ? true : false);
+	addPageMenu($corefolder,$mod,$tabLang["lang_emargement"],geturl("membres","list",""),"icn32_trombi.png",false);
 
 	if (GetDroit("AccesMembresVirtuel"))
 	{

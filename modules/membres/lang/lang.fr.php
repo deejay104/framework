@@ -1,6 +1,7 @@
 <?php
 	// $tabLang["lang_list"]="Liste";
 	$tabLang["lang_pictures"]="Trombinoscope";
+	$tabLang["lang_emargement"]="Imprimer";
 	$tabLang["lang_normal"]="Normaux";
 	$tabLang["lang_virtuals"]="Virtuels";
 	// $tabLang["lang_add"]="Ajouter";

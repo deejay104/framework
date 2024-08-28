@@ -1,0 +1,74 @@
+<!-- BEGIN: icone -->
+<img src="{path_module}/img/icn48_titre.png" alt="" border=0 />
+<!-- END: icone -->
+
+<!-- BEGIN: infos -->
+<!-- END: infos -->
+
+
+<!-- BEGIN: corps -->
+<style>
+    .table_emargement tr {
+        height:12mm;
+    }
+    .table_emargement th {
+        font-weight: bold;
+        border: 1px solid #000000;
+        width:150mm;
+    }
+    .table_emargement td {
+        border: 1px solid #000000;
+        height:20mm;
+    }
+    .table_emargement {
+        border: 1px solid #000000;
+    }
+
+    .form-line {
+        display: inline-block;
+        min-width: 140px;
+    }
+</style>
+
+
+<div class="row">
+	<div class="grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+<!-- BEGIN: lst_groupe -->
+                <div class="form-check form-check-primary form-line" id="chk_{aff_codegroupe}"><label class="form-check-label"><input type="checkbox" class="form-control form-input" value="{aff_codegroupe}" {aff_checked} onChange="reload();"> {aff_groupe}</label></div>
+<!-- END: lst_groupe -->
+
+                <table class="table_emargement">
+                    <tr><th>Membres</th><th>Signature</th></tr>
+<!-- BEGIN: lst_membre -->
+                    <tr><td>{aff_displayname}</td><td>&nbsp;</td></tr>
+<!-- END: lst_membre -->
+                </table>
+            </div>
+		</div>
+	</div>
+</div>
+
+<script>
+
+    function reload()
+    {
+        grp="[";
+        s="";
+        $('.form-input').each(function(){ 
+            if ($(this)[0].checked)
+            {
+                console.log($(this)[0].value);  
+                grp=grp+s+'"'+$(this)[0].value+'"';
+                s=",";
+            }
+        });
+        grp=grp+"]";
+        console.log(grp);
+        window.location="/membres/list?grp="+grp
+    }
+
+</script>
+
+<!-- END: corps -->

@@ -691,7 +691,7 @@ class user_core extends objet_core
 // *********************************************************************************************************
 
 
-function ListActiveUsers($sql,$order="",$tabtype=array(),$virtuel="non",$type="")
+function ListActiveUsers($sql,$order="",$tabtype=array(),$virtuel="non",$typeall="")
 {
 	global $MyOpt;
  
@@ -729,7 +729,7 @@ function ListActiveUsers($sql,$order="",$tabtype=array(),$virtuel="non",$type=""
 	{
 		$query.="OR actif='non' ";
 	}
-	if ($type=="all")
+	if ($typeall=="all")
 	{
 		$query.="OR 1=1";
 	}
