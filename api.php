@@ -349,7 +349,6 @@
 		}
 		else if (file_exists($appfolder."/modules/".$mod."/lang/lang.".$MyOpt["DefaultLanguage"].".php"))
 		{
-			echo "default";
 			require ($appfolder."/modules/".$mod."/lang/lang.".$MyOpt["DefaultLanguage"].".php");
 		}
 
