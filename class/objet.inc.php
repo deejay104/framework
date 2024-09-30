@@ -47,10 +47,12 @@ class objet_core
 		"yes"=>array(
 			"fr"=>"Oui",
 			"en"=>"Yes",
+			"ca"=>"Oui",
 		),
 		"no"=>array(
 			"fr"=>"Non",
 			"en"=>"No",
+			"ca"=>"Non",
 		)
 	);
 

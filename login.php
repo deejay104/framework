@@ -11,7 +11,7 @@
 	}
 
 
-// ---- Récupère les variables transmises
+// ---- Rï¿½cupï¿½re les variables transmises
 	$redirect=checkVar("redirect","varchar");
   	$url=$MyOpt["host"].(($redirect!="") ? $redirect : "/index.php?".$_SERVER['QUERY_STRING']);
 
@@ -32,24 +32,33 @@
 		$lang="fr";
 	}
 	$tabLang=array();
-	require (MyRep("lang.".$lang.".php","default",false));
+	//require (MyRep("lang.".$lang.".php","default",false));
  
-// ---- Charge les prérequis
+	if (MyRep("lang.".$lang.".php","default",false)!="")
+	{
+		require (MyRep("lang.".$lang.".php","default",false));
+	}
+	else if (MyRep("lang.".$MyOpt["DefaultLanguage"].".php","default",false)!="")
+	{
+		require (MyRep("lang.".$MyOpt["DefaultLanguage"].".php","default",false));
+	}
+
+// ---- Charge les prï¿½requis
 	require_once ("class/xtpl.inc.php");
 	require_once ("class/mysql.inc.php");
 
 
-// ---- Charge le numéro de version
+// ---- Charge le numï¿½ro de version
 	require ("version.php");
 
 // ---- Charge les templates
 	$module="modules";
 	$tmpl_prg = LoadTemplate("login","default");
 
-// ---- Connection à la base de données
+// ---- Connection ï¿½ la base de donnï¿½es
 	$sql   = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db,$port);
 
-// ---- Test si l'on a validé la page
+// ---- Test si l'on a validï¿½ la page
 	if ($fonc == "logout")
 	{
 		if ($_SESSION['sessid']>0)

@@ -1,6 +1,7 @@
 <?php
 	// $tabLang["lang_list"]="List";
 	$tabLang["lang_pictures"]="Pictures";
+	$tabLang["lang_emargement"]="Print";
 	$tabLang["lang_normal"]="Regular";
 	$tabLang["lang_virtuals"]="Virtuals";
 	// $tabLang["lang_add"]="Add";

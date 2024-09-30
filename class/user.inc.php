@@ -36,7 +36,7 @@ class user_core extends objet_core
 		"groupe" => Array("type" => "uppercase","len"=>5, "default"=>"ALL"),
 		"actif" => Array("type" => "enum", "default" => "oui", "index" => "1", ),
 		"virtuel" => Array("type" => "bool", "default" => "non", "index" => "1", ),
-		"language" => Array("type" => "enum", "default" => "fr" ),
+		"language" => Array("type" => "enum", "default" => "fr", "index" => "1", ),
 		"aff_msg" => Array("type" => "number", "default" => "0", ),
 		"aff_mail" => Array("type" => "bool", "default" => "oui", ),
 		"aff_infos" => Array("type" => "bool", "default" => "oui", ),
@@ -80,12 +80,14 @@ class user_core extends objet_core
 
 	protected $tabList=array(
 		"language"=>array(
-			"fr"=>array('fr'=>"Français",'en'=>'Anglais'),
-			"en"=>array('fr'=>"French",'en'=>'English'),
+			"fr"=>array('fr'=>"Français",'en'=>'Anglais','ca'=>'Canadien'),
+			"en"=>array('fr'=>"French",'en'=>'English','ca'=>'Canadian'),
+			"ca"=>array('fr'=>"Français",'en'=>'Anglais','ca'=>'Canadien'),
 		),
 		"actif"=>array(
 			"fr"=>array("oui"=>"Oui","non"=>"Non","off"=>"Désactivé"),
 			"en"=>array("oui"=>"Yes","non"=>"No","off"=>"Disabled"),
+			"ca"=>array("oui"=>"Oui","non"=>"Non","off"=>"Désactivé"),
 		)
 	);
 
@@ -93,14 +95,17 @@ class user_core extends objet_core
 		"err_nickname"=>array(
 			"fr"=>"Les initiales choisies existent déjà !",
 			"en"=>"This nickname already exists",
+			"ca"=>"Les initiales choisies existent déjà !",
 		),
 		"err_mail"=>array(
 			"fr"=>"Le mail choisi existe déjà !",
 			"en"=>"This email already exists",
+			"ca"=>"Le mail choisi existe déjà !",
 		),
 		"err_name"=>array(
 			"fr"=>"Le nom est vide",
 			"en"=>"Name is mandatory",
+			"ca"=>"Le nom est vide",
 		)
 	);
 	

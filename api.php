@@ -308,7 +308,14 @@
 		$lang="fr";
 	}
 	$tabLang=array();
-	require ("modules/default/lang/lang.".$lang.".php");
+	if (file_exists("modules/default/lang/lang.".$lang.".php"))
+	{
+		require ("modules/default/lang/lang.".$lang.".php");
+	}
+	else
+	{
+		require ("modules/default/lang/lang.".$MyOpt["DefaultLanguage"].".php");
+	}
 
 // ---- Vérifie la variable $mod
 	$mod=checkVar("mod","varchar");
@@ -332,9 +339,18 @@
 		{
 			require ("modules/".$mod."/lang/lang.".$lang.".php");
 		}
+		else if (file_exists("modules/".$mod."/lang/lang.".$MyOpt["DefaultLanguage"].".php"))
+		{
+			require ("modules/".$mod."/lang/lang.".$MyOpt["DefaultLanguage"].".php");
+		}
 		if (file_exists($appfolder."/modules/".$mod."/lang/lang.".$lang.".php"))
 		{
 			require ($appfolder."/modules/".$mod."/lang/lang.".$lang.".php");
+		}
+		else if (file_exists($appfolder."/modules/".$mod."/lang/lang.".$MyOpt["DefaultLanguage"].".php"))
+		{
+			echo "default";
+			require ($appfolder."/modules/".$mod."/lang/lang.".$MyOpt["DefaultLanguage"].".php");
 		}
 
 		// Charge le script

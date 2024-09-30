@@ -44,10 +44,12 @@ class amelioration_core extends objet_core
 		"status"=>array(
 			"fr"=>array('1new'=>'Nouveau','2sched'=>'Prochaine version','3inprg'=>'En cours','4test'=>'En test','5close'=>'Publié','6duplicate'=>'Doublon','7cancel'=>'Annulé'),
 			"en"=>array('1new'=>'New','2sched'=>'Next release','3inprg'=>'In progress','4test'=>'Testing','5close'=>'Released','6duplicate'=>'Duplicate','7cancel'=>'Canceled'),
+			"ca"=>array('1new'=>'Nouveau','2sched'=>'Prochaine version','3inprg'=>'En cours','4test'=>'En test','5close'=>'Publié','6duplicate'=>'Doublon','7cancel'=>'Annulé'),
 		),
 		"module"=>array(
 			"fr"=>array("core"=>"Framework","user"=>"Utilisateur","admin"=>"Administration","docs"=>"Documents","custom"=>"Autre"),
-			"en"=>array("core"=>"Framework","user"=>"User","admin"=>"Administration","docs"=>"Documents","custom"=>"Other")
+			"en"=>array("core"=>"Framework","user"=>"User","admin"=>"Administration","docs"=>"Documents","custom"=>"Other"),
+			"ca"=>array("core"=>"Framework","user"=>"Utilisateur","admin"=>"Administration","docs"=>"Documents","custom"=>"Autre"),
 		)
 	);
 

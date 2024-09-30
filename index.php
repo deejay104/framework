@@ -292,7 +292,15 @@
 	{
 		$lang="fr";
 	}
-	require (MyRep("lang.".$lang.".php","default",false));
+
+	if (file_exists(MyRep("lang.".$lang.".php","default",false)))
+	{
+		require (MyRep("lang.".$lang.".php","default",false));
+	}
+	else
+	{
+		require (MyRep("lang.".$MyOpt["DefaultLanguage"].".php","default",false));
+	}
 
 // ---- Maintenance	
 	if (($MyOpt["maintenance"]=="on") && (!GetDroit("SYS")))
@@ -374,6 +382,13 @@
 		{
 			require (MyRep("lang.".$lang.".php","default"));
 		}
+		else if (MyRep("lang.".$MyOpt["DefaultLanguage"].".php","default")!="")
+		{
+			require (MyRep("lang.".$MyOpt["DefaultLanguage"].".php","default"));
+		}
+		
+
+
 		require($appfolder."/modules/default/menu.inc.php");
 	}
 
@@ -499,15 +514,22 @@
 		$corps="";
 		
 		// Charge le fichier de langue du module
-		$l=MyRep("lang.".$lang.".php","",false);
-		if ($l!="")
+		if (MyRep("lang.".$lang.".php","",false)!="")
 		{
-			require ($l);
+			require (MyRep("lang.".$lang.".php","",false));
 		}
-		$l=MyRep("lang.".$lang.".php");
-		if ($l!="")
+		else if (MyRep("lang.".$MyOpt["DefaultLanguage"].".php","",false)!="")
 		{
-			require ($l);
+			require (MyRep("lang.".$MyOpt["DefaultLanguage"].".php","",false));
+		}
+
+		if (MyRep("lang.".$lang.".php")!="")
+		{
+			require (MyRep("lang.".$lang.".php"));
+		}
+		else if (MyRep("lang.".$MyOpt["DefaultLanguage"].".php")!="")
+		{
+			require (MyRep("lang.".$MyOpt["DefaultLanguage"].".php"));
 		}
 
 		// Charge le template

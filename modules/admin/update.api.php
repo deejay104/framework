@@ -177,6 +177,10 @@ function AjoutLog($txt)
                         foreach($tabTmpl[$tab] as $field=>$d)
                         {
 // echo $tab.":".$field."=".$tabTmpl[$tab][$field]["Type"]." ".$tabProd[$MyOpt["tbl"]."_".$tab][$field]["Type"]."<br>\n";
+                                if (!isset($tabTmpl[$tab][$field]["Index"]))
+                                {
+                                        $tabTmpl[$tab][$field]["Index"]=0;
+                                }
 
                                 // Le champ n'existe pas
                                 if (!isset($tabProd[$MyOpt["tbl"]."_".$tab][$field]))
@@ -274,7 +278,7 @@ function AjoutLog($txt)
                                 }
 
                                 // Index
-                                if ((isset($tabTmpl[$tab][$field]["Index"])) && (!isset($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Index"])))
+                                if (($tabTmpl[$tab][$field]["Index"]!="0") && (!isset($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Index"])))
                                 {
                                         $q="ALTER TABLE `".$MyOpt["tbl"]."_".$tab."` ADD INDEX (`".$field."`)";
                                         $res=$sql->Update($q);
