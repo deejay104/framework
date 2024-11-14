@@ -245,12 +245,6 @@ $(function() {
         uploadData(0,fd);
     });
 
-    // Open file selector on div click
-    <!-- $("#uploadfile").click(function(){ -->
-		<!-- console.log("click"); -->
-        <!-- $("#file").click(); -->
-    <!-- }); -->
-
     // file selected
     $("#newFile").change(function(){
         var fd = new FormData();
@@ -468,32 +462,6 @@ function showComment(avatar,txt,author,created)
 	$("#contentComment").html($("#contentComment").html()+newComment);
 }
 
-/*
-<div class="d-flex align-items-start profile-feed-item">
-                          <img src="../../../../images/faces/face13.jpg" alt="profile" class="img-sm rounded-circle">
-                          <div class="ml-4">
-                            <h6>
-                              Mason Beck
-                              <small class="ml-4 text-muted"><i class="mdi mdi-clock mr-1"></i>10 hours</small>
-                            </h6>
-                            <p>
-                              There is no better advertisement campaign that is low cost and also successful at the same time.
-                            </p>
-                            <p class="small text-muted mt-2 mb-0">
-                              <span>
-                                <i class="mdi mdi-star mr-1"></i>4
-                              </span>
-                              <span class="ml-2">
-                                <i class="mdi mdi-comment mr-1"></i>11
-                              </span>
-                              <span class="ml-2">
-                                <i class="mdi mdi-reply"></i>
-                              </span>
-                            </p>
-                          </div>
-                        </div>
-						*/
-
 
 function showSearch()
 {
@@ -577,19 +545,12 @@ function uploadData(id,formdata){
         processData: false,
         dataType: 'json',
         success: function(response){
-            <!-- addThumbnail(response); -->
 			$("#newContentText").html("Nouveau Document");
 			$("#addContentText").html("Ajouter Document");
 
 			if (id==0)
 			{
 				console.log(response);
-				//divPaper=document.getElementById("lstPapers");
-				//divPaper.innerHTML=divPaper.innerHTML+"<div class='paperBox'>";
-				//divPaper.innerHTML=divPaper.innerHTML+"<div onclick='loadContent("+response.id+");' class='paperTitle'><p>"+response.title+"</p></div>";
-				//divPaper.innerHTML=divPaper.innerHTML+"<div class='paperAuthor'><p>par "+response.author+", "+response.created+"</p></div>";
-				//divPaper.innerHTML=divPaper.innerHTML+"<div class='paperDocument'><p>"+response.link+"</p><div id='doc_del_"+response.id+"'></div></div>";
-
 
 				txt='<div class="d-flex align-items-start profile-feed-item">';
 				txt=txt+'<div class="ml-4">';

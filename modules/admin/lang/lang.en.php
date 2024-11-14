@@ -45,6 +45,10 @@ $tabLang["lang_right"]="Right";
 $tabLang["lang_multi"]="Multi";
 $tabLang["lang_notif"]="Notif";
 $tabLang["lang_delay"]="Delay";
+$tabLang["lang_poste"]="Line";
+$tabLang["lang_cost"]="Cost";
+$tabLang["lang_document"]="Document";
+$tabLang["lang_contexte"]="Context";
 
 $tabLang["lang_lastexec"]="Last run";
 $tabLang["lang_nextexec"]="Next run";

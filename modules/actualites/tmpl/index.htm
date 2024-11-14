@@ -62,13 +62,6 @@
 	<div class="col-md-4 grid-margin stretch-card">
 		<div class="card">
 			<div class="card-body">
-				<div class="align-items-start profile-feed-item">
-					<h4>{lang_information}</h4>
-					<A href="{path_root}/docs">{lang_nbdocs}</A> : <A href="index.php?mod=docs" class="{color_nonlus}">{nb_nonlus}</A>
-					<!-- BEGIN: lst_echeance -->
-					<p>{form_echeance}</p>
-					<!-- END: lst_echeance -->
-				</div>
 
 				<div class="align-items-start profile-feed-item">
 					<h4>{lang_search}</h4>
@@ -76,6 +69,19 @@
 						<input type="hidden" name="mod" value="actualites">
 						<p><input id="searchactu" class='form-control' type="text" name="search" placeholder="{lang_searchterms}" OnKeyUp="CapturePost(event);"></p>
 					</form>
+				</div>
+				<div class="align-items-start profile-feed-item">
+					<h4>{lang_lastdocs}</h4>
+					<!-- BEGIN: lst_lastdocs -->
+					<div>{form_document_link}<small class="ml-4 text-muted"><i class="mdi mdi-clock mr-1"></i>{form_document_time}</small></div>
+					<!-- END: lst_lastdocs -->
+				</div>
+
+				<div class="align-items-start profile-feed-item">
+					<h4>{lang_information}</h4>
+					<!-- BEGIN: lst_echeance -->
+					{form_echeance}
+					<!-- END: lst_echeance -->
 				</div>
 				{aff_custom}
 			</div>
@@ -99,9 +105,6 @@
 	$("html").on("drop", function(e) { e.preventDefault(); e.stopPropagation(); });
 
 
-
-
-$(function() {
 
     // preventing page from redirecting
     $("html").on("dragover", function(e) {
@@ -163,7 +166,7 @@ $(function() {
 
         uploadData(fd);
     });
-});
+
 
 // Sending AJAX request and upload file
 function uploadData(formdata){
@@ -189,8 +192,8 @@ function uploadData(formdata){
 
 // Added thumbnail
 function addThumbnail(data){
-    <!-- $("#actualitesNouveau h1").remove();  -->
-    var len = $("#actualitesNouveau div.thumbnail").length;
+
+	var len = $("#actualitesNouveau div.thumbnail").length;
 
     var num = Number(len);
     num = num + 1;
@@ -256,28 +259,6 @@ function convertSize(size) {
 				if (response.news.length>0)
 				{
 					$.each(response.news, function (index, value) {
-
-						<!-- txt="<div id='news_"+value.id+"' class='actualitesBloc'>"; -->
-						<!-- txt=txt+"	<div class='actualitesPhoto' >"; -->
-						<!-- txt=txt+"		<img src='{path_root}/"+value.avatar+"' alt=''>"; -->
-						<!-- txt=txt+"	</div>"; -->
-						<!-- txt=txt+"	<div class='actualitesMessage'>"; -->
-						<!-- txt=txt+"		<div class='actualitesTitre' OnMouseOver='document.getElementById(\"icone_"+value.id+"\").style.display=\"block\";' OnMouseOut='document.getElementById(\"icone_"+value.id+"\").style.display=\"none\";'>"; -->
-						<!-- txt=txt+"			<div class='actualitesTitreMsg'>"; -->
-						<!-- txt=txt+"				<a name='id"+value.id+"'></a>"; -->
-						<!-- txt=txt+"				<p>"+value.title+"</p>"; -->
-						<!-- txt=txt+"				<span>par "+value.author+", "+value.date+"</span>"; -->
-						<!-- txt=txt+"			</div>"; -->
-						<!-- txt=txt+"			<div id='icone_"+value.id+"' class='actualitesIcones' style='display:none;'>"; -->
-						<!-- txt=txt+"				<a href='index.php?mod=actualites&fonc=editer&id="+value.id+"' class='imgDelete'><img src='{path_root}/{path_module}/img/icn16_editer.png' /></a>"; -->
-						<!-- txt=txt+"				<a href='' class='imgDelete' OnClick='return delNews("+value.id+");'><img src='{path_root}/{path_module}/img/icn16_supprimer.png' /></a>"; -->
-						<!-- txt=txt+"			</div>"; -->
-						<!-- txt=txt+"		</div>"; -->
-						<!-- txt=txt+"		<div class='actualitesTexte'>"; -->
-						<!-- txt=txt+"<p>"+value.message+"</p>"; -->
-						<!-- txt=txt+"</div>"; -->
-						<!-- txt=txt+"	</div>"; -->
-						<!-- txt=txt+"</div>"; -->
 
 
 						txt='<div id="news_'+value.id+'" class="d-flex align-items-start profile-feed-item">';

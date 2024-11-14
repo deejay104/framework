@@ -98,6 +98,11 @@
 </div>
 
 <div id='lstfolders'>
+	<div class='row'><div class='grid-margin stretch-card'><div class='card'><div class='card-body'>
+		<div class='form-inline'><h4><a href='/docs/folder?id="+data.data[key].id+"'>Mes Documents</a></h4></div>
+		<div class='folderDescription'><p>Retrouvez ici les documents liés à votre profile.</p></div>
+		</div></div></div>
+	</div>
 </div>
 
 
@@ -180,21 +185,22 @@ function loadContent()
 		divFolder=document.getElementById("lstfolders");
 		divFolder.innerHTML="";
 
+		var txt="";
+		txt=txt+"<div class='row'><div class='grid-margin stretch-card'><div class='card'><div class='card-body'>";
+		txt=txt+"<div class='form-inline'><h4><a href='/docs/mydocs'>"+"Mes Documents"+"</a>";
+		txt=txt+"</h4></div>";
+		txt=txt+"<div class='folderDescription'><p>"+"Vous retrouverez ici la liste des documents de votre profile."+"</p></div>";
+		txt=txt+"</div></div></div></div>";
+		divFolder.innerHTML=divFolder.innerHTML+txt;
+
 		for (var key in data.data)
 		{
 			var txt="";
 			txt=txt+"<div class='row'><div class='grid-margin stretch-card'><div class='card'><div class='card-body'>";
-
 			txt=txt+"<div class='form-inline' onmouseover='document.getElementById(\"edit_"+key+"\").style.display=\"inline-block\";' onmouseout='document.getElementById(\"edit_"+key+"\").style.display=\"none\";'><h4><a href='/docs/folder?id="+data.data[key].id+"'>"+data.data[key].title+"</a>";
-
-			<!-- txt=txt+"<div id='edit_"+key+"' style='display:none; cursor: pointer;'>"; -->
 			txt=txt+"<a href='#' id='edit_"+key+"' style='display:none; margin-left:10px;' onclick='editFolder("+data.data[key].id+");'><i class='mdi mdi-pencil' style='font-size:16px;'></i></a>";
-			<!-- txt=txt+"</div>"; -->
 			txt=txt+"</h4></div>";
-
 			txt=txt+"<div class='folderDescription'><p>"+data.data[key].description+"</p></div>";
-
-
 			txt=txt+"</div></div></div></div>";
 			divFolder.innerHTML=divFolder.innerHTML+txt;
 		}

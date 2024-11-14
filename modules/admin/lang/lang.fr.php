@@ -42,6 +42,10 @@ $tabLang["lang_right"]="Droit";
 $tabLang["lang_multi"]="Multi";
 $tabLang["lang_notif"]="Notif";
 $tabLang["lang_delay"]="Délai";
+$tabLang["lang_poste"]="Poste";
+$tabLang["lang_cost"]="Cout";
+$tabLang["lang_document"]="Document";
+$tabLang["lang_contexte"]="Contexte";
 
 $tabLang["lang_lastexec"]="Dernière exécution";
 $tabLang["lang_nextexec"]="Prochaine exécution";

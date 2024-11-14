@@ -11,6 +11,7 @@ class echeance_core extends objet_core
 		"typeid" => Array("type" => "number", "index" => "1", ),
 		"uid" => Array("type" => "number", "index" => "1", ),
 		"dte_echeance" => Array("type" => "date", ),
+		"doc" => Array("type" => "number", "index" => "0", ),
 	);
 
 
@@ -29,6 +30,8 @@ class echeance_core extends objet_core
 		$this->typeid="";
 		$this->poste=0;
 		$this->description="";
+		$this->doc=0;
+		$this->document="non";
 		$this->uid=$uid;
 		$this->dte_echeance="";
 		$this->paye="non";
@@ -45,7 +48,7 @@ class echeance_core extends objet_core
 	function load($id){
 		$this->id=$id;
 		$sql=$this->sql;
-		$query = "SELECT echeance.*, echeancetype.context, echeancetype.poste, echeancetype.description, echeancetype.droit, echeancetype.multi, echeancetype.resa FROM ".$this->tbl."_echeance AS echeance LEFT JOIN ".$this->tbl."_echeancetype AS echeancetype ON echeance.typeid=echeancetype.id WHERE echeance.id='$id'";
+		$query = "SELECT echeance.*, echeancetype.context, echeancetype.poste, echeancetype.description, echeancetype.droit, echeancetype.multi, echeancetype.resa, echeancetype.document FROM ".$this->tbl."_echeance AS echeance LEFT JOIN ".$this->tbl."_echeancetype AS echeancetype ON echeance.typeid=echeancetype.id WHERE echeance.id='$id'";
 		$res = $sql->QueryRow($query);
 
 		if (!isset($res["id"]))
@@ -59,17 +62,19 @@ class echeance_core extends objet_core
 		$this->poste=$res["poste"];
 		$this->uid=$res["uid"];
 		$this->dte_echeance=$res["dte_echeance"];
+		$this->doc=$res["doc"];
 		$this->paye=$res["paye"];
 		$this->description=$res["description"];
 		$this->droit=$res["droit"];
 		$this->multi=$res["multi"];
 		$this->resa=$res["resa"];
+		$this->document=$res["document"];
 	}
 
 	# Charge une échéance par son type
 	function loadtype($tid){
 		$sql=$this->sql;
-		$query = "SELECT echeance.*, echeancetype.context, echeancetype.poste, echeancetype.description, echeancetype.droit, echeancetype.multi, echeancetype.resa FROM ".$this->tbl."_echeance AS echeance LEFT JOIN ".$this->tbl."_echeancetype AS echeancetype ON echeance.typeid=echeancetype.id WHERE echeance.actif='oui' AND echeance.typeid='".$tid."' AND echeance.uid='".$this->uid."'";
+		$query = "SELECT echeance.*, echeancetype.context, echeancetype.poste, echeancetype.description, echeancetype.droit, echeancetype.multi, echeancetype.resa,echeancetype.document FROM ".$this->tbl."_echeance AS echeance LEFT JOIN ".$this->tbl."_echeancetype AS echeancetype ON echeance.typeid=echeancetype.id WHERE echeance.actif='oui' AND echeance.typeid='".$tid."' AND echeance.uid='".$this->uid."'";
 		$res = $sql->QueryRow($query);
 		
 		if (is_array($res))
@@ -81,11 +86,13 @@ class echeance_core extends objet_core
 			$this->poste=$res["poste"];
 			// $this->uid=$res["uid"];
 			$this->dte_echeance=$res["dte_echeance"];
+			$this->doc=$res["doc"];
 			$this->paye=$res["paye"];
 			$this->description=$res["description"];
 			$this->droit=$res["droit"];
 			$this->multi=$res["multi"];
 			$this->resa=$res["resa"];
+			$this->document=$res["document"];
 		}
 	}
 
@@ -128,7 +135,7 @@ class echeance_core extends objet_core
 	function Create()
 	{
 		$sql=$this->sql;
-		$this->id=$sql->Edit("echeance",$this->tbl."_echeance",0,array("uid_creat"=>$this->myuid, "dte_creat"=>now(), "uid_maj"=>$this->myuid, "dte_maj"=>now()));		
+		$this->id=$sql->Edit("echeance",$this->tbl."_echeance",0,array("uid_creat"=>$this->myuid, "dte_creat"=>now(), "doc"=>$this->doc, "uid_maj"=>$this->myuid, "dte_maj"=>now()));		
 	}
 
 	function Delete()
@@ -145,7 +152,7 @@ class echeance_core extends objet_core
 			$this->Create();
 		}
 
-		$sql->Edit("echeance",$this->tbl."_echeance",$this->id,array("typeid"=>$this->Valid("typeid",$this->typeid),"uid"=>$this->Valid("uid",$this->uid),"dte_echeance"=>$this->Valid("dte_echeance",$this->dte_echeance),"paye"=>$this->Valid("paye",$this->paye),"uid_maj"=>$this->myuid, "dte_maj"=>now()));		
+		$sql->Edit("echeance",$this->tbl."_echeance",$this->id,array("typeid"=>$this->Valid("typeid",$this->typeid),"uid"=>$this->Valid("uid",$this->uid),"dte_echeance"=>$this->Valid("dte_echeance",$this->dte_echeance),"doc"=>$this->Valid("doc",$this->doc),"paye"=>$this->Valid("paye",$this->paye),"uid_maj"=>$this->myuid, "dte_maj"=>now()));		
 	}
 
 	function Affiche($type="") 
@@ -157,7 +164,7 @@ class echeance_core extends objet_core
 			$sql=$this->sql;
 			$n=0;
 
-			$ret.="<div id='echeance_0'><p></p></div>";
+			$ret.="<div id='echeance_0' class='showEcheance'><p></p></div>";
 
 			$ret.="<script>";
 			$ret.="function AddEcheance(i) {";
@@ -193,7 +200,7 @@ class echeance_core extends objet_core
 			}
 			$ret.="r=r+\"</select></label>\";\n";
 
-			$ret.="r=r+\"<input name='form_echeance[a\"+i+\"]' class='form-control' value='' type='date' OnChange='AddEcheance(\"+(i+1)+\");'></div><div id='echeance_\"+(i+1)+\"'></div>\";\n";
+			$ret.="r=r+\"<input name='form_echeance[a\"+i+\"]' class='form-control' value='' type='date' OnChange='AddEcheance(\"+(i+1)+\");' style='width:165px;'></div><div id='echeance_\"+(i+1)+\"'></div>\";\n";
 			$ret.="var d=document.getElementById('echeance_'+i);\n";
 			$ret.="d.innerHTML=r;\n";
 				
@@ -209,11 +216,27 @@ class echeance_core extends objet_core
 		}
 		else if ( ($this->editmode=="edit") && (GetDroit($this->droit)) )
 		{
-			$ret.="<div id='aff_echeance".$this->id."' OnMouseOver='document.getElementById(\"echeance_del_".$this->id."\").style.display=\"inline-block\";' OnMouseOut='document.getElementById(\"echeance_del_".$this->id."\").style.display=\"none\";'>";
+			$ret.="<div id='aff_echeance".$this->id."' OnMouseOver='document.getElementById(\"echeance_del_".$this->id."\").style.display=\"inline-block\";' OnMouseOut='document.getElementById(\"echeance_del_".$this->id."\").style.display=\"none\";' class='showEcheance'>";
 			$ret.="<p>";
-			$ret.="<label class='col-lg-6'>".$tabLang["lang_echeance"]." ".$this->description." ".$tabLang["core_the"]."</label><input name='form_echeance[".$this->id."]' id='form_echeance".$this->id."' class='form-control' value='".$this->dte_echeance."' type='date' style='width: 165px;'>&nbsp;";
+			$ret.="<label class='col-lg-6'>".$tabLang["lang_echeance"]." ".$this->description." ".$tabLang["core_the"]."</label><input name='form_echeance[".$this->id."]' id='form_echeance".$this->id."' class='form-control' value='".$this->dte_echeance."' type='date' style='width:165px;'>&nbsp;";
 			$ret.="<a href=\"#\" OnClick=\"document.getElementById('form_echeance".$this->id."').value=''; document.getElementById('aff_echeance".$this->id."').style.display='none';\" class='imgDelete'><img  id='echeance_del_".$this->id."' src='".$MyOpt["host"]."/".$corefolder."/static/images/icn16_supprimer.png' style='display:none;'></a>";
 			$ret.="</p>";
+
+			$ret.="<select name='form_echeance_doc[".$this->id."]' id='form_echeance_doc".$this->id."' class='form-control' style='margin-left:20%;width:80%;'><option value=0>Aucun</option>";
+
+			$lstdoc=ListDocument($this->sql,$this->uid,"document");
+			
+			if (is_array($lstdoc))
+			{
+				foreach($lstdoc as $i=>$did)
+				{
+					$doc = new document_core($did,$this->sql);
+					$ret.="<option value='".$doc->id."' ".(($this->doc==$doc->id) ? "selected" : "").">".$doc->name."</option>";
+				}
+			}	
+
+
+			$ret.="<select>";
 			$ret.="</div>";
 		}
 		else if ($type=="val")
@@ -224,7 +247,7 @@ class echeance_core extends objet_core
 		{
 			$tabIcon=array("ok"=>array("icon"=>"mdi-checkbox-marked-outline","color"=>"green"),"nok"=>array("icon"=>"mdi-close-box-outline","color"=>"red"));
 			$r=TestDate($this->dte_echeance);
-			$ret="<i class='mdi ".$tabIcon[$r]["icon"]."' style='font-size:20px; color:".$tabIcon[$r]["color"].";'></i> ".$tabLang["lang_echeance"]." ".$this->description." ".$tabLang["core_the"]." ".AffDate($this->dte_echeance);
+			$ret="<div><i class='mdi ".$tabIcon[$r]["icon"]."' style='font-size:20px; color:".$tabIcon[$r]["color"].";'></i> ".$tabLang["lang_echeance"]." ".$this->description." ".$tabLang["core_the"]." ".AffDate($this->dte_echeance)." ".($this->checkDoc())."</div>";
 		}
 		return $ret;
 	}
@@ -235,6 +258,23 @@ class echeance_core extends objet_core
 		return $this->dte_echeance;
 	}
 
+
+	function checkDoc()
+	{
+		if ($this->doc>0)
+		{
+			$doc = new document_core($this->doc,$this->sql);
+			return $doc->Affiche("short");
+		}
+		else if (($this->document=="oui") && ($this->doc==0))
+		{
+			return "<i class='mdi mdi-checkbox-blank-outline' style='font-size:20px; color:red;'></i>";
+		}
+		else if ($this->document=="non")
+		{
+			return "";
+		}
+	}
 }
 
 
@@ -318,6 +358,7 @@ class echeancetype_core extends objet_core
 		"delai" => Array("type" => "number", "default" => "30" ),
 		"context" => Array("type" => "enum", "default" => "utilisateurs", "index"=>1 ),
 		"recipient" => Array("type" => "varchar", "len"=>10, "default" => "user" ),
+		"document" => Array("type" => "bool", "default" => "non" ),
 	);
 
 	protected $tabList=array(

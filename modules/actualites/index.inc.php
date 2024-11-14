@@ -100,13 +100,21 @@
 
 // ---- Derniers message des forums
 
-	$query = "SELECT COUNT(forums.id) AS nb FROM ".$MyOpt["tbl"]."_forums AS forums LEFT JOIN ".$MyOpt["tbl"]."_forums_lus AS forums_nonlus ON forums_nonlus.forum_usr=$uid AND forums.id=forums_nonlus.forum_msg WHERE forums_nonlus.forum_msg IS NULL";
-	$res=$sql->QueryRow($query);
-	$tmpl_x->assign("nb_nonlus",(($res["nb"]>1) ? $res["nb"]." messages" : (($res["nb"]==1) ? $res["nb"]." message" : "Aucun")));
-	$tmpl_x->assign("color_nonlus",($res["nb"]>0) ? "red" : "black");
+	$lstdoc=LastDocument();
+		
+	if (is_array($lstdoc))
+	{
+		foreach($lstdoc as $i=>$did)
+		{
+			$doc = new document_core($did,$sql);
+			$tmpl_x->assign("form_document_name",$doc->name);
+			$tmpl_x->assign("form_document_link",$doc->Affiche("name","name"));
+			$tmpl_x->assign("form_document_time",DisplayDate($doc->dte_creat));
+			$tmpl_x->parse("corps.lst_lastdocs");
+		}
+	}	
 
-
-// ---- Derniers documents
+// ---- Dernieres actualités
 
 	if ($id>0)
 	{

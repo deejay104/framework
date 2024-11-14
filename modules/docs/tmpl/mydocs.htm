@@ -1,0 +1,250 @@
+<!-- BEGIN: icone -->
+<img src="{path_module}/img/icn48_titre.png" alt="" border=0 />
+<!-- END: icone -->
+<!-- BEGIN: infos -->
+<!-- END: infos -->
+
+
+<!-- BEGIN: corps -->
+<style>
+
+.contentFiles { text-align: center;}
+.contentFiles:hover { background-color:#{LineBackgroundHover}; color:#{TextBackgroundHover}; }
+.contentFiles { cursor: pointer; }
+.contentFiles label { cursor: pointer; }
+
+</style>
+
+
+<div class="row">
+	<div class="grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">	
+				<div class="form-inline">
+					<!-- BEGIN: lstusers -->
+					<div class="col-4">{form_lstusers}</div>
+					<!-- END: lstusers -->
+					<div id='newContentFile' class='contentFiles form-control col-6'>
+						<label for='newFile'><p id='newContentText'><i class="mdi mdi-cloud-upload" style="font-size:20px;"></i> Nouveau Document</p></label>
+						<input id='newFile' type='file' style='display:none'>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body row">	
+				<div id='lstPapers'></div>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+<script>
+
+$(document).ready(function() {
+	loadPapers();
+});
+
+	var listDocs=[];
+	var editable=false;
+	var uid={uid};
+
+
+    // preventing page from redirecting
+    $("html").on("dragover", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    });
+
+    $("html").on("drop", function(e) { e.preventDefault(); e.stopPropagation(); });
+
+    // Drag enter
+    $('#newContentFile').on('dragenter', function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        $("#newContentFile").css({"border":"1px dashed #{FormulaireBackgroundDark}"});
+    });
+
+    // Drag over
+    $('#newContentFile').on('dragover', function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        $("#newContentFile").css({"border":"1px dashed #{FormulaireBackgroundDark}"});
+    });
+
+    // Drag leave
+    $('#newContentFile').on('dragleave', function (e) {
+        $("#newContentFile").css({"border":"1px solid #{FormulaireBackgroundNormal}"});
+    });
+
+    // Drop
+    $('#newContentFile').on('drop', function (e) {
+		console.log("drop");
+        e.stopPropagation();
+        e.preventDefault();
+
+        $("#newContentFile").css({"border":"1px solid #{FormulaireBackgroundNormal}"});
+
+        var file = e.originalEvent.dataTransfer.files;
+        var fd = new FormData();
+        fd.append('file', file[0]);
+
+        uploadData(0,fd);
+    });
+
+
+    // file selected
+    $("#newFile").change(function(){
+        var fd = new FormData();
+        var files = $('#newFile')[0].files[0];
+        fd.append('file',files);
+		console.log(files);
+        uploadData(0,fd);
+    });
+
+
+    // file selected
+    $("#addFile").change(function(){
+        var fd = new FormData();
+        var files = $('#addFile')[0].files[0];
+        fd.append('file',files);
+		console.log(files);
+
+        uploadData(currentPaper,fd);
+    });
+
+
+
+$("#form_id").change(function(){
+	document.location='/docs/mydocs?id='+$("#form_id").val();
+});
+
+function loadPapers()
+{
+	var filter=$("#selectFilter").val();
+	var date=$("#selectDate").val();
+	var crit=$("#crit").val();
+	var sort=$("#selectSort").val();
+	$.get('/api/v1/docs/lstdocs?id='+uid).done(function(data)
+	{
+		$("#lstPapers").html("");
+
+		for (var key in data.data)
+		{
+			listDocs[data.data[key].id]=data.data[key];
+			txt=generateLine(data.data[key].id,data.data[key].title,data.data[key].author,data.data[key].created,data.data[key].doc);
+			$("#lstPapers").append(txt);
+		}
+	});
+}
+
+var newname="";
+function editContent(id)
+{
+	console.log("edit:"+id+" "+listDocs[id].id);
+	if (editable)
+	{
+	}
+	else
+	{
+		editable=true;
+		$("#docName_"+id).html("<input id='editname_"+id+"' value='"+listDocs[id].title+"' onchange='saveContent("+listDocs[id].id+");' onfocusout='saveContent("+listDocs[id].id+");' class='form-control form-input'>");
+		$("#savename_"+id).css({"display":"inline-block"});
+		$("#editname_"+id).focus();
+	}
+}
+
+function saveContent(id)
+{
+	if (editable)
+	{
+		console.log("save");
+		listDocs[id].title=$("#editname_"+id).val();
+		console.log(listDocs[id].title);
+
+		editable=false;
+
+		$.post( "/api/v1/docs/postdoc?folder=0&id="+id+"&uid="+uid, { name:listDocs[id].title } ).done(function(data) {
+			console.log("Doc saved:"+id);
+
+			$("#docName_"+id).html("<h5>"+listDocs[id].title+"</h5>");
+			$("#savename_"+id).css({"display":"none"});
+
+		});
+	}
+}
+
+function delContent(id)
+{	
+	$.post( "/api/v1/docs/postdoc?folder=0&id="+id, { fonc:"delete" } ).done(function(data) {
+		console.log("Doc deleted:"+id);
+
+		$("#doc_"+id).attr('style','display: none !important');
+	});	
+}
+
+// Sending AJAX request and upload file
+function uploadData(id,formdata)
+{
+	console.log("upload file");
+	
+    $.ajax({
+        url: '/api/v1/docs/postdoc?id=0&folder=0&uid='+uid,
+        type: 'post',
+        data: formdata,
+        contentType: false,
+        processData: false,
+        dataType: 'json',
+        success: function(response){
+			response.doc=[];
+			response.doc[0]=[];
+			response.doc[0].url=response.link;
+			txt=generateLine(response.id,response.title,response.author,response.created,response.doc);
+
+			$("#lstPapers").append(txt);
+			listDocs[response.id]=response;
+        },
+		error: function(response){
+			$("#newContentText").html("Nouveau Document");
+			$("#addContentText").html("Ajouter Document");
+        }
+    });
+}
+
+function generateLine(id,title,author,created,ldocs)
+{
+	txt="<div id='doc_"+id+"' class='d-flex align-items-start profile-feed-item'>";
+	txt=txt+'<div class="ml-4">';
+	txt=txt+"<div  class='link-hover' onmouseover='document.getElementById(\"edit_"+id+"\").style.display=\"inline-block\";' onmouseout='document.getElementById(\"edit_"+id+"\").style.display=\"none\";'>";
+
+	txt=txt+"<div id='docName_"+id+"' style='display:inline-block;'><h5>"+title+"</h5></div>";
+
+	txt=txt+"<div id='edit_"+id+"' style='display:none; margin-left:10px; font-size:16px;'>";
+	txt=txt+"<a href='#' onclick='editContent("+id+"); return false;'><i class='mdi mdi-pencil'></i></a>";
+	txt=txt+"<a href='#' onclick='delContent("+id+"); return false;'><i class='mdi mdi-delete'></i></a>";
+	txt=txt+"</div>";
+
+	txt=txt+"</div>";
+
+	txt=txt+'<h6>'+author+'<small class="ml-4 text-muted"><i class="mdi mdi-clock mr-1"></i>'+created+'</small></h6>';
+
+	txt=txt+"<div id='paperDocument_"+id+"'>";
+	for (var ii in ldocs)
+	{
+		txt=txt+"<p'>"+ldocs[ii].url+"</p>";
+	}
+	txt=txt+'</div>';
+	txt=txt+'</div>';
+
+	return txt;
+}
+
+</script>
+
+<!-- END: corps -->

@@ -68,6 +68,10 @@
 			"aff"=>$tabLang["lang_delay"],
 			"width"=>90
 		),
+		"document"=>array(
+			"aff"=>$tabLang["lang_document"],
+			"width"=>70
+		),
 		"context"=>array(
 			"aff"=>"Contexte",
 			"width"=>110
@@ -107,6 +111,8 @@
 		$tabValeur[$i]["recipient"]["aff"]=$ech->aff("recipient","form","form_data[".$id."]");
 		$tabValeur[$i]["delay"]["val"]=$ech->val("delai");
 		$tabValeur[$i]["delay"]["aff"]=$ech->aff("delai","form","form_data[".$id."]");
+		$tabValeur[$i]["document"]["val"]=$ech->val("document");
+		$tabValeur[$i]["document"]["aff"]=$ech->aff("document","form","form_data[".$id."]");
 		
 		$tabValeur[$i]["id"]["val"]=$id;
 		$tabValeur[$i]["action"]["val"]=$id;

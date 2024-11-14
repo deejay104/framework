@@ -8,5 +8,6 @@
 	$tabLang["lang_newmsg"]="Write your message...";
 	$tabLang["lang_delpost"]="Do you wantto delete this post ?";
 	$tabLang["lang_upload"]="Upload in progress";
+	$tabLang["lang_lastdocs"]="Last documents";
 
 ?>

@@ -22,7 +22,7 @@
 <?
 	$id=checkVar("id","numeric");
 	if ( (!GetDroit("AccesMembre")) && (!GetMyId($id)) )
-	  { FatalError("Acc�s non autoris� (AccesMembre)"); }
+	  { FatalError("Accès non autorisé (AccesMembre)"); }
 
 	require_once ("class/document.inc.php");
 	require_once ("class/echeance.inc.php");
@@ -37,6 +37,7 @@
 	$form_donnees=checkVar("form_donnees","array");
 	$form_echeance=CheckVar("form_echeance","array");
 	$form_echeance_type=CheckVar("form_echeance_type","array");
+	$form_echeance_doc=CheckVar("form_echeance_doc","array");
 
 	$msg_erreur="";
 	$msg_confirmation="";
@@ -60,7 +61,7 @@
 
 	if (($fonc==$tabLang["lang_save"]) && ((GetMyId($id)) || (GetDroit("ModifUser"))) && (!isset($_SESSION['tab_checkpost'][$checktime])))
 	{
-		// Sauvegarde les donn�es
+		// Sauvegarde les données
 		if (count($form_data)>0)
 		{
 			foreach($form_data as $k=>$v)
@@ -120,7 +121,7 @@
 			}
 		}
 
-		// Sauvegarde des �ch�ances
+		// Sauvegarde des échéances
 		if ((isset($form_echeance)) && (is_array($form_echeance)))
 		{
 			foreach($form_echeance as $i=>$d)
@@ -129,15 +130,17 @@
 				if ((!is_numeric($i)) || ($i==0))
 				{
 					$dte->typeid=$form_echeance_type[$i];
+					$dte->doc=0;
 					$dte->uid=$id;
 				}
 				if (($d!='') && ($d!='0000-00-00'))
 				{
 					$dte->dte_echeance=$d;
+					$dte->doc=$form_echeance_doc[$i];
 					$dte->Save();
 				}
 				else
-				{!!
+				{
 					$dte->Delete();
 				}
 			}
@@ -290,71 +293,70 @@
 		}
 	}
 
-		// Affiche les documents
-		if ( (GetMyId($id)) || (GetDroit("ModifUserAll")) || (GetDroit("ModifUserInfos")) )
+	// Affiche les documents
+	if ( (GetMyId($id)) || (GetDroit("ModifUserAll")) || (GetDroit("ModifUserDocument")) )
+	{
+		if ($typeaff=="form")
+		{
+			$doc = new document_core(0,$sql);
+			$doc->editmode="form";
+			$tmpl_x->assign("form_document",$doc->Affiche());
+			$tmpl_x->parse("corps.aff_documents.lst_document");
+		}
+
+		if ((is_numeric($id)) && ($id>0))
+		{
+			$lstdoc=ListDocument($sql,$id,"document");
+		
+			if (is_array($lstdoc))
+			{
+				foreach($lstdoc as $i=>$did)
+				{
+					$doc = new document_core($did,$sql);
+					$doc->editmode=($typeaff=="form") ? "edit" : "std";
+					$tmpl_x->assign("form_document",$doc->Affiche("large","name"));
+					$tmpl_x->parse("corps.aff_documents.lst_document");
+				}
+			}	
+		}
+
+		$tmpl_x->parse("corps.aff_documents");
+		
+	}
+
+	// Echéances
+	if ($MyOpt["module"]["echeances"]=="on")
+	{
+		if ( (GetMyId($id)) || (GetDroit("ModifUserAll")) || (GetDroit("ModifUserEcheance")) )
 		{
 			if ($typeaff=="form")
 			{
-				$doc = new document_core(0,$sql);
-				$doc->editmode="form";
-				$tmpl_x->assign("form_document",$doc->Affiche());
-				$tmpl_x->parse("corps.aff_documents.lst_document");
+				$dte = new echeance_core(0,$sql,$id);
+				$dte->editmode="form";
+				$dte->context="utilisateurs";
+				$tmpl_x->assign("form_echeance",$dte->Affiche());
+				$tmpl_x->parse("corps.aff_echeances.lst_echeance");
 			}
-
-			if ((is_numeric($id)) && ($id>0))
-			{
-				$lstdoc=ListDocument($sql,$id,"document");
-			
-				if (is_array($lstdoc))
-				{
-					foreach($lstdoc as $i=>$did)
-					{
-						$doc = new document_core($did,$sql);
-						$doc->editmode=($typeaff=="form") ? "edit" : "std";
-						$tmpl_x->assign("form_document",$doc->Affiche());
-						$tmpl_x->parse("corps.aff_documents.lst_document");
-					}
-				}	
-			}
-
-			$tmpl_x->parse("corps.aff_documents");
-			
-		}
-
-		// Echéances
-		if ($MyOpt["module"]["echeances"]=="on")
-		{
-			if ( (GetMyId($id)) || (GetDroit("ModifUserAll")) || (GetDroit("ModifUserInfos")) )
-			{
-
-				if ($typeaff=="form")
-				{
-					$dte = new echeance_core(0,$sql,$id);
-					$dte->editmode="form";
-					$dte->context="utilisateurs";
-					$tmpl_x->assign("form_echeance",$dte->Affiche());
-					$tmpl_x->parse("corps.aff_echeances.lst_echeance");
-				}
-					
-				$lstdte=ListEcheance($sql,$id);
-				if ((is_numeric($id)) && ($id>0))
-				{ 
-					if (is_array($lstdte))
-					{
-						foreach($lstdte as $i=>$did)
-						{
-							$dte = new echeance_core($did,$sql,$id);
-							$dte->editmode=($typeaff=="form") ? "edit" : "html";
-							$tmpl_x->assign("form_echeance",$dte->Affiche());
-							$tmpl_x->parse("corps.aff_echeances.lst_echeance");
-						}
-					}
-				}
 				
-				$tmpl_x->parse("corps.aff_echeances");			
-	
+			$lstdte=ListEcheance($sql,$id);
+			if ((is_numeric($id)) && ($id>0))
+			{ 
+				if (is_array($lstdte))
+				{
+					foreach($lstdte as $i=>$did)
+					{
+						$dte = new echeance_core($did,$sql,$id);
+						$dte->editmode=($typeaff=="form") ? "edit" : "html";
+						$tmpl_x->assign("form_echeance",$dte->Affiche());
+						$tmpl_x->parse("corps.aff_echeances.lst_echeance");
+					}
+				}
 			}
+			
+			$tmpl_x->parse("corps.aff_echeances");			
+
 		}
+	}
 
 // ---- Données spécifique
 

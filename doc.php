@@ -62,11 +62,11 @@
 	$mode=checkVar("mode","varchar");
 	
 
-// ---- Se connecte à  la base MySQL
+// ---- Se connecte Ã  la base MySQL
 	require ("class/mysql.inc.php");
 	$sql = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db,$port);
 
-// ---- Charge les informations de l'utilisateur connecté
+// ---- Charge les informations de l'utilisateur connectÃ©
 	require ("class/objet.inc.php");
 	require ("class/user.inc.php");
 	$myuser = new user_core($gl_uid,$sql,true);

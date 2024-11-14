@@ -22,7 +22,7 @@
 
 class document_core{
 	protected $table="document";
-	
+
  	# Constructor
 	function __construct($id=0,$sql="",$type="document"){
 		global $MyOpt;
@@ -35,6 +35,7 @@ class document_core{
 
 		$this->id=0;
 		$this->name="";
+		$this->originalname="";
 		$this->filename="";
 		$this->uid="";
 		$this->type=$type;
@@ -50,13 +51,6 @@ class document_core{
 		{
 			$this->load($id);
 		}
-		// else if ($id==-1)
-		// {
-			// $this->id=0;
-			// $this->filepath="static/images";
-			// $this->filename="icn64_membre.png";
-			// $this->droit="ALL";
-		// }
 		else
 		{
 			$this->id=0;
@@ -76,6 +70,7 @@ class document_core{
 		{
 			// Charge les variables
 			$this->name=$res["name"];
+			$this->originalname=$res["originalname"];
 			$this->filename=$res["filename"];
 			$this->uid=$res["uid"];
 			$this->type=$res["type"];
@@ -92,8 +87,9 @@ class document_core{
 	}
 
 
-	function Save($id,$name,$tmpname)
-	{ global $gl_uid;
+	function Save($uid,$name,$tmpname)
+	{ 
+		global $gl_uid;
 		$sql=$this->sql;
 
 		$ret="";
@@ -105,7 +101,7 @@ class document_core{
 		}
 		$name=addslashes($name);
 
-	  	$query="INSERT INTO ".$this->tbl."_document SET name='$name', uid='$id', droit='$this->droit', type='$this->type', actif='oui', uid_creat='$gl_uid',dte_creat='".now()."', uid_maj='$gl_uid',dte_maj='".now()."'";
+	  	$query="INSERT INTO ".$this->tbl."_document SET name='$name',originalname='$name', uid='$uid', droit='$this->droit', type='$this->type', actif='oui', uid_creat='$gl_uid',dte_creat='".now()."', uid_maj='$gl_uid',dte_maj='".now()."'";
 		$this->id=$sql->Insert($query);
 
 		$myname=CompleteTxt($this->id,6,"0");
@@ -116,9 +112,10 @@ class document_core{
 		  	mkdir($this->filepath."/".$mypath);
 		}
 
-		$this->uid=$id;
+		$this->uid=$uid;
 		$this->filename=$mypath."/".$myname.".".$myext;
-		$this->name=$name;			
+		$this->originalname=$name;	
+		$this->name=$name;
 
 		if (!move_uploaded_file($tmpname,$this->filepath."/".$this->filename))
 		{
@@ -136,23 +133,27 @@ class document_core{
 	}
 
 	function Update()
-	{ global $gl_uid;
+	{
+		global $gl_uid;
 		$sql=$this->sql;
+
+		$ret="";
 
 		$td["uid"]=$this->uid;
 		$td["type"]=$this->type;
+		$td["name"]=$this->name;
 		$td["droit"]=$this->droit;
 		$td["uid_maj"]=$gl_uid;
 		$td["dte_maj"]=now();
 		$this->uid_maj=$gl_uid;
 		$this->dte_maj=now();
 
-		$this->id=$sql->Edit($this->table,$this->tbl."_".$this->table,$this->id,$td);
+		$sql->Edit($this->table,$this->tbl."_".$this->table,$this->id,$td);
 
 		return $ret;
 	}
 
-	function Import($id,$name,$filename="",$droit="")
+	function Import($uid,$name,$filename="",$droit="")
 	{ global $gl_uid;
 		$sql=$this->sql;
 
@@ -164,7 +165,7 @@ class document_core{
 			$filename=substr(GetFilename($name),0,96).".".$myext;
 		}
 
-	  	$query="INSERT INTO ".$this->tbl."_document SET name='".(($filename!="") ? $filename : $name)."', uid='$id', type='$this->type', droit='$droit',actif='oui', uid_creat='$gl_uid',dte_creat='".now()."'";
+	  	$query="INSERT INTO ".$this->tbl."_document SET name='".(($filename!="") ? $filename : $name)."', originalname='".(($filename!="") ? $filename : $name)."', uid='$uid', type='$this->type', droit='$droit',actif='oui', uid_creat='$gl_uid',dte_creat='".now()."'";
 		$this->id=$sql->Insert($query);
 
 		$myname=CompleteTxt($this->id,6,"0");
@@ -174,7 +175,7 @@ class document_core{
 		  {
 		  	mkdir($this->filepath."/".$mypath);
 		  }
-		$this->uid=$id;
+		$this->uid=$uid;
 		$this->filename=$mypath."/".$myname.".".$myext;
 
 		rename($name,$this->filepath."/".$this->filename);
@@ -191,7 +192,7 @@ class document_core{
 
 		if ( ($this->uid_creat==$gl_uid) || (GetDroit("SupprimeDocument")) || ((isset($myuser->groupe[$this->droit])) && ($myuser->groupe[$this->droit])) )
 		{
-			if (file_exists($this->filepath."/".$this->filename))
+			if (($this->filename!="") && (file_exists($this->filepath."/".$this->filename)))
 			{
 				if (unlink($this->filepath."/".$this->filename))
 				{
@@ -199,7 +200,7 @@ class document_core{
 				}
 			}
 			
-			if (!file_exists($this->filepath."/".$this->filename))
+			if ((!file_exists($this->filepath."/".$this->filename)) || ($this->filename==""))
 			{
 				$sql->Edit("document",$this->tbl."_document",$this->id,array("actif"=>'non', "uid_maj"=>$gl_uid, "dte_maj"=>now()));
 			}
@@ -207,10 +208,9 @@ class document_core{
 		return $ret;
 	}
 
-	function Affiche()
+	function Affiche($type="large",$name="file")
 	{ global $MyOpt,$corefolder;
-		$myext=GetExtension($this->name);
-
+		$myext=GetExtension($this->filename);
 		if ($myext=="xls")
 		  { $icon="excel"; }
 		else if ($myext=="xlsx")
@@ -250,7 +250,9 @@ class document_core{
 		else if ($myext=="txt")
 		  { $icon="document"; }
 		else
-		  { $icon="file"; }
+		  { $icon="outline"; }
+
+		$filename=($name=="file") ? $this->originalname : $this->name;
 
 		$txt="";
 		if ($this->editmode=="form")
@@ -272,18 +274,18 @@ class document_core{
 		else if ($this->editmode=="regular")
 		{
 			$txt.="<div id='doc_".$this->id."' class='docLink'>";
-			$txt.="<p>";
+			$txt.=(($type=="large") ? "<p>" : "");
 			if (file_exists($this->filepath."/".$this->filename))
 			{
 				$fsize=CalcSize(filesize($this->filepath."/".$this->filename));
 				// $txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><img src='".$MyOpt["host"]."/".$corefolder."/static/images/icn16_".$icon.".png' width=16 height=16 border=0> ".$this->name." ($fsize) </a>";
-				$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><i class='mdi mdi-list mdi-file-".$icon."'></i> ".$this->name." ($fsize) </a>";
+				$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><i class='mdi mdi-list mdi-file-".$icon."'></i> ".(($type=="large") ? $filename." (".$fsize.") " : "")."</a>";
 			}
-			else
+			else if ($type=="large")
 			{
 				$txt.="<i class='mdi mdi-list mdi-file-hidden'></i> <s>".$this->name."</s>";
 			}
-			$txt.="</p>";
+			$txt.=(($type=="large") ? "</p>" : "");
 			$txt.="</div>";
 		}
 		else if ($this->editmode=="read")
@@ -291,25 +293,25 @@ class document_core{
 			if (file_exists($this->filepath."/".$this->filename))
 			{
 				$fsize=CalcSize(filesize($this->filepath."/".$this->filename));
-				$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><i class='mdi mdi-list mdi-file-".$icon."'></i> ".$this->name." ($fsize) </a>";
+				$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><i class='mdi mdi-list mdi-file-".$icon."'></i> ".(($type!="short") ? $filename." (".$fsize.") " : "")."</a>";
 			}
 			else
 			{
-				$txt.="<i class='mdi mdi-list mdi-file-hidden'></i> <s>".$this->name."</s>";
+				$txt.="<i class='mdi mdi-list mdi-file-hidden'></i> <s>".(($type!="short") ? "<s>".$filename."</s>" : "")."</s>";
 			}
 		}
 		else
 		{
-			$txt.="<div id='doc_".$this->id."' OnMouseOver='document.getElementById(\"doc_del_".$this->id."\").style.visibility=\"visible\";' OnMouseOut='document.getElementById(\"doc_del_".$this->id."\").style.visibility=\"hidden\";'>";
-			$txt.="<p>";
+			$txt.="<div id='doc_".$this->id."' ".(($this->editmode=="edit") ? "OnMouseOver='document.getElementById(\"doc_del_".$this->id."\").style.visibility=\"visible\";' OnMouseOut='document.getElementById(\"doc_del_".$this->id."\").style.visibility=\"hidden\";'" : "")." class='".(($type=="large") ? "" : "showDocument")."'>";
+			$txt.=(($type=="large") ? "<p>" : "");
 			if (file_exists($this->filepath."/".$this->filename))
 			{
 					$fsize=CalcSize(filesize($this->filepath."/".$this->filename));
-					$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><i class='mdi mdi-list mdi-file-".$icon."'></i> ".$this->name." ($fsize) </a>";
+					$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><i class='mdi mdi-list mdi-file-".$icon."'></i> ".(($type!="short") ? $filename." (".$fsize.") " : "")."</a>";
 			}
 			else
 			{
-					$txt.="<i class='mdi mdi-list mdi-file-hidden'></i> <s>".$this->name."</s>";
+					$txt.="<i class='mdi mdi-list mdi-file-hidden'></i> ".(($type!="short") ? "<s>".$filename."</s>" : "");
 			}
 
 			// Si mode édition
@@ -318,7 +320,7 @@ class document_core{
 				// $txt.=" <a href=\"#\" OnClick=\"var win=window.open('doc.php?id=".$this->id."&fonc=delete','scrollbars=no,resizable=no,width=10'); return false;\" class='imgDelete'><img src='".$corefolder."/static/images/icn16_supprimer.png'></a>";
 				$txt.=" <a href=\"#\" OnClick=\"$(function() { $.ajax({url:'".$MyOpt["host"]."/doc.php?id=".$this->id."&fonc=delete'}); document.getElementById('doc_".$this->id."').style.visibility='hidden'; document.getElementById('doc_".$this->id."').style.height='0'; })\" class='imgDelete'><img  id='doc_del_".$this->id."' src='".$MyOpt["host"]."/".$corefolder."/static/images/icn16_supprimer.png' style='visibility:hidden;'></a>";
 			}
-			$txt.="</p>";
+			$txt.=(($type=="large") ? "</p>" : "");
 			$txt.="</div>";
 		}
 
@@ -348,7 +350,7 @@ class document_core{
 			$mode="";
 		}
 
-		$myext=GetExtension($this->name);
+		$myext=GetExtension($this->filename);
 		$fname=$this->filepath."/".$this->filename;
 		if (!file_exists($fname))
 		{
@@ -475,9 +477,14 @@ class document_core{
 		{
 		  	return;
 		}
-				
+		
 		$exif = @exif_read_data($file);
-		$orientation = $exif['Orientation'];
+
+		if (!is_array($exif))
+		{
+			return false;
+		}
+		$orientation = $exif['Orientation'];	
 
 		$deg=0;
 		if (isset($orientation) && $orientation != 1)
@@ -648,11 +655,17 @@ class document_core{
 		}
 		return "doc.php?id=".$this->id.$type;
 	}
+
 }
 	
 // Gestion de fichier
 function GetExtension($file)
 {
+	if ($file=="")
+	{
+		return "";
+	}
+
 	$myext=strtolower(substr($file,strrpos($file,".")+1,strlen($file)-strrpos($file,".")-1));
 	return $myext;
 }
@@ -664,11 +677,11 @@ function GetFilename($file)
 	return $myfile;
 }
 
-function ListDocument($sql,$id,$type)
+function ListDocument($sql,$uid,$type)
   {
 	global $MyOpt, $gl_uid, $myuser;
 
-	$query="SELECT ".$MyOpt["tbl"]."_document.id,".$MyOpt["tbl"]."_document.uid,".$MyOpt["tbl"]."_document.droit  FROM ".$MyOpt["tbl"]."_document WHERE ".$MyOpt["tbl"]."_document.actif='oui' ".(($id>0) ? "AND ".$MyOpt["tbl"]."_document.uid='$id'" : "" )." ".(($type!="") ? "AND ".$MyOpt["tbl"]."_document.type='$type'" : "" )." ORDER BY name";
+	$query="SELECT ".$MyOpt["tbl"]."_document.id,".$MyOpt["tbl"]."_document.uid,".$MyOpt["tbl"]."_document.droit  FROM ".$MyOpt["tbl"]."_document WHERE ".$MyOpt["tbl"]."_document.actif='oui' ".(($uid>0) ? "AND ".$MyOpt["tbl"]."_document.uid='$uid'" : "" )." ".(($type!="") ? "AND ".$MyOpt["tbl"]."_document.type='$type'" : "" )." ORDER BY name";
 
 	$sql->Query($query);
 	$lstdoc=array();
@@ -688,5 +701,36 @@ function ListDocument($sql,$id,$type)
 
 	return $lstdoc;
   }
-	
+
+  function LastDocument()
+  {
+	global $sql,$MyOpt, $gl_uid, $myuser;
+
+	$query="SELECT id,uid,droit,type  FROM ".$MyOpt["tbl"]."_document WHERE ".$MyOpt["tbl"]."_document.actif='oui' ORDER BY dte_creat DESC LIMIT 0,20";
+
+	$sql->Query($query);
+	$lstdoc=array();
+	$nb=0;
+	for($i=0; $i<$sql->rows; $i++)
+	{
+		$sql->GetRow($i);
+		if ( 
+			($gl_uid==$sql->data["uid"]) 
+			|| (($sql->data["droit"]!="") && (isset($myuser->groupe[$sql->data["droit"]])) && ($myuser->groupe[$sql->data["droit"]]))
+			|| (($sql->data["droit"]=="ALL") && ($sql->data["type"]!="document"))
+			|| (GetDroit("VisuDocument"))
+		)
+		{
+			$lstdoc[$i]=$sql->data["id"];
+			$nb=$nb+1;
+		}
+		if ($nb>=5)
+		{
+			break;
+		}
+	}
+
+	return $lstdoc;
+  }
+
 ?>

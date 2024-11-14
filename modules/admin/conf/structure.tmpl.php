@@ -52,6 +52,7 @@ $tabTmpl=Array
 	(
 		"id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
 		"name" => Array("Type" => "varchar(100)", ),
+		"originalname" => Array("Type" => "varchar(100)", ),
 		"filename" => Array("Type" => "varchar(20)", ),
 		"uid" => Array("Type" => "int(10) unsigned", "Default" => 0, "Index" => "1", ),
 		"type" => Array("Type" => "varchar(10)", "Index" => "1", ),
@@ -196,7 +197,7 @@ $tabTmpl=Array
 	$obj->genSqlTab($tabTmpl);
 	$obj=new groupe_core(0,$sql);
 	$obj->genSqlTab($tabTmpl);
-	
+
 	require_once ("class/amelioration.inc.php");
 	$obj=new amelioration_core(0,$sql);
 	$obj->genSqlTab($tabTmpl);

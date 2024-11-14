@@ -498,8 +498,9 @@
 	}
 	else
 	{
-		$tmpl_prg->assign("aff_avatar",$MyOpt["host"]."/".$corefolder."/static/images/none.gif");
+		$tmpl_prg->assign("aff_avatar",$MyOpt["host"]."/static/images/icn64_membre.png");
 	}	
+
 
 // ---- Charge la rubrique
 	$affrub=$rub;
