@@ -278,12 +278,11 @@ class document_core{
 			if (file_exists($this->filepath."/".$this->filename))
 			{
 				$fsize=CalcSize(filesize($this->filepath."/".$this->filename));
-				// $txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><img src='".$MyOpt["host"]."/".$corefolder."/static/images/icn16_".$icon.".png' width=16 height=16 border=0> ".$this->name." ($fsize) </a>";
 				$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><i class='mdi mdi-list mdi-file-".$icon."'></i> ".(($type=="large") ? $filename." (".$fsize.") " : "")."</a>";
 			}
-			else if ($type=="large")
+			else
 			{
-				$txt.="<i class='mdi mdi-list mdi-file-hidden'></i> <s>".$this->name."</s>";
+				$txt.="<i class='mdi mdi-list mdi-file-hidden'></i> <s>".$filename."</s>";
 			}
 			$txt.=(($type=="large") ? "</p>" : "");
 			$txt.="</div>";
@@ -293,7 +292,7 @@ class document_core{
 			if (file_exists($this->filepath."/".$this->filename))
 			{
 				$fsize=CalcSize(filesize($this->filepath."/".$this->filename));
-				$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><i class='mdi mdi-list mdi-file-".$icon."'></i> ".(($type!="short") ? $filename." (".$fsize.") " : "")."</a>";
+				$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank' title='".$this->name."'><i class='mdi mdi-list mdi-file-".$icon."'></i> ".(($type!="short") ? $filename." (".$fsize.") " : "")."</a>";
 			}
 			else
 			{
@@ -307,7 +306,7 @@ class document_core{
 			if (file_exists($this->filepath."/".$this->filename))
 			{
 					$fsize=CalcSize(filesize($this->filepath."/".$this->filename));
-					$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><i class='mdi mdi-list mdi-file-".$icon."'></i> ".(($type!="short") ? $filename." (".$fsize.") " : "")."</a>";
+					$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank' title='".$this->name."'><i class='mdi mdi-list mdi-file-".$icon."'></i> ".(($type!="short") ? $filename." (".$fsize.") " : "")."</a>";
 			}
 			else
 			{

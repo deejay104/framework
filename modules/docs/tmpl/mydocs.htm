@@ -7,7 +7,7 @@
 
 <!-- BEGIN: corps -->
 <style>
-
+.contentTitle { min-height: 32px; }
 .contentFiles { text-align: center;}
 .contentFiles:hover { background-color:#{LineBackgroundHover}; color:#{TextBackgroundHover}; }
 .contentFiles { cursor: pointer; }
@@ -221,9 +221,9 @@ function generateLine(id,title,author,created,ldocs)
 {
 	txt="<div id='doc_"+id+"' class='d-flex align-items-start profile-feed-item'>";
 	txt=txt+'<div class="ml-4">';
-	txt=txt+"<div  class='link-hover' onmouseover='document.getElementById(\"edit_"+id+"\").style.display=\"inline-block\";' onmouseout='document.getElementById(\"edit_"+id+"\").style.display=\"none\";'>";
+	txt=txt+"<div  class='link-hover contentTitle' onmouseover='document.getElementById(\"edit_"+id+"\").style.display=\"inline-block\";' onmouseout='document.getElementById(\"edit_"+id+"\").style.display=\"none\";'>";
 
-	txt=txt+"<div id='docName_"+id+"' style='display:inline-block;'><h5>"+title+"</h5></div>";
+	txt=txt+"<div id='docName_"+id+"' style='display:inline-block;' onclick='editContent("+id+"); return false;'><h5>"+title+"</h5></div>";
 
 	txt=txt+"<div id='edit_"+id+"' style='display:none; margin-left:10px; font-size:16px;'>";
 	txt=txt+"<a href='#' onclick='editContent("+id+"); return false;'><i class='mdi mdi-pencil'></i></a>";

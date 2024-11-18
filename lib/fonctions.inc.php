@@ -27,7 +27,7 @@ function MyRep($file,$mymod="",$custom=true)
 		$mymod=$mod;
 	}
 
-  	$myfile=substr($file,0,strrpos($file,"."));
+	$myfile=substr($file,0,strrpos($file,"."));
 	$myext=substr($file,strrpos($file,".")+1,strlen($file)-strrpos($file,".")-1);
 
 	if ($custom)
@@ -652,6 +652,7 @@ function MyMail($from,$to,$tabcc,$subject,$message,$headers="",$files="")
 	
 	//Create a new PHPMailer instance
 	$mail = new PHPMailer;
+	$mail->SMTPDebug = true;
 
 	if ($MyOpt["mail"]["smtp"]=="on")
 	{
@@ -670,6 +671,11 @@ function MyMail($from,$to,$tabcc,$subject,$message,$headers="",$files="")
 		$mail->Host = $MyOpt["mail"]["host"];
 		//Set the SMTP port number - likely to be 25, 465 or 587
 		$mail->Port = $MyOpt["mail"]["port"];
+
+		if ($MyOpt["mail"]["ssl"]=="on")
+		{
+			$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+		}
 
 		// Do not close connection to SMTP
 		$mail->SMTPKeepAlive = true;
@@ -695,9 +701,7 @@ function MyMail($from,$to,$tabcc,$subject,$message,$headers="",$files="")
 	//Set an alternative reply-to address
 	$mail->addReplyTo($fromadd, "");
 	//Set who the message is to be sent to
-
 	$mail->addAddress($to);
-//$mail->addAddress("matthieu@les-mnms.net");
 
 	if ((is_array($tabcc)) && (count($tabcc)>0))
 	{
@@ -730,7 +734,13 @@ function MyMail($from,$to,$tabcc,$subject,$message,$headers="",$files="")
 	}
 
 	//send the message, check for errors
-	return $mail->send();
+echo $mail->ErrorInfo;
+	$ret=$mail->send();
+	if ((!$ret) && (isset($MyOpt["debug"])) && ($MyOpt["debug"]=="on")) 
+	{
+		//affInformation("Email not sent:".$mail->ErrorInfo,"warning");
+	}
+	return $ret;
 }
 
 
