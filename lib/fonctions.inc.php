@@ -652,7 +652,7 @@ function MyMail($from,$to,$tabcc,$subject,$message,$headers="",$files="")
 	
 	//Create a new PHPMailer instance
 	$mail = new PHPMailer;
-	$mail->SMTPDebug = true;
+	//$mail->SMTPDebug = true;
 
 	if ($MyOpt["mail"]["smtp"]=="on")
 	{
@@ -734,13 +734,7 @@ function MyMail($from,$to,$tabcc,$subject,$message,$headers="",$files="")
 	}
 
 	//send the message, check for errors
-echo $mail->ErrorInfo;
-	$ret=$mail->send();
-	if ((!$ret) && (isset($MyOpt["debug"])) && ($MyOpt["debug"]=="on")) 
-	{
-		//affInformation("Email not sent:".$mail->ErrorInfo,"warning");
-	}
-	return $ret;
+	return $mail->send();
 }
 
 
