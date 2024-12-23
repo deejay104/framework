@@ -136,7 +136,7 @@
 				if (($d!='') && ($d!='0000-00-00'))
 				{
 					$dte->dte_echeance=$d;
-					$dte->doc=$form_echeance_doc[$i];
+					$dte->doc=((isset($form_echeance_doc[$i])) && (is_numeric($form_echeance_doc[$i]))) ? $form_echeance_doc[$i] : 0;
 					$dte->Save();
 				}
 				else

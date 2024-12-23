@@ -222,21 +222,20 @@ class echeance_core extends objet_core
 			$ret.="<a href=\"#\" OnClick=\"document.getElementById('form_echeance".$this->id."').value=''; document.getElementById('aff_echeance".$this->id."').style.display='none';\" class='imgDelete'><img  id='echeance_del_".$this->id."' src='".$MyOpt["host"]."/".$corefolder."/static/images/icn16_supprimer.png' style='display:none;'></a>";
 			$ret.="</p>";
 
-			$ret.="<select name='form_echeance_doc[".$this->id."]' id='form_echeance_doc".$this->id."' class='form-control' style='margin-left:20%;width:80%;'><option value=0>Aucun</option>";
 
 			$lstdoc=ListDocument($this->sql,$this->uid,"document");
 			
 			if (is_array($lstdoc))
 			{
+				$ret.="<select name='form_echeance_doc[".$this->id."]' id='form_echeance_doc".$this->id."' class='form-control' style='margin-left:20%;width:80%;'><option value=0>Aucun</option>";
 				foreach($lstdoc as $i=>$did)
 				{
 					$doc = new document_core($did,$this->sql);
 					$ret.="<option value='".$doc->id."' ".(($this->doc==$doc->id) ? "selected" : "").">".$doc->name."</option>";
 				}
+				$ret.="<select>";
 			}	
 
-
-			$ret.="<select>";
 			$ret.="</div>";
 		}
 		else if ($type=="val")
