@@ -64,6 +64,7 @@
 	require ("class/mysql.inc.php");
 	require ("class/document.inc.php");
 
+
 // ---- Se connecte à la base MySQL
 	if (!isset($port))
 	{

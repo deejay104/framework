@@ -92,7 +92,7 @@ $MyOptTmpl["mail"]["port"]="25";
 $MyOptHelp["mail"]["port"]="SMTP port";
 
 $MyOptTmpl["mail"]["ssl"]="off";
-$MyOptHelp["mail"]["ssl"]="Activate SSL (on=activated)";
+$MyOptHelp["mail"]["ssl"]="Activate SSL (on=SSL activated, tls=TLS)";
 
 $MyOptTmpl["mail"]["username"]="";
 $MyOptHelp["mail"]["username"]="SMTP username";

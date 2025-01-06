@@ -652,7 +652,7 @@ function MyMail($from,$to,$tabcc,$subject,$message,$headers="",$files="")
 	
 	//Create a new PHPMailer instance
 	$mail = new PHPMailer;
-	//$mail->SMTPDebug = true;
+	//$mail->SMTPDebug = 3;
 
 	if ($MyOpt["mail"]["smtp"]=="on")
 	{
@@ -675,6 +675,10 @@ function MyMail($from,$to,$tabcc,$subject,$message,$headers="",$files="")
 		if ($MyOpt["mail"]["ssl"]=="on")
 		{
 			$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+		}
+		else if ($MyOpt["mail"]["ssl"]=="tls")
+		{
+			$mail->SMTPSecure = 'tls';
 		}
 
 		// Do not close connection to SMTP
