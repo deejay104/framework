@@ -38,8 +38,8 @@
 						<input type="hidden" name="id" id="id" value="{form_id}">
 						<input type="hidden" name="checktime" value="{form_checktime}">
 				
-						<input type="text" class='form-control' name="form_titre" value="" placeholder="{lang_newpost}"  ><br />
-						<textarea name="form_message" class='form-control' placeholder="{lang_newmsg}" rows=4></textarea>
+						<input type="text" class='form-control' name="form_titre" value="{news_title}" placeholder="{lang_newpost}"  ><br />
+						<textarea name="form_message" class='form-control' placeholder="{lang_newmsg}" rows=4>{news_message}</textarea>
 						<p>
 						<label for='file' class="btn btn-primary" style="margin:0px; height:42px;"><i class="mdi mdi-camera	 menu-icon"></i></label>
 							<input id='file' class="btn btn-primary mr-2" type='file' style='display:none'>
@@ -243,14 +243,14 @@ function convertSize(size) {
 
 	});
 
-	function loadNews(id,limit,search,mid=0)
+	function loadNews(id,limit,search,mid=0,fav=0)
 	{
 		console.log("load:"+id+"-"+limit);
 		console.log("lastid:"+lastid);
 
 		$.ajax({
 			type: 'GET',
-			url: '{apiurlget}&id='+id+'&mid='+mid+'&limit='+limit+'&search='+search,
+			url: '{apiurlget}&id='+id+'&mid='+mid+'&fav='+fav+'&limit='+limit+'&search='+search,
 			dataType: 'JSON',
 
 			success: function(response) {
@@ -261,15 +261,34 @@ function convertSize(size) {
 					$.each(response.news, function (index, value) {
 
 
-						txt='<div id="news_'+value.id+'" class="d-flex align-items-start profile-feed-item">';
+						txt='<div id="news_'+value.id+'" class="';
+						if (value.favori>0)
+						{
+							txt=txt+'content-wrapper msgbox-warning ';
+						}
+						txt=txt+'d-flex align-items-start profile-feed-item">';
 						txt=txt+'<img src="{path_root}/'+value.avatar+'" alt="profile" class="img-sm rounded-circle">';
 						txt=txt+'<div class="ml-4">';
 
 						txt=txt+"<div onmouseover='document.getElementById(\"edit_"+value.id+"\").style.display=\"inline-block\";' onmouseout='document.getElementById(\"edit_"+value.id+"\").style.display=\"none\";'>";
 						txt=txt+"<h5>"+value.title;
+
+						txt=txt+"<div id='edit_"+value.id+"' style='display:none; margin-left:10px;'>";
+
+						if (value.setfav=="yes")
+						{
+							if (value.favori>0)
+							{
+								txt=txt+"<a href='#' onclick='setFav("+value.id+",0);'><i class='mdi mdi-star'></i></a>";
+							}
+							else
+							{
+								txt=txt+"<a href='#' onclick='setFav("+value.id+",1);'><i class='mdi mdi-star-outline'></i></a>";
+							}
+						}
+
 						if ((value.edit=="ok") || (value.delete=="ok"))
 						{
-							txt=txt+"<div id='edit_"+value.id+"' style='display:none; margin-left:10px;'>";
 							if (value.edit=="ok")
 							{
 								txt=txt+"<a href='#' onclick='editNews("+value.id+");'><i class='mdi mdi-pencil'></i></a>";
@@ -278,8 +297,10 @@ function convertSize(size) {
 							{
 								txt=txt+"<a href='' onclick='delNews("+value.id+");'><i class='mdi mdi-delete'></i></a>";
 							}
-							txt=txt+"</div>";
 						}
+						txt=txt+"</div>";
+
+
 						txt=txt+"</h5>";
 						txt=txt+"</div>";
 
@@ -289,7 +310,15 @@ function convertSize(size) {
 						txt=txt+'</div>';
 						//txt=txt+'</div>';
 
-						$("#news").append(txt);
+						if (value.favori>0)
+						{
+							$("#news").prepend(txt);
+							console.log("favori");
+						}
+						else
+						{
+							$("#news").append(txt);
+						}
 						lastid=value.id;
 						console.log("lastid:"+lastid);
 					});
@@ -324,15 +353,21 @@ function convertSize(size) {
 	{
 		window.location.replace("/?id="+id);
 	}
+	function setFav(id,fav)
+	{
+		window.location.replace("/?favid="+id+"&setfav="+fav);
+	}
+
 	
-	loadNews(0,5,"",{idstart});
+	loadNews(0,2,"",0,1);
+	loadNews(0,8,"",{idstart},0);
 		
 	$(window).scroll(function() {
 		if($(window).scrollTop() + $(window).height() >= $(document).height()-50) {
 			if (aff==0)
 			{
 				aff=1;
-				loadNews(lastid,2,searchTxt);
+				loadNews(lastid,2,searchTxt,0);
 			}
 		}
 	});

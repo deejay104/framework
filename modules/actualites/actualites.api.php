@@ -10,6 +10,7 @@
 	$mid=checkVar("mid","numeric");
 	$fonc=checkVar("fonc","varchar");
 	$type=checkVar("type","varchar");
+	$fav=checkVar("fav","numeric",0);
 
 	require_once ("class/document.inc.php");
 
@@ -18,7 +19,7 @@
 
 	if (($fonc=="get") || ($fonc==""))
 	{
-		$limit=checkVar("limit","numeric",5);
+		$limit=checkVar("limit","numeric",8);
 		$search=addslashes(checkVar("search","varchar",40));
 
 		$q="";
@@ -26,8 +27,8 @@
 		  {
 			$q=" AND (titre LIKE '%".$search."%' OR message LIKE '%".$search."%') ";
 		  }
-
-		$query="SELECT * FROM `".$MyOpt["tbl"]."_actualites` WHERE actif='oui' ".(($mid>0) ? "AND id='".$mid."'" : "")." ".(($id>0) ? "AND id<'".$id."'" : "")." ".$q." ORDER BY dte_creat DESC LIMIT 0,$limit";
+		
+		$query="SELECT * FROM `".$MyOpt["tbl"]."_actualites` WHERE actif='oui' AND favori='".$fav."' ".(($mid>0) ? "AND id='".$mid."'" : "")." ".(($id>0) ? "AND id<'".$id."'" : "")." ".$q." ORDER BY dte_creat DESC LIMIT 0,$limit";
 		$sql->Query($query);
 		$news=array();
 		for($i=0; $i<$sql->rows; $i++)
@@ -44,7 +45,7 @@
 			$resusr=new user_core($d["uid_creat"],$sql,false,false);
 
 			// $txt=nl2br(htmlentities($d["message"],ENT_HTML5,"ISO-8859-1"));
-			$txt=nl2br($d["message"]);
+			$txt=nl2br(($d["message"]!="") ? $d["message"] : "");
 			$txt=preg_replace("/((http|https|ftp):\/\/[^ \n\r<]*)/si","<a href='$1' target='_blank'>$1</a>",$txt);
 			$txt=preg_replace("/ (www\.[^ |\/]*)/si","<a href='http://$1' target='_blank'>$1</a>",$txt);
 
@@ -86,9 +87,9 @@
 
 			$result["news"][$nid]["id"]=$d["id"];
 			$result["news"][$nid]["title"]=$d["titre"];
-			// $result["news"][$nid]["message"]=utf8_encode($txt);
+			$result["news"][$nid]["favori"]=$d["favori"];
+			$result["news"][$nid]["setfav"]=(GetDroit("ModifActualiteFavori")) ? "yes" : "no";
 			$result["news"][$nid]["message"]=$txt;
-			// $result["news"][$nid]["message"]="éèà €";
 			$result["news"][$nid]["author"]=$resusr->Aff("fullname");
 			$result["news"][$nid]["date"]=DisplayDate($d["dte_creat"]);
 

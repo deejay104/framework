@@ -34,6 +34,8 @@
 	$idstart=checkVar("idstart","numeric");
 	$form_titre=checkVar("form_titre","varchar");
 	$form_message=checkVar("form_message","text");
+	$favid=checkVar("favid","numeric");
+	$setfav=checkVar("setfav","numeric");
 	
 // ---- Enregistre le post
 
@@ -75,6 +77,15 @@
 
 		}
 	}
+
+
+// ---- Mettre une actualité en favori
+if ($favid>0)
+{
+	$query="UPDATE ".$MyOpt["tbl"]."_actualites SET favori='".$setfav."' WHERE id='$favid'";
+	$res = $sql->Update($query);
+}
+
 
 // ---- url de l'api
 	$tmpl_x->assign("site_title",$MyOpt["site_title"]);

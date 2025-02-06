@@ -16,6 +16,7 @@ $tabRoles["AccesConfigEmails"]="Accès à la page de gestion des template d'emai
 
 $tabRoles["ModifGroupe"]="Modification d'un groupe (roles et informations)";
 $tabRoles["ModifActualite"]="Modifier une actualite";
+$tabRoles["ModifActualiteFavori"]="Mettre une actualite en favori";
 
 $tabRoles["CreeFamille"]="Créer une famille";
 $tabRoles["CreeGroupe"]="Créer un nouveau groupe";

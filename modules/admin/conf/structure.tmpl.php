@@ -8,6 +8,7 @@ $tabTmpl=Array
 		"message" => Array("Type" => "text", ),
 		"dte_mail" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
 		"mail" => Array("Type" => "enum('oui','non','draft')", "Default" => "non", ),
+		"favori" => Array("Type" => "enum('0','1')", "Default" => "0", "Index"=>1),
 		"actif" => Array("Type" => "enum('oui','non')", "Default" => "oui", "Index"=>1),
 		"uid_creat" => Array("Type" => "int(10) unsigned", "Index" => "1", "Default" => "0" ),
 		"dte_creat" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
