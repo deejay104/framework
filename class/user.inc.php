@@ -320,7 +320,7 @@ class user_core extends objet_core
 					}
 					if (($sql->data["groupe"]!="SYS") || GetDroit("SYS"))
 					{
-						$ret.=(($sql->data["description"]!="") ? $sql->data["description"]." (".$sql->data["groupe"].")" : $sql->data["groupe"])."<br/>";
+						$ret.=(($sql->data["description"]!="") ? "<div class='tagsinput'><span class='tag'>".$sql->data["description"]." (".$sql->data["groupe"].")</span></div>" : "<div class='tagsinput'><span class='tag'>".$sql->data["groupe"]."</span></div>");
 					}
 				}
 				$ret="<span>".$ret."</span>";

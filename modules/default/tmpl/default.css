@@ -28838,8 +28838,11 @@ body.avgrund-active {
 
 /* Tags */
 div.tagsinput {
-  padding: 15px 15px 10px;
+  /* padding: 15px 15px 10px; */
+  margin-right: 5px;
+  margin-bottom: 10px;
   border-color: #e3e7ed;
+  display: inline-block;
 }
 
 div.tagsinput span.tag {
