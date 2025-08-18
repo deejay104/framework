@@ -48,6 +48,8 @@
 	
 	if ($theme!="phone")
 	{
+		$tabTitre["dte_creat"]["aff"]="Date";
+		$tabTitre["dte_creat"]["width"]=100;
 		$tabTitre["version"]["aff"]="Version";
 		$tabTitre["version"]["width"]=100;
 		$tabTitre["module"]["aff"]="Module";
@@ -67,6 +69,8 @@
 		$tabValeur[$i]["titre"]["aff"]="<a href='".geturl("ameliorations","detail","id=".$d["id"])."'>".$d["titre"]."</a>";
 		$tabValeur[$i]["status"]["val"]=$d["status"];
 		$tabValeur[$i]["status"]["aff"]=$d["affstatus"];
+		$tabValeur[$i]["dte_creat"]["val"]=$d["dte_creat"];
+		$tabValeur[$i]["dte_creat"]["aff"]=sql2date($d["dte_creat"],"jour");
 		$tabValeur[$i]["version"]["val"]=$d["version"];
 		$tabValeur[$i]["version"]["aff"]=$d["version"];
 		$tabValeur[$i]["module"]["val"]=$d["module"];

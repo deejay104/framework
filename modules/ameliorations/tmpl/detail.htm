@@ -115,54 +115,39 @@
 
 </form>
 
-<!-- BEGIN: aff_commentaire -->
-	<div class='actualitesBloc'>
-		<div class="actualitesPhoto" >
-			<img src="{msg_avatar}" alt="">
-		</div>
-		<div class="actualitesMessage">
-			<div class="actualitesTitre">
-				<div class="actualitesTitreMsg">
-					<a name="id{msg_id}"></a>
-					<span>par {msg_autheur}, {msg_date}</span>
-				</div>
-				<div class="actualitesIcones">
-					<!-- BEGIN: icn_modifier -->
-					<a href="{path_root}/index.php?mod=actualites&fonc=editer&id={msg_id}" class='imgDelete'><img src="{path_module}/img/icn16_editer.png" /></a>
-					<!-- END: icn_modifier -->
-					<!-- BEGIN: icn_supprimer -->
-					<a href="#" class='imgDelete' OnClick="ConfirmeClick('{path_root}/index.php?mod=actualites&fonc=supprimer&id={msg_id}#id{msg_idprev}','Souhaitez-vous supprimer cette actualité ?');"><img src="{path_module}/img/icn16_supprimer.png" /></a>
-					<!-- END: icn_supprimer -->
-				</div>
-			</div>
-			<div class="actualitesTexte">
-				<p>{msg_message}</p>
-			</div>
-		</div>
-	</div>
-<!-- END: aff_commentaire -->
-
-<!-- BEGIN: aff_commentaire_vide -->
 <div class="row">
 	<div class="grid-margin stretch-card">
 		<div class="card">
 			<div class="card-body">
-				<form name="form_reponse" method="post" action="{path_root}/index.php" enctype="multipart/form-data">
-					<input type="hidden" name="mod" value="ameliorations">
-					<input type="hidden" name="rub" value="detail">
-					<input type="hidden" name="id" value="{form_id}">
-					<input type="hidden" name="checktime" value="{form_checktime}">
-				
-					<textarea name="form_desc" class="form-control" placeholder="{reponse_vide}" rows="4"></textarea>
-					<p>
-					<input type="submit" name="fonc" class="btn btn-light" value="Poster">
-					</p>
-				</form>
+				<!-- BEGIN: aff_commentaire -->
+				<div class="d-flex align-items-start profile-feed-item">
+					<img src="{path_root}/{msg_avatar}" alt="profile" class="img-sm rounded-circle">
+					<div class="ml-4">
+						<h6>{msg_autheur}<small class="ml-4 text-muted"><i class="mdi mdi-clock mr-1"></i>{msg_date}</small></h6>
+						<p style="text-align:justify;">{msg_message}</p>
+					</div>
+				</div>
+				<!-- END: aff_commentaire -->
+
+<!-- BEGIN: aff_commentaire_vide -->
+				<div class="d-flex align-items-start profile-feed-item">
+					<form name="form_reponse" method="post" action="{path_root}/index.php" enctype="multipart/form-data" style="width:100%;">
+						<input type="hidden" name="mod" value="ameliorations">
+						<input type="hidden" name="rub" value="detail">
+						<input type="hidden" name="id" value="{form_id}">
+						<input type="hidden" name="checktime" value="{form_checktime}">
+					
+						<textarea name="form_desc" class="form-control" placeholder="{reponse_vide}" rows="4"></textarea>
+						<p>
+						<input type="submit" name="fonc" class="btn btn-light" value="Poster">
+						</p>
+					</form>
+				</div>
+<!-- END: aff_commentaire_vide -->
+
 			</div>
 		</div>
 	</div>
 </div>
-<!-- END: aff_commentaire_vide -->
-
 
 <!-- END: corps -->
