@@ -21,6 +21,30 @@
 // Class Document
 
 class document_core{
+	public $actif="oui";
+	public $tbl="";
+	public $sql="";
+	public $settime=true;
+
+	public $uid_creat=0;
+	public $dte_creat="";
+	public $uid_maj=0;
+	public $dte_maj="";
+
+	public $id=0;
+	public $uid=0;
+	public $myuid=0;
+	public $expire="";
+	public $name="";
+	public $originalname="";
+	public $filename ="";
+	public $type ="";
+	public $dossier ="";
+	public $droit ="";
+	public $editmode ="";
+	public $filepath ="";
+
+
 	protected $table="document";
 
  	# Constructor

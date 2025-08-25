@@ -18,6 +18,17 @@
 
 class user_core extends objet_core
 {
+	public $id=0;
+	public $me="";
+	public $prenom="";
+	public $nom="";
+	public $fullname="";
+	public $virtuel="";
+	public $mail="";
+	public $donnees="";
+	public $groupe="";
+	public $role="";
+
 	protected $table="utilisateurs";
 	protected $mod="membres";
 	protected $rub="detail";

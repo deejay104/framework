@@ -41,6 +41,19 @@ Type:
 // Class Utilisateur
 class objet_core
 {
+	public $id=0;
+	public $actif="oui";
+	public $settime=true;
+
+	public $data=array();
+
+	public $uid_creat=0;
+	public $dte_creat ="";
+	public $uid_maj=0;
+	public $dte_maj="";
+
+	protected $tbl="";
+	protected $sql="";
 	protected $type=array();
 	protected $tabLang=array();
 	protected $tabLangObject=array(
@@ -56,7 +69,6 @@ class objet_core
 		)
 	);
 
-	public $settime=true;
 	
 	# Constructor	
 	function __construct($id=0,$sql="")

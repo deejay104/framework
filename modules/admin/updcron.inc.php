@@ -1,13 +1,13 @@
 <?
-// ---- Refuse l'accès en direct
+// ---- Refuse l'accï¿½s en direct
 	if ((!isset($token)) || ($token==""))
 	  { header("HTTP/1.0 401 Unauthorized"); exit; }
 
-// ---- Vérifie les paramètres
+// ---- Vï¿½rifie les paramï¿½tres
 	$res=array();
 	if (!isset($_GET["id"]))
 	{
-		$res["result"]=utf8_encode("NOK");
+		$res["result"]="NOK";
 		echo json_encode($res);
 		error_log("id not provided.");
 	  	exit;
@@ -16,7 +16,7 @@
 
 	if (!isset($_GET["var"]))
 	{
-		$res["result"]=utf8_encode("NOK");
+		$res["result"]="NOK";
 		echo json_encode($res);
 		error_log("var not provided.");
 	  	exit;
@@ -25,14 +25,14 @@
 
 	if (!isset($_GET["val"]))
 	{
-		$res["result"]=utf8_encode("NOK");
+		$res["result"]="NOK";
 		echo json_encode($res);
 		error_log("val not provided.");
 	  	exit;
 	}
 	$val=$_GET["val"];
 
-	$res["result"]=utf8_encode("NOK");
+	$res["result"]="NOK";
 
 	if ($var=="schedule")
 	{
@@ -48,8 +48,8 @@
 		
 		$q="UPDATE ".$MyOpt["tbl"]."_cron SET schedule='".$val."' WHERE id='".$id."'";
 		$sql->Update($q);
-		$res["result"]=utf8_encode("OK");
-		$res["value"]=utf8_encode(AffTemps($val,"full"));
+		$res["result"]="OK";
+		$res["value"]=AffTemps($val,"full");
 	}
 	else if ($var=="actif")
 	{
@@ -58,16 +58,16 @@
 			$val="non";
 			$q="UPDATE ".$MyOpt["tbl"]."_cron SET actif='$val' WHERE id='".$id."'";
 			$sql->Update($q);
-			$res["result"]=utf8_encode("OK");
-			$res["value"]=utf8_encode($val);
+			$res["result"]="OK";
+			$res["value"]=$val;
 		}
 		else if ($val=="non")
 		{
 			$val="oui";
 			$q="UPDATE ".$MyOpt["tbl"]."_cron SET actif='$val' WHERE id='".$id."'";
 			$sql->Update($q);
-			$res["result"]=utf8_encode("OK");
-			$res["value"]=utf8_encode($val);
+			$res["result"]="OK";
+			$res["value"]=$val;
 		}
 	}
 	

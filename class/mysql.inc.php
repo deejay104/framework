@@ -1,6 +1,18 @@
 <?php
 
 class mysql_core{
+	public $id=0;
+	public $user="";
+	public $host="";
+	public $db="";
+	public $show="";
+	public $result="";
+	public $query="";
+	public $rows="";
+	public $data="";
+	public $numfields="";
+	public $a_rows="";
+
 	# Constructor
 	function __construct($user="phpuser",$pass="php",$host="localhost",$db="test",$port=3306){
 		$this->user=$user;
@@ -35,8 +47,13 @@ class mysql_core{
 
 	# Update elements in database
 	function Update($query){
-		$this->result=mysqli_query($this->id,$query) or
+		try {
+			$this->result=mysqli_query($this->id,$query) or
+				$this->mysql_ErrorMsg("Unable to perform update: $query",$this->show);
+		}
+		catch(Exception $e) {
 			$this->mysql_ErrorMsg("Unable to perform update: $query",$this->show);
+		}
 		return $this->a_rows=@mysqli_affected_rows($this->id);
 
 	}

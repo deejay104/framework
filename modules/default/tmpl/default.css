@@ -29595,7 +29595,7 @@ div.tagsinput span.tag a {
   font-weight: 400;
   padding: 0.6rem 1.25rem;
   width: 240px;
-  z-index: 11;
+  z-index: 1000;
   transition: width 0.25s ease, background 0.25s ease;
   -webkit-transition: width 0.25s ease, background 0.25s ease;
   -moz-transition: width 0.25s ease, background 0.25s ease;

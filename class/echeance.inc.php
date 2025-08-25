@@ -1,6 +1,23 @@
 <?php
 class echeance_core extends objet_core
 {
+	public $type="";
+	public $typeid="";
+	public $poste="";
+	public $description="";
+	public $doc="";
+	public $document="";
+	public $uid=0;
+	public $myuid=0;
+	public $dte_echeance="";
+	public $paye="";
+	public $editmode="";
+	public $droit="";
+	public $context ="";
+	public $multi ="";
+	public $resa ="";
+
+
 	# Constructor
 	protected $table="echeance";
 	protected $mod="";

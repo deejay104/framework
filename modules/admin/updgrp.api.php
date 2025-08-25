@@ -29,11 +29,11 @@
 	if (GetDroit("ModifGroupe"))
 	{
 		$id=checkVar("id","array");
-$ret["query"]=array();
+//$ret["query"]=array();
 
 		$q="DELETE FROM ".$MyOpt["tbl"]."_roles WHERE groupe='".$grp."' AND autorise='".$aut."'";
 		$res=$sql->Delete($q);
-			$ret["query"][]=$q;
+			//$ret["query"][]=$q;
 
 		if (count($id)>0)
 		{
@@ -42,11 +42,11 @@ $ret["query"]=array();
 			{
 				$q="DELETE FROM ".$MyOpt["tbl"]."_roles WHERE groupe='".$grp."' AND role='".$role."'";
 				$res=$sql->Delete($q);
-				$ret["query"][]=$q;
+				//$ret["query"][]=$q;
 
 				$q="INSERT INTO ".$MyOpt["tbl"]."_roles SET groupe='".$grp."',role='".$role."',autorise='".$aut."', uid_creat=".$gl_uid.",uid_maj='".$gl_uid."',dte_creat='".now()."',dte_maj='".now()."'";
 				$sql->Insert($q);
-				$ret["query"][]=$q;
+				//$ret["query"][]=$q;
 			}
 		}
 	}

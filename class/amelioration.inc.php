@@ -25,6 +25,7 @@ class amelioration_core extends objet_core
 	protected $mod="ameliorations";
 	protected $rub="detail";
 
+	protected $usr_maj;
 	protected $droit=array("status"=>"ModifAmeliorationStatus");
 
 	protected $fields=array
