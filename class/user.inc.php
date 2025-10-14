@@ -43,7 +43,7 @@ class user_core extends objet_core
 		"mail" => Array("type" => "email","len"=>104 ),
 		"notification" => Array("type" => "bool", "default" => "oui", ),
 		"commentaire" => Array("type" => "text", ),
-		"droits" => Array("type" => "varchar","len"=>100 ),
+		"droits" => Array("type" => "varchar","len"=>100,"show"=>"tag" ),
 		"groupe" => Array("type" => "uppercase","len"=>5, "default"=>"ALL"),
 		"actif" => Array("type" => "enum", "default" => "oui", "index" => "1", ),
 		"virtuel" => Array("type" => "bool", "default" => "non", "index" => "1", ),
@@ -347,6 +347,7 @@ class user_core extends objet_core
 					$res=$sql->QueryRow($query);
 
 					$ret="<a href='".geturl("membres","detail","id=".$this->id)."'>".$res["description"]."</a>";
+
 				}
 				else
 				{

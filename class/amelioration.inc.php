@@ -33,7 +33,7 @@ class amelioration_core extends objet_core
 		"titre"=>Array("type"=>"varchar","len"=>100,"formlen"=>500),
 		"description"=>Array("type"=>"text"),
 		"version"=>Array("type"=>"varchar","len"=>10),
-		"status"=>Array("type"=>"enum","index" => "1","default"=>"1new"),
+		"status"=>Array("type"=>"enum","index" => "1","default"=>"1new","show"=>"tag"),
 		"module"=>Array("type"=>"enum","index" => "1"),
 		"actif"=>Array("type"=>"bool", "default" => "oui", "index" => "1",),
 		"uid_dist" => Array("type" => "number"),
@@ -410,7 +410,7 @@ function ListActiveAmeliorations($sql)
 			$res[$i]["test"]="ok";
 			$res[$i]["titre"]=$pb->val("titre");
 			$res[$i]["status"]=$pb->val("status");
-			$res[$i]["affstatus"]=$pb->aff("status","read","form_data");
+			$res[$i]["affstatus"]=$pb->aff("status");
 			$res[$i]["version"]=$pb->val("version");
 			$res[$i]["module"]=$pb->val("module");
 			$res[$i]["dte_creat"]=$pb->dte_creat;

@@ -394,21 +394,6 @@
 	}
 
 
-	if ($MyOpt["module"]["ameliorations"]=="on")
-	{
-		$tabMenu["amelioration"]["icone"]=$MyOpt["host"]."/".$corefolder."/static/modules/ameliorations/img/icn32_titre.png";
-		$tabMenu["amelioration"]["icone"]="mdi-bug";
-		$tabMenu["amelioration"]["nom"]=$tabLang["core_improve"];
-		$tabMenu["amelioration"]["droit"]="AccesAmeliorations";
-		$tabMenu["amelioration"]["url"]=geturl("ameliorations","index","");
-
-		$tabMenuPhone["amelioration"]["icone"]=$MyOpt["host"]."/".$corefolder."/static/modules/ameliorations/img/icn48_titre.png";
-		$tabMenuPhone["amelioration"]["icone"]="mdi-bug";
-		$tabMenuPhone["amelioration"]["nom"]="";
-		$tabMenuPhone["amelioration"]["droit"]="AccesAmeliorations";
-		$tabMenuPhone["amelioration"]["url"]=geturl("ameliorations","index","");
-	}
-
 	$tabMenu["configuration"]=array(
 		"icone"=>$MyOpt["host"]."/".$corefolder."/static/modules/admin/img/icn32_titre.png",
 		"icone"=>"mdi-settings",

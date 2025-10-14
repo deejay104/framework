@@ -20440,123 +20440,75 @@ code {
 }
 
 .bg-blue {
-  background-color: #5E50F9;
+  background-color: #5E50F9!important;
 }
 
 .bg-indigo {
-  background-color: #267CB9;
+  background-color: #267CB9!important;
 }
 
 .bg-purple {
-  background-color: #9d00cc;
+  background-color: #9d00cc!important;
 }
 
 .bg-pink {
-  background-color: #E91E63;
+  background-color: #E91E63!important;
 }
 
 .bg-red {
-  background-color: #f96868;
+  background-color: #f96868!important;
 }
 
 .bg-orange {
-  background-color: #f2a654;
+  background-color: #f2a654!important;
 }
 
 .bg-yellow {
-  background-color: #f6e84e;
+  background-color: #f6e84e!important;
 }
 
 .bg-green {
-  background-color: #46c35f;
+  background-color: #46c35f!important;
 }
 
 .bg-teal {
-  background-color: #58d8a3;
+  background-color: #58d8a3!important;
 }
 
 .bg-cyan {
-  background-color: #57c7d4;
+  background-color: #57c7d4!important;
 }
 
 .bg-white {
-  background-color: #ffffff;
+  background-color: #ffffff!important;
 }
 
 .bg-gray {
-  background-color: #6c757d;
+  background-color: #6c757d!important;
 }
 
 .bg-gray-dark {
-  background-color: #0f1531;
-}
-
-.bg-blue {
-  background-color: #5E50F9;
-}
-
-.bg-indigo {
-  background-color: #267CB9;
-}
-
-.bg-purple {
-  background-color: #9d00cc;
-}
-
-.bg-pink {
-  background-color: #E91E63;
-}
-
-.bg-red {
-  background-color: #f96868;
-}
-
-.bg-orange {
-  background-color: #f2a654;
-}
-
-.bg-yellow {
-  background-color: #f6e84e;
-}
-
-.bg-green {
-  background-color: #46c35f;
-}
-
-.bg-teal {
-  background-color: #58d8a3;
-}
-
-.bg-cyan {
-  background-color: #57c7d4;
-}
-
-.bg-white {
-  background-color: #ffffff;
-}
-
-.bg-gray {
-  background-color: #434a54;
+  background-color: #0f1531!important;
 }
 
 .bg-gray-light {
-  background-color: #ced4da;
+  background-color: #ced4da!important;
 }
 
 .bg-gray-lighter {
-  background-color: #e8eff4;
+  background-color: #e8eff4!important;
 }
 
 .bg-gray-lightest {
-  background-color: #e6e9ed;
+  background-color: #e6e9ed!important;
 }
 
 .bg-black {
-  background-color: #000000;
+  background-color: #000000!important;
 }
 
 .bg-violet {
-  background-color: #6f42c1;
+  background-color: #6f42c1!important;
 }
 
 .dashed-divider {
@@ -28846,7 +28798,7 @@ div.tagsinput {
 }
 
 div.tagsinput span.tag {
-  background: #267CB9;
+  background-color: #267CB9;
   border: 0;
   color: #ffffff;
   padding: 6px 14px;

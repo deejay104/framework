@@ -455,7 +455,18 @@ class objet_core
 				{
 					$tt[]=$this->tabList[$key][$lang][$v];
 				}
-				$ret=implode(",",$tt);
+				if ((isset($this->fields[$key]["show"])) && ($this->fields[$key]["show"]=="tag"))
+				{
+					$ret="";
+					foreach($tt as $t)
+					{
+						$ret.="<div class='tagsinput'><span class='tag'>".$t."</span></div>";
+					}
+				}
+				else
+				{
+					$ret=implode(",",$tt);
+				}
 			}
 			else if (is_array($txt))
 			{
@@ -474,6 +485,11 @@ class objet_core
 			}
 
 			
+			if (($type!="multi") && (isset($this->fields[$key]["show"])) && ($this->fields[$key]["show"]=="tag"))
+			{
+				$ret="<div class='tagsinput'><span class='tag ".((isset($this->color[$key][$txt])) ? "bg-".$this->color[$key][$txt] : "")."'>".$ret."</span></div>";
+			}
+
 			// A voir si on met tous les champs en clicable ou pas
 			if (($this->mod!="") && ($this->rub!="") && ($link))
 			{
