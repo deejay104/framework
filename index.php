@@ -388,11 +388,17 @@
 			require (MyRep("lang.".$MyOpt["DefaultLanguage"].".php","default"));
 		}
 		
-
-
 		require($appfolder."/modules/default/menu.inc.php");
 	}
 
+	if ($MyOpt["module"]["ameliorations"]=="on")
+	{
+		$tabMenu["amelioration"]["icone"]=$MyOpt["host"]."/".$corefolder."/static/modules/ameliorations/img/icn32_titre.png";
+		$tabMenu["amelioration"]["icone"]="mdi-bug";
+		$tabMenu["amelioration"]["nom"]=$tabLang["core_improve"];
+		$tabMenu["amelioration"]["droit"]="AccesAmeliorations";
+		$tabMenu["amelioration"]["url"]=geturl("ameliorations","index","");
+	}
 
 	$tabMenu["configuration"]=array(
 		"icone"=>$MyOpt["host"]."/".$corefolder."/static/modules/admin/img/icn32_titre.png",

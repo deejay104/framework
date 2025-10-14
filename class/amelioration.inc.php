@@ -54,6 +54,10 @@ class amelioration_core extends objet_core
 		)
 	);
 
+	protected $color=array(
+		"status"=>array("1new"=>"red","2sched"=>"orange","3inprg"=>"purple","4test"=>"teal","5close"=>"green","6duplicate"=>"gray","7cancel"=>"gray-light"),
+	);
+
 	# Constructor
 	function __construct($id=0,$sql="")
 	{
