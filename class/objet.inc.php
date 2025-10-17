@@ -286,8 +286,8 @@ class objet_core
 			else if ($type=="bool")
 		  	{
 				$ret="<label class='toggle-switch toggle-switch-success'>";
-				$ret.="<input id='".$key."'type='hidden' name=\"".$formname."[$key]\" value='non'>";
-				$ret.="<input id='".$key."'type='checkbox' name=\"".$formname."[$key]\" ".(($txt=="oui") ? "checked" : "")." value='oui'>";
+				$ret.="<input type='hidden' name=\"".$formname."[$key]\" value='non'>";
+				$ret.="<input id='".$key."' type='checkbox' name=\"".$formname."[$key]\" ".(($txt=="oui") ? "checked" : "")." value='oui'>";
 				$ret.="<span class='toggle-slider round'></span></label>";
 
 			}
