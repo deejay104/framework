@@ -446,6 +446,10 @@ class objet_core
 			else if ($type=="bool")
 		  	{
 				$ret=($txt=='oui') ? $this->tabLang["yes"][$lang] : $this->tabLang["no"][$lang];
+
+				$tabIcon=array("oui"=>array("icon"=>"mdi-checkbox-marked-outline","color"=>"green"),"non"=>array("icon"=>"mdi-checkbox-blank-outline","color"=>"#cccccc"));
+				$ret="<i class='mdi ".$tabIcon[$txt]["icon"]."' style='font-size:20px; color:".$tabIcon[$txt]["color"].";'></i>";
+
 			}
 			else if (($type=="multi") && (is_array($this->tabList[$key][$lang])))
 			{
