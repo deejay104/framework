@@ -24,6 +24,7 @@ Type:
 	date
 	datetime
 	duration: Temps
+	birthday: date + age
 	ucword
 	uppercase
 	lowercase
@@ -96,7 +97,7 @@ class objet_core
 			foreach($this->fields as $key=>$field)
 			{
 				$this->type[$key]=$field["type"];
-				if ($field["type"]=="date")
+				if (($field["type"]=="date") || ($field["type"]=="birthday"))
 				{
 					if ((isset($field["default"])) && ($field["default"]=="now"))
 					{
@@ -365,8 +366,9 @@ class objet_core
 				$ret="<INPUT id='".(($formid!="") ? $formid : "").$key."_jour' class='form-control form-input'  name=\"".$formname."[$key][date]\" value=\"".date2sql(sql2date($txt,"jour"))."\" type=\"date\" style=\"width:160px!important;\"> ";
 				$ret.="<INPUT id='".(($formid!="") ? $formid : "").$key."_heure' class='form-control form-input'  name=\"".$formname."[$key][time]\" value=\"".sql2time($txt)."\" type=\"time\" style=\"width:140px!important;\">";
 			}
-			else if ($type=="date")
+			else if (($type=="date") || ($type=="birthday"))
 			{
+				$type="date";
 				$ret="<INPUT id='".(($formid!="") ? $formid : "").$key."' class='form-control form-input'  name=\"".$formname."[$key]\" value=\"".date2sql(sql2date($txt,"jour"))."\" type=\"date\" style=\"width:160px!important;\">";
 			}
 			else if ($type=="price")
@@ -400,7 +402,7 @@ class objet_core
 			}
 			else if ($type=="date")
 			{
-				if ($ret=="0000-00-00")
+				if ($txt=="0000-00-00")
 				{
 					$ret="-";
 				}
@@ -409,13 +411,27 @@ class objet_core
 					$ret=sql2date($txt,"jour");
 				}
 			}
+			else if ($type=="birthday")
+			{
+				if ($txt=="0000-00-00")
+				{
+					$ret="-";
+				}
+				else
+				{
+					$ret=sql2date($txt,"jour")." (".floor((time()-strtotime($txt))/31536000)." ans)";
+				}
+			}
 			else if ($type=="datetime")
 			{
 				if ($txt=="0000-00-00 00:00:00")
 				{
 					$ret="-";
 				}
-				$ret=sql2date($txt);
+				else
+				{
+					$ret=sql2date($txt);
+				}
 			}
 			else if ($type=="email")
 			{
@@ -680,7 +696,7 @@ class objet_core
 				$vv="non";
 			}
 		}
-	  	else if ($this->type[$key]=="date")
+	  	else if (($this->type[$key]=="date") || ($this->type[$key]=="birthday"))
 		{
 	  	  	if (date2sql($v)!="nok")
 	  	  	  { $vv=date2sql($v); }
@@ -990,7 +1006,7 @@ class objet_core
 						$tabobj[$key]["Default"]=$field["default"];
 					}
 				}
-				else if ($field["type"]=="date")
+				else if (($field["type"]=="date") || ($field["type"]=="birthday"))
 				{
 					$tabobj[$key]["Type"]="date";
 					$tabobj[$key]["Default"]="0000-00-00";

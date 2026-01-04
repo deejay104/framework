@@ -1747,11 +1747,26 @@ function AffHeures($min){
 
 // Affiche un téléphone
 function AffTelephone($txt)
-  {
-  	$rtxt=$txt;
-		$rtxt=preg_replace("/^0([1-9])([0-9]*)$/","+33\\1\\2",$txt);
-		return $rtxt;
-  }
+{
+	$number = preg_replace('/[^0-9+]/', '', $txt);
+
+	// Cas 1 : commence par +33
+    if (preg_match('/^\+33([1-9][0-9]{8})$/', $number, $matches)) {
+        return '+33' . $matches[1];
+    }
+
+    // Cas 2 : commence par 0033
+    if (preg_match('/^0033([1-9][0-9]{8})$/', $number, $matches)) {
+        return '+33' . $matches[1];
+    }
+
+    // Cas 3 : format national (0X XX XX XX XX)
+    if (preg_match('/^0([1-9][0-9]{8})$/', $number, $matches)) {
+        return '+33' . $matches[1];
+    }
+
+	return "-";
+}
 
 
 // Génère le fichier des variables
