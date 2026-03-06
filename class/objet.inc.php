@@ -950,17 +950,16 @@ class objet_core
 	
 	function sign($t)
 	{
-		$s="";
-		foreach($t as $i=>$k)
-		{		
-			$s.="_";
-			
-			if (isset($this->data[$k]))
-			{
-				$s.=$this->data[$k];
-			}
+		global $hmacKey;
+
+		$payload="id=".$this->id;
+		foreach($t as $k)
+		{
+			$payload.="|".$k."=".((isset($this->data[$k])) ? $this->data[$k] : 'null');
 		}
-		return md5($s);
+
+		$hash=hash_hmac('sha256', $payload, $hmacKey);
+		return hash('sha256', $hash);
 	}
 
 	# Export as JSON
