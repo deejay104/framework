@@ -23834,6 +23834,9 @@ select.border-teal.tt-hint:focus {
   background: transparent;
 }
 
+.form-input {
+}
+
 .map-container {
   position: relative;
   min-width: 100%;

@@ -21,9 +21,14 @@
 	
 	$lst=ListActiveComments($id,$sql);
 
-	$result=array();
+	$result=array(
+		"id"=>$id,
+		"type"=>"doc_comment",
+		"data"=>array(),
+	);
 	foreach($lst as $i=>$d)
 	{
+		$result["data"][$i]=array();
 		$result["data"][$i]["id"]=$d["id"];
 		$result["data"][$i]["id_paper"]=$d["id_paper"];
 		$result["data"][$i]["description"]=nl2br($d["description"]);

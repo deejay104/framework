@@ -294,6 +294,10 @@
 	}
 
 	// Affiche les documents
+
+	// Devrait être VisuDocument pour afficher le bloc
+	// ModifUserDocument pour passer en mode édition
+	
 	if ( (GetMyId($id)) || (GetDroit("ModifUserAll")) || (GetDroit("ModifUserDocument")) )
 	{
 		if ($typeaff=="form")

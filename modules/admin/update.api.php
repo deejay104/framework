@@ -37,6 +37,7 @@ function AjoutLog($txt)
                 }
         }
 
+
 // ---- Vérifie le character set de la base
         $q="SELECT @@character_set_database AS charset, @@collation_database AS col";
         $res=$sql->QueryRow($q);
