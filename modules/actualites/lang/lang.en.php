@@ -1,5 +1,5 @@
 <?php
-	$tabLang["lang_information"]="Informations";
+	$tabLang["lang_information"]="My Informations";
 	$tabLang["lang_nbdocs"]="Unread documents";
 	$tabLang["lang_search"]="Search";
 	$tabLang["lang_searchterms"]="Words to search";

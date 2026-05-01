@@ -4,6 +4,7 @@
 	if ((!isset($token)) || ($token==""))
 	  { header("HTTP/1.0 401 Unauthorized"); exit; }
 
+	require_once ("class/document.inc.php");
 
 // ---- List all papers from a folder
 
@@ -47,6 +48,20 @@
 		{
 			$result["data"][$k]["id"]=$usr->id;
 			$result["data"][$k]["name"]=$usr->fullname;
+//			$result["data"][$k]["phone"]=$usr->AffTel();
+			$result["data"][$k]["mail"]=$usr->val("mail");
+
+			$lstdoc=ListDocument($sql,$id,"avatar");
+			if (count($lstdoc)>0)
+			{
+				$doc=new document_core($lstdoc[0],$sql);
+				$result["data"][$k]["avatar"]=$doc->GenerePath(64,64);
+			}
+			else
+			{
+				$result["data"][$k]["avatar"]="";
+			}
+
 			$k++;
 		}
 	}

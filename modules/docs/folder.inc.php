@@ -37,19 +37,11 @@
 
 
 // ---- Affiche les bouttons
-	addPageMenu($corefolder,$mod,"Liste",geturl("docs","",""),"mdi-keyboard-backspace");
-	// addPageMenu($corefolder,$mod,"Rechercher",geturl("docs","recherche",""),"icn32_rechercher.png",false,"","showSearch();");
 
 	$tmpl_x->assign("id",$id);
 	$tmpl_x->assign("crit",$crit);
 	$tmpl_x->assign("form_today",date("Y-m-d"));
-	$tmpl_x->assign("BorderBlack",$MyOpt["styleColor"]["BorderBlack"]);
-	$tmpl_x->assign("LineBackgroundHover",$MyOpt["styleColor"]["LineBackgroundHover"]);
-	$tmpl_x->assign("TextBackgroundHover",$MyOpt["styleColor"]["TextBackgroundHover"]);
-	$tmpl_x->assign("TitleBackgroundNormal",$MyOpt["styleColor"]["TitleBackgroundNormal"]);
-	$tmpl_x->assign("FormulaireBackgroundDark",$MyOpt["styleColor"]["FormulaireBackgroundDark"]);
-	$tmpl_x->assign("FormulaireBackgroundNormal",$MyOpt["styleColor"]["FormulaireBackgroundNormal"]);
-	$tmpl_x->assign("FormulaireBackgroundLight",$MyOpt["styleColor"]["FormulaireBackgroundLight"]);
+	$tmpl_x->assign("folder_name",$folder->val("title"));
 
 	if (GetDroit($folder->val("group_write")))
 	{

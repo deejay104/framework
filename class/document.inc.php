@@ -234,48 +234,8 @@ class document_core{
 
 	function Affiche($type="large",$name="file")
 	{ global $MyOpt,$corefolder;
-		$myext=GetExtension($this->filename);
-		if ($myext=="xls")
-		  { $icon="excel"; }
-		else if ($myext=="xlsx")
-		  { $icon="excel"; }
-		else if ($myext=="doc")
-		  { $icon="word"; }
-		else if ($myext=="docx")
-		  { $icon="word"; }
-		else if ($myext=="ppt")
-		  { $icon="powerpoint"; }
-		else if ($myext=="pptx")
-		  { $icon="powerpoint"; }
-		else if ($myext=="pps")
-		  { $icon="powerpoint"; }
-		else if ($myext=="jpg")
-		  { $icon="image"; }
-		else if ($myext=="jpeg")
-		  { $icon="image"; }
-		else if ($myext=="gif")
-		  { $icon="image"; }
-		else if ($myext=="png")
-		  { $icon="image"; }
-		else if ($myext=="pdf")
-		  { $icon="pdf"; }
-		else if ($myext=="mp3")
-		  { $icon="music"; }
-		else if ($myext=="zip")
-		  { $icon="multiple"; }
-		else if ($myext=="rar")
-		  { $icon="multiple"; }
-		else if ($myext=="xml")
-		  { $icon="xml"; }
-		else if ($myext=="json")
-		  { $icon="document"; }
-		else if ($myext=="css")
-		  { $icon="document"; }
-		else if ($myext=="txt")
-		  { $icon="document"; }
-		else
-		  { $icon="outline"; }
 
+		$attr=$this->getAttributes();
 		$filename=($name=="file") ? $this->originalname : $this->name;
 
 		$txt="";
@@ -302,11 +262,11 @@ class document_core{
 			if (file_exists($this->filepath."/".$this->filename))
 			{
 				$fsize=CalcSize(filesize($this->filepath."/".$this->filename));
-				$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><i class='mdi mdi-list mdi-file-".$icon."'></i> ".(($type=="large") ? $filename." (".$fsize.") " : "")."</a>";
+				$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><i class='mdi mdi-file-".$attr["icon"]."' style='color:".$attr["color"].";'></i> ".(($type=="large") ? $filename." (".$fsize.") " : "")."</a>";
 			}
 			else
 			{
-				$txt.="<i class='mdi mdi-list mdi-file-hidden'></i> <s>".$filename."</s>";
+				$txt.="<i class='mdi mdi-file-hidden' style='color:".$attr["color"].";'></i> <s>".$filename."</s>";
 			}
 			$txt.=(($type=="large") ? "</p>" : "");
 			$txt.="</div>";
@@ -316,21 +276,42 @@ class document_core{
 			if (file_exists($this->filepath."/".$this->filename))
 			{
 				$fsize=CalcSize(filesize($this->filepath."/".$this->filename));
-				$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank' title='".$this->name."'><i class='mdi mdi-list mdi-file-".$icon."'></i> ".(($type!="short") ? $filename." (".$fsize.") " : "")."</a>";
+
+				$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank' class='doc-list-item'>";
+				$txt.="    <i class='mdi mdi-file-".$attr["icon"]." doc-icon' style='color:".$attr["color"].";'></i>";
+				if ($type!="short")
+				{
+					$txt.="    <span class='doc-name'>".$filename."</span>";
+					$txt.="<span class='doc-size'>".$fsize."</span>";
+				}
+				$txt.="</a>";
+
 			}
 			else
 			{
-				$txt.="<i class='mdi mdi-list mdi-file-hidden'></i> <s>".(($type!="short") ? "<s>".$filename."</s>" : "")."</s>";
+				$txt.="<i class='mdi mdi-file-hidden doc-icon' style='color:#8e8e8e;'></i>";
+				if ($type!="short")
+				{
+					$txt.="<span class='doc-name'><s>".$filename."</s></span>";
+				}
+
 			}
 		}
 		else
 		{
-			$txt.="<div id='doc_".$this->id."' ".(($this->editmode=="edit") ? "OnMouseOver='document.getElementById(\"doc_del_".$this->id."\").style.visibility=\"visible\";' OnMouseOut='document.getElementById(\"doc_del_".$this->id."\").style.visibility=\"hidden\";'" : "")." class='".(($type=="large") ? "" : "showDocument")."'>";
-			$txt.=(($type=="large") ? "<p>" : "");
+			$txt.="<div id='doc_".$this->id."' class='action doc-list-item'>";
 			if (file_exists($this->filepath."/".$this->filename))
 			{
-					$fsize=CalcSize(filesize($this->filepath."/".$this->filename));
-					$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank' title='".$this->name."'><i class='mdi mdi-list mdi-file-".$icon."'></i> ".(($type!="short") ? $filename." (".$fsize.") " : "")."</a>";
+				$fsize=CalcSize(filesize($this->filepath."/".$this->filename));
+
+				$txt.="<i class='mdi mdi-file-".$attr["icon"]." doc-icon' style='color:".$attr["color"].";'></i>";
+				if ($type!="short")
+				{
+					$txt.="<span class='doc-name'>".$filename."</span>";
+					$txt.="<span class='doc-size'>".$fsize."</span>";
+				}
+				$txt.="</a>";
+
 			}
 			else
 			{
@@ -340,14 +321,65 @@ class document_core{
 			// Si mode édition
 			if ($this->editmode=="edit")
 			{
-				// $txt.=" <a href=\"#\" OnClick=\"var win=window.open('doc.php?id=".$this->id."&fonc=delete','scrollbars=no,resizable=no,width=10'); return false;\" class='imgDelete'><img src='".$corefolder."/static/images/icn16_supprimer.png'></a>";
-				$txt.=" <a href=\"#\" OnClick=\"$(function() { $.ajax({url:'".$MyOpt["host"]."/doc.php?id=".$this->id."&fonc=delete'}); document.getElementById('doc_".$this->id."').style.visibility='hidden'; document.getElementById('doc_".$this->id."').style.height='0'; })\" class='imgDelete'><img  id='doc_del_".$this->id."' src='".$MyOpt["host"]."/".$corefolder."/static/images/icn16_supprimer.png' style='visibility:hidden;'></a>";
+				$txt.=" <span class='feed-actions'><a href=\"#\" OnClick=\"$(function() { $.ajax({url:'".$MyOpt["host"]."/doc.php?id=".$this->id."&fonc=delete'}); document.getElementById('doc_".$this->id."').style.visibility='hidden'; document.getElementById('doc_".$this->id."').style.height='0'; }); return false;\"><i class='mdi mdi-delete'></i></a></span>";
 			}
-			$txt.=(($type=="large") ? "</p>" : "");
 			$txt.="</div>";
 		}
 
 		return $txt;
+	}
+
+	function Path()
+	{	global $MyOpt;
+		return $MyOpt["host"]."/doc.php?id=".$this->id;
+	}
+
+	function getAttributes()
+	{
+		$myext=GetExtension($this->filename);
+
+		if ($myext=="xls")
+		  { $icon="excel"; $color="#27ae60"; }
+		else if ($myext=="xlsx")
+		  { $icon="excel"; $color="#27ae60"; }
+		else if ($myext=="doc")
+		  { $icon="word"; $color="#2980b9"; }
+		else if ($myext=="docx")
+		  { $icon="word"; $color="#2980b9"; }
+		else if ($myext=="ppt")
+		  { $icon="powerpoint"; $color="#e67e22"; }
+		else if ($myext=="pptx")
+		  { $icon="powerpoint"; $color="#e67e22"; }
+		else if ($myext=="pps")
+		  { $icon="powerpoint"; $color="#e67e22"; }
+		else if ($myext=="jpg")
+		  { $icon="image"; $color="#8e44ad"; }
+		else if ($myext=="jpeg")
+		  { $icon="image"; $color="#8e44ad"; }
+		else if ($myext=="gif")
+		  { $icon="image"; $color="#8e44ad"; }
+		else if ($myext=="png")
+		  { $icon="image"; $color="#8e44ad"; }
+		else if ($myext=="pdf")
+		  { $icon="pdf"; $color="#c0392b"; }
+		else if ($myext=="mp3")
+		  { $icon="music"; $color="#c0a52b"; }
+		else if ($myext=="zip")
+		  { $icon="multiple"; $color="#ec622c"; }
+		else if ($myext=="rar")
+		  { $icon="multiple"; $color="#ec622c"; }
+		else if ($myext=="xml")
+		  { $icon="xml"; $color="#2980b9"; }
+		else if ($myext=="json")
+		  { $icon="document"; $color="#2980b9"; }
+		else if ($myext=="css")
+		  { $icon="document"; $color="#2980b9"; }
+		else if ($myext=="txt")
+		  { $icon="document"; $color="#2980b9"; }
+		else
+		  { $icon="outline"; $color="#8e8e8e";}
+
+		return array("ext"=>$myext, "icon"=>$icon, "color"=>$color);
 	}
 
 	function Download($mode)

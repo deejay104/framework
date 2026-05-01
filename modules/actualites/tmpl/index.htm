@@ -1,97 +1,122 @@
-<!-- BEGIN: icone -->
-	<img src="{path_module}/img/icn48_titre.png" alt="" border=0 />
-<!-- END: icone -->
-<!-- BEGIN: infos -->
-	 {site_title}
-<!-- END: infos -->
-
-
 <!-- BEGIN: corps -->
-<style>
-.thumbnail{
-    max-width: 500px;
-    max-height: 500px;
-}
-.thumbnail img{
-	width: 100%;
-    max-width: 500px;
-    max-height: 500px;
-}
-.upload {
-	width:100%;
-	padding-top:5px;
-	margin-bottom:5px;
-	display:inline-block;"
-}
-.upload p {
-	text-align:left;
-}
-</style>
-
 
 <div class="row">
-	<div class="col-md-8 grid-margin stretch-card">
-		<div class="card">
-			<div class="card-body">
-				<div id="actualitesNouveau">
-					<form name="actualites" method="post" action="{path_root}/actualites" enctype="multipart/form-data">
-						<input type="hidden" name="id" id="id" value="{form_id}">
-						<input type="hidden" name="checktime" value="{form_checktime}">
-				
-						<input type="text" class='form-control' name="form_titre" value="{news_title}" placeholder="{lang_newpost}"  ><br />
-						<textarea name="form_message" class='form-control' placeholder="{lang_newmsg}" rows=4>{news_message}</textarea>
-						<p>
-						<label for='file' class="btn btn-primary" style="margin:0px; height:42px;"><i class="mdi mdi-camera	 menu-icon"></i></label>
-							<input id='file' class="btn btn-primary mr-2" type='file' style='display:none'>
-							<input name='fonc' class="btn btn-primary mr-2" type='submit' value='{lang_post}' style="margin:0px; height:42px;">
-						</p>
-					</form>
 
-					<div id="uploadDoc" class="upload">
-						<div id="uploadProgress" style="display:none; text-align: center;"></div>
-					</div>
-				</div>
+  <!-- ── Colonne principale : fil d'actualités ── -->
+  <div class="col-md-8 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-header" style="padding:14px 20px;">
+        <span style="font-size:1rem; font-weight:600; color:#2d3748;">
+          <i class="mdi mdi-bulletin-board" style="color:#4a6fa5; margin-right:6px;"></i>Actualités
+        </span>
+      </div>
+      <div class="card-body" style="padding:20px;">
 
-				<div id="news" class="border-top profile-feed">
-				</div>
+        <!-- Zone de rédaction -->
+        <div id="actualitesNouveau">
+          <form name="actualites" method="post" action="{path_root}/actualites" enctype="multipart/form-data">
+			<INPUT type="hidden" name="id" value="{id}">
+			<INPUT type="hidden" name="checktime" value="{form_checktime}">
+
+            <div class="compose-box">
+              <div id="myavatar" class="feed-avatar"></div>
+              <div class="compose-form">
+                <input type="text" class="form-control form-input" name="form_titre" placeholder="Titre de l'actualité…" style="margin-bottom:8px;" value="{news_title}">
+                <textarea name="form_message" class="form-control form-input" placeholder="Quoi de neuf ?" rows="2">{news_message}</textarea>
+                <div class="compose-toolbar">
+                  <label for="file" class="btn-photo">
+                    <i class="mdi mdi-camera"></i> Photo
+                  </label>
+                  <input id="file" type="file" style="display:none">
+                  <input name="fonc" class="btn btn-primary btn-sm" type="submit" value="{lang_post}" style="margin-left:auto; border-radius:6px;">
+                </div>
+              </div>
+            </div>
+
+            <div id="uploadDoc" class="upload">
+              <div id="uploadProgress" style="display:none; text-align:center; font-size:0.82rem; color:#718096;"></div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Fil d'actualités (injecté par JS) -->
+        <div id="news" class="border-top profile-feed">
+<!-- BEGIN: news_template -->
+			<!-- Exemple de la structure injectée par loadNews() — voir JS -->
+          <div id="news_118" class="feed-item pinned">
+            <div class="feed-avatar">
+              <img src="" alt="avatar">
+            </div>
+            <div class="feed-body">
+              <div class="feed-title">
+                <span class="pin-badge"><i class="mdi mdi-star" style="font-size:0.7rem;"></i> Épinglé</span>
+                Proposition de vol en PA28 de Strasbourg à Brives 5-6 nov
+                <span class="feed-actions" id="edit_118">
+                  <a href="#" onclick="setFav(118,0);" title="Désépingler"><i class="mdi mdi-star"></i></a>
+                  <a href="#" onclick="editNews(118);" title="Modifier"><i class="mdi mdi-pencil"></i></a>
+                  <a href="" onclick="delNews(118);" title="Supprimer"><i class="mdi mdi-delete"></i></a>
+                </span>
+              </div>
+              <div class="feed-meta">
+                <a href="https://easyaero.dev.les-mnms.net/membres/detail?id=1">Matthieu ISOREZ</a>
+                <span class="sep">·</span>
+                <i class="mdi mdi-clock-outline" style="font-size:0.8rem;"></i> 25/10/2022 à 22:08
+              </div>
+              <p class="feed-text">Hello les pilotis. Si quelqu'un intéressé je vais à Brives le 5 novembre - retour le 6 novembre en PA28 de l'ACAF, au départ de Entzheim. Si la météo le permet bien sûr, décollage vers 8h, et retour le dimanche avant 20h. J'y vais pour effectuer sur place un saut de demonstration en parachute à l'ouverture du match de rugby entre Brives et la Rochelle le samedi à 17h. Si quelqu'un intéressé pour m'accompagner ? On se sépare à l'arrivée à Brives et on se retrouve le Dimanche début d'après midi pour le vol retour. 2 places disponibles. Philippe 07 82 31 79 68</p>
+            </div>
+          </div>
+        </div>
+<!-- END: news_template -->
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Colonne droite : informations ── -->
+  <div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body" style="padding:20px;">
+
+        <!-- Recherche actualités -->
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">
+            <i class="mdi mdi-magnify"></i> {lang_search}
+          </div>
+          <form name="recherche" method="post" action="{path_root}/index.php" enctype="multipart/form-data">
+            <input type="hidden" name="mod" value="actualites">
+            <input id="searchactu" class="form-control form-control-sm" type="text" name="search" placeholder="{lang_searchterms}" onkeyup="CapturePost(event);">
+          </form>
+        </div>
+
+        <!-- Derniers documents -->
+
+        <div class="sidebar-section">
+			<div class="sidebar-section-title">
+				<i class="mdi mdi-file-document"></i> {lang_lastdocs}
 			</div>
-		</div>
-	</div>
+			<!-- BEGIN: lst_lastdocs -->
+			{form_document_link}
+			<!-- END: lst_lastdocs -->
+        </div>
 
 
-	<div class="col-md-4 grid-margin stretch-card">
-		<div class="card">
-			<div class="card-body">
-
-				<div class="align-items-start profile-feed-item">
-					<h4>{lang_search}</h4>
-					<form name="recherche" method="post" action="{path_root}/index.php" enctype="multipart/form-data">
-						<input type="hidden" name="mod" value="actualites">
-						<p><input id="searchactu" class='form-control' type="text" name="search" placeholder="{lang_searchterms}" OnKeyUp="CapturePost(event);"></p>
-					</form>
-				</div>
-				<div class="align-items-start profile-feed-item">
-					<h4>{lang_lastdocs}</h4>
-					<!-- BEGIN: lst_lastdocs -->
-					<div>{form_document_link}<small class="ml-4 text-muted"><i class="mdi mdi-clock mr-1"></i>{form_document_time}</small></div>
-					<!-- END: lst_lastdocs -->
-				</div>
-
-				<div class="align-items-start profile-feed-item">
-					<h4>{lang_information}</h4>
-					<!-- BEGIN: lst_echeance -->
-					{form_echeance}
-					<!-- END: lst_echeance -->
-				</div>
-				{aff_custom}
+        <!-- Échéances pilote -->
+        <div class="sidebar-section">
+			<div class="sidebar-section-title">
+				<i class="mdi mdi-shield-check"></i> {lang_information}
 			</div>
+			<!-- BEGIN: lst_echeance -->
+			{form_echeance}
+			<!-- END: lst_echeance -->
 		</div>
 
+        {aff_custom}
 
-	</div>
-		
+      </div>
+    </div>
+  </div>
+
 </div>
-
 
 
 <script type="text/javascript">
@@ -168,63 +193,63 @@
     });
 
 
-// Sending AJAX request and upload file
-function uploadData(formdata){
-	$("#uploadProgress").css({"display":"block"});
-	$("#uploadProgress").text("{lang_upload}");
+	// Sending AJAX request and upload file
+	function uploadData(formdata){
+		$("#uploadProgress").css({"display":"block"});
+		$("#uploadProgress").text("Chargement du document en cours");
 
-    $.ajax({
-        url: '{apiurlpost}&type=file&id='+document.getElementById("id").value,
-        type: 'post',
-        data: formdata,
-        contentType: false,
-        processData: false,
-        dataType: 'json',
-        success: function(response){
-            addThumbnail(response);
-			$("#uploadProgress").css({"display":"none"});
-        },
-		error: function(response){
-			$("#uploadProgress").css({"display":"none"});
-        }
-    });
-}
+		$.ajax({
+			url: '{apiurlpost}&type=file&id='+document.getElementById("id").value,
+			type: 'post',
+			data: formdata,
+			contentType: false,
+			processData: false,
+			dataType: 'json',
+			success: function(response){
+				addThumbnail(response);
+				$("#uploadProgress").css({"display":"none"});
+			},
+			error: function(response){
+				$("#uploadProgress").css({"display":"none"});
+			}
+		});
+	}
 
-// Added thumbnail
-function addThumbnail(data){
+	// Added thumbnail
+	function addThumbnail(data){
 
-	var len = $("#actualitesNouveau div.thumbnail").length;
+		var len = $("#actualitesNouveau div.thumbnail").length;
 
-    var num = Number(len);
-    num = num + 1;
-	
-	if (data.status=="ok")
-	{
-		if (data.type=="image")
+		var num = Number(len);
+		num = num + 1;
+		
+		if (data.status=="ok")
 		{
-			$("#uploadDoc").append('<div id="thumbnail_'+num+'" class="thumbnail"></div>');
+			if (data.type=="image")
+			{
+				$("#uploadDoc").append('<div id="thumbnail_'+num+'" class="thumbnail"></div>');
+			}
+			else
+			{
+				$("#uploadDoc").append('<div id="thumbnail_'+num+'"></div>');
+			}
+			$("#thumbnail_"+num).append(data.link);
+			document.getElementById("id").value=data.id;
+			console.log(data.id);
 		}
 		else
 		{
-			$("#uploadDoc").append('<div id="thumbnail_'+num+'"></div>');
+			$("#actualitesNouveau").append('<div>Erreur avec le chargement du fichier !</div>');
 		}
-		$("#thumbnail_"+num).append(data.link);
-		document.getElementById("id").value=data.id;
-		console.log(data.id);
 	}
-	else
-	{
-		$("#actualitesNouveau").append('<div>Erreur avec le chargement du fichier !</div>');
-	}
-}
 
-// Bytes conversion
-function convertSize(size) {
-    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-    if (size == 0) return '0 Byte';
-    var i = parseInt(Math.floor(Math.log(size) / Math.log(1024)));
-    return Math.round(size / Math.pow(1024, i), 2) + ' ' + sizes[i];
-}
+	// Bytes conversion
+	function convertSize(size) {
+		var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+		if (size == 0) return '0 Byte';
+		var i = parseInt(Math.floor(Math.log(size) / Math.log(1024)));
+		return Math.round(size / Math.pow(1024, i), 2) + ' ' + sizes[i];
+	}
 
 
 
@@ -243,6 +268,8 @@ function convertSize(size) {
 
 	});
 
+
+
 	function loadNews(id,limit,search,mid=0,fav=0)
 	{
 		console.log("load:"+id+"-"+limit);
@@ -260,67 +287,47 @@ function convertSize(size) {
 				{
 					$.each(response.news, function (index, value) {
 
+						var isPinned = value.favori > 0;
+           				var aff_avatar=getAvatar(value.avatar,value.displayname);
 
-						txt='<div id="news_'+value.id+'" class="';
-						if (value.favori>0)
-						{
-							txt=txt+'content-wrapper msgbox-warning ';
+						txt = '<div id="news_'+value.id+'" class="feed-item'+(isPinned ? ' pinned' : '')+'">';
+						txt += '<div class="feed-avatar">'+aff_avatar+'</div>';
+						txt += '<div class="feed-body">';
+
+						// Titre + actions
+						txt += '<div class="feed-title">';
+						if (isPinned) {
+							txt += '<span class="pin-badge"><i class="mdi mdi-star" style="font-size:.7rem;"></i> Épinglé</span>';
 						}
-						txt=txt+'d-flex align-items-start profile-feed-item">';
-						txt=txt+'<img src="{path_root}/'+value.avatar+'" alt="profile" class="img-sm rounded-circle">';
-						txt=txt+'<div class="ml-4">';
+						txt += '<span>'+value.title+'</span>';
 
-						txt=txt+"<div onmouseover='document.getElementById(\"edit_"+value.id+"\").style.display=\"inline-block\";' onmouseout='document.getElementById(\"edit_"+value.id+"\").style.display=\"none\";'>";
-						txt=txt+"<h5>"+value.title;
-
-						txt=txt+"<div id='edit_"+value.id+"' style='display:none; margin-left:10px;'>";
-
-						if (value.setfav=="yes")
-						{
-							if (value.favori>0)
-							{
-								txt=txt+"<a href='#' onclick='setFav("+value.id+",0);'><i class='mdi mdi-star'></i></a>";
-							}
-							else
-							{
-								txt=txt+"<a href='#' onclick='setFav("+value.id+",1);'><i class='mdi mdi-star-outline'></i></a>";
+						// Boutons d'action (visibles au hover via CSS)
+						txt += '<span class="feed-actions" id="edit_'+value.id+'">';
+						if (value.setfav=="yes") {
+							if (isPinned) {
+								txt += "<a href='#' onclick='setFav("+value.id+",0);' title='Désépingler'><i class='mdi mdi-star'></i></a>";
+							} else {
+								txt += "<a href='#' onclick='setFav("+value.id+",1);' title='Épingler'><i class='mdi mdi-star-outline'></i></a>";
 							}
 						}
+						if (value.edit=="ok")   txt += "<a href='#' onclick='editNews("+value.id+");' title='Modifier'><i class='mdi mdi-pencil'></i></a>";
+						if (value.delete=="ok") txt += "<a href='' onclick='delNews("+value.id+");' title='Supprimer'><i class='mdi mdi-delete'></i></a>";
+						txt += '</span>';
+						txt += '</div>'; // .feed-title
 
-						if ((value.edit=="ok") || (value.delete=="ok"))
-						{
-							if (value.edit=="ok")
-							{
-								txt=txt+"<a href='#' onclick='editNews("+value.id+");'><i class='mdi mdi-pencil'></i></a>";
-							}
-							if (value.delete=="ok")
-							{
-								txt=txt+"<a href='' onclick='delNews("+value.id+");'><i class='mdi mdi-delete'></i></a>";
-							}
-						}
-						txt=txt+"</div>";
+						// Méta
+						txt += '<div class="feed-meta">'+value.author+'<span class="sep">·</span><i class="mdi mdi-clock-outline" style="font-size:.8rem;"></i>'+value.date+'</div>';
 
+						// Contenu
+						txt += '<p class="feed-text">'+value.message+'</p>';
+						txt += '</div></div>';
 
-						txt=txt+"</h5>";
-						txt=txt+"</div>";
-
-						txt=txt+'<h6>'+value.author+'<small class="ml-4 text-muted"><i class="mdi mdi-clock mr-1"></i>'+value.date+'</small></h6>';
-						txt=txt+'<p style="text-align:justify;">'+value.message+'</p>';
-						txt=txt+'</div>';
-						txt=txt+'</div>';
-						//txt=txt+'</div>';
-
-						if (value.favori>0)
-						{
+						if (isPinned) {
 							$("#news").prepend(txt);
-							console.log("favori");
-						}
-						else
-						{
+						} else {
 							$("#news").append(txt);
 						}
-						lastid=value.id;
-						console.log("lastid:"+lastid);
+						lastid = value.id;
 					});
 				}
 				aff=0;
@@ -334,7 +341,7 @@ function convertSize(size) {
 
 	function delNews(id)
 	{
-		var is_confirmed = confirm("{lang_delpost}");
+		var is_confirmed = confirm("Souhaitez-vous supprimer cette actualité ?");
 		if (is_confirmed) { 
 			
 			$.ajax({
@@ -360,8 +367,11 @@ function convertSize(size) {
 
 	
 	loadNews(0,2,"",0,1);
-	loadNews(0,8,"",{idstart},0);
-		
+	loadNews(0,8,"",0,0);
+
+  var aff_avatar=getAvatar("{form_avatar}","{form_displayname}");
+  $("#myavatar").html(aff_avatar);
+
 	$(window).scroll(function() {
 		if($(window).scrollTop() + $(window).height() >= $(document).height()-50) {
 			if (aff==0)
@@ -401,7 +411,6 @@ function convertSize(size) {
 	
 		if (key==13)
 		 { 
-		 	<!-- document.forms["recherche"].submit();  -->
 			return false;
 	 	 }
 

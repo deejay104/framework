@@ -27,9 +27,9 @@
 	$aff=checkVar("aff","varchar");
 
 // ---- Menu
-	addPageMenu($corefolder,$mod,$tabLang["lang_list"],geturl("membres","","fonc=&aff=".$aff),"icn32_liste.png",($fonc!="trombi") ? true : false);
-	addPageMenu($corefolder,$mod,$tabLang["lang_pictures"],geturl("membres","","fonc=trombi&aff=".$aff),"icn32_trombi.png",($fonc=="trombi") ? true : false);
-	addPageMenu($corefolder,$mod,$tabLang["lang_emargement"],geturl("membres","list",""),"icn32_trombi.png",false);
+	addPageMenu($corefolder,$mod,$tabLang["lang_list"],geturl("membres","","fonc=&aff=".$aff),"mdi-keyboard-backspace",($fonc!="trombi") ? true : false);
+	addPageMenu($corefolder,$mod,$tabLang["lang_pictures"],geturl("membres","","fonc=trombi&aff=".$aff),"mdi-account-circle",($fonc=="trombi") ? true : false);
+	addPageMenu($corefolder,$mod,$tabLang["lang_emargement"],geturl("membres","list",""),"mdi-format-list-bulleted",false);
 
 	if (GetDroit("AccesMembresVirtuel"))
 	{
@@ -42,32 +42,35 @@
 		addPageMenu($corefolder,$mod,$tabLang["lang_add"],geturl("membres","detail","id=0"),"icn32_ajouter.png");
 	}
 
-// ---- Trombino
+	$tmpl_x->assign("aff",$aff);
+	$tmpl_x->assign("fonc",$fonc);
 
+// ---- Trombino
 	if ($fonc=="trombi")
 	{
-		$lstusr=ListActiveUsers($sql,"nom","");
-
-
-		foreach($lstusr as $i=>$id)
+		if ($theme!="phone")
 		{
-			$usr = new user_core($id,$sql,false);
-
-			$lstdoc=ListDocument($sql,$id,"avatar");
-			if (count($lstdoc)>0)
+			$lstusr=ListActiveUsers($sql,"nom","");
+			foreach($lstusr as $i=>$id)
 			{
-				$doc=new document_core($lstdoc[0],$sql);
-				$tmpl_x->assign("aff_avatar",$doc->GenerePath(200,240));
+				$usr = new user_core($id,$sql,false);
+
+				$lstdoc=ListDocument($sql,$id,"avatar");
+				if (count($lstdoc)>0)
+				{
+					$doc=new document_core($lstdoc[0],$sql);
+					$tmpl_x->assign("aff_avatar",$doc->GenerePath(200,240));
+				}
+				else
+				{
+					$tmpl_x->assign("aff_avatar",$corefolder."/static/images/none.gif");
+				}	
+				$tmpl_x->assign("id_membre",$id);
+
+				$tmpl_x->parse("corps.trombino.aff_picture");
 			}
-			else
-			{
-				$tmpl_x->assign("aff_avatar",$corefolder."/static/images/none.gif");
-			}	
-			$tmpl_x->assign("id_membre",$id);
-
-			$tmpl_x->parse("corps.trombino.aff_picture");
- 		}
-		$tmpl_x->parse("corps.trombino");
+			$tmpl_x->parse("corps.trombino");
+		}
 	}
 // ---- Liste les membres
 	else
@@ -75,36 +78,10 @@
 		if (!isset($aff))
 		{ $aff=""; }
 	  
-		$lstusr=ListActiveUsers($sql,"std","",($aff=="virtuel") ? "oui" : "non");
 
-		if ($theme=="phone")
+		if ($theme!="phone")
 		{
-			foreach($lstusr as $i=>$id)
-			{
-				$usr = new user_core($id,$sql);
-				$tmpl_x->assign("id_membre",$id);
-				$tmpl_x->assign("url_detail",geturl("membres","detail","id=".$id));
-				$tmpl_x->assign("aff_membre",$usr->aff("fullname"));
-				// $tmpl_x->assign("tel_membre",$usr->AffTel());
-				$tmpl_x->assign("mail_membre",$usr->aff("mail"));
-
-				$lstdoc=ListDocument($sql,$id,"avatar");
-				if (count($lstdoc)>0)
-				{
-					$doc=new document_core($lstdoc[0],$sql);
-					$tmpl_x->assign("aff_avatar",$doc->GenerePath(64,64));
-				}
-				else
-				{
-					$tmpl_x->assign("aff_avatar",$corefolder."/static/images/icn64_membre.png");
-				}	
-
-				$tmpl_x->assign("id_membre",$usr->id);
-				$tmpl_x->parse("corps.lst_ligne");
-			}
-		}
-		else
-		{
+			$lstusr=ListActiveUsers($sql,"std","",($aff=="virtuel") ? "oui" : "non");
 			$tabTitre=array();
 			$tabTitre["prenom"]["aff"]=$tabLang["lang_firstname"];
 			$tabTitre["prenom"]["width"]=($theme!="phone") ? 150 : 120;

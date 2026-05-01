@@ -7,576 +7,655 @@
 
 <!-- BEGIN: corps -->
 <style>
+/* ── Styles locaux — page Documents ── */
 
-.contentFiles { text-align: center;}
-.contentFiles:hover { background-color:#{LineBackgroundHover}; color:#{TextBackgroundHover}; }
-.contentFiles { cursor: pointer; }
-.contentFiles label { cursor: pointer; }
+/* Barre de filtres */
+.filters-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-end;
+}
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.filter-group label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--p67-text-muted);
+  margin: 0;
+}
+.filter-group.filter-search { flex: 1; min-width: 180px; }
+.filter-group.filter-search .input-wrap { position: relative; }
+.filter-group.filter-search .input-wrap .mdi {
+  position: absolute;
+  left: 10px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--p67-text-muted);
+  font-size: 1rem;
+  pointer-events: none;
+}
+.filter-group.filter-search input { padding-left: 32px; }
 
+/* Zone d'upload */
+.upload-zone {
+  border: 2px dashed var(--p67-primary-border);
+  background: var(--p67-primary-light);
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+  color: var(--p67-text-muted);
+}
+.upload-zone:hover, .upload-zone.drag-over {
+  border-color: var(--p67-primary);
+  background: #e4edfa;
+  color: var(--p67-primary);
+}
+.upload-zone .mdi { font-size: 1.8rem; display: block; margin-bottom: 4px; }
+.upload-zone p  { margin: 0; font-size: 0.85rem; font-weight: 500; }
+.upload-zone small { font-size: 0.75rem; }
+
+/* Liste de documents */
+.paper-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--p67-border);
+  cursor: pointer;
+  transition: background .15s;
+  position: relative;
+}
+.paper-item:last-child { border-bottom: none; }
+.paper-item:hover { background: var(--p67-primary-light); }
+
+.paper-ico {
+  width: 38px; height: 38px; min-width: 38px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--p67-primary-light);
+  border: 1px solid var(--p67-primary-border);
+  flex-shrink: 0;
+  margin-top: 2px;
+  transition: background .15s;
+}
+.paper-ico .mdi { font-size: 1.2rem; color: var(--p67-primary); }
+.paper-item:hover .paper-ico { background: var(--p67-primary); }
+.paper-item:hover .paper-ico .mdi { color: #fff; }
+
+.paper-content { flex: 1; min-width: 0; }
+
+.paper-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--p67-text);
+  margin-bottom: 3px;
+  line-height: 1.3;
+}
+
+.paper-meta {
+  font-size: 0.78rem;
+  color: var(--p67-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.paper-meta span { display: flex; align-items: center; gap: 4px; }
+.paper-meta .mdi { font-size: 0.85rem; }
+
+/* Pièces jointes en pills */
+.paper-attachments { display: flex; flex-wrap: wrap; gap: 5px; }
+.attach-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 9px;
+  border: 1px solid var(--p67-border);
+  background: #f7f9fc;
+  color: var(--p67-text);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 20px;
+  transition: background .15s, border-color .15s, color .15s;
+}
+.attach-pill:hover {
+  background: var(--p67-primary-light);
+  border-color: var(--p67-primary);
+  color: var(--p67-primary);
+  text-decoration: none;
+}
+.attach-pill .mdi { font-size: 0.85rem; }
+
+/* Boutons d'action (hover) */
+.paper-actions {
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity .15s;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+.paper-item:hover .paper-actions { opacity: 1; }
+
+.action-btn {
+  width: 30px; height: 30px;
+  border: none;
+  background: none;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--p67-text-muted);
+  cursor: pointer;
+  font-size: 0.95rem;
+  border-radius: 4px;
+  transition: background .15s, color .15s;
+}
+.action-btn:hover { background: var(--p67-primary-light); color: var(--p67-primary); }
+.action-btn.danger:hover { background: var(--p67-danger-soft); color: var(--p67-danger); }
+
+/* État vide */
+.paper-empty {
+  padding: 40px;
+  text-align: center;
+  color: var(--p67-text-muted);
+}
+.paper-empty .mdi { font-size: 2.5rem; display: block; margin-bottom: 10px; opacity: .4; }
+
+/* Modal — ajustements */
+.modal-header-actions { display: flex; align-items: center; gap: 6px; }
+.modal-icon-btn {
+  width: 32px; height: 32px;
+  border: 1px solid var(--p67-border);
+  background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: var(--p67-text-muted);
+  font-size: 1rem;
+  border-radius: 4px;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.modal-icon-btn:hover { background: var(--p67-primary-light); color: var(--p67-primary); border-color: var(--p67-primary-border); }
+.modal-icon-btn.danger:hover { background: var(--p67-danger-soft); color: var(--p67-danger); border-color: #f5b8b5; }
+
+.modal-fields-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 20px;
+}
+
+.modal-upload-zone {
+  border: 1.5px dashed var(--p67-primary-border);
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+  background: var(--p67-primary-light);
+  color: var(--p67-text-muted);
+  font-size: 0.82rem;
+}
+.modal-upload-zone:hover { border-color: var(--p67-primary); color: var(--p67-primary); background: #e4edfa; }
+.modal-upload-zone .mdi { font-size: 1.3rem; }
+
+.modal-divider { height: 1px; background: var(--p67-border); margin: 16px 0; }
+
+/* Commentaires dans modal */
+.comment-block {
+  background: var(--p67-primary-light);
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  font-size: 0.82rem;
+  color: var(--p67-text);
+  border-left: 3px solid var(--p67-primary);
+}
+.comment-block .c-meta { font-size: 0.72rem; color: var(--p67-text-muted); margin-top: 4px; }
+
+/* Compteur de documents */
+#paperCount {
+  font-size: 0.75rem;
+  color: var(--p67-text-muted);
+  font-weight: 400;
+  margin-left: auto;
+}
 </style>
 
+
+<!-- ── Barre d'actions ── -->
 <div class="row">
-	<div class="grid-margin stretch-card">
-		<div class="card">
-			<div class="card-body">	
-				<div class="row">	
-					<div class="col-lg-3">
-							<label class="col-lg-4">Filtrer par</label>
-							<select id='selectFilter' class='col-lg-7 form-control' onChange='loadPapers();'>
-								<option value="active">Documents actifs</option>
-								<option value="all">Tous</option>
-							</select>
-
-					</div>
-
-					<div class="col-lg-3">
-
-							<label class="col-lg-4">en date du</label>
-							<input id='selectDate' class='col-lg-7 form-control' type="date" value='{form_today}'  onChange='loadPapers();'>
-
-					</div>
-
-					<div class="col-lg-3">
-							<label class="col-lg-4">Trier par</label>
-							<select id='selectSort' class='col-lg-7 form-control' onChange='loadPapers();'>
-								<option value="dte_creat">Date</option>
-								<option value="title">Titre</option>
-								<option value="uid_creat">Auteur</option>
-							</select>
-					</div>
-
-					<div class="col-lg-3">
-							<input type='text' id='crit' value='{crit}' class="form-control" OnKeyUp="searchkey(event);" autocomplete="off" placeholder="Rechercher"/>
-					</div>
-				</div>
-			</div>
-
-<!-- BEGIN: createdoc -->
-			<div class="card-body">	
-				<div class="row">	
-					<div id='newContentFile' class='contentFiles form-control'>
-						<label for='newFile'><p id='newContentText'><i class="mdi mdi-cloud-upload" style="font-size:20px;"></i> Nouveau Document</p></label>
-						<input id='newFile' type='file' style='display:none'>
-					</div>
-				</div>
-			</div>
-<!-- END: createdoc -->
-
-		</div>
-	</div>
+  <div class="col content-menu">
+    <i class="mdi mdi-folder-multiple-outline"></i> <a href="https://easyaero.dev.les-mnms.net/docs">Documents</a> / {folder_name}
+  </div>
 </div>
 
+<!-- ── Card filtres + upload ── -->
 <div class="row">
-	<div class="grid-margin stretch-card">
-		<div class="card">
-			<div class="card-body row">	
-				<div id='lstPapers'></div>
+  <div class="col grid-margin stretch-card">
+    <div class="card">
+      <div class="card-header">
+        Filtres &amp; Import
+        <span id="paperCount"></span>
+      </div>
+      <div class="card-body">
+        <div class="filters-bar">
+
+          <div class="filter-group">
+            <label>Afficher</label>
+            <select id="selectFilter" class="form-control" style="min-width:160px;" onchange="loadPapers();">
+              <option value="active" selected>Documents actifs</option>
+              <option value="all">Tous</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>En date du</label>
+            <input id="selectDate" class="form-control" type="date" value="2026-04-30" onchange="loadPapers();">
+          </div>
+
+          <div class="filter-group">
+            <label>Trier par</label>
+            <select id="selectSort" class="form-control" style="min-width:140px;" onchange="loadPapers();">
+              <option value="dte_creat" selected>Date</option>
+              <option value="title">Titre</option>
+              <option value="uid_creat">Auteur</option>
+            </select>
+          </div>
+
+          <div class="filter-group filter-search">
+            <label>Rechercher</label>
+            <div class="input-wrap">
+              <i class="mdi mdi-magnify"></i>
+              <input type="text" id="crit" class="form-control"
+                placeholder="Mot-clé…"
+                onkeyup="searchkey(event);" autocomplete="off">
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+		<!-- BEGIN: createdoc -->
+		<!-- Zone d'upload -->
+		<div style="padding: 0 1.25rem 1.25rem;">
+			<div id="newContentFile" class="upload-zone">
+			<label for="newFile" style="cursor:pointer; margin:0; width:100%; display:block;">
+				<i class="mdi mdi-cloud-upload-outline"></i>
+				<p>Déposer un fichier ici ou <strong>parcourir</strong></p>
+				<small>Glissez-déposez ou cliquez pour ajouter un nouveau document</small>
+			</label>
+			<input id="newFile" type="file" style="display:none">
+			<div style="text-align:center; font-size:0.82rem; color:var(--p67-text-muted); margin-top:6px; display:none;" id="newContentText"></div>
 			</div>
 		</div>
-	</div>
+		<!-- END: createdoc -->
+
+    	</div>
+  	</div>
 </div>
-	
+
+<!-- ── Card liste des documents ── -->
+<div class="row">
+  <div class="col grid-margin stretch-card">
+    <div class="card">
+      <div class="card-header">Documents</div>
+      <div id="lstPapers">
+        <!-- Chargé dynamiquement par loadPapers() -->
+      </div>
+    </div>
+  </div>
+</div>
 
 
-<div id='paperContent' class="modal fade" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
-	<div class="modal-dialog modal-lg" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title col-lg-10" id="exampleModalLabel"><input type="text" id='contentTitle' class='form-control' readonly></h5>
+<!-- ══════════════════════════════════════
+     MODAL — Détail / édition document
+     ══════════════════════════════════════ -->
+<div id="paperContent" class="modal fade" tabindex="-1" role="dialog" style="display:none;" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
 
-<!-- BEGIN: edit -->
-			<button id='edit' type="button" class="close col-lg-1 link-hover" data-dismiss="modal" aria-label="Edit" title='Editer les informations'>
-				<i class='mdi mdi-pencil'></i>
-			</button>
-			<button id='archive' type="button" class="close col-lg-1 link-hover" data-dismiss="modal" aria-label="Archive" title='Archiver le document'>
-				<i class='mdi mdi-archive'></i>
-			</button>
-<!-- END: edit -->
-<!-- BEGIN: noedit -->
-<!-- END: noedit -->
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:10px; flex:1; min-width:0;">
+          <div class="paper-ico" style="flex-shrink:0;">
+            <i class="mdi mdi-file-document-outline"></i>
+          </div>
+          <input type="text" id="contentTitle" class="form-control" readonly>
+        </div>
+        <div class="modal-header-actions" style="margin-left:10px;">
+			<!-- BEGIN: edit -->
+			<button id="edit" type="button" class="modal-icon-btn" title="Modifier">
+	            <i class="mdi mdi-pencil-outline"></i>
+    	    </button>
+          	<button id="archive" type="button" class="modal-icon-btn danger" title="Archiver">
+            	<i class="mdi mdi-archive"></i>
+          	</button>
+			<!-- END: edit -->
+          	<button id="close" type="button" class="modal-icon-btn" title="Fermer">
+            	<i class="mdi mdi-close"></i>
+          	</button>
+        </div>
+      </div>
 
-				<button id='close' type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">×</span>
-				</button>
-			</div>
+      <div class="modal-body">
 
-			<div class="modal-body">
-				<div class="row">
-					<div class="form-group row">
-						<label class="col-lg-2  col-form-label">Auteur</label>
-						<div class="col-lg-7"><input type='text' id='contentAuthor' class='form-control' readonly></div>
-					</div>
-					<div class="form-group row">
-						<label class="col-lg-2  col-form-label">Date de création</label>
-						<div class="col-lg-7"><input type='text' id='contentDateCreate' class='form-control' readonly></div>
-					</div>
-					<div class="form-group row">
-						<label class="col-lg-2  col-form-label">Date de début</label>
-						<div class="col-lg-7"><input type='date' id='contentDateStart' class='form-control' readonly></div>
-					</div>
-					<div class="form-group row">
-						<label class="col-lg-2  col-form-label">Date d'échéance</label>
-						<div class="col-lg-7"><input type='date' id='contentDateEnd' class='form-control' readonly></div>
-					</div>
+        <!-- Métadonnées 2 colonnes -->
+        <div class="modal-fields-grid">
+          <div class="form-group">
+            <label class="col-form-label" style="font-size:0.72rem; text-transform:uppercase; letter-spacing:.06em;">Auteur</label>
+            <input type="text" id="contentAuthor" class="form-control" readonly>
+          </div>
+          <div class="form-group">
+            <label class="col-form-label" style="font-size:0.72rem; text-transform:uppercase; letter-spacing:.06em;">Date de création</label>
+            <input type="text" id="contentDateCreate" class="form-control" readonly>
+          </div>
+          <div class="form-group">
+            <label class="col-form-label" style="font-size:0.72rem; text-transform:uppercase; letter-spacing:.06em;">Date de début</label>
+            <input type="date" id="contentDateStart" class="form-control" readonly>
+          </div>
+          <div class="form-group">
+            <label class="col-form-label" style="font-size:0.72rem; text-transform:uppercase; letter-spacing:.06em;">Date d'échéance</label>
+            <input type="date" id="contentDateEnd" class="form-control" readonly>
+          </div>
+        </div>
 
-					<!-- BEGIN: adddoc -->
-					<div class="form-group row">
-						<label class="col-lg-2  col-form-label"></label>
-						<div class="col-lg-7">
-							<div id='addContentFile' class='contentFiles form-control'>
-								<label for='addFile' style='display: inline-block;'><p id='addContentText'><i class="mdi mdi-cloud-upload" style="font-size:20px;"></i> Ajouter Document</p></label>
-								<input id='addFile' type='file' style='display:none'>
-							</div>
-						</div>
-					</div>
-					<!-- END: adddoc -->
+        <div class="modal-divider"></div>
 
-					<div class="form-group row">
-						<label class="col-lg-2  col-form-label">Commentaires</label>
-						<div class="col-lg-7"><textarea id='contentNewComment' class='form-control'></textarea></div>
-					</div>
+		<!-- BEGIN: adddoc -->
+        <!-- Pièces jointes -->
+        <div class="form-group">
+          <label class="col-form-label" style="font-size:0.72rem; text-transform:uppercase; letter-spacing:.06em;">Pièces jointes</label>
+          <div id="addContentFile" class="modal-upload-zone">
+            <label for="addFile" style="cursor:pointer; margin:0; display:inline-flex; align-items:center; gap:6px;">
+              <i class="mdi mdi-cloud-upload-outline"></i>
+              <span id="addContentText">Ajouter un fichier</span>
+            </label>
+            <input id="addFile" type="file" style="display:none">
+          </div>
+          <div id="modalAttachments" style="margin-top:8px; display:flex; flex-wrap:wrap; gap:5px;"></div>
+        </div>
+        <div class="modal-divider"></div>
+		<!-- END: adddoc -->
 
-					<div class="form-group row">
-						<label class="col-lg-2  col-form-label"></label>
-						<div class="col-lg-7">
-							<input id='save' type='submit' value='Enregistrer' class='btn btn-primary'>
-							<input id='cancel' type='submit' value='Annuler' class='btn btn-light'>
-						</div>
-					</div>
+        <!-- Commentaires -->
+        <div class="form-group">
+          <label class="col-form-label" style="font-size:0.72rem; text-transform:uppercase; letter-spacing:.06em;">Ajouter un commentaire</label>
+          <textarea id="contentNewComment" class="form-control" rows="2" placeholder="Votre commentaire…"></textarea>
+        </div>
 
-					<div class="form-group row">
-						<label class="col-lg-2 col-form-label"></label>
-						<div class="col-lg-7">
-							<div class="profile-feed" id="contentComment"></div>
-						</div>
-					</div>	
+        <div id="contentComment" class="profile-feed"></div>
 
-				</div>
-			</div>
+
+	  </div>
+
+		<!-- Boutons -->
+		<div class="card-footer">
+			<input id="save" type="button" value="Enregistrer" class="btn btn-primary btn-sm">
+			<a href="#" id="cancel" class="text-muted" style="font-size:0.85rem;">Annuler</a>
 		</div>
-	</div>
-</div>
 
+    </div>
+  </div>
+</div>
 
 <script>
+  /* ═══════════════════════════════════════════════════
+     LOGIQUE — identique à l'original, rendu amélioré
+     ═══════════════════════════════════════════════════ */
 
-$(document).ready(function() {
+  $(document).ready(function() { loadPapers(); });
 
-	loadPapers();
-});
+  var currentPaper = 0;
+  var isEditing = false;
 
+// ── Chargement liste ──────────────────────────────────────────
+  function loadPapers() {
+    var filter = $('#selectFilter').val();
+    var date   = $('#selectDate').val();
+    var crit   = $('#crit').val();
+    var sort   = $('#selectSort').val();
 
-function loadPapers()
-{
-	var filter=$("#selectFilter").val();
-	var date=$("#selectDate").val();
-	var crit=$("#crit").val();
-	var sort=$("#selectSort").val();
-	$.get('/api/v1/docs/lstpaper?id={id}&filter='+filter+'&date='+date+'&sort='+sort+'&crit='+crit).done(function(data)
-	{
-		//divPaper=document.getElementById("lstPapers");
-		//divPaper.innerHTML="";
-		<!-- divDescription=document.getElementById("lstDescription"); -->
-		<!-- divDescription.innerHTML=""; -->
-		$("#lstPapers").html("");
-
-		for (var key in data.data)
-		{
-			txt='<div class="d-flex align-items-start profile-feed-item">';
-			txt=txt+'<div class="ml-4">';
-			txt=txt+"<div id='paperTitle_"+data.data[key].id+"' onclick='loadContent("+data.data[key].id+");' class='link-hover'><h5>"+data.data[key].title+"</h5></div>";
-			txt=txt+'<h6>'+data.data[key].author+'<small class="ml-4 text-muted"><i class="mdi mdi-clock mr-1"></i>'+data.data[key].created+'</small></h6>';
-			//txt=txt+'<p style="text-align:justify;">'+value.message+'</p></div>';
-			txt=txt+"<div id='paperDocument_"+data.data[key].id+"'>";
-			for (var ii in data.data[key].doc)
-			{
-				txt=txt+"<p'>"+data.data[key].doc[ii].url+"</p>";
-			}
-			txt=txt+'</div>';
-			txt=txt+'</div>';
-
-			$("#lstPapers").html($("#lstPapers").html()+txt);
-		}
-	});
-}
-
-$(function() {
-
-    // preventing page from redirecting
-    $("html").on("dragover", function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        <!-- $("h1").text("Drag here"); -->
+    $.get('/api/v1/docs/lstpaper?id={id}&filter='+filter+'&date='+date+'&sort='+sort+'&crit='+crit)
+          .done(function(data){ renderPapers(data); 
     });
+  }
 
-    $("html").on("drop", function(e) { e.preventDefault(); e.stopPropagation(); });
+  function renderPapers(data) {
+    var html = '';
+    var count = 0;
 
-    // Drag enter
-    $('#newContentFile').on('dragenter', function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-        $("#newContentFile").css({"border":"1px dashed #{FormulaireBackgroundDark}"});
-    });
+    for (var k in data.data) {
+      var p = data.data[k];
+      count++;
 
-    // Drag over
-    $('#newContentFile').on('dragover', function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-        $("#newContentFile").css({"border":"1px dashed #{FormulaireBackgroundDark}"});
-    });
+      // Attachements en pills
+      var attachHtml = '';
+      for (var d in p.doc) {
+        attachHtml += '<a href="' + p.doc[d].url + '" target="_blank" class="attach-pill" onclick="event.stopPropagation();">' +
+          '<i class="mdi mdi-file-' + p.doc[d].icon + '" style="color:' + p.doc[d].color + ';"></i>' + p.doc[d].name + '</a>';
+      }
 
-    // Drag leave
-    $('#newContentFile').on('dragleave', function (e) {
-        $("#newContentFile").css({"border":"1px solid #{FormulaireBackgroundNormal}"});
-    });
+      var authorHtml = p.author ? '<span><i class="mdi mdi-account-outline"></i>' + p.author + '</span>' : '';
 
-    // Drop
-    $('#newContentFile').on('drop', function (e) {
-		console.log("drop");
-        e.stopPropagation();
-        e.preventDefault();
+      html += '<div class="paper-item" id="paperItem_' + p.id + '" onclick="loadContent(' + p.id + ');" >' +
+        '<div class="paper-ico"><i class="mdi mdi-file-document-outline"></i></div>' +
+        '<div class="paper-content">' +
+          '<div class="paper-title" id="paperTitle_' + p.id + '">' + p.title + '</div>' +
+          '<div class="paper-meta">' +
+            authorHtml +
+            '<span><i class="mdi mdi-clock-outline"></i>' + p.created + '</span>' +
+          '</div>' +
+          (attachHtml ? '<div class="paper-attachments">' + attachHtml + '</div>' : '') +
+        '</div>' +
+        '<div class="paper-actions">' +
+          '<button class="action-btn" onclick="event.stopPropagation();loadContent(' + p.id + ');" title="Voir / modifier"><i class="mdi mdi-pencil-outline"></i></button>' +
+          '<button class="action-btn danger" onclick="event.stopPropagation();archivePaper(' + p.id + ');" title="Archiver"><i class="mdi mdi-archive-outline"></i></button>' +
+        '</div>' +
+      '</div>';
+    }
 
-        $("#newContentFile").css({"border":"1px solid #{FormulaireBackgroundNormal}"});
+    if (count === 0) {
+      html = '<div style="padding:40px; text-align:center; color:var(--muted);">' +
+        '<i class="mdi mdi-file-search-outline" style="font-size:40px; display:block; margin-bottom:10px;"></i>' +
+        'Aucun document trouvé.</div>';
+    }
+    $('#lstPapers').html(html);
+    $('#paperCount').text(count + ' document' + (count > 1 ? 's' : ''));
+  }
 
-        var file = e.originalEvent.dataTransfer.files;
-        var fd = new FormData();
-        fd.append('file', file[0]);
+  // ── Ouverture modal ───────────────────────────────────────────
+  function loadContent(id) {
+    currentPaper = id;
+    isEditing = false;
 
-        uploadData(0,fd);
-    });
+    $.get('/api/v1/docs/getpaper?id=' + id).done(function(data) {
+      $('#contentTitle').val(data.data.title);
+      $('#contentAuthor').val(data.data.author);
+      $('#contentDateCreate').val(data.data.created);
+      $('#contentDateStart').val(data.data.dte_start);
+      $('#contentDateEnd').val(data.data.dte_end);
+      $('#contentNewComment').val('');
+      setReadonly(true);
 
-    // file selected
-    $("#newFile").change(function(){
-        var fd = new FormData();
-        var files = $('#newFile')[0].files[0];
-        fd.append('file',files);
-		console.log(files);
-        uploadData(0,fd);
-    });
+      // Pièces jointes dans la modal
+      var attHtml = '';
+      if (data.data.doc) {
+        for (var d in data.data.doc) {
+          var tmp = $('<div>').html(data.data.doc[d].url);
+          var a = tmp.find('a');
+          var fname = a.attr('title') || a.text().trim();
+          var href  = a.attr('href') || '#';
+          var ico   = fileIcon(fname);
+          var col   = fileColor(fname);
+          attHtml += '<a href="' + href + '" target="_blank" class="attach-pill">' +
+            '<i class="mdi ' + ico + '" style="color:' + col + ';"></i>' + fname + '</a>';
+        }
+      }
+      $('#modalAttachments').html(attHtml);
 
-
-
-    // Drag enter
-    $('#addContentFile').on('dragenter', function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-        $("#addContentFile").css({"border":"1px dashed #{FormulaireBackgroundDark}"});
-    });
-
-    // Drag over
-    $('#addContentFile').on('dragover', function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-        $("#addContentFile").css({"border":"1px dashed #{FormulaireBackgroundDark}"});
-    });
-
-    // Drag leave
-    $('#addContentFile').on('dragleave', function (e) {
-        $("#addContentFile").css({"border":"1px solid #ffffff"});
-    });
-
-    // Drop
-    $('#addContentFile').on('drop', function (e) {
-		console.log("addFile drop");
-        e.stopPropagation();
-        e.preventDefault();
-
-        $("#addContentFile").css({"border":"1px solid #ffffff"});
-
-        var file = e.originalEvent.dataTransfer.files;
-        var fd = new FormData();
-        fd.append('file', file[0]);
-		uploadData(currentPaper,fd);
-    });
-
-    // file selected
-    $("#addFile").change(function(){
-        var fd = new FormData();
-        var files = $('#addFile')[0].files[0];
-        fd.append('file',files);
-		console.log(files);
-
-        uploadData(currentPaper,fd);
-    });
-
-	$("#cancel").click(function(){
-		$("#contentNewComment").val("");
-		closeContent();
-	});
-	$("#close").click(function(){
-		$("#contentNewComment").val("");
-		closeContent();
-	});
-
-	$("#save").click(function(){
-		if (editable)
-		{
-			savePaper(currentPaper);
-		}
-		if ($("#contentNewComment").val()!="")
-		{
-			$.post( "/api/v1/docs/postcomment", { id: currentPaper, comment:$("#contentNewComment").val() } ).done(function(data) {
-				console.log("Comment saved");
-				$("#contentComment").html($("#contentComment").html()+$("#contentNewComment").val());
-				showComment(data.avatar,data.description,data.author,data.created);
-			});
-		}
-		closeContent();
-		$("#contentNewComment").val("");
-	});
-
-
-	$("#edit").click(function(){
-		if (editable)
-		{
-			savePaper(currentPaper);
-		}
-		editContent();
-	});
-
-	$("#archive").click(function(){
-
-		today = new Date();
-		$.post( "/api/v1/docs/postpaper", { id: currentPaper, dte_end:  today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate()} ).done(function(data) {
-			console.log("Paper archived");
-			$("#contentDateEnd").val(today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate());
-		});
-	});
-
-	function savePaper(id)
-	{
-		$.post( "/api/v1/docs/postpaper", { id: id, title:$("#contentTitle").val(), dte_start:$("#contentDateStart").val(), dte_end:$("#contentDateEnd").val() } ).done(function(data) {
-			console.log("Paper saved:"+id);
-			$("#paperTitle_"+id).html("<h5>"+$("#contentTitle").val()+"</h5>");
-		});
-	}
-
-});
-
-
-var currentPaper=0;
-var editable=false;
-
-function loadContent(id)
-{
 	$("#contentComment").html("");
-	console.log("Load Content:"+id+":"+currentPaper);
-	if (currentPaper!=id)
+	$.get('/api/v1/docs/lstcomment?id='+id).done(function(data)
 	{
-		$("#paperList").addClass('blurBackground');	
-
-		currentPaper=id;
-		editContent(true);
-		$.get('/api/v1/docs/getpaper?id='+id).done(function(data)
-		{
-			$("#contentTitle").val(data.data.title);
-			<!-- $("#contentDescription").html(data.data.description); -->
-			$("#contentAuthor").val(data.data.author);
-			$("#contentDateCreate").val(data.data.dte_create);
-			$("#contentDateStart").val(data.data.dte_start);
-			$("#contentDateEnd").val(data.data.dte_end);
-
-			$("#paperContent").css({"display":"block"});
-			$("#paperContent").css("opacity",1);
-			$("#lstPapers").css("opacity",0.25);
-		});
-		$.get('/api/v1/docs/lstcomment?id='+id).done(function(data)
-		{
 			for (var key in data.data)
-			{
-				showComment(data.data[key].avatar,data.data[key].description,data.data[key].author,data.data[key].created);
-			}
+		{
+		//	showComment(data.data[key].avatar,data.data[key].description,data.data[key].author,data.data[key].created);
+			var newComment='<div class="feed-item"><div class="feed-avatar"><img src="/'+data.data[key].avatar+'" alt="avatar"></div>';
+			newComment+='<div class="feed-body"><div class="feed-title"><div class="feed-meta">'+data.data[key].author+'<span class="sep">·</span><i class="mdi mdi-clock-outline" style="font-size:.8rem;"></i>'+data.data[key].created+'</div></div>';
+			newComment+='<p class="feed-text">'+data.data[key].description+'</p></div>';
+			$("#contentComment").html($("#contentComment").html()+newComment);
+
+		}
+	});
+
+      $('#paperContent').modal('show');
+    });
+  }
+
+  function setReadonly(on) {
+    ['#contentTitle','#contentDateStart','#contentDateEnd'].forEach(function(sel) {
+      $(sel).prop('readonly', on);
+      if (on) $(sel).removeClass('contentEditable');
+      else    $(sel).addClass('contentEditable');
+    });
+  }
+
+  // ── Boutons modal ─────────────────────────────────────────────
+  $('#edit').on('click', function() {
+    isEditing = !isEditing;
+    setReadonly(!isEditing);
+    $(this).find('i').toggleClass('mdi-pencil-outline mdi-pencil');
+    $(this).toggleClass('active').css('background', isEditing ? '#eef3fc' : '').css('color', isEditing ? 'var(--primary)' : '');
+  });
+
+  $('#archive').on('click', function() {
+    if (confirm('Archiver ce document ?')) archivePaper(currentPaper);
+  });
+
+  function archivePaper(id) {
+    var today = new Date();
+    var dateStr = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate();
+    $.post('/api/v1/docs/postpaper', { id: id, dte_end: dateStr }).done(function() {
+      $('#paperContent').modal('hide');
+      loadPapers();
+    });
+  }
+
+  $('#save').on('click', function() {
+
+	if (isEditing)
+	{
+		$.post('/api/v1/docs/postpaper', {
+			id: currentPaper,
+			title: $('#contentTitle').val(),
+			dte_start: $('#contentDateStart').val(),
+			dte_end: $('#contentDateEnd').val()
+		}).done(function() {
+			$('#paperTitle_' + currentPaper).text($('#contentTitle').val());
 		});
 	}
-	else
+	if ($("#contentNewComment").val()!="")
 	{
-		closeContent();
+		$.post( "/api/v1/docs/postcomment", { id: currentPaper, comment:$("#contentNewComment").val() } ).done(function(data) {
+			console.log("Comment saved");
+			$("#contentComment").html($("#contentComment").html()+$("#contentNewComment").val());
+			//showComment(data.avatar,data.description,data.author,data.created);
+		});
 	}
 
-}
+    $('#paperContent').modal('hide');
+  });
+
+  $('#cancel, #close').on('click', function() { $('#paperContent').modal('hide'); });
+
+  // ── Recherche ─────────────────────────────────────────────────
+  var timer = null;
+  function searchkey(e) {
+    var key = e.which || (window.event && window.event.keyCode);
+    if (key === 13) { loadPapers(); return false; }
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(function() { timer = null; loadPapers(); }, 350);
+  }
+
+  // ── Upload drag & drop ────────────────────────────────────────
+  $('html').on('dragover drop', function(e) { e.preventDefault(); e.stopPropagation(); });
+
+  $('#newContentFile')
+    .on('dragenter dragover', function() { $(this).addClass('drag-over'); })
+    .on('dragleave',          function() { $(this).removeClass('drag-over'); })
+    .on('drop', function(e) {
+      $(this).removeClass('drag-over');
+      e.stopPropagation(); e.preventDefault();
+      var fd = new FormData();
+      fd.append('file', e.originalEvent.dataTransfer.files[0]);
+      uploadData(0, fd);
+    });
+
+  $('#newFile').on('change', function() {
+    var fd = new FormData();
+    fd.append('file', this.files[0]);
+    uploadData(0, fd);
+  });
+
+  $('#addContentFile').on('drop', function(e) {
+    e.stopPropagation(); e.preventDefault();
+    var fd = new FormData();
+    fd.append('file', e.originalEvent.dataTransfer.files[0]);
+    uploadData(currentPaper, fd);
+  });
+
+  $('#addFile').on('change', function() {
+    var fd = new FormData();
+    fd.append('file', this.files[0]);
+    uploadData(currentPaper, fd);
+  });
 
 
-
-
-function editContent(setEditable)
-{
-	if (typeof setEditable!=='undefined')
-	{
-		editable=setEditable;
-	}
-
-	if (editable)
-	{
-		editable=false;
-		$("#contentSubmit").css({"display":"none"});
-
-		$("#contentTitle").prop('readonly', true);	
-		$("#contentDateStart").prop('readonly', true);	
-		$("#contentDateEnd").prop('readonly', true);	
-
-		//$("#contentTitle").css({"background-color":"#{FormulaireBackgroundNormal}"});
-
-		$("#contentTitle").removeClass('contentEditable');	
-		$("#contentDateStart").removeClass('contentEditable');	
-		$("#contentDateEnd").removeClass('contentEditable');	
-	}
-	else
-	{
-		editable=true;
-		$("#contentSubmit").css({"display":"inline-block"});
-
-		$("#contentTitle").prop('readonly', false);	
-		$("#contentDateStart").prop('readonly', false);	
-		$("#contentDateEnd").prop('readonly', false);	
-
-		//$("#contentTitle").css({"background-color":"#ffffff"});
-
-		$("#contentTitle").addClass('contentEditable');	
-		$("#contentDateStart").addClass('contentEditable');	
-		$("#contentDateEnd").addClass('contentEditable');
-
-	}
-}
-
-function closeContent()
-{
-	currentPaper=0;
-	$("#paperContent").css({"display":"none"});
-	$("#paperContent").css("opacity",0);
-	$("#lstPapers").css("opacity",1);
-	$("#paperList").removeClass('blurBackground');	
-}
-
-
-
-function showComment(avatar,txt,author,created)
-{
-	var newComment="<div class='d-flex align-items-start profile-feed-item'>";
-	newComment=newComment+"<img src='/"+avatar+"' class='img-sm rounded-circle'>";
-	newComment=newComment+"<div class='ml-2'>";
-	newComment=newComment+"<h6>"+author+" <small class='ml-4 text-muted'><i class='mdi mdi-clock mr-1'></i>"+created+"</small></h6>";
-	newComment=newComment+"<p>"+txt+"</p>";
-	newComment=newComment+"</div>";
-	newComment=newComment+"</div>";
-
-	$("#contentComment").html($("#contentComment").html()+newComment);
-}
-
-
-function showSearch()
-{
-	$("#search").css({"display":"inline-block"});
-	$("#crit").focus();
-}
-
-function searchApply()
-{
-	console.log("search");
-	$("#search").css({"display":"none"});
-	loadPapers();
-}
-function searchCancel()
-{
-	$("#crit").val("");
-	$("#search").css({"display":"none"});
-	loadPapers();
-}
-
-var timer=null;
-function searchkey(e) {
-	if (window.event)
-	{
-		key = window.event.keyCode;
-	} //IE
-	else
-	{
-		key = e.which;
-	} //firefox
-
-	if (key==13)
-	{ 
-		searchApply();
-		return false;
-	}
-	if (key==27)
-	{
-		searchCancel();
-		return false;
-	}
-
-
-	if (timer) {
-		window.clearTimeout(timer);
-	}
-	timer = window.setTimeout( function() {
-		timer = null;
-		loadPapers();
-	}, 300 );
-}
-
-
-// Sending AJAX request and upload file
-function uploadData(id,formdata){
-	<!-- $("#uploadProgress").css({"display":"block"}); -->
-	<!-- $("#uploadProgress").text("{lang_upload}"); -->
-
+  function uploadData(id, fd) {
 	folder={id};
 	if (folder==0)
 	{
 		return;
 	}
 
-	if (id==0)
-	{
-		$("#newContentText").html("Téléversement en cours");
-	}
-	else
-	{
-		$("#addContentText").html("Téléversement en cours");
-	}
-	
-	console.log("upload file "+id);
-	
-    $.ajax({
-        url: '/api/v1/docs/postdoc?id='+id+'&folder='+folder,
-        type: 'post',
-        data: formdata,
-        contentType: false,
-        processData: false,
-        dataType: 'json',
-        success: function(response){
-			$("#newContentText").html("Nouveau Document");
-			$("#addContentText").html("Ajouter Document");
-
-			if (id==0)
-			{
-				console.log(response);
-
-				txt='<div class="d-flex align-items-start profile-feed-item">';
-				txt=txt+'<div class="ml-4">';
-				txt=txt+"<div id='paperTitle_"+response.id+"' onclick='loadContent("+response.id+");' style='cursor:pointer;'><h5>"+response.title+"</h5></div>";
-				txt=txt+'<h6>'+response.author+'<small class="ml-4 text-muted"><i class="mdi mdi-clock mr-1"></i>'+response.created+'</small></h6>';
-
-				txt=txt+"<div id='paperDocument_"+response.id+"'>";
-				txt=txt+"<p'>"+response.link+"</p>";
-				txt=txt+'</div>';
-
-				txt=txt+'</div>';
-				$("#lstPapers").html($("#lstPapers").html()+txt);
-			}
-			else
-			{
-				
-				$("#paperDocument_"+id).html($("#paperDocument_"+id).html()+"<p>"+response.link+"</p></div>");
-			}
-        },
-		error: function(response){
-			$("#newContentText").html("Nouveau Document");
-			$("#addContentText").html("Ajouter Document");
+	$.ajax({
+      url: '/api/v1/docs/postdoc?id='+id+'&folder='+folder,
+      type: 'POST',
+      data: fd,
+      processData: false,
+      contentType: false,
+      success: function(response) {
+        if (id === 0) {
+          // Nouveau document : ajout en tête de liste
+          var ico = fileIcon(response.title);
+          var col = fileColor(response.title);
+          var html = '<div class="paper-item" id="paperItem_' + response.id + '" onclick="loadContent(' + response.id + ');">' +
+            '<div class="paper-ico"><i class="mdi mdi-file-document-outline"></i></div>' +
+            '<div class="paper-content">' +
+              '<div class="paper-title" id="paperTitle_' + response.id + '">' + response.title + '</div>' +
+              '<div class="paper-meta"><span><i class="mdi mdi-clock-outline"></i>' + response.created + '</span></div>' +
+              '<div class="paper-attachments">' +
+                '<a href="' + response.href + '" target="_blank" class="attach-pill" onclick="event.stopPropagation();">' +
+                  '<i class="mdi ' + ico + '" style="color:' + col + ';"></i>' + response.title + '</a>' +
+              '</div>' +
+            '</div>' +
+            '<div class="paper-actions">' +
+              '<button class="action-btn" onclick="event.stopPropagation();loadContent(' + response.id + ');"><i class="mdi mdi-pencil-outline"></i></button>' +
+              '<button class="action-btn danger" onclick="event.stopPropagation();archivePaper(' + response.id + ');"><i class="mdi mdi-archive-outline"></i></button>' +
+            '</div>' +
+          '</div>';
+          $('#lstPapers').prepend(html);
+        } else {
+          // Ajout de pièce jointe à un doc existant
+          var ico2 = fileIcon(response.title);
+          var col2 = fileColor(response.title);
+          $('#paperDocument_' + id).append(
+            '<a href="' + response.href + '" target="_blank" class="attach-pill" onclick="event.stopPropagation();">' +
+              '<i class="mdi ' + ico2 + '" style="color:' + col2 + ';"></i>' + response.title + '</a>');
         }
+      }
     });
-}
-
-</script>
+  }
+  </script>
 
 <!-- END: corps -->

@@ -45,31 +45,37 @@
 	<INPUT type="hidden" name="id" value="{form_id}">
 	<INPUT type="hidden" name="checktime" value="{form_checktime}">
 
-<div class="row">
-	<div class="col-md-12 border-top">
-		<div class="d-flex ">
-			<div class="ml-4 small">
-				Dernière mise à  jour : {form_usr_maj} {form_dte_maj}
-			</div>
+
+<div class="info-cartouche-wrap">
+	<div class="info-cartouche">
+	<div class="info-cartouche-icon">
+		<i class="mdi mdi-clock-outline"></i>
+	</div>
+	<div class="info-cartouche-body">
+		<div>
+		<span class="label">{lang_lastupdate}</span>
 		</div>
+		<div>
+		<label title="{info_historique}">{form_usr_maj} {form_dte_maj}</label>
+		</div>
+	</div>
 	</div>
 </div>
 
 <div class="row">
-	<div class="grid-margin stretch-card">
+	<div class="col grid-margin stretch-card">
 		<div class="card">
+			<div class="card-header">{form_titre}</div>
 			<div class="card-body row">
-
-				<div class="col-lg-12">
-					<a name="id{msg_id}"></a>
-					<h5>{form_titre}</h5>
-				</div>
-				<div class="col-lg-12">
-					<div class="ml-4 small">
-						par {form_usr_maj}, {form_dte_maj}
+				<div class="info-potentiel">
+					<div>
+						<span class="potentiel">
+							<i class="mdi mdi-gauge"></i>
+							par {form_usr_maj}, {form_dte_maj}
+						</span>
 					</div>
 				</div>
-				
+
 
 				<div class="form-group row">
 					<label class="col-lg-1 col-form-label">Numéro</label>
@@ -92,7 +98,7 @@
 	</div>
 </div>
 <div class="row">
-	<div class="grid-margin stretch-card">
+	<div class="col grid-margin stretch-card">
 		<div class="card">
 			<div class="card-body">
 			{form_description}
@@ -103,7 +109,7 @@
 
 <!-- BEGIN: submit -->
 <div class="row">
-	<div class="grid-margin stretch-card">
+	<div class="col grid-margin stretch-card">
 		<div class="card">
 			<div class="card-body">
 				<input type="submit" name="fonc" class="btn btn-primary" id="enregistrer" value="Enregistrer">
@@ -116,7 +122,7 @@
 </form>
 
 <div class="row">
-	<div class="grid-margin stretch-card">
+	<div class="col grid-margin stretch-card">
 		<div class="card">
 			<div class="card-body">
 				<!-- BEGIN: aff_commentaire -->

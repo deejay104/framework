@@ -33,33 +33,32 @@
 <form name="form_detail" method="post" action="{path_root}/admin/config" enctype="multipart/form-data">
 
 
-<div class="col-md-14 grid-margin stretch-card">
-	<div class="card">
-		<div class="card-body">
+<div class='row'>
+    <div class='col grid-margin stretch-card'>
+        <div class='card'>
+            <div class='card-footer'><input type="submit" class="btn btn-primary mr-2" name="fonc" id="enregistrer" value="{lang_save}"></div>
+            <div class='card-body'>
+              <div class="form-group ">
+                <div class="row">
+                  <label class="col-sm-2 col-form-label">{lang_parameter}</label>
+                  <label class="col-sm-2 col-form-label">{lang_variable}</label>
+                  <label class="col-sm-3 col-form-label">{lang_value}</label>
+                  <label class="col-sm-4 col-form-label">{lang_default}</label>
+                </div>
 
-<input type="submit" class="btn btn-primary mr-2" name="fonc" id="enregistrer" value="{lang_save}">
-
-	<div class="form-group ">
-		<div class="row">
-			<label class="col-sm-2 col-form-label">{lang_parameter}</label>
-			<label class="col-sm-2 col-form-label">{lang_variable}</label>
-			<label class="col-sm-3 col-form-label">{lang_value}</label>
-			<label class="col-sm-4 col-form-label">{lang_default}</label>
-		</div>
-
-<!-- BEGIN: lst_param -->
-		<div class="row">
-			<label class="col-sm-2 col-form-label">{param_nom}</label>
-			<label class="col-sm-2 col-form-label">{param_var}</label>
-			<div class="col-sm-3"><input class="form-control" name="MyOptTab[{param_var1}][{param_var2}]" value="{param_txt}"  title="{param_help}"/></div>
-			<div class="col-sm-4">{param_default}</div>
-		</div>
-<!-- END: lst_param -->
-	</div>
-<input type="submit" class="btn btn-primary mr-2" name="fonc" id="enregistrer" value="{lang_save}">
-
-</div>
-</div>
+                <!-- BEGIN: lst_param -->
+                <div class="row">
+                  <label class="col-sm-2 col-form-label">{param_nom}</label>
+                  <label class="col-sm-2 col-form-label">{param_var}</label>
+                  <div class="col-sm-3"><input class="form-control" name="MyOptTab[{param_var1}][{param_var2}]" value="{param_txt}"  title="{param_help}"/></div>
+                  <div class="col-sm-4">{param_default}</div>
+                </div>
+                <!-- END: lst_param -->
+              </div>
+            </div>
+            <div class='card-footer'><input type="submit" class="btn btn-primary mr-2" name="fonc" id="enregistrer" value="{lang_save}"></div>
+        </div>
+    </div>
 </div>
 
 <br />

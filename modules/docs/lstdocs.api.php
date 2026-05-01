@@ -38,12 +38,16 @@
 		$line["author"]=$usr->fullname;
 		$line["created"]=DisplayDate($doc->dte_creat);
 
-//				$doc = new document_core($did,$sql);
-				$doc->editmode="read";
-				$line["doc"][$d]["url"]=$doc->Affiche();
-				$line["doc"][$d]["name"]=$doc->originalname;
-                $result["data"][$k]=$line;
-                $k++;
+		$attr=$doc->getAttributes();
+		$doc->editmode="read";
+		$line["doc"][$d]["url"]=$doc->Path();
+		$line["doc"][$d]["fullpath"]=$doc->Affiche();
+		$line["doc"][$d]["name"]=$doc->originalname;
+		$line["doc"][$d]["ext"]=$attr["ext"];
+		$line["doc"][$d]["icon"]=$attr["icon"];
+		$line["doc"][$d]["color"]=$attr["color"];
+		$result["data"][$k]=$line;
+		$k++;
 	}
 	
 	echo json_encode($result);	

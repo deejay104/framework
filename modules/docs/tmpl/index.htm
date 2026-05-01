@@ -8,153 +8,186 @@
 
 <!-- BEGIN: corps -->
 <style>
-.folderBox {
-	width: 450px; 
-	margin-bottom:10px;
-}
-.folderTitle { 
-	display: flex; 
-	height:36px; 
-	padding-top:6px; 
-	padding-left: 15px;
-	border: 1px solid #{FormulaireBackgroundNormal};
-	background-color:#{FormulaireBackgroundLight};
-	font-weight: bold; 
-}
+    /* ════════════════════════════════════════
+       NOUVEAUX STYLES — page Documents
+       ════════════════════════════════════════ */
 
+    /* En-tête */
+    .docs-header {
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom:24px; flex-wrap:wrap; gap:12px;
+    }
+    .docs-title {
+      font-size:20px; font-weight:700; color:#1a2540;
+      display:flex; align-items:center; gap:10px;
+    }
+    .docs-title i { color:var(--primary); font-size:22px; }
 
-.folderTitle p { width:450px; }
-.folderTitle img{ border:1px solid #{FormulaireBackgroundNormal}; }
-.folderTitle img:hover{ border:1px solid #000000!important; background-color:#ffffff; }
-.folderTitle:hover { background-color:#{LineBackgroundHover}; color:#{TextBackgroundHover}; cursor: pointer;}
+    .btn-new-folder {
+      display:inline-flex; align-items:center; gap:7px;
+      background:var(--primary); color:#fff; border:none; border-radius:10px;
+      padding:9px 18px; font-size:13.5px; font-weight:600; cursor:pointer;
+      transition:background .18s, box-shadow .18s, transform .12s;
+      box-shadow:0 3px 10px rgba(45,79,161,.22); text-decoration:none;
+    }
+    .btn-new-folder:hover {
+      background:var(--primary-dark); color:#fff; text-decoration:none;
+      box-shadow:0 5px 16px rgba(45,79,161,.32); transform:translateY(-1px);
+    }
 
-.folderDescription {
-	padding-left: 15px;
-	
-}
-.contentTitle { padding:10px; height: 48px; background-color:#{FormulaireBackgroundNormal}; border-top-left-radius: 5px;border-top-right-radius: 5px;}
-.contentTitle p { display:inline-block; font-weight: bold;  }
-.contentTitle img{ border:1px solid #{FormulaireBackgroundNormal}; }
-.contentTitle img:hover{ border:1px solid #000000!important; background-color:#ffffff; }
+    /* Recherche */
+    .search-wrap { position:relative; margin-bottom:28px; }
+    .search-wrap .s-icon {
+      position:absolute; left:16px; top:50%; transform:translateY(-50%);
+      color:var(--muted); font-size:18px; pointer-events:none;
+    }
+    .search-input {
+      width:100%; max-width:540px; padding:11px 16px 11px 46px;
+      border:1.5px solid #dce4f0; border-radius:5px; background:#fff;
+      font-size:14px; color:#1a2540; font-family:'DM Sans',sans-serif;
+      transition:border-color .2s, box-shadow .2s; outline:none;
+      box-shadow:0 1px 4px rgba(0,0,0,.04);
+    }
+    .search-input:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(45,79,161,.12); }
+    .search-input::placeholder { color:var(--muted); }
 
-.createFolder { position: absolute; top: 140px; left:5px; width: 470px; margin-left:5px; display: none; border:1px solid #{FormulaireBackgroundDark}; background-color: #ffffff; border-radius:5px; }
-.createFolder label { display: inline-block; width: 150px; }
-.createFolder input { border: 1px solid #{FormulaireBackgroundDark}; }
-.createFolder textarea { border: 1px solid #{FormulaireBackgroundDark}; }
-.contentDescription { height:100px; }
-.createTitle { width:420px; }
-.createInput { width:445px; }
+    /* Résultats de recherche */
+    .result-item {
+      display:flex; align-items:center; gap:10px; padding:10px 16px;
+      color:#1a2540; font-size:13.5px; font-weight:500;
+      border-bottom:1px solid #f0f3fa; text-decoration:none; cursor:pointer;
+    }
+    .result-item:last-child { border-bottom:none; }
+    .result-item i { color:var(--muted); font-size:17px; flex-shrink:0; }
+    .result-item .r-folder { font-size:11.5px; color:var(--muted); }
+    .result-item:hover { background:#f4f7fb; }
 
-.searchBox { position: absolute; top: 110px; width: 450px; min-height:120px; display: none; border:1px solid #{FormulaireBackgroundDark}; background-color: #f8f8f8; border-radius:5px; }
-.searchBoxInput { border: 1px solid #{FormulaireBackgroundDark}; margin-left:10px; width:430px; }
-.searchBox p { display: inline-block; margin-left:10px; margin-top:2px; width:400px; }
+    /* Grille */
+    .folders-grid {
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
+      gap:16px;
+    }
 
-.lstPapers { display: inline-block;  margin-bottom:10px;}
+    /* Carte */
+    .folder-card {
+      background:#fff; border:1.5px solid var(--border); border-radius:16px;
+      display:flex; flex-direction:column; overflow:hidden; position:relative;
+      text-decoration:none; color:inherit;
+      transition:border-color .2s, box-shadow .2s, transform .18s;
+      animation:cardIn .3s ease both;
+    }
+    .folder-card:hover {
+      border-color:var(--primary);
+      box-shadow:0 8px 28px rgba(45,79,161,.13);
+      transform:translateY(-3px);
+      text-decoration:none; color:inherit;
+    }
 
-@media (min-width: 714px) and (min-device-width: 714px) {
-	/* Screen larger than 714px */
-	.folderBox { width: 650px; }
-	.createFolder { width: 640px; }
-	.createTitle { width:590px; }
-	.folderTitle p { width:610px; }
-	.createInput { width:615px; }
-	.searchBox { width: 550px; }
-	.searchBoxInput { width:530px; }
-	.searchBox p { width:520px; }
-}
+    /* Bandeau couleur */
+    .card-stripe { height:5px; }
 
-@media (min-width: 1024px) and (min-device-width: 1024px) {
-	/* Screen larger than 1024px */
-	.createFolder { top: 90px; left:220px; }
-	.searchBox { top:70px; }
-}
+    /* Corpo de la carte */
+    .card-body-inner {
+      padding:18px 18px 14px; display:flex;
+      align-items:flex-start; gap:14px; text-decoration:none; color:inherit; flex:1;
+    }
+    .card-body-inner:hover { text-decoration:none; color:inherit; }
 
-@media (min-width: 1200px) and (min-device-width: 1200px) {
-	/* Screen larger than 1200px */
-	.createFolder { left:260px; }
-}
+    /* Icône */
+    .folder-ico {
+      width:46px; height:46px; min-width:46px; border-radius:12px;
+      display:flex; align-items:center; justify-content:center;
+      transition:background .2s;
+    }
+    .folder-ico i { font-size:23px; }
 
-@media (min-width: 1420px) and (min-device-width: 1420px) {
-	/* Screen larger than 1420px */
-}
+    /* Texte */
+    .folder-text { flex:1; min-width:0; }
+    .f-name {
+      font-size:14.5px; font-weight:700; color:#1a2540;
+      margin-bottom:5px; line-height:1.3;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .f-desc {
+      font-size:12.5px; color:var(--muted); line-height:1.45;
+      display:-webkit-box; -webkit-line-clamp:2;
+      -webkit-box-orient:vertical; overflow:hidden;
+    }
+    .f-desc.empty { font-style:italic; }
 
+    /* Pied de carte */
+    .card-foot {
+      padding:8px 16px; border-top:1px solid #f0f3fa;
+      display:flex; justify-content:flex-end;
+    }
+    .edit-btn {
+      display:inline-flex; align-items:center; gap:4px;
+      font-size:12px; color:var(--muted); background:none; border:none;
+      padding:3px 9px; border-radius:7px; cursor:pointer;
+      font-family:'DM Sans',sans-serif;
+      transition:background .15s, color .15s;
+    }
+    .edit-btn:hover { background:#eef3fc; color:var(--primary); }
+    .edit-btn i { font-size:14px; }
+
+    /* Carte personnelle */
+    .folder-card.personal .folder-ico { background:var(--primary); }
+    .folder-card.personal .folder-ico i { color:#fff; }
+    .personal-badge {
+      position:absolute; top:14px; right:14px;
+      background:var(--primary); color:#fff;
+      font-size:10px; font-weight:700; padding:2px 9px;
+      border-radius:20px; letter-spacing:.5px; text-transform:uppercase;
+    }
 
 </style>
 
-<div class='row mt-2'>
-	<div class='grid-margin stretch-card'>
-		<input type='text' id='crit' placeholder='Rechercher' class='form-control' OnKeyUp="searchkey(event);" autocomplete="off">
-	</div>
-</div>
+<!-- En-tête -->
 
-<div id='lstPapersOutbox' class="row" style="display:none;">
-	<div class="grid-margin stretch-card">
+<!-- Recherche — dans une card, comme le reste du site -->
+<div class="row">
+	<div class="col grid-margin stretch-card">
 		<div class="card">
-			<div class="card-body">	
-				<div id='lstPapers' class='lstPapers'></div>
+			<div class="card-body py-2">
+				<div class="search-wrap mb-0">
+				<i class="mdi mdi-magnify s-icon"></i>
+				<input type="text" id="crit" class="search-input"
+					placeholder="Rechercher un document dans tous les classeurs…"
+					onkeyup="searchkey(event);" autocomplete="off">
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
 
-<div id='lstfolders'>
-	<div class='row'><div class='grid-margin stretch-card'><div class='card'><div class='card-body'>
-		<div class='form-inline'><h4><a href='/docs/folder?id="+data.data[key].id+"'>Mes Documents</a></h4></div>
-		<div class='folderDescription'><p>Retrouvez ici les documents liés à votre profile.</p></div>
-		</div></div></div>
+<!-- Résultats de recherche — dans une card, masquée par défaut -->
+<div class="row">
+	<div class="col grid-margin stretch-card">
+		<div class="card">
+			<div id="lstPapersOutbox" class="grid-margin stretch-card" style="display:none;">
+				<div class="card">
+				<div class="card-header">Résultats</div>
+				<div class="card-body p-0">
+					<div id="lstPapers"></div>
+				</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 
-
-<div id='createFolder' class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="display: none;" aria-hidden="true">
-	<div class="modal-dialog modal-lg" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Créer un nouveau dossier</h5>
-				<button id='close' type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">×</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<div class="row">
-
-					<div class="form-group row">
-						<label class="col-lg-2 col-form-label">Titre</label>
-						<div class="col-lg-7"><input type='text' id='contentNewTitle' class='form-control'></div>
-					</div>
-					<div class="form-group row">
-						<label class="col-lg-2  col-form-label">Description</label>
-						<div class="col-lg-7"><textarea id='contentNewComment' class='form-control' rows=5></textarea></div>
-					</div>
-					<div class="form-group row">
-						<label class="col-lg-2  col-form-label">Groupe de lecture</label>
-						<div class="col-lg-7">
-							<select id='group_read' class="form-control">
-								<option value="ALL">ALL</option>
-								<!-- BEGIN: lst_group_read -->
-								<option value="{aff_group}">{aff_group}</option>
-								<!-- END: lst_group_read -->
-							</select>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-lg-2  col-form-label">Groupe d'écriture</label>
-						<div class="col-lg-7">
-							<select id='group_write' class="form-control">
-								<option value="ALL">ALL</option>
-								<!-- BEGIN: lst_group_write -->
-								<option value="{aff_group}">{aff_group}</option>
-								<!-- END: lst_group_write -->
-							</select>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-lg-2  col-form-label"></label>
-						<div class="col-lg-7">
-							<button class="btn btn-primary" id="save">Enregistrer</button>&nbsp;
-							<button class="btn btn-light" id="cancel">Annuler</button>
-						</div>
-					</div>
+<!-- Classeurs — card conteneur unique, grille à l'intérieur -->
+<div class="row">
+	<div class="col grid-margin stretch-card">
+		<div class="card">
+			<div class="card-header">Classeurs disponibles</div>
+			<div class="card-body">
+				<div class="folders-grid" id="lstfolders">
+				<div class="folder-card skeleton" style="min-height:108px;"></div>
+				<div class="folder-card skeleton" style="min-height:108px;animation-delay:.08s;"></div>
+				<div class="folder-card skeleton" style="min-height:108px;animation-delay:.16s;"></div>
+				<div class="folder-card skeleton" style="min-height:108px;animation-delay:.24s;"></div>
 				</div>
 			</div>
 		</div>
@@ -162,13 +195,56 @@
 </div>
 
 
-<div id='search' class='searchBox'>
-	<p>Rechercher un document :</p>
-	<input type='text' id='crit2' class='searchBoxInput' OnKeyUp="searchkey(event);" autocomplete="off"/>
-	<div style='text-align: right; margin-top:5px; margin-right:10px; margin-bottom:10px;'>
-		<input type='submit' value='Afficher' onClick='searchApply();'>
-		<input type='submit' value='Annuler' onClick='searchCancel();'>
+<!-- MODAL -->
+<div id="createFolder" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal-dialog modal-lg" role="document">
+	<div class="modal-content">
+	<div class="modal-header">
+		<h5 class="modal-title" id="modalLabel">Créer un nouveau classeur</h5>
+		<button id="close" type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
 	</div>
+	<div class="modal-body">
+		<div class="form-group row">
+		<label class="col-lg-3 col-form-label">Titre</label>
+		<div class="col-lg-8"><input type="text" id="contentNewTitle" class="form-control" placeholder="Nom du classeur"></div>
+		</div>
+		<div class="form-group row">
+		<label class="col-lg-3 col-form-label">Description</label>
+		<div class="col-lg-8"><textarea id="contentNewComment" class="form-control" rows="4" placeholder="Description facultative…"></textarea></div>
+		</div>
+		<div class="form-group row">
+		<label class="col-lg-3 col-form-label">Groupe de lecture</label>
+		<div class="col-lg-4">
+			<select id="group_read" class="form-control">
+			<option value="ALL">ALL</option><option value="ADM">ADM</option><option value="BTM">BTM</option>
+			<option value="BUR">BUR</option><option value="ELE">ELE</option><option value="INS">INS</option>
+			<option value="INV">INV</option><option value="MEM">MEM</option><option value="MTN">MTN</option>
+			<option value="PIL">PIL</option><option value="PRE">PRE</option><option value="REX">REX</option>
+			<option value="TRE">TRE</option>
+			</select>
+		</div>
+		</div>
+		<div class="form-group row">
+		<label class="col-lg-3 col-form-label">Groupe d'écriture</label>
+		<div class="col-lg-4">
+			<select id="group_write" class="form-control">
+			<option value="ALL">ALL</option><option value="ADM">ADM</option><option value="BTM">BTM</option>
+			<option value="BUR">BUR</option><option value="ELE">ELE</option><option value="INS">INS</option>
+			<option value="INV">INV</option><option value="MEM">MEM</option><option value="MTN">MTN</option>
+			<option value="PIL">PIL</option><option value="PRE">PRE</option><option value="REX">REX</option>
+			<option value="TRE">TRE</option>
+			</select>
+		</div>
+		</div>
+		<div class="form-group row">
+		<div class="col-lg-8 offset-lg-3">
+			<button class="btn btn-primary" id="save"><i class="mdi mdi-content-save-outline mr-1"></i>Enregistrer</button>&nbsp;
+			<button class="btn btn-light" id="cancel">Annuler</button>
+		</div>
+		</div>
+	</div>
+	</div>
+</div>
 </div>
 
 <script>
@@ -178,6 +254,30 @@ $(document).ready(function() {
 
 var	currentFolder=0;
 
+  // Thèmes icône/couleur par mot-clé dans le titre du classeur
+  var THEMES = [
+    { keys:['bureau','bur'],      icon:'mdi-briefcase-outline',       accent:'#e67e22' },
+    { keys:['document'],          icon:'mdi-note-multiple-outline',   accent:'#e67e22' },
+    { keys:['cours','formation','instruction','stage'], icon:'mdi-school',                  accent:'#27ae60' },
+    { keys:['manuel'], icon:'mdi-note-outline',                  accent:'#27ae60' },
+    { keys:['avion'],             icon:'mdi-airplane', 	   			  accent:'#2980b9' },
+    { keys:['maintenance','mtn'], icon:'mdi-tools',                   accent:'#d35400' },
+    { keys:['réservation','resa'],icon:'mdi-calendar-outline',        accent:'#16a085' },
+    { keys:['list'],              icon:'mdi-format-list-bulleted-square',        accent:'#16a085' },
+    { keys:['sécurité','rex'],    icon:'mdi-alert-outline',           accent:'#c0392b' },
+    { keys:['test'],              icon:'mdi-test-tube-empty',         accent:'#7f8c8d' },
+  ];
+
+  function getTheme(title) {
+    var t = title.toLowerCase();
+    for (var i = 0; i < THEMES.length; i++)
+      for (var j = 0; j < THEMES[i].keys.length; j++)
+        if (t.indexOf(THEMES[i].keys[j]) !== -1) return THEMES[i];
+    return { icon:'mdi-folder-outline', accent:'#2d4fa1' };
+  }
+
+
+
 function loadContent()
 {
 	$.get('/api/v1/docs/lstfolder').done(function(data)
@@ -186,24 +286,56 @@ function loadContent()
 		divFolder.innerHTML="";
 
 		var txt="";
-		txt=txt+"<div class='row'><div class='grid-margin stretch-card'><div class='card'><div class='card-body'>";
-		txt=txt+"<div class='form-inline'><h4><a href='/docs/mydocs'>"+"Mes Documents"+"</a>";
-		txt=txt+"</h4></div>";
-		txt=txt+"<div class='folderDescription'><p>"+"Vous retrouverez ici la liste des documents de votre profile."+"</p></div>";
-		txt=txt+"</div></div></div></div>";
-		divFolder.innerHTML=divFolder.innerHTML+txt;
+	    var html = '';
 
-		for (var key in data.data)
-		{
-			var txt="";
-			txt=txt+"<div class='row'><div class='grid-margin stretch-card'><div class='card'><div class='card-body'>";
-			txt=txt+"<div class='form-inline' onmouseover='document.getElementById(\"edit_"+key+"\").style.display=\"inline-block\";' onmouseout='document.getElementById(\"edit_"+key+"\").style.display=\"none\";'><h4><a href='/docs/folder?id="+data.data[key].id+"'>"+data.data[key].title+"</a>";
-			txt=txt+"<a href='#' id='edit_"+key+"' style='display:none; margin-left:10px;' onclick='editFolder("+data.data[key].id+");'><i class='mdi mdi-pencil' style='font-size:16px;'></i></a>";
-			txt=txt+"</h4></div>";
-			txt=txt+"<div class='folderDescription'><p>"+data.data[key].description+"</p></div>";
-			txt=txt+"</div></div></div></div>";
-			divFolder.innerHTML=divFolder.innerHTML+txt;
+		txt=txt+"<div class='grid-margin stretch-card'><div class='card'>";
+		txt=txt+"<div class='card-header action'><a href='/docs/mydocs'>"+"Mes Documents"+"</a>";
+		txt=txt+"</div><div class='card-body'>";
+		txt=txt+"<p>Vous retrouverez ici la liste des documents de votre profile.</p>";
+		txt=txt+"</div></div></div>";
+
+		// Carte "Mes Documents" en tête
+		html += '<a href="/docs/mydocs" class="folder-card personal">' +
+		'<div class="card-stripe" style="background:var(--primary);"></div>' +
+		'<div class="card-body-inner">' +
+			'<div class="folder-ico" style="background:var(--primary);"><i class="mdi mdi-account-circle-outline" style="color:#fff;font-size:23px;"></i></div>' +
+			'<div class="folder-text">' +
+			'<div class="f-name">Mes Documents</div>' +
+			'<div class="f-desc">Tous les documents liés à votre profil membre.</div>' +
+			'</div>' +
+		'</div>' +
+		'<span class="personal-badge">Personnel</span>' +
+		'</a>';
+
+		// Cartes classeurs
+		for (var k in data.data) {
+			var f = data.data[k];
+			var th = getTheme(f.title);
+			var desc = (f.description && f.description.trim())
+				? f.description.replace(/\n/g,'<br>')
+				: '<span class="empty">Aucune description</span>';
+
+			html += '<div class="folder-card">' +
+				'<div class="card-stripe" style="background:' + th.accent + ';"></div>' +
+				'<a href="/docs/folder?id=' + f.id + '" class="card-body-inner">' +
+				'<div class="folder-ico" style="background:' + th.accent + '18;">' +
+					'<i class="mdi ' + th.icon + '" style="color:' + th.accent + ';"></i>' +
+				'</div>' +
+				'<div class="folder-text">' +
+					'<div class="f-name">' + f.title + '</div>' +
+					'<div class="f-desc">' + desc + '</div>' +
+				'</div>' +
+				'</a>' +
+				'<div class="card-foot">' +
+				'<button class="edit-btn" onclick="event.stopPropagation();editFolder(' + f.id + ');" title="Modifier">' +
+					'<i class="mdi mdi-pencil-outline"></i> Modifier' +
+				'</button>' +
+				'</div>' +
+				'</div>';
 		}
+
+	  	divFolder.innerHTML = html;
+
 	});
 }
 function createFolder()
@@ -215,7 +347,9 @@ function createFolder()
 	$("#group_write").val("");
 	$("#createFolder").css({"display":"block"});
 	$("#createFolder").css("opacity",1);
-	$("#lstfolders").css({"opacity":0.25});
+	$(".card").css("opacity",0.25);
+	$(".sidebar").css("opacity",0.25);
+	$(".content-menu").css("opacity",0.25);
 	currentFolder=0;
 }
 
@@ -233,7 +367,9 @@ function editFolder(id)
 		$("#group_write").val(data.data.group_write);
 		$("#createFolder").css({"display":"block"});
 		$("#createFolder").css("opacity",1);
-		$("#lstfolders").css({"opacity":0.25});
+		$(".card").css("opacity",0.25);
+		$(".sidebar").css("opacity",0.25);
+		$(".content-menu").css("opacity",0.25);
 		currentFolder=id;
 	});
 }
@@ -241,7 +377,9 @@ function editFolder(id)
 $( "#cancel" ).on( "click", function() {
 	$("#createFolder").css({"display":"none"});
 	$("#createFolder").css("opacity",0);
-	$("#lstfolders").css({"opacity":1});
+	$(".card").css("opacity",1);
+	$(".sidebar").css("opacity",1);
+	$(".content-menu").css("opacity",1);
 });
 
 $( "#save" ).on( "click", function() {
@@ -252,13 +390,17 @@ $( "#save" ).on( "click", function() {
 
 	$("#createFolder").css({"display":"none"});
 	$("#createFolder").css("opacity",0);
-	$("#lstfolders").css({"opacity":1});
+	$(".card").css("opacity",1);
+	$(".sidebar").css("opacity",1);
+	$(".content-menu").css("opacity",1);
 });
 
 $( "#close" ).on( "click", function() {
 	$("#createFolder").css("opacity",0);
 	$("#createFolder").css("display","none");
-	$("#lstfolders").css({"opacity":1});
+	$(".card").css("opacity",1);
+	$(".sidebar").css("opacity",1);
+	$(".content-menu").css("opacity",1);
 });
 	
 function showSearch()

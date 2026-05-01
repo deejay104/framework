@@ -2,7 +2,8 @@
   'use strict';
   $(function() {
     $('[data-toggle="offcanvas"]').on("click", function() {
-      $('.sidebar-offcanvas').toggleClass('active')
+      console.log("click");
+      $('.sidebar-offcanvas-open').toggleClass('active')
     });
   });
 })(jQuery);

@@ -1,184 +1,481 @@
 <!-- BEGIN: main -->
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>{site_title} - Login</title>
-	<link rel="SHORTCUT ICON" href="{rootfolder}/{corefolder}/static/images/favicon.png" />
-	<link rel="stylesheet" href="{style_url}" type="text/css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>{site_title} - Login</title>
+  <link rel="SHORTCUT ICON" href="{rootfolder}/{corefolder}/static/images/favicon.png" />
+  <style>
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sky:       #38a9e3;
+      --sky-dark:  #1e7fb5;
+      --sky-light: #e8f6fd;
+      --ink:       #1a2332;
+      --ink-mid:   #2d3748;
+      --muted:     #718096;
+      --border:    #dde3ec;
+      --surface:   #ffffff;
+      --bg:        #eef1f6;
+      --danger:    #e53935;
+      --radius:    10px;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--ink-mid);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Fond avec motif aviation ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+
+	  background:
+        linear-gradient(135deg, #eef1f6 0%, #eef1f6 30%, #38a9e3 100%); 
+      z-index: 0;
+    }
+
+    /* Cercles décoratifs subtils */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+
+	  background:
+        radial-gradient(circle at 15% 85%, rgba(56,169,227,0.18) 0%, transparent 45%),
+        radial-gradient(circle at 85% 15%, rgba(255,255,255,0.05) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(56,169,227,0.06) 0%, transparent 60%);
+      z-index: 0;
+    }
+
+    /* ── Conteneur centré ── */
+    .login-screen {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    /* ── Carte principale ── */
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(255,255,255,0.97);
+      border-radius: var(--radius);
+      box-shadow:
+        0 4px 6px rgba(0,0,0,0.05),
+        0 20px 60px rgba(0,0,0,0.25),
+        0 0 0 1px rgba(255,255,255,0.15);
+      overflow: hidden;
+      animation: cardIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ── En-tête de carte ── */
+    .card-header {
+      background: linear-gradient(135deg, var(--ink) 0%, #2a3f5e 100%);
+      padding: 2rem 2rem 1.75rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-header::before {
+      content: '';
+      position: absolute;
+      top: -30px; right: -30px;
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      background: rgba(56,169,227,0.12);
+    }
+
+    .card-header::after {
+      content: '';
+      position: absolute;
+      bottom: -20px; left: -20px;
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: rgba(56,169,227,0.08);
+    }
+
+    .logo-wrap {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-wrap img {
+      height: 92px;
+      width: auto;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+    }
+
+    .app-name {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: -0.01em;
+    }
+
+    .app-subtitle {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 400;
+      margin-top: -0.25rem;
+    }
+
+    /* ── Corps du formulaire ── */
+    .card-body {
+      padding: 2rem;
+    }
+
+    .form-intro {
+      font-size: 0.83rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    /* ── Champs ── */
+    .field {
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--ink-mid);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+
+    .field-inner {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .field-icon {
+      position: absolute;
+      left: 0.85rem;
+      color: var(--muted);
+      font-size: 1.1rem;
+      pointer-events: none;
+      transition: color 0.15s;
+      line-height: 1;
+    }
+
+    .field input {
+      width: 100%;
+      height: 46px;
+      padding: 0 0.9rem 0 2.6rem;
+      font-size: 0.875rem;
+      font-family: inherit;
+      color: var(--ink-mid);
+      background: #fafbfc;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+      outline: none;
+    }
+
+    .field input::placeholder { color: #b0bac8; }
+
+    .field input:focus {
+      border-color: var(--sky);
+      background: var(--surface);
+      box-shadow: 0 0 0 3px rgba(56,169,227,0.15);
+    }
+
+    .field input:focus ~ .field-icon,
+    .field-inner:focus-within .field-icon { color: var(--sky); }
+
+    /* ── Message d'erreur ── */
+    .error-msg {
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      background: #fff5f5;
+      border: 1px solid #fca5a5;
+      border-left: 3px solid var(--danger);
+      padding: 0.65rem 0.9rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      color: #b91c1c;
+      margin-bottom: 1.25rem;
+      animation: shake 0.3s ease;
+    }
+    .error-msg.show { display: flex; }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25%       { transform: translateX(-5px); }
+      75%       { transform: translateX(5px); }
+    }
+
+    /* ── Bouton ── */
+    .btn-login {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: 100%;
+      height: 48px;
+      margin-top: 1.5rem;
+      padding: 0 1.25rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      font-family: inherit;
+      letter-spacing: 0.02em;
+      color: #fff;
+      background: linear-gradient(135deg, var(--sky) 0%, var(--sky-dark) 100%);
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: transform 0.12s, box-shadow 0.12s, opacity 0.12s;
+      box-shadow: 0 4px 14px rgba(56,169,227,0.35);
+    }
+
+    .btn-login:hover  { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(56,169,227,0.4); }
+    .btn-login:active { transform: translateY(0); box-shadow: 0 2px 8px rgba(56,169,227,0.3); }
+    .btn-login:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+    .btn-login svg { width: 18px; height: 18px; flex-shrink: 0; }
+	.img-login { width: 24px; }
+
+    /* ── Spinner de chargement ── */
+    .loader-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+      padding: 2.5rem 2rem;
+    }
+
+    .spinner {
+      width: 44px; height: 44px;
+      border: 3px solid rgba(56,169,227,0.2);
+      border-top-color: var(--sky);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loader-wrap p {
+      font-size: 0.83rem;
+      color: var(--muted);
+    }
+
+    /* ── Pied de carte ── */
+    .card-footer {
+      padding: 0.9rem 2rem;
+      background: #f7f9fc;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+
+    /* ── Version tag ── */
+    .version-tag {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      font-size: 0.68rem;
+      color: rgba(0,0,0,0.35);
+      font-family: 'DM Mono', monospace;
+      z-index: 2;
+      letter-spacing: 0.04em;
+    }
+  </style>
 </head>
 
 <body onload="setFormFocus();">
-	<style>
-		#loginbox { display:none; }
-	</style>
 
-<!-- BEGIN: logout -->
-	<script language="javascript">
-		if (localStorage)
-		{
-			localStorage.setItem("myid","");
-			localStorage.setItem("mytoken","");
-		}
-	</script>
-<!-- END: logout -->
+  <div class="login-screen">
+    <div class="login-card">
 
-	<script type="text/javascript" src="{rootfolder}/{corefolder}/external/jquery/jquery.min.js"></script>
-	<script type="text/JavaScript" src="{rootfolder}/{corefolder}/static/js/_md5.js"></script>
-	
-	<script type="text/javascript">
-		function setFormFocus()
-		{
-			self.focus();
-			document.forms[0].username.focus(); 
-			document.forms[0].username.select();
-		}
+      <!-- En-tête -->
+      <div class="card-header">
+        <div class="logo-wrap">
+          <img src="{rootfolder}/{site_logo}" alt="Polygone 67">
+          <div class="app-subtitle">{core_authenticate}</div>
+        </div>
+      </div>
 
-		function checkCredentials()
-		{
-			username=document.getElementById("username").value;
-			password=MD5(document.getElementById("mypassword").value);
+      <!-- Chargement (affiché par défaut pendant la vérif du token) -->
+      <div id="load" class="loader-wrap">
+        <div class="spinner"></div>
+        <p>Vérification de la session…</p>
+      </div>
 
-			console.log("authenticate");
+      <!-- Formulaire (masqué par défaut) -->
+      <div id="loginbox" style="display:none;">
+        <div class="card-body">
 
-			$(function() {
-				$.ajax({
-					url:'{rootfolder}/api.php',
-					type: 'POST',
-					dataType: 'json',
-					data: '{"fonc":"login","myusr":"'+username+'","mypwd":"'+password+'"}',
-					contentType: "application/json; charset=utf-8",
-					success: function(response)
-					{
-						console.log(response);
+          <p class="form-intro">Entrez votre adresse mail ou vos initiales et votre mot de passe.</p>
 
-						if (response.auth=="OK")
-						{
-							console.log("credentials confirmed");
-							localStorage.setItem("token",response.token);
-							document.location="{url}";
-						}
-						else
-						{
-							console.log("credentials rejected");						
-							console.log(response);						
-							document.getElementById("errormsg").innerHTML="{core_autherror}: "+response.error;
-						}
-					},
-					error : function(response)
-					{
-						console.log("Cannot access authentication api ");	
-					}
-				});
-			});
-			return false;
-		}
+          <div id="errormsg" class="error-msg">
+            <svg viewBox="0 0 20 20" fill="currentColor" class="img-login"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
+            <span id="errormsg-text"></span>
+          </div>
 
-		if (localStorage)
-		{
-			console.log("load local storage");
-			var mytoken=localStorage.getItem("token");
+          <form name="FormLogin" onsubmit="checkCredentials(); return false;">
 
-			$(function() {
-				$.ajax({
-					url:'{rootfolder}/api.php',
-					type: 'POST',
-					dataType: 'json',
-					data: '{"fonc":"login","mykey":"'+mytoken+'"}',
-					contentType: "application/json; charset=utf-8",
-					success: function(response)
-					{
-						<!-- console.log(response); -->
+            <div class="field">
+              <label for="username">Identifiant</label>
+              <div class="field-inner">
+                <input type="text" name="username" id="username"
+                       maxlength="256" placeholder="Mail ou initiales" autocomplete="username">
+                <span class="field-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </span>
+              </div>
+            </div>
 
-						if (response.auth=="OK")
-						{
-							console.log("token confirmed");
-							if (typeof response.token==="undefined")
-							{
-							}
-							else
-							{
-								console.log("Token updated");
-								localStorage.setItem("token",response.token);
-							}
-							document.location="{url}";
-						}
-						else
-						{
-							console.log("token rejected");						
-							loadIndex();
-						}
-					},
-					error : function(response)
-					{
-						console.log("Cannot access authentication api");	
-						loadIndex();
-					}
-				});
-			});
-			
-		}
-		else
-		{
-			console.log("local storage not available, switching to login page");
-			loadIndex();
-		}
-		
-	
-		function loadIndex()
-		{
-			console.log('{var}');
-			<!-- document.location='{var}'; -->
-			$("#load").css("display","none");
-			$("#loginbox").css("display","block");
-			setFormFocus();
-		}
-	</script>
+            <div class="field">
+              <label for="mypassword">Mot de passe</label>
+              <div class="field-inner">
+                <input type="password" name="mypassword" id="mypassword"
+                       maxlength="256" placeholder="••••••••" autocomplete="current-password">
+                <span class="field-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </span>
+              </div>
+            </div>
 
-	<div class="container-scroller">
-		<div class="container-fluid page-body-wrapper full-page-wrapper">
-			<div class="content-wrapper d-flex align-items-center auth px-0">
-				<div class="row w-100 mx-0">
-					<div class="col-lg-4 mx-auto">
+            <button type="submit" id="fonc" class="btn-login">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+              Se connecter
+            </button>
 
-						<div class="auth-form-light text-left py-5 px-4 px-sm-5 border" id="loginbox">
+          </form>
+        </div>
 
-							<div class="form-group form-inline">
-							<h1><img src="{rootfolder}/{site_logo}" alt="Home" border="0"/> {core_authenticate}</h1>
-							</div>
+        <div class="card-footer">
+          Easyaero &mdash; {core_version} {version}
+        </div>
+      </div>
 
-							<div class="form-group">
-								{core_authtxt}<br />
-								<div id="errormsg" style='color: #ff0000;'></div>
-							</div>
-
-							<form METHOD="post" NAME="FormLogin" OnSubmit="checkCredentials(); return false;" class="pt-3">
-							<div class="form-group">
-								<input name="username" value="{username}" id="username" class="form-control form-control-lg" maxlength=256 placeholder="{core_user}">
-							</div>
-							<div class="form-group">
-								<input name="mypassword" value="" type="password" id="mypassword" class="form-control form-control-lg" maxlength=256  placeholder="{core_password}">
-							</div>
+    </div>
+  </div>
 
 
-							<div class="mt-3">
-							  <input type="submit" id="fonc" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" name="fonc" value="{core_connect}">
-							</div>
+  <script src="{rootfolder}/{corefolder}/external/jquery/jquery.min.js"></script>
+  <script src="{rootfolder}/{corefolder}/static/js/_md5.js"></script>
+  <script>
+    const API = '{rootfolder}/api/v1/admin/auth';
+    const HOME = '{rootfolder}';
 
+    function setFormFocus() {
+      const u = document.getElementById('username');
+      if (u) { u.focus(); u.select(); }
+    }
 
-							</form>
-						</div>
-						<div id="load" class="row">
-							<div class="circle-loader"></div>		
-						</div>
+    function showError(msg) {
+      const box = document.getElementById('errormsg');
+      document.getElementById('errormsg-text').textContent = msg;
+      box.classList.add('show');
+    }
 
-					</div>
+    function hideError() {
+      document.getElementById('errormsg').classList.remove('show');
+    }
 
-			</div>
-		</div>
-	</div>
-  
+    function checkCredentials() {
+      hideError();
+      const username = document.getElementById('username').value;
+      const password = MD5(document.getElementById('mypassword').value);
+      const btn = document.getElementById('fonc');
+      btn.disabled = true;
+      btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px"></div> Connexion…';
+	  $("#loginbox").hide();
+	  $("#load").show();
+
+      $.ajax({
+        url: API, type: 'POST', dataType: 'json',
+        data: JSON.stringify({ fonc: 'login', myusr: username, mypwd: password }),
+        contentType: 'application/json; charset=utf-8',
+        success: function(r) {
+          if (r.auth === 'OK') {
+            localStorage.setItem('token', r.token);
+            document.location = "{url}";
+          } else {
+			$("#loginbox").show();
+			$("#load").hide();
+
+			showError("{core_autherror}: "+r.error);
+            btn.disabled = false;
+            btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Se connecter';
+          }
+        },
+        error: function(e) {
+			console.log(e);
+			$("#loginbox").show();
+			$("#load").hide();
+
+			showError('Impossible de contacter le serveur.');
+			btn.disabled = false;
+			btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Se connecter';
+        }
+      });
+
+      return false;
+    }
+
+    function loadIndex() {
+      $('#load').hide();
+      $('#loginbox').fadeIn(200);
+      setFormFocus();
+    }
+
+    // Vérification du token existant
+    if (localStorage) {
+      const mytoken = localStorage.getItem('token');
+      $.ajax({
+        url: API, type: 'POST', dataType: 'json',
+        data: JSON.stringify({ fonc: 'login', mykey: mytoken }),
+        contentType: 'application/json; charset=utf-8',
+        success: function(r) {
+          if (r.auth === 'OK') {
+            if (r.token) localStorage.setItem('token', r.token);
+            document.location = HOME;
+          } else {
+            loadIndex();
+          }
+        },
+        error: function() { loadIndex(); }
+      });
+    } else {
+      loadIndex();
+    }
+  </script>
 </body>
 </html>
 

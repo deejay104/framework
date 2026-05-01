@@ -29,7 +29,7 @@
 	// Désactive
 	if ((GetDroit("DesactiveUser")) && ($usr->actif=="oui"))
 	{
-		addPageMenu($corefolder,$mod,$tabLang["lang_disable"],geturl("membres","detail","id=".$id."&fonc=desactive"),"");
+		addPageMenu($corefolder,$mod,$tabLang["lang_disable"],geturl("membres","detail","id=".$id."&fonc=desactive"),"",false,"","","outline-danger");
 	}
 	// Active
   	if ((GetDroit("DesactiveUser")) && ($usr->actif=="off"))
@@ -39,7 +39,7 @@
 	// Supprime
 	if ((GetDroit("SupprimeUser")) && ($usr->actif=="off"))
 	{
-		addPageMenu($corefolder,$mod,$tabLang["lang_delete"],geturl("membres","detail","id=".$id."&fonc=delete"),"");
+		addPageMenu($corefolder,$mod,$tabLang["lang_delete"],geturl("membres","detail","id=".$id."&fonc=delete"),"",false,"","","outline-danger");
 	}
 	if ((GetDroit("SupprimeUser")) && ($usr->actif=="non"))
 	{

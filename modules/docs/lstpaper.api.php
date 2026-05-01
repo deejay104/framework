@@ -95,8 +95,15 @@
 			{
 				$doc = new document_core($did,$sql);
 				$doc->editmode="read";
+				$attr=$doc->getAttributes();
 				$line["doc"][$did]["url"]=$doc->Affiche();
-				$line["doc"][$did]["name"]=$doc->name;
+//				$line["doc"][$did]["name"]=$doc->name;
+				$line["doc"][$did]["name"]=$doc->originalname;
+				$line["doc"][$did]["url"]=$doc->Path();
+				$line["doc"][$did]["fullpath"]=$doc->Affiche();
+				$line["doc"][$did]["ext"]=$attr["ext"];
+				$line["doc"][$did]["icon"]=$attr["icon"];
+				$line["doc"][$did]["color"]=$attr["color"];
 
 				if (preg_match("/".$crit."/i",$doc->name))
 				{
@@ -104,7 +111,7 @@
 				}
 			}
 		}
-// echo "crit=".$crit." filter=".$filter." okcrit:".$okcrit." okfilter:".$okfilter." - ";		
+
 		if (($okcrit) && ($okfilter))
 		{
 			$result["data"][$k]=$line;

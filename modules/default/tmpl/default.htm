@@ -6,35 +6,33 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title>{site_title} - {module} - {rub}</title>
 	<link rel="stylesheet" type="text/css" href="{corefolder}/external/jquery/css/smoothness/jquery-ui.css" />
+	<link rel="stylesheet" href="{corefolder}/static/css/bootstrap.min.css" type="text/css" />
 	<link rel="stylesheet" href="{style_url}" type="text/css" />
 	<link rel="icon" type="image/png" href="{corefolder}/static/images/favicon.png" />
-  </head>
+
+
+</head>
 
 <body>
 	<script src="{corefolder}/external/jquery/jquery.min.js"></script>
 	<script src="{corefolder}/external/jquery/jquery-ui.min.js"></script>
-	<script src="{corefolder}/static/js/fonctions.js"></script>
+	<script src="{corefolder}/static/js/functions.js"></script>
 	<script src="{corefolder}/static/js/base.js"></script>
 	<script src="{corefolder}/static/js/jquery.toast.js"></script>
 	<script src="{corefolder}/static/js/jquery.js"></script>
 	<script src="{corefolder}/static/js/settings.js"></script>
 	<script src="{corefolder}/static/js/template.js"></script>
-	<script src="{corefolder}/static/js/off-canvas.js"></script>
-
 
   <div class="container-scroller">
 
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-      <div id="navbar-icon" class="text-center navbar-brand-wrapper align-items-center">
+      <div class="navbar-icon text-center navbar-brand-wrapper align-items-center">
         <a class="navbar-brand brand-logo" href="/"><img src="{site_logo}" alt="logo"/></a>
         <a class="navbar-brand brand-logo-mini" href="/"><img src="{site_logo}" alt="logo"/></a>
       </div>
 
 
       <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
-        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-          <span class="mdi mdi-menu"></span>
-        </button>
         <ul class="navbar-nav mr-lg-2">
           <li class="nav-item nav-search d-none d-lg-block">
             <div class="input-group">
@@ -45,57 +43,18 @@
               </div>
               <input id="searchsite" type="text" class="form-control" placeholder="Rechercher sur le site..."  OnKeyUp="SearchSite(event);" autocomplete="off">
             </div>
-			<div id="searchresult" class="dropdown-menu navbar-dropdown preview-list "></div>
+			      <div id="searchresult" class="dropdown-menu navbar-dropdown preview-list "></div>
           </li>
 
           <li class="align-self-left d-block d-sm-none" style="width: 320px; z-index:999;">
-			<div class='icone'><a href="{rootfolder}/"><i class="mdi mdi-home menu-icon"></i></a></div>
-<!-- BEGIN: menu_lst_phone -->
-			<div class='icone'><a href="{menu_url}"><i class="mdi {menu_icone}"></i></a></div>
-<!-- END: menu_lst_phone -->
-			</li>
+            <div class='navbar-menu'><a href="{rootfolder}/"><i class="mdi mdi-home menu-icon"></i></a></div>
+            <!-- BEGIN: menu_lst_phone -->
+            <div class='navbar-menu'><a href="{menu_url}"><i class="mdi {menu_icone}"></i></a></div>
+            <!-- END: menu_lst_phone -->
+    			</li>
         </ul>
 
-        <ul id="navbar-profile" class="navbar-nav navbar-nav-right d-none">
- <!-- BEGIN: notification -->
-         <li class="nav-item dropdown">
-            <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
-              <i class="mdi mdi-bell-outline mx-0"></i>
-              <span class="count"></span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
-              <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
-
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  <div class="preview-icon bg-warning">
-                    <i class="mdi mdi-alert mx-0"></i>
-                  </div>
-                </div>
-                <div class="preview-item-content">
-                  <h6 class="preview-subject font-weight-normal">Echéance CEN F-ZZZZ</h6>
-                  <p class="font-weight-light small-text mb-0 text-muted">
-                    31/07/2019
-                  </p>
-                </div>
-              </a>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  <div class="preview-icon bg-danger">
-                    <i class="mdi mdi-close-circle mx-0"></i>
-                  </div>
-                </div>
-                <div class="preview-item-content">
-                  <h6 class="preview-subject font-weight-normal">Echéance CEN F-YYYY</h6>
-                  <p class="font-weight-light small-text mb-0 text-muted">
-                    31/07/2019
-                  </p>
-                </div>
-              </a>
-            </div>
-          </li>
-<!-- END: notification -->
-
+        <ul class="navbar-profile navbar-nav navbar-nav-right d-none">
           <li class="nav-item nav-profile dropdown">
             <a class="nav-link" href="#profileDropdown" data-bs-toggle="dropdown" id="profileDropdown">
               <img src="{aff_avatar}" alt="profile"/>
@@ -112,6 +71,7 @@
             </div>
           </li>
         </ul>
+
         <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
           <span class="mdi mdi-menu"></span>
         </button>
@@ -149,33 +109,39 @@
 <!-- END: menu_lst -->
         </ul>
       </nav>
-      <div class="main-panel">          
+      <div id="main-panel" class="main-panel">          
         <div class="content-wrapper">
-			<div class="row">
-				<div class="mt-4 mt-md-0">
-					<!-- BEGIN: lst_pagemenu -->
-					<a href="{pagemenu_url}" {pagemenu_confirm}><button class="btn btn-sm {pagemenu_class}"><i class="mdi {pagemenu_image} menu-icon"></i>{pagemenu_name}</button></a>
-					<!-- END: lst_pagemenu -->
-				</div>
-			</div>
-			{corps}
+          <div class="row">
+            <div class="col content-menu"><!-- BEGIN: lst_pagemenu --><a href="{pagemenu_url}" {pagemenu_confirm}><button class="btn btn-sm {pagemenu_class}"><i class="mdi {pagemenu_image} menu-icon"></i>{pagemenu_name}</button></a><!-- END: lst_pagemenu --></div>
+          </div>
 
-
-			<!-- BEGIN: aff_fatalerror -->
-			<div class="row" id="page-content">
-				<div class="grid-margin stretch-card">
-					<div class="card">	
-						<div class="card-body">	
-							{error_message}
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- END: aff_fatalerror -->
+<!-- BEGIN: template -->
+<div class='row'>
+    <div class='col grid-margin stretch-card'>
+        <div class='card'>
+            <div class='card-body'>
+              
+            </div>
         </div>
-        <footer class="footer">
-			{username}&nbsp;-&nbsp;{core_version} {version}
-        </footer>
+    </div>
+</div>
+<!-- END: template -->
+
+          {corps}
+
+          <!-- BEGIN: aff_fatalerror -->
+          <div class="row" id="page-content">
+            <div class="grid-margin stretch-card">
+              <div class="card">	
+                <div class="card-body">	
+                  {error_message}
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- END: aff_fatalerror -->
+        </div>
+        <footer class="footer">{username}&nbsp;-&nbsp;{core_version} {version}</footer>
       </div>
     </div>
   </div>
@@ -275,6 +241,27 @@ showToast("","{msg_infos}","{msg_type}");
 
 		}, 400 );
 	}
+
+
+    $('[data-toggle="minimize"]').on("click", function() {
+      console.log("click");
+
+//      $("#sidebar").addClass("d-none");
+//			$("#sidebar").css("display","none");
+
+      if (($('#sidebar').hasClass("sidebar-offcanvas-close"))) {
+        console.log("open");
+        $('#sidebar').removeClass("sidebar-offcanvas-close");
+        $('#main-panel').removeClass("mainpanel-offcanvas-close");
+      } else {
+        $('#sidebar').addClass("sidebar-offcanvas-close");
+        $('#main-panel').addClass("mainpanel-offcanvas-close");
+      }
+    });
+
+    $('[data-toggle="offcanvas"]').on("click", function() {
+      $('.sidebar-offcanvas').toggleClass('active')
+    });
 
 </script>
 

@@ -27,9 +27,9 @@
 	$grp=checkVar("grp","varchar");
 
 // ---- Menu
-	addPageMenu($corefolder,$mod,$tabLang["lang_list"],geturl("membres","","fonc=&aff=".$aff),"icn32_liste.png",false);
-	addPageMenu($corefolder,$mod,$tabLang["lang_pictures"],geturl("membres","","fonc=trombi&aff=".$aff),"icn32_trombi.png",false);
-	addPageMenu($corefolder,$mod,$tabLang["lang_emargement"],geturl("membres","list",""),"icn32_trombi.png",true);
+	addPageMenu($corefolder,$mod,$tabLang["lang_list"],geturl("membres","","fonc=&aff=".$aff),"mdi-format-list-bulleted",false);
+	addPageMenu($corefolder,$mod,$tabLang["lang_pictures"],geturl("membres","","fonc=trombi&aff=".$aff),"mdi-account-circle",false);
+	addPageMenu($corefolder,$mod,$tabLang["lang_emargement"],geturl("membres","list",""),"mdi-printer",true);
 
 	if (GetDroit("AccesMembresVirtuel"))
 	{

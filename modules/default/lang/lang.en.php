@@ -92,7 +92,7 @@
 	$tabLang["lang_tab_info"]="Showing _START_ to _END_ of _TOTAL_ entries";
 	$tabLang["lang_tab_lengthmenu"]="Show _MENU_ entries";
 
-	$tabLang["lang_configuration"]="Configuration";
+	$tabLang["lang_configuration"]="Parameters";
 	$tabLang["lang_database"]="Database";
 	$tabLang["lang_groups"]="Groups";
 	$tabLang["lang_deadline"]="Deadlines";

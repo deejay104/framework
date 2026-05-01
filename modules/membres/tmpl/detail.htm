@@ -6,17 +6,33 @@
 <!-- END: infos -->
 
 <!-- BEGIN: corps -->
+<style>
 
-<div class="row">
-	<div class="col-md-12 border-top">
-		<div class="d-flex ">
-			<div class="ml-4 small">
-				{lang_lastupdate} : {info_maj}<br />{lang_lastconnection} : {info_connect}
-			</div>
-		</div>
-	</div>
-</div>
 
+</style>
+
+
+	<div class="info-cartouche-wrap">
+      <div class="info-cartouche">
+        <div class="info-cartouche-icon">
+          <i class="mdi mdi-clock-outline"></i>
+        </div>
+        <div class="info-cartouche-body">
+          <div>
+            <span class="label">{lang_lastupdate}</span>
+          </div>
+          <div>
+            <label title="{info_historique}">{info_maj}</label>
+          </div>
+          <div>
+            <span class="label">{lang_lastconnection}</span>
+          </div>
+          <div>
+            <label title="{info_historique}">{info_connect}</label>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
 <FORM name="form_detail" method="post" action="{path_root}/membres/detail" enctype="multipart/form-data">
@@ -29,8 +45,8 @@
 
 			<div class="col-12 grid-margin stretch-card">
 				<div class="card">
+					<div class="card-header">{lang_informations}</div>
 					<div class="card-body">
-						<h4>{lang_informations}</h4>
 
 						<div class="form-group">
 							<IMG src="{aff_avatar}" alt="" width=200 height=240>
@@ -101,19 +117,17 @@
 						{form_commentaire}
 						</div>
 					</div>
-				</div>
-			</div>
-	
-			<!-- BEGIN: submit -->
-			<div class="col-12 grid-margin stretch-card">
-				<div class="card">
-					<div class="card-body">
+
+					<!-- BEGIN: submit -->
+					<div class="card-footer">
 						<input type="submit" class="btn btn-primary mr-2" name="fonc" id="enregistrer" value="{lang_save}">
 						<input type="submit" class="btn btn-light"  name="fonc" id="annuler" value="{lang_cancel}">
 					</div>
+					<!-- END: submit -->
+
 				</div>
 			</div>
-			<!-- END: submit -->
+	
 		</div>
 	</div>
 
@@ -122,8 +136,8 @@
 		<div class="row flex-grow">
 			<div class="col-12 grid-margin stretch-card">
 				<div class="card">
+					<div class="card-header">{lang_data}</div>
 					<div class="card-body">
-						<h4>{lang_data}</h4>
 						<!-- BEGIN: aff_donnees_left -->
 						{aff_data_left}
 						<!-- END: aff_donnees_left -->
@@ -150,20 +164,13 @@
 
 	<div class="col-md-4 grid-margin stretch-card">
 		<div class="row flex-grow">
-			<div class="col-12 grid-margin stretch-card">
-				<div class="card">
-					<div class="card-body">
-						{aff_data_right}
-					</div>
-				</div>
-			</div>
+			{aff_data_right}
 
 			<!-- BEGIN: aff_documents -->
 			<div class="col-12 grid-margin stretch-card">
 				<div class="card">
+					<div class="card-header">{lang_documents}</div>
 					<div class="card-body">
-
-						<h4>{lang_documents}</h4>
 						<!-- BEGIN: lst_document -->
 						{form_document}
 						<!-- END: lst_document -->
@@ -175,8 +182,8 @@
 			<!-- BEGIN: aff_echeances -->
 			<div class="col-12 grid-margin stretch-card">
 				<div class="card">
+					<div class="card-header">{lang_deadline}</div>
 					<div class="card-body">
-						<h4>{lang_deadline}</h4>
 						<!-- BEGIN: lst_echeance -->
 						{form_echeance}
 						<!-- END: lst_echeance -->
@@ -187,8 +194,8 @@
 			<!-- BEGIN: droits -->
 			<div class="col-12 grid-margin stretch-card">
 				<div class="card">
+					<div class="card-header">{lang_rights}</div>
 					<div class="card-body">
-						<h4>{lang_rights}</h4>
 						{form_droits}
 					</div>
 				</div>

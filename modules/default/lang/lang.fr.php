@@ -60,7 +60,7 @@
 	$tabLang["lang_delete"]="Supprimer";
 	$tabLang["lang_list"]="Liste";
 	$tabLang["lang_lastupdate"]="Dernière mise à jour";
-	$tabLang["lang_lastconnection"]="Dernière connection";
+	$tabLang["lang_lastconnection"]="Dernière connexion";
 	$tabLang["lang_group"]="Groupe";
 	$tabLang["lang_description"]="Description";
 	$tabLang["lang_main"]="Principal";
@@ -92,7 +92,7 @@
 	$tabLang["lang_tab_lengthmenu"]="Affiche _MENU_ ligne(s)";
 
 	
-	$tabLang["lang_configuration"]="Configuration";
+	$tabLang["lang_configuration"]="Paramètres";
 	$tabLang["lang_database"]="Base de données";
 	$tabLang["lang_groups"]="Groupes";
 	$tabLang["lang_deadline"]="Echéances";

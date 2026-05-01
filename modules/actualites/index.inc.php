@@ -39,7 +39,7 @@
 	
 // ---- Enregistre le post
 
-	if ( ($fonc=="Poster") && (!isset($_SESSION['tab_checkpost'][$checktime])) )
+	if ( ($fonc==$tabLang["lang_post"]) && (!isset($_SESSION['tab_checkpost'][$checktime])) )
 	{
 		$_SESSION['tab_checkpost'][$checktime]=$checktime;
 
@@ -78,13 +78,25 @@
 		}
 	}
 
+// ---- Avatar
+	$lstdoc=ListDocument($sql,$gl_uid,"avatar");
+	if (count($lstdoc)>0)
+	{
+		$doc=new document_core($lstdoc[0],$sql);
+		$tmpl_x->assign("form_avatar",$doc->GenerePath(200,240));
+	}
+	else
+	{
+		$tmpl_x->assign("form_avatar","");
+	}	
+	$tmpl_x->assign("form_displayname",$myuser->Val("fullname"));
 
 // ---- Mettre une actualité en favori
-if ($favid>0)
-{
-	$query="UPDATE ".$MyOpt["tbl"]."_actualites SET favori='".$setfav."' WHERE id='$favid'";
-	$res = $sql->Update($query);
-}
+	if ($favid>0)
+	{
+		$query="UPDATE ".$MyOpt["tbl"]."_actualites SET favori='".$setfav."' WHERE id='$favid'";
+		$res = $sql->Update($query);
+	}
 
 
 // ---- url de l'api
@@ -92,8 +104,6 @@ if ($favid>0)
 	$tmpl_x->assign("apiurlget",geturlapi("actualites","actualites","get","q=1"));
 	$tmpl_x->assign("apiurlpost",geturlapi("actualites","actualites","post","q=1"));
 	$tmpl_x->assign("apiurldel",geturlapi("actualites","actualites","del","q=1"));
-	$tmpl_x->assign("FormulaireBackgroundNormal",$MyOpt["styleColor"]["FormulaireBackgroundNormal"]);
-	$tmpl_x->assign("FormulaireBackgroundDark",$MyOpt["styleColor"]["FormulaireBackgroundDark"]);
 
 // ---- Affiche les échéances
 	$lstdte=ListEcheance($sql,$gl_uid);

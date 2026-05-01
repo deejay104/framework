@@ -135,7 +135,7 @@
 	addPageMenu("","admin",$tabLang["lang_list"],geturl("admin","groupes",""),"mdi-keyboard-backspace");
 	addPageMenu("","admin",$tabLang["lang_new"],geturl("admin","groupes/gdetail",""),"");
 	addPageMenu("","admin",$tabLang["lang_copy"],geturl("admin","groupes/gdetail","grp=".$grp."&fonc=copier"),"");
-	addPageMenu("","admin",$tabLang["lang_delete"],geturl("admin","groupes/gdetail","grp=".$grp."&fonc=supprimer"),"",false,"Voulez-vous supprimer ce groupe ?");
+	addPageMenu("","admin",$tabLang["lang_delete"],geturl("admin","groupes/gdetail","grp=".$grp."&fonc=supprimer"),"",false,"Voulez-vous supprimer ce groupe ?","","outline-danger");
 
 
 // ---- Affiche les informations

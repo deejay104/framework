@@ -172,7 +172,7 @@ class echeance_core extends objet_core
 		$sql->Edit("echeance",$this->tbl."_echeance",$this->id,array("typeid"=>$this->Valid("typeid",$this->typeid),"uid"=>$this->Valid("uid",$this->uid),"dte_echeance"=>$this->Valid("dte_echeance",$this->dte_echeance),"doc"=>$this->Valid("doc",$this->doc),"paye"=>$this->Valid("paye",$this->paye),"uid_maj"=>$this->myuid, "dte_maj"=>now()));		
 	}
 
-	function Affiche($type="") 
+	function Affiche($type="",$description="") 
 	{ global $MyOpt,$corefolder,$tabLang;
 		$ret="";
 
@@ -233,10 +233,11 @@ class echeance_core extends objet_core
 		}
 		else if ( ($this->editmode=="edit") && (GetDroit($this->droit)) )
 		{
-			$ret.="<div id='aff_echeance".$this->id."' OnMouseOver='document.getElementById(\"echeance_del_".$this->id."\").style.display=\"inline-block\";' OnMouseOut='document.getElementById(\"echeance_del_".$this->id."\").style.display=\"none\";' class='showEcheance'>";
+//			$ret.="<div id='aff_echeance".$this->id."' OnMouseOver='document.getElementById(\"echeance_del_".$this->id."\").style.display=\"inline-block\";' OnMouseOut='document.getElementById(\"echeance_del_".$this->id."\").style.display=\"none\";' class='showEcheance'>";
+			$ret.="<div id='aff_echeance".$this->id."' class='action showEcheance'>";
 			$ret.="<p>";
 			$ret.="<label class='col-lg-6'>".$tabLang["lang_echeance"]." ".$this->description." ".$tabLang["core_the"]."</label><input name='form_echeance[".$this->id."]' id='form_echeance".$this->id."' class='form-control' value='".$this->dte_echeance."' type='date' style='width:165px;'>&nbsp;";
-			$ret.="<a href=\"#\" OnClick=\"document.getElementById('form_echeance".$this->id."').value=''; document.getElementById('aff_echeance".$this->id."').style.display='none';\" class='imgDelete'><img  id='echeance_del_".$this->id."' src='".$MyOpt["host"]."/".$corefolder."/static/images/icn16_supprimer.png' style='display:none;'></a>";
+			$ret.="<span class='feed-actions'><a href=\"#\" OnClick=\"document.getElementById('form_echeance".$this->id."').value=''; document.getElementById('aff_echeance".$this->id."').style.display='none'; return false;\"><i class='mdi mdi-delete'></i></a></span>";
 			$ret.="</p>";
 
 
@@ -244,7 +245,7 @@ class echeance_core extends objet_core
 			
 			if (is_array($lstdoc))
 			{
-				$ret.="<select name='form_echeance_doc[".$this->id."]' id='form_echeance_doc".$this->id."' class='form-control' style='margin-left:20%;width:80%;'><option value=0>Aucun</option>";
+				$ret.="<select name='form_echeance_doc[".$this->id."]' id='form_echeance_doc".$this->id."' class='form-control'><option value=0>Aucun</option>";
 				foreach($lstdoc as $i=>$did)
 				{
 					$doc = new document_core($did,$this->sql);
@@ -262,12 +263,32 @@ class echeance_core extends objet_core
 		else
 		{
 			$tabIcon=array("ok"=>array("icon"=>"mdi-checkbox-marked-outline","color"=>"green"),"nok"=>array("icon"=>"mdi-close-box-outline","color"=>"red"));
-			$r=TestDate($this->dte_echeance);
-			$ret="<div><i class='mdi ".$tabIcon[$r]["icon"]."' style='font-size:20px; color:".$tabIcon[$r]["color"].";'></i> ".$tabLang["lang_echeance"]." ".$this->description." ".$tabLang["core_the"]." ".AffDate($this->dte_echeance)." ".($this->checkDoc())."</div>";
+			$chkDate=TestDate($this->dte_echeance);
+			//$ret="<div><i class='mdi ".$tabIcon[$r]["icon"]."' style='font-size:20px; color:".$tabIcon[$r]["color"].";'></i> ".$tabLang["lang_echeance"]." ".$this->description." ".$tabLang["core_the"]." ".AffDate($this->dte_echeance)." ".($this->checkDoc())."</div>";
+
+			if ($this->id==0)
+			{
+				$chkDate="none";
+				$dte="Aucune échéance";
+			}
+			else
+			{
+				$dte=AffDate($this->dte_echeance);
+			}
+
+			$tabColor=array("ok"=>"success","nok"=>"danger","warning"=>"warning","none"=>"secondary");
+
+			$ret ='<div class="echeance-item '.$tabColor[$chkDate].'">';
+            $ret.='<i class="mdi mdi-checkbox-marked-circle '.$chkDate.'"></i>';
+            $ret.='<span>'.(($description!="") ? $description : $this->description).' — <strong>'.$dte.'</strong></span>';
+            $ret.=$this->checkDoc();
+            $ret.='</div>';
+
 		}
 		return $ret;
 	}
 
+	
 	function val($key="")
 	{ global $MyOpt;
 		
@@ -284,7 +305,7 @@ class echeance_core extends objet_core
 		}
 		else if (($this->document=="oui") && ($this->doc==0))
 		{
-			return "<i class='mdi mdi-checkbox-blank-outline' style='font-size:20px; color:red;'></i>";
+			return "<i class='mdi mdi-file-alert-outline' style='font-size:20px; color:red;'></i>";
 		}
 		else if ($this->document=="non")
 		{

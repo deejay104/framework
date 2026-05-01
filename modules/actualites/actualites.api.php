@@ -91,6 +91,7 @@
 			$result["news"][$nid]["setfav"]=(GetDroit("ModifActualiteFavori")) ? "yes" : "no";
 			$result["news"][$nid]["message"]=$txt;
 			$result["news"][$nid]["author"]=$resusr->Aff("fullname");
+			$result["news"][$nid]["displayname"]=$resusr->Val("fullname");
 			$result["news"][$nid]["date"]=DisplayDate($d["dte_creat"]);
 
 			$lstdoc=ListDocument($sql,$d["uid_creat"],"avatar");
@@ -102,7 +103,7 @@
 			}
 			else
 			{
-				$result["news"][$nid]["avatar"]="static/images/icn64_membre.png";
+				$result["news"][$nid]["avatar"]="";
 			}
 
 			if (GetDroit("SupprimeActualite"))

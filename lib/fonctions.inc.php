@@ -98,7 +98,7 @@ function getip()
 	return $ip;
 }
 
-function addPageMenu($path,$mod,$title,$url,$img,$selected=false,$confirm="",$onclick="")
+function addPageMenu($path,$mod,$title,$url,$img,$selected=false,$confirm="",$onclick="",$class="")
 {
 	global $tmpl_prg,$module,$MyOpt;
 	
@@ -130,7 +130,11 @@ function addPageMenu($path,$mod,$title,$url,$img,$selected=false,$confirm="",$on
 		$tmpl_prg->assign("pagemenu_image","");
 	}
 
-	if ($selected)
+	if ($class)
+	{
+		$tmpl_prg->assign("pagemenu_class","btn-".$class);
+	}
+	else if ($selected)
 	{
 		$tmpl_prg->assign("pagemenu_class","btn-primary");
 	}
@@ -927,7 +931,7 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 	$ret.="</tbody>\n";
 	$ret.="</table></div>\n";
 
-	$ret.="<link rel='stylesheet' type='text/css' href='".$MyOpt["host"]."/core/external/jquery/css/dataTables.min.css' />";
+	//$ret.="<link rel='stylesheet' type='text/css' href='".$MyOpt["host"]."/core/external/jquery/css/dataTables.min.css2' />";
 	$ret.="<script type='text/javascript' src='".$MyOpt["host"]."/core/external/jquery/jquery.dataTables.min.js'></script>";
 
 	$ret.="<script>";
@@ -1130,7 +1134,7 @@ function AfficheTableauRemote($tabTitre,$url,$order="",$trie="d",$search="",$nbl
 	// }
 	$ret.="</table></div>\n";
 
-	$ret.="<link rel='stylesheet' type='text/css' href='".$MyOpt["host"]."/core/external/jquery/css/dataTables.min.css' />";
+	//$ret.="<link rel='stylesheet' type='text/css' href='".$MyOpt["host"]."/core/external/jquery/css/dataTables.min.css2' />";
 	$ret.="<script type='text/javascript' src='".$MyOpt["host"]."/core/external/jquery/jquery.dataTables.min.js'></script>";
 
 	$ret.="<script>";

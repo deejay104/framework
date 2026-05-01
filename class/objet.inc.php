@@ -317,11 +317,8 @@ class objet_core
 		  	  	$ret ="<div class='form-inline'>";
 				foreach($this->tabList[$key][$lang] as $k=>$v)
 				{
-					// $ret.="<input id='".(($formid!="") ? $formid : "").$key."_".$k."' type='radio' class='form-control form-input'  name=\"".$formname."[$key]\" value=\"".$k."\" ".(($txt==$k) ? "checked" : "").">".$this->tabList[$key][$lang][$k]." ";
-
-
 					$ret.="<div class='form-check'>";
-					$ret.='<label class="form-check-label"><input id="'.(($formid!="") ? $formid : "").$key."_".$k.'" type="radio" class="form-check-input" name="'.$formname.'['.$key.']" value="'.$k.'" '.(($txt==$k) ? "checked" : "").'>'.$this->tabList[$key][$lang][$k].'<i class="input-helper"></i></label>&nbsp;';
+					$ret.='<label class="form-check-label"><input id="'.(($formid!="") ? $formid : "").$key."_".$k.'" type="radio" class="form-check-input" name="'.$formname.'['.$key.']" value="'.$k.'" '.(($txt==$k) ? "checked" : "").'>'.$this->tabList[$key][$lang][$k].'<i class="input-helper"></i></label>';
 					$ret.="</div>";
 				}
 				$ret.="</div>";

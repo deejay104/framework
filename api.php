@@ -131,7 +131,7 @@
 		$query = "SELECT id,prenom,nom,mail,password,creds FROM ".$MyOpt["tbl"]."_utilisateurs WHERE ((mail='".$myusr."' AND mail<>'') OR (initiales='".$myusr."' AND initiales<>'')) AND actif='oui' AND virtuel='non'";
 		$res = $sql->QueryRow($query);
 
-		if (($res["id"]>0) && (password_verify($mypwd,$res["creds"])))
+		if ((isset($res["id"])) && ($res["id"]>0) && (password_verify($mypwd,$res["creds"])))
 		{
 			$data["result"]="success";
 			$query="INSERT INTO ".$MyOpt["tbl"]."_login SET username='".addslashes($res["prenom"])." ".addslashes($res["nom"])."',srcip='".getip()."',status='password',dte_maj='".now()."',header='".substr(addslashes($_SERVER["HTTP_USER_AGENT"]),0,200)."',type='".json_encode($data)."'";
@@ -160,7 +160,7 @@
 
 			$ret["auth"]="OK";
 		}
-		else if (($res["id"]>0) && ($res["creds"]=="") && ($mypwd==$res["password"]))  // For compatibility with older password
+		else if ((isset($res["id"])) && ($res["id"]>0) && ($res["creds"]=="") && ($mypwd==$res["password"]))  // For compatibility with older password
 		{
 			$data["result"]="success";
 			$query="INSERT INTO ".$MyOpt["tbl"]."_login SET username='".addslashes($res["prenom"])." ".addslashes($res["nom"])."',srcip='".getip()."',status='password',dte_maj='".now()."',header='".substr(addslashes($_SERVER["HTTP_USER_AGENT"]),0,200)."',type='".json_encode($data)."'";

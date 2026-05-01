@@ -431,7 +431,6 @@
 	// {
 		// $tabMenu=$tabMenuPhone;
 	// }
-
 	foreach ($tabMenu as $m=>$d)
 	{
 		if (GetDroit($d["droit"]))

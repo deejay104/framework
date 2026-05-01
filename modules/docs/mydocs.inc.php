@@ -29,16 +29,8 @@
 
 
 // ---- Affiche les bouttons
-	addPageMenu($corefolder,$mod,"Liste",geturl("docs","",""),"mdi-keyboard-backspace");
+	//addPageMenu($corefolder,$mod,"Liste",geturl("docs","",""),"mdi-keyboard-backspace");
 	// addPageMenu($corefolder,$mod,"Rechercher",geturl("docs","recherche",""),"icn32_rechercher.png",false,"","showSearch();");
-
-	$tmpl_x->assign("BorderBlack",$MyOpt["styleColor"]["BorderBlack"]);
-	$tmpl_x->assign("LineBackgroundHover",$MyOpt["styleColor"]["LineBackgroundHover"]);
-	$tmpl_x->assign("TextBackgroundHover",$MyOpt["styleColor"]["TextBackgroundHover"]);
-	$tmpl_x->assign("TitleBackgroundNormal",$MyOpt["styleColor"]["TitleBackgroundNormal"]);
-	$tmpl_x->assign("FormulaireBackgroundDark",$MyOpt["styleColor"]["FormulaireBackgroundDark"]);
-	$tmpl_x->assign("FormulaireBackgroundNormal",$MyOpt["styleColor"]["FormulaireBackgroundNormal"]);
-	$tmpl_x->assign("FormulaireBackgroundLight",$MyOpt["styleColor"]["FormulaireBackgroundLight"]);
 
 // ---- Affiche la liste des utilisateurs
 	if ((GetDroit("ModifUserAll")) || (GetDroit("ModifUserDocument")))

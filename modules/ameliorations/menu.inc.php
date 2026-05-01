@@ -14,11 +14,11 @@
 	}
 	if ((GetDroit("ModifAmelioration")) && ($id>0))
 	{
-		addPageMenu($corefolder,$mod,$tabLang["lang_modify"],geturl("ameliorations","detail","fonc=modifier&id=".$id),"");
+		addPageMenu($corefolder,$mod,$tabLang["lang_modify"],geturl("ameliorations","detail","fonc=modifier&id=".$id),"",($fonc=="modifier") ? true : false);
 	}	
 	if ((GetDroit("SupprimeAmelioration")) && ($id>0))
 	{
-		addPageMenu($corefolder,$mod,$tabLang["lang_delete"],geturl("ameliorations","detail","fonc=supprimer&id=".$id),"");
+		addPageMenu($corefolder,$mod,$tabLang["lang_delete"],geturl("ameliorations","detail","fonc=supprimer&id=".$id),"",false,"","","outline-danger");
 	}
 
 		

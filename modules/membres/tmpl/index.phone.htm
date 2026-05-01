@@ -7,27 +7,156 @@
 
 
 <!-- BEGIN: corps -->
+<style>
+a.feed-item:hover {
+  background: var(--p67-primary-light);
+  text-decoration: none;
+}
+a.feed-item:hover .feed-title span { color: var(--p67-primary); }
+.feed-title { font-size:1.4rem;}
+.feed-img-large .feed-initials { width:60px!important; height:60px!important; }
+.feed-avatar img { width:60px!important; height:60px!important; }
+
+
+/* Grille trombinoscope */
+.trombi {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  margin: -1.25rem; /* annule le padding du card-body */
+}
+
+.trombi-card {
+  position: relative;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  background: #1a2332;
+  cursor: pointer;
+}
+
+/* Photo pleine carte */
+.trombi-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  transition: transform .3s ease;
+}
+.trombi-card:hover img { transform: scale(1.04); }
+
+/* Initiales pleine carte */
+.trombi-initials {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+  letter-spacing: .05em;
+}
+
+/* Nom en overlay bas */
+.trombi-label {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 28px 10px 10px;
+  background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 100%);
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  letter-spacing: 0.01em;
+}
+
+/* Sur grand écran : 3 colonnes */
+@media (min-width: 768px) {
+  #lstusers { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+</style>
 
 <div class="row">
-	<div class="grid-margin stretch-card">
+	<div class="col grid-margin stretch-card">
 		<div class="card">
+			<div class="card-header">
+				<span>Membres</span>
+				<input type="text" id="filterMembre" class="form-control form-control-sm"
+					placeholder="Filtrer…" style="max-width:200px; margin-left:auto;"
+					oninput="filterList(this.value)">
+			</div>
 			<div class="card-body">
-
-	<!-- BEGIN: lst_ligne -->
-	<div class="d-flex align-items-start profile-feed-item">
-		<a href="{url_detail}"><img src="{path_root}/{aff_avatar}" alt="" class="img-mi rounded-circle"></a>
-		<div class="pl-2">
-			<h4>{aff_membre}</h4>
-			<h4>{tel_membre}</h4>
-			<h6>{mail_membre}</h6>
-		</div>
-	</div>
-	<!-- END: lst_ligne -->
-
-
+				<div id="lstusers"></div>
 			</div>
 		</div>
 	</div>
 </div>
+<script>
+$(document).ready(function() {
 
+	var fonc="{fonc}";
+
+	$.get('/api/v1/membres/lstmembre?aff={aff}&fonc={fonc}').done(function(data)
+	{
+		$("#lstusers").html("");
+
+		for (var key in data.data)
+		{
+			txt ="<div class='feed-item'>";
+
+			if (fonc=="trombi")
+			{
+				$("#lstusers").addClass("trombi");
+
+				var m = data.data[key];
+				var prenom = m.name.split(' ')[0];
+
+				txt = "<a href='/membres/detail?id=" + m.id + "' class='trombi-card' data-name='" + m.name.toLowerCase() + "'>";
+
+				if (m.avatar) {
+					txt += "<img src='/" + m.avatar + "' alt='" + m.name + "'>";
+				} else {
+					var initials = m.name.trim().split(/\s+/).map(function(w){ return w.charAt(0).toUpperCase(); }).slice(0,2).join('');
+					var colors = ['#4a6fa5','#2e7d32','#c0392b','#7b1fa2','#e67e22','#0288d1','#00796b','#c62828'];
+					var bg = colors[m.name.charCodeAt(0) % colors.length];
+					txt += "<div class='trombi-initials' style='background:" + bg + ";'>" + initials + "</div>";
+				}
+
+				txt += "<div class='trombi-label'>" + prenom + "</div>";
+				txt += "</a>";
+			}
+			else
+			{
+				var aff_avatar=getAvatar(data.data[key].avatar,data.data[key].name);
+				var phoneHtml = (data.data[key].phone && data.data[key].phone !== '-') ? '<div class="feed-meta"><i class="mdi mdi-phone-outline"></i> ' + data.data[key].phone + '</div>' : '';
+				var mailHtml = data.data[key].mail ? '<div class="feed-meta"><i class="mdi mdi-email-outline"></i> ' + data.data[key].mail + '</div>' : '';
+				var badge = (data.data[key].virtuel == 'oui') ? '<span class="badge badge-secondary" style="font-size:0.65rem; margin-left:6px;">Virtuel</span>' : '';
+
+				txt+='<div class="feed-avatar feed-img-large"><a href="/membres/detail?id='+data.data[key].id+'">'+aff_avatar+'</a></div>';
+				txt+='<div class="feed-body">';
+				txt+='<div class="feed-title"><span><a href="/membres/detail?id='+data.data[key].id+'">'+data.data[key].name+'</a></span>' + badge + '</div>';
+				txt+= phoneHtml + mailHtml;
+
+				txt+='</div>';
+			}
+
+			txt+='</div>';
+
+			$("#lstusers").append(txt);
+		}
+	});
+
+});
+
+function filterList(val) {
+  var q = val.toLowerCase();
+  $('#lstusers a.feed-item, #lstusers .feed-item').each(function() {
+    var name = $(this).find('.feed-title').text().toLowerCase();
+    $(this).toggle(name.indexOf(q) > -1);
+  });
+}
+</script>
 <!-- END: corps -->
