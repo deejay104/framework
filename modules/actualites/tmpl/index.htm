@@ -40,45 +40,19 @@
         </div>
 
         <!-- Fil d'actualités (injecté par JS) -->
-        <div id="news" class="border-top profile-feed">
-<!-- BEGIN: news_template -->
-			<!-- Exemple de la structure injectée par loadNews() — voir JS -->
-          <div id="news_118" class="feed-item pinned">
-            <div class="feed-avatar">
-              <img src="" alt="avatar">
-            </div>
-            <div class="feed-body">
-              <div class="feed-title">
-                <span class="pin-badge"><i class="mdi mdi-star" style="font-size:0.7rem;"></i> Épinglé</span>
-                Proposition de vol en PA28 de Strasbourg à Brives 5-6 nov
-                <span class="feed-actions" id="edit_118">
-                  <a href="#" onclick="setFav(118,0);" title="Désépingler"><i class="mdi mdi-star"></i></a>
-                  <a href="#" onclick="editNews(118);" title="Modifier"><i class="mdi mdi-pencil"></i></a>
-                  <a href="" onclick="delNews(118);" title="Supprimer"><i class="mdi mdi-delete"></i></a>
-                </span>
-              </div>
-              <div class="feed-meta">
-                <a href="https://easyaero.dev.les-mnms.net/membres/detail?id=1">Matthieu ISOREZ</a>
-                <span class="sep">·</span>
-                <i class="mdi mdi-clock-outline" style="font-size:0.8rem;"></i> 25/10/2022 à 22:08
-              </div>
-              <p class="feed-text">Hello les pilotis. Si quelqu'un intéressé je vais à Brives le 5 novembre - retour le 6 novembre en PA28 de l'ACAF, au départ de Entzheim. Si la météo le permet bien sûr, décollage vers 8h, et retour le dimanche avant 20h. J'y vais pour effectuer sur place un saut de demonstration en parachute à l'ouverture du match de rugby entre Brives et la Rochelle le samedi à 17h. Si quelqu'un intéressé pour m'accompagner ? On se sépare à l'arrivée à Brives et on se retrouve le Dimanche début d'après midi pour le vol retour. 2 places disponibles. Philippe 07 82 31 79 68</p>
-            </div>
-          </div>
-        </div>
-<!-- END: news_template -->
+        <div id="news" class="border-top profile-feed"></div>
 
       </div>
     </div>
   </div>
 
   <!-- ── Colonne droite : informations ── -->
-  <div class="col-md-6 grid-margin stretch-card">
+  <div class="col-md-4 grid-margin stretch-card">
     <div class="card">
       <div class="card-body" style="padding:20px;">
 
         <!-- Recherche actualités -->
-        <div class="sidebar-section">
+        <div id="card-search" class="sidebar-section">
           <div class="sidebar-section-title">
             <i class="mdi mdi-magnify"></i> {lang_search}
           </div>
@@ -90,7 +64,7 @@
 
         <!-- Derniers documents -->
 
-        <div class="sidebar-section">
+        <div id="card-document" class="sidebar-section">
 			<div class="sidebar-section-title">
 				<i class="mdi mdi-file-document"></i> {lang_lastdocs}
 			</div>
@@ -101,7 +75,7 @@
 
 
         <!-- Échéances pilote -->
-        <div class="sidebar-section">
+        <div id="card-echeance" class="sidebar-section">
 			<div class="sidebar-section-title">
 				<i class="mdi mdi-shield-check"></i> {lang_information}
 			</div>
@@ -110,7 +84,9 @@
 			<!-- END: lst_echeance -->
 		</div>
 
-        {aff_custom}
+		<div id="card-custom">
+			{aff_custom}
+		</div>
 
       </div>
     </div>
