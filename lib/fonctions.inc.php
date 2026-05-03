@@ -1964,7 +1964,8 @@ function getBearing($lat1, $lon1, $lat2, $lon2) {
     }
   }
   //return the angle, normalized
-  return (rad2deg(atan2($dLon, $dPhi)) + 360) % 360;
+  //return (rad2deg(atan2(round($dLon,6), round($dPhi,6))) + 360) % 360;
+  return round(rad2deg(atan2($dLon, $dPhi))+360,0) % 360;
 }
 
 function getCompassDirection( $bearing )

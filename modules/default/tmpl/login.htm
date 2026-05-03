@@ -391,7 +391,7 @@
   <script src="{rootfolder}/{corefolder}/static/js/_md5.js"></script>
   <script>
     const API = '{rootfolder}/api/v1/admin/auth';
-    const HOME = '{rootfolder}';
+    const HOME = '{url}';
 
     function setFormFocus() {
       const u = document.getElementById('username');
@@ -425,12 +425,14 @@
         success: function(r) {
           if (r.auth === 'OK') {
             localStorage.setItem('token', r.token);
-            document.location = "{url}";
-          } else {
-			$("#loginbox").show();
-			$("#load").hide();
+            document.location = HOME;
+          } 
+          else 
+          {
+            $("#loginbox").show();
+            $("#load").hide();
 
-			showError("{core_autherror}: "+r.error);
+			      showError("{core_autherror}: "+r.error);
             btn.disabled = false;
             btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Se connecter';
           }

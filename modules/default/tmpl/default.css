@@ -1678,6 +1678,7 @@ div.tagsinput span.tag a { color: #ffffff; }
   padding:     0.25rem 0;
   max-height:  250px;
   overflow-y:  auto;
+  z-index:1010;
 }
 
 .ui-menu-item { padding: 0; }
