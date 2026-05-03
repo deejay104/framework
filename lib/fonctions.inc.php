@@ -883,10 +883,7 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 		foreach($tabValeur as $i=>$val)
 		{ 
 			$ret.="<tr";
-			if ($showicon!="")
-			{
-				$ret.=" OnMouseOver=\"document.getElementById('".$showicon."_".$val["id"]["val"]."').style.display='block';\" OnMouseOut=\"document.getElementById('".$showicon."_".$val["id"]["val"]."').style.display='none';\"";
-			}
+			$ret.=(($showicon!="") ? " class='action'" : "");
 			$ret.=">";
 	
 			foreach($tabTitre as $name=>$v)
@@ -905,8 +902,10 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 				}
 				if (!isset($val[$name]["align"]))
 				{
-					$val[$name]["align"]="left";
+					$val[$name]["align"]="";
 				}
+	
+
 				if ("*".$val[$name]["val"]=="*<line>")
 				{
 					// echo "'".$val[$name]["val"]."'";
@@ -914,7 +913,11 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 				}
 				else
 				{
-					$ret.="<td data-sort='".str_replace("'","_",$val[$name]["val"])."' ".(($val[$name]["align"]!="") ? "align='".$val[$name]["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").(($val[$name]["color"]!="") ? " style='background-color:#".$val[$name]["color"].";'" : "").">".$val[$name]["aff"]."</td>";
+					$ret.="<td data-sort='".str_replace("'","_",$val[$name]["val"])."' ";
+					$ret.="class='".(($val[$name]["align"]!="") ? "dt-".$val[$name]["align"] : "").(($v["mobile"]=="no") ? " noMobile" :"")."' ";
+					$ret.=(($val[$name]["color"]!="") ? " style='background-color:#".$val[$name]["color"].";'" : "").">";
+					$ret.=$val[$name]["aff"];
+					$ret.="</td>";
 				}
 			}
 			$ret.="</tr>\n";
@@ -1358,7 +1361,8 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 				$ret.="<tr";
 				if ($showicon!="")
 				{
-					$ret.=" OnMouseOver=\"document.getElementById('".$showicon."_".$val["id"]["val"]."').style.display='block';\" OnMouseOut=\"document.getElementById('".$showicon."_".$val["id"]["val"]."').style.display='none';\"";
+//					$ret.=" OnMouseOver=\"document.getElementById('".$showicon."_".$val["id"]["val"]."').style.display='block';\" OnMouseOut=\"document.getElementById('".$showicon."_".$val["id"]["val"]."').style.display='none';\"";
+					$ret.=" class='action'";
 				}
 				$ret.=">";
 
@@ -1372,7 +1376,7 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 					  }
 					else
 					  {
-						$ret.="<td ".(((isset($val[$name]["align"])) && ($val[$name]["align"]!="")) ? " align='".$val[$name]["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").">".(((!isset($val[$name]["aff"])) || ($val[$name]["aff"]=="")) ? $val[$name]["val"] : $val[$name]["aff"])."</td>";
+						$ret.="<td ".(((isset($val[$name]["align"])) && ($val[$name]["align"]!="")) ? " class='dt-".$val[$name]["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").">".(((!isset($val[$name]["aff"])) || ($val[$name]["aff"]=="")) ? $val[$name]["val"] : $val[$name]["aff"])."</td>";
 					  }
 				  }
 				$ret.="</tr>\n";
