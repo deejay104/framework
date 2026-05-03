@@ -1148,6 +1148,14 @@ textarea.form-control { min-height: 100px; resize: none; }
 .badge-outline-danger  { color: var(--p67-danger);  border: 1px solid var(--p67-danger);  }
 .badge-outline-success { color: var(--p67-success); border: 1px solid var(--p67-success); }
 
+.personal-badge {
+  position:absolute; top:6px; right:8px;
+  background:var(--primary); color:#fff;
+  font-size:10px; font-weight:700; padding:2px 9px;
+  border-radius:20px; letter-spacing:.5px; text-transform:uppercase;
+}
+
+
 /* ── 14. Alertes ────────────────────────────────────────────── */
 .alert {
   padding:       0.85rem 1.1rem;
@@ -1205,6 +1213,8 @@ textarea.form-control { min-height: 100px; resize: none; }
 .dropdown-divider { border-top: 1px solid var(--p67-border); margin: 0.25rem 0; }
 
 /* ── 16. Modales ─────────────────────────────────────────────  */
+.modal.fade .modal-dialog { -webkit-transform: translate(0,0px); transform: translate(0,0px); }
+
 .modal-content {
   border:        1px solid var(--p67-border);
   border-radius: 0;
@@ -1481,6 +1491,8 @@ div.tagsinput span.tag a { color: #ffffff; }
 .previous { width: auto; border: 0px;}
 .next { width: auto; border: 0px; }
 .disabled { opacity: .35; cursor: default; }
+.dt-right { white-space: nowrap; }
+
 
 .dataTables_wrapper .dataTables_filter input { margin-left: 0.5em; }
 .dataTables_wrapper input { height: 2.375rem; padding: 0.375rem 0.75rem; border: 1px solid #cdd4e0; }
@@ -1597,7 +1609,7 @@ div.tagsinput span.tag a { color: #ffffff; }
   .navbar-icon { display: block !important; }
   .navbar-profile { display: flex !important; }
   .d-lg-block { display: block !important; }
-  .modal-dialog { margin-top: 160px; }
+  .modal-dialog { margin-top: 40px; }
 }
 @media (min-width: 768px) {
   .grid-margin-md   { margin-bottom: 1.25rem; }
@@ -1844,6 +1856,7 @@ div {
   padding:     2px 6px;
   flex-shrink: 0;
 }
+
 
 /* Zone de rédaction */
 .compose-box {
