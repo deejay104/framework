@@ -1491,7 +1491,10 @@ div.tagsinput span.tag a { color: #ffffff; }
 .previous { width: auto; border: 0px;}
 .next { width: auto; border: 0px; }
 .disabled { opacity: .35; cursor: default; }
-.dt-right { white-space: nowrap; }
+.dt-left { text-align:left; white-space: nowrap; }
+.dt-center { text-align:center; white-space: nowrap; }
+.dt-right { text-align:right; white-space: nowrap; }
+.dt-action { padding:0px; }
 
 
 .dataTables_wrapper .dataTables_filter input { margin-left: 0.5em; }
