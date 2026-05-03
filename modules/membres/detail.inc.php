@@ -298,9 +298,9 @@
 	// Devrait être VisuDocument pour afficher le bloc
 	// ModifUserDocument pour passer en mode édition
 	
-	if ( (GetMyId($id)) || (GetDroit("ModifUserAll")) || (GetDroit("ModifUserDocument")) )
+	if ( (GetMyId($id)) || (GetDroit("ModifUserAll")) || (GetDroit("ModifUserDocument")) || (GetDroit("VisuUserDocument")) || (GetDroit("VisuDocument")) )
 	{
-		if ($typeaff=="form")
+		if (($typeaff=="form") && ((GetDroit("ModifUserDocument")) || (GetDroit("ModifUserAll"))))
 		{
 			$doc = new document_core(0,$sql);
 			$doc->editmode="form";
@@ -321,19 +321,18 @@
 					$tmpl_x->assign("form_document",$doc->Affiche("large","name"));
 					$tmpl_x->parse("corps.aff_documents.lst_document");
 				}
-			}	
+			}
 		}
 
-		$tmpl_x->parse("corps.aff_documents");
-		
+		$tmpl_x->parse("corps.aff_documents");		
 	}
 
 	// Echéances
 	if ($MyOpt["module"]["echeances"]=="on")
 	{
-		if ( (GetMyId($id)) || (GetDroit("ModifUserAll")) || (GetDroit("ModifUserEcheance")) )
+		if ( (GetMyId($id)) || (GetDroit("ModifUserAll")) || (GetDroit("ModifUserEcheance")) || (GetDroit("VisuUserEcheance")) )
 		{
-			if ($typeaff=="form")
+			if (($typeaff=="form") && ((GetDroit("ModifUserEcheance")) || (GetDroit("ModifUserAll"))))
 			{
 				$dte = new echeance_core(0,$sql,$id);
 				$dte->editmode="form";

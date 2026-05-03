@@ -52,16 +52,22 @@
 							<IMG src="{aff_avatar}" alt="" width=200 height=240>
 
 							<!-- BEGIN: photos -->
-							<div class="form-group">
-									<INPUT id="form_photo" name="form_photo" class="file-upload-default" type="file">
-
-									<div class="input-group col-xs-12">
-										<input type="text" class="form-control file-upload-info" disabled="" placeholder="Image">
-										<span class="input-group-append">
-											<button class="file-upload-browse btn btn-sm btn-primary" type="button">Upload</button>
-										</span>
-								  </div>
+							<div class="doc-list-item">
+								<div class="file-input-wrapper ">
+								  <input name="form_photo" type="file" id="form_photo">
+								  <label for="form_photo" class="file-input-label">
+									<i class="mdi mdi-cloud-upload-outline"></i>
+									Choisir un fichier
+								  </label>
+								  <span class="file-input-name" id="form_photo_name">Aucun fichier sélectionné</span>
+								</div>
 							</div>
+										
+								<script>document.getElementById("form_photo").addEventListener("change", function() {
+									var nom = this.files.length ? this.files[0].name : "Aucun fichier sélectionné";
+									document.getElementById("form_photo_name").textContent = nom;
+								  });</script>
+
 							<div class="form-group">
 								{lang_selectpicture}
 								{lang_selectpicture2}

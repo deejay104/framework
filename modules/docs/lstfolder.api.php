@@ -21,6 +21,8 @@
 		{
 			$result["data"][$ii]=$d;
 			$result["data"][$ii]["description"]=nl2br($d["description"]);
+			$result["data"][$ii]["edit"]=((GetDroit($d["group_write"])) && (GetDroit("ModifDossier")) ) ? 1 : 0;
+			
 			$ii++;
 		}
 	}

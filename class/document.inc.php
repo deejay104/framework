@@ -241,19 +241,48 @@ class document_core{
 		$txt="";
 		if ($this->editmode=="form")
 		{
-			$txt.="<div id='doc_0'></div>";
 
+			$txt.='<div class="doc-list-item">';
+			$txt.='<div class="file-input-wrapper ">';
+			$txt.='  <input name="form_adddocument[0]" type="file" id="form_adddocument_0">';
+			$txt.='  <label for="form_adddocument_0" class="file-input-label">';
+			$txt.='	<i class="mdi mdi-cloud-upload-outline"></i>';
+			$txt.='	Choisir un fichier';
+			$txt.='  </label>';
+			$txt.='  <span class="file-input-name" id="form_adddocument_name">Aucun fichier sélectionné</span>';
+			$txt.='</div>';
+			$txt.='</div>';
+
+//			$txt.='<script>function AddDocument() {console.log($("#form_adddocument_0")); $("#form_adddocument_name").html($("#form_adddocument_0").val()); }</script>';
+
+			$txt.='<script>document.getElementById("form_adddocument_0").addEventListener("change", function() {';
+			$txt.='	var nom = this.files.length ? this.files[0].name : "Aucun fichier sélectionné";';
+			$txt.='	document.getElementById("form_adddocument_name").textContent = nom;';
+			$txt.='  });</script>';
+
+/*
+			$txt.="<div id='doc_a_0'></div>";
 			$txt.="<script>";
 			$txt.="function AddDocument(i) {";
 
-			$txt.="var r=\"<input name='form_adddocument[\"+i+\"]' type='file' size='60' class='form-control' OnChange='AddDocument(\"+(i+1)+\");'/>\";\n";
-			$txt.="r=r+\"<div id='doc_\"+(i+1)+\"'></div>\";\n";
-			$txt.="var d=document.getElementById('doc_'+i);\n";
+			//$txt.="var r=\"<input name='form_adddocument[\"+i+\"]' type='file' size='60' class='form-control' OnChange='AddDocument(\"+(i+1)+\");'/>\";\n";
+			$txt.="var r=\"<div class='file-input-wrapper'>; 
+				<input name='form_adddocument[\"+i+\"]' type='file' OnChange='AddDocument(\"+(i+1)+\");'/>\"; 
+				<label for='form_adddocument[\"+i+\"]' class='file-input-label'>\"; ";
+			$txt.="r+=\"<i class='mdi mdi-cloud-upload-outline'></i>\"; ";
+			$txt.="r+=\"Choisir un fichier\"; ";
+			$txt.="r+=\"</label>\"\n";
+			$txt.="r+=\"<span class='file-input-name' id='form_adddocument_\"+i+\"_nom'>Aucun fichier sélectionné</span>\"; ";
+		  	$txt.="r+=\"</div>\";";
+
+			$txt.="r=r+\"<div id='doc_a_\"+(i+1)+\"'></div>\";\n";
+			$txt.="var d=document.getElementById('doc_a_'+i);\n";
 			$txt.="d.innerHTML=r;\n";
 			$txt.="}\n";
 			
 			$txt.="AddDocument(0);\n";
 			$txt.="</script>";
+*/
 		}
 		else if ($this->editmode=="regular")
 		{
@@ -277,11 +306,11 @@ class document_core{
 			{
 				$fsize=CalcSize(filesize($this->filepath."/".$this->filename));
 
-				$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank' class='doc-list-item'>";
-				$txt.="    <i class='mdi mdi-file-".$attr["icon"]." doc-icon' style='color:".$attr["color"].";'></i>";
+				$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank' >";
+				$txt.="<i class='mdi mdi-file-".$attr["icon"]." doc-icon' style='color:".$attr["color"].";'></i>";
 				if ($type!="short")
 				{
-					$txt.="    <span class='doc-name'>".$filename."</span>";
+					$txt.="<span class='doc-name'>".$filename."</span>";
 					$txt.="<span class='doc-size'>".$fsize."</span>";
 				}
 				$txt.="</a>";
@@ -303,12 +332,12 @@ class document_core{
 			if (file_exists($this->filepath."/".$this->filename))
 			{
 				$fsize=CalcSize(filesize($this->filepath."/".$this->filename));
-
+				$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'>";
 				$txt.="<i class='mdi mdi-file-".$attr["icon"]." doc-icon' style='color:".$attr["color"].";'></i>";
 				if ($type!="short")
 				{
 					$txt.="<span class='doc-name'>".$filename."</span>";
-					$txt.="<span class='doc-size'>".$fsize."</span>";
+					$txt.="<span class='doc-size'> (".$fsize.")</span>";
 				}
 				$txt.="</a>";
 
@@ -748,6 +777,7 @@ function ListDocument($sql,$uid,$type)
 			|| (($sql->data["droit"]!="") && (isset($myuser->groupe[$sql->data["droit"]])) && ($myuser->groupe[$sql->data["droit"]]))
 			|| ($sql->data["droit"]=="ALL") 
 			|| (GetDroit("VisuDocument"))
+			|| (GetDroit("VisuUserDocument"))
 		)
 		{
 			$lstdoc[$i]=$sql->data["id"];

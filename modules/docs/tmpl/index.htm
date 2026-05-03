@@ -135,7 +135,7 @@
     .folder-card.personal .folder-ico { background:var(--primary); }
     .folder-card.personal .folder-ico i { color:#fff; }
     .personal-badge {
-      position:absolute; top:14px; right:14px;
+      position:absolute; top:6px; right:8px;
       background:var(--primary); color:#fff;
       font-size:10px; font-weight:700; padding:2px 9px;
       border-radius:20px; letter-spacing:.5px; text-transform:uppercase;
@@ -326,11 +326,15 @@ function loadContent()
 					'<div class="f-desc">' + desc + '</div>' +
 				'</div>' +
 				'</a>' +
-				'<div class="card-foot">' +
-				'<button class="edit-btn" onclick="event.stopPropagation();editFolder(' + f.id + ');" title="Modifier">' +
+				'<div class="card-foot">';
+			if (f.edit==1)
+			{
+				html +='<button class="edit-btn" onclick="event.stopPropagation();editFolder(' + f.id + ');" title="Modifier">' +
 					'<i class="mdi mdi-pencil-outline"></i> Modifier' +
-				'</button>' +
-				'</div>' +
+				'</button>';
+
+			}
+				html +='</div>' +
 				'</div>';
 		}
 
