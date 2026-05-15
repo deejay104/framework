@@ -62,7 +62,8 @@
 		$tabValeur[$i]["titre"]["aff"]=$sql->data["titre"];
 		$tabValeur[$i]["id"]["val"]=$sql->data["id"];
 		$tabValeur[$i]["action"]["val"]=$sql->data["id"];
-		$tabValeur[$i]["action"]["aff"]="<div id='action_".$sql->data["id"]."' style='display:none;'><a id='edit_".$sql->data["id"]."' ><i class='mdi mdi-pencil'></i></a></div>";
+		$tabValeur[$i]["action"]["align"]="action";
+		$tabValeur[$i]["action"]["aff"]="<span class='feed-actions'><a id='edit_".$sql->data["id"]."' ><i class='mdi mdi-pencil'></i></a></span>";
 		
 		$tmpl_x->assign("lst_id",$sql->data["id"]);
 		$tmpl_x->parse("corps.lst_edit");
