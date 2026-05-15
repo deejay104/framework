@@ -190,7 +190,64 @@ class objet_core
 			$this->data[$k]=$res[$k];
 		}
 	}
+
+	# Load object from a given field that needs to be unique
+	function loadFromField($field,$id=0)
+	{
+		$sql=$this->sql;
+
+		if (is_array($field))
+		{
+			$q="";
+			$s="";
+			foreach($field as $f=>$id)
+			{
+				if (isset($id))
+				{
+					$q.=$s." ".$f."='".addslashes($id)."' ";
+					$s="AND";					
+				}
+			}
+
+			$query = "SELECT * FROM ".$this->tbl."_".$this->table." WHERE ".$q;
+
+			$res = $sql->QueryRow($query);
+			if (!is_array($res))
+			{
+				return 0;
+			}
+			
 	
+			$this->id=$res["id"];
+			$this->actif=$res["actif"];
+			$this->uid_creat=$res["uid_creat"];
+			$this->dte_creat=$res["dte_creat"];
+			$this->uid_maj=$res["uid_maj"];
+			$this->dte_maj=$res["dte_maj"];
+			
+			// Charge les variables
+			
+			foreach($this->fields as $k=>$v)
+			{
+				$this->data[$k]=$res[$k];
+			}
+		}
+	}
+
+	function genuuid($data = null) {
+		// Generate 16 bytes (128 bits) of random data or use the data passed into the function.
+		$data = $data ?? random_bytes(16);
+		assert(strlen($data) == 16);
+
+		// Set version to 0100
+		$data[6] = chr(ord($data[6]) & 0x0f | 0x40);
+		// Set bits 6-7 to 10
+		$data[8] = chr(ord($data[8]) & 0x3f | 0x80);
+
+		// Output the 36 character UUID.
+		return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+	}
+
 	# Show object informations
 	function aff($key,$typeaff="html",$formname="form_data",&$render="",$formid="")
 	{
@@ -1001,6 +1058,11 @@ class objet_core
 					{
 						$tabobj[$key]["Default"]=$field["default"];
 					}
+				}
+				else if ($field["type"]=="uuid")
+				{
+					$tabobj[$key]["Type"]="varchar(40)";
+					$tabobj[$key]["Default"]="";
 				}
 				else if (($field["type"]=="date") || ($field["type"]=="birthday"))
 				{

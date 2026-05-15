@@ -43,14 +43,23 @@
 	$myusr=checkVar("myusr","varchar");
 	$mypwd=checkVar("mypwd","varchar");
 	$mod=checkVar("mod","varchar");
-	$rub=checkVar("rub","varchar","index");
+	$rub=checkVar("rub","varchar",50);
 	$fonc=checkVar("fonc","varchar");
+	$context=checkVar("c","varchar",10,"api");
 
 	$gl_uid = 0;
 	$token=(!isset($token)) ? "" : $token;
 	$token=($token=="sys") ? "" : $token;
 
-	
+	if ($context=="public")
+	{
+		$gl_context="pub";
+	}
+	else
+	{
+		$gl_context="api";
+	}
+
 // ---- Demande d'authentification --------------------------------------------------------------------
 	if (($fonc=="login") && ($mykey!=""))
 	{
@@ -234,6 +243,10 @@
 			header("HTTP/1.0 401 Unauthorized"); exit;
 		}		
 	}
+	else if ($context=="public")
+	{
+
+	}
 	else
 	{
 		header("HTTP/1.0 401 Unauthorized"); exit;
@@ -252,15 +265,29 @@
 
 
 	header('access-control-allow-credentials: true');
-	header('access-control-allow-headers: token');
-	header('access-control-allow-methods: GET,HEAD,PUT,PATCH,POST,DELETE');
-	header('access-control-allow-origin: *');
+//	header('access-control-allow-headers: token');
+	header('Access-Control-Allow-Headers: Content-Type');
+	header('Access-Control-Max-Age: 86400');
+	header('access-control-allow-methods: GET,POST,DELETE,OPTIONS');
 	header('Strict-Transport-Security: max-age=31536000;includeSubdomains');
 	header("Content-Security-Policy: frame-ancestors 'none'; default-src 'self', script-src '".$MyOpt["host"].":*'");
 	header('X-Content-Type-Options: nosniff');
 	header('X-Frame-Options: DENY');
 	header('Referrer-Policy: no-referrer');
 
+	$allowed = [$MyOpt["host"], 'https://www.polygone67.com'];
+	$origin  = $_SERVER['HTTP_ORIGIN'] ?? '';
+
+	if (in_array($origin, $allowed, true)) {
+		header("Access-Control-Allow-Origin: $origin");
+		header('Vary: Origin');
+	}
+
+	if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS')
+	{
+		http_response_code(204);
+		exit();
+	}
 
 // ---- Charge les informations standards
 
@@ -290,7 +317,11 @@
 	{
 		$myuser = new user_core(0,$sql,true);
 	}
-
+	else
+	{
+		// A limiter pour page publique, à voir quel user on utilise pour l'impersonification des pages publiques system ou club
+		$myuser = new user_core(0,$sql,true);
+	}
 	$module="modules";
 	$gl_mode="api";
 
@@ -353,18 +384,18 @@
 		}
 
 		// Charge le script
-		if (file_exists($appfolder."/modules/".$mod."/".$rub.".api.php"))
+		if (file_exists($appfolder."/modules/".$mod."/".$rub.".".$gl_context.".php"))
 		{
-			require($appfolder."/modules/".$mod."/".$rub.".api.php");
+			require($appfolder."/modules/".$mod."/".$rub.".".$gl_context.".php");
 		}
-		else if (file_exists("modules/".$mod."/".$rub.".api.php"))
+		else if (file_exists("modules/".$mod."/".$rub.".".$gl_context.".php"))
 		{
-			require("modules/".$mod."/".$rub.".api.php");
+			require("modules/".$mod."/".$rub.".".$gl_context.".php");
 		}
-		else if (file_exists("modules/".$mod."/".$rub.".inc.php"))
-		{
-			require("modules/".$mod."/".$rub.".inc.php");
-		}
+//		else if (file_exists("modules/".$mod."/".$rub.".inc.php"))
+//		{
+//			require("modules/".$mod."/".$rub.".inc.php");
+//		}
 		else
 		{
 			echo "{  \"result\": \"File not found\" }\n";

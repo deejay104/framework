@@ -83,7 +83,7 @@
 	if (count($lstdoc)>0)
 	{
 		$doc=new document_core($lstdoc[0],$sql);
-		$tmpl_x->assign("form_avatar",$doc->GenerePath(200,240));
+		$tmpl_x->assign("form_avatar",$doc->GenerePath(64,64));
 	}
 	else
 	{

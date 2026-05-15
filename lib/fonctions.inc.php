@@ -221,6 +221,10 @@ function checkVar($var,$type,$len=256,$default="")
 		{
 			$v=$data[$var];
 		}
+		else if (isset($data["data"][$var]))
+		{
+			$v=$data[$var];
+		}
 		else
 		{
 			$v=$default;
@@ -280,7 +284,8 @@ function checkVar($var,$type,$len=256,$default="")
 	}
 	else if ($type=="bool")
 	{
-		if ($v=="true")
+		error_log($v);
+		if (($v=="true") || ($v))
 		{
 			return true;
 		}
@@ -622,7 +627,6 @@ function SendMailFromFile($from,$to,$tabcc,$subject="",$tabvar=array(),$name="",
 	{
 		$mail.="\n\n-Email envoyé à partir du site ".$MyOpt["site_title"]."-";
 		$mail=nl2br($mail);
-
 		return MyMail($from,$to,$tabcc,$subject,$mail,"",$files);
 	}
 }
@@ -653,10 +657,10 @@ function MyMail($from,$to,$tabcc,$subject,$message,$headers="",$files="")
 	}
 
 	if ($MyOpt["sendmail"]!="on") { myPrint("From:".$txtfrom." - To:".$to." - Cc:".$txtcc." - Subject:".$subject); return false; }
-	
+
 	//Create a new PHPMailer instance
 	$mail = new PHPMailer;
-	//$mail->SMTPDebug = 3;
+	$mail->SMTPDebug = 0;
 
 	if ($MyOpt["mail"]["smtp"]=="on")
 	{
@@ -2053,4 +2057,63 @@ function Purge($txt)
 
 	return $txt;
 }
+
+/**
+ * Masque une adresse e-mail pour affichage public.
+ * 
+ * matthieu@les-mnms.net  → ma******@le*******.net
+ * jean.dupont@gmail.com  → je********@gm***.com
+ * a@b.co                 → a@b.co  (trop court, on garde tel quel)
+ */
+function maskMail(string $mail): string
+{
+    if (!str_contains($mail, '@')) return $mail;
+
+    [$local, $domain] = explode('@', $mail, 2);
+
+    $dotPos = strrpos($domain, '.');
+    if ($dotPos === false) return $mail;
+
+    $domainName = substr($domain, 0, $dotPos);
+    $tld        = substr($domain, $dotPos);      // .net, .com, .fr
+
+    $local      = maskPart($local, 2);
+    $domainName = maskPart($domainName, 2);
+
+    return $local . '@' . $domainName . $tld;
+}
+
+/**
+ * Masque un numéro de téléphone pour affichage public.
+ *
+ * 0689888666   → 06••••••66
+ * 06 89 88 86 66 → 06 •• •• •• 66
+ * +33689888666 → +336••••••66
+ */
+function maskPhone(string $phone): string
+{
+    $digits = preg_replace('/\D/', '', $phone);
+    $len    = strlen($digits);
+
+    if ($len < 6) return $phone;           // trop court, on ne touche pas
+
+    $show = 2;                              // chiffres visibles début / fin
+    $maskDigits = str_repeat('•', $len - $show * 2);
+
+    $masked = substr($digits, 0, $show) . $maskDigits . substr($digits, -$show);
+
+    return $masked;
+}
+
+/**
+ * Masque un fragment en ne gardant que les $keep premiers caractères visibles.
+ */
+function maskPart(string $str, int $keep): string
+{
+    $len = mb_strlen($str);
+    if ($len <= $keep) return $str;
+
+    return mb_substr($str, 0, $keep) . str_repeat('•', $len - $keep);
+}
+
 ?>
