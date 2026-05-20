@@ -15,7 +15,7 @@
         <!-- Zone de rédaction -->
         <div id="actualitesNouveau">
           <form name="actualites" method="post" action="{path_root}/actualites" enctype="multipart/form-data">
-			<INPUT type="hidden" name="id" value="{id}">
+			<INPUT type="hidden" id="id" name="id" value="{id}">
 			<INPUT type="hidden" name="checktime" value="{form_checktime}">
 
             <div class="compose-box">
@@ -30,12 +30,12 @@
                   <input id="file" type="file" style="display:none">
                   <input name="fonc" class="btn btn-primary btn-sm" type="submit" value="{lang_post}" style="margin-left:auto; border-radius:6px;">
                 </div>
+				<div id="uploadDoc" class="upload">
+					<div id="uploadProgress" style="display:none; text-align:center; font-size:0.82rem; color:#718096;"></div>
+				</div>
               </div>
             </div>
 
-            <div id="uploadDoc" class="upload">
-              <div id="uploadProgress" style="display:none; text-align:center; font-size:0.82rem; color:#718096;"></div>
-            </div>
           </form>
         </div>
 
@@ -273,7 +273,7 @@
 						// Titre + actions
 						txt += '<div class="feed-title">';
 						if (isPinned) {
-							txt += '<span class="pin-badge"><i class="mdi mdi-star" style="font-size:.7rem;"></i> Épinglé</span>';
+							txt += '<span class="pin-badge"><i class="mdi mdi-star" style="font-size:.7rem;"></i> Rappel</span>';
 						}
 						txt += '<span>'+value.title+'</span>';
 
