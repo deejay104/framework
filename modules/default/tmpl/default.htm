@@ -193,7 +193,7 @@ showToast("","{msg_infos}","{msg_type}");
 						{
 							i=i+1;
 							console.log(data.data[key]);
-							$("#searchresult").html($("#searchresult").html()+"<p>"+data.data[key].doc[ii].url+"</p>");
+							$("#searchresult").html($("#searchresult").html()+"<div class='doc-list-item'>"+data.data[key].doc[ii].fullpath+"</div>");
 						}
 					}
 					if (i>0)

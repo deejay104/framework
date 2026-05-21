@@ -469,13 +469,13 @@ function searchList()
 			i=0
 			for (var key in data.data)
 			{
-				txtFiles=txtFiles+"<div class='paperBox'>";
 				for (var ii in data.data[key].doc)
 				{
-					txtFiles=txtFiles+"<div class='paperDocument'>"+data.data[key].doc[ii].url+"</div>";
+					txtFiles=txtFiles+"<div class='doc-list-item'>";
+					txtFiles=txtFiles+data.data[key].doc[ii].fullpath;
+					txtFiles=txtFiles+"</div>";
 					i=i+1;
 				}
-				txtFiles=txtFiles+"</div>";
 			}
 			$("#lstPapers").html(txtFiles);
 			if (i>0)

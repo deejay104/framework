@@ -1967,7 +1967,7 @@ div {
   text-align: center;
 }
 .doc-list-item .doc-name { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.doc-list-item .doc-size { font-size: 0.72rem; color: var(--p67-text-muted); flex-shrink: 0; }
+.doc-list-item .doc-size { font-size: 0.72rem; color: var(--p67-text-muted); flex-shrink: 0; padding-left: 6px; }
 
 /* Échéances */
 .echeance-item {
