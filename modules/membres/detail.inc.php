@@ -29,8 +29,17 @@
 
 // ---- Charge le template
 	$tmpl_x->assign("path_module",$MyOpt["host"]."/".$corefolder."/".$module."/".$mod);
-	
+
+// ---- Annule
+	if ($fonc==$tabLang["lang_cancel"])
+	{
+		header('Location: /membres/detail?id='.$id, true, 303);
+		exit;
+	}
+
 // ---- Initialisation des variables
+
+	$update=checkVar("update","numeric");
 
 	$form_data=checkVar("form_data","array");
 	$form_droits=checkVar("form_droits","array");
@@ -48,18 +57,19 @@
 	  { $usr = new user_core(0,$sql,false); }
 
 // ---- Sauvegarde les infos
-	if (($fonc==$tabLang["lang_save"]) && (($id=="") || ($id==0)) && ((GetDroit("CreeUser"))) && (!isset($_SESSION['tab_checkpost'][$checktime])))
+	if ( ($fonc==$tabLang["lang_save"]) && (($id=="") || ($id==0)) && ((GetDroit("CreeUser"))) )
 	{
 		$usr->Create();
 		$id=$usr->id;
 	}
-	else if (($fonc==$tabLang["lang_save"]) && ($id=="") && (isset($_SESSION['tab_checkpost'][$checktime])))
+	else if ( ($fonc==$tabLang["lang_save"]) && ($id==0) )
 	{
-		$mod="membres";
-		$affrub="index";
+		header('Location: /membres', true, 303);
+    	exit;
 	}
 
-	if (($fonc==$tabLang["lang_save"]) && ((GetMyId($id)) || (GetDroit("ModifUser"))) && (!isset($_SESSION['tab_checkpost'][$checktime])))
+	$ok=0;
+	if ( ($fonc==$tabLang["lang_save"]) && ((GetMyId($id)) || (GetDroit("ModifUser"))) )
 	{
 		// Sauvegarde les données
 		if (count($form_data)>0)
@@ -145,9 +155,7 @@
 				}
 			}
 		}
-
-		affInformation($tabLang["lang_datasaved"],"ok");
-		$_SESSION['tab_checkpost'][$checktime]=$checktime;		
+		$ok=1;
 	}
 
 	// Sauvegarde les droits
@@ -155,38 +163,59 @@
 	{
 		$err=$usr->SaveDroits($form_droits);
 		affInformation($err,"error");
+		$ok=1;
 	}
 	if (($fonc==$tabLang["lang_save"]) && ($id>0) && (GetDroit("ModifUserGroupe")) && ($usr->data["groupe"]!=""))
 	{
 		$err=$usr->AddGroupe($usr->data["groupe"]);
 		affInformation($err,"error");
+		$ok=1;
 	}
 
-	// Sauvegarde les donn�es utilisateurs
+	// Sauvegarde les données utilisateurs
 	if (($fonc==$tabLang["lang_save"]) && ($id>0) && (GetDroit("ModifUserDonnees")) && (is_array($form_donnees)))
 	{
 		$usr->LoadDonneesComp();
 		$err=$usr->SaveDonneesComp($form_donnees);
 		affInformation($err,"error");
+		$ok=1;
 	}
+
+	if ($ok==1)
+	{
+		header('Location: /membres/detail?id='.$id.'&update=1', true, 303);
+		exit;
+	}
+
 
 // ---- Supprimer l'utilisateur
 	if (($fonc=="delete") && ($id>0) && (GetDroit("SupprimeUser")))
-	  {
+	{
 		$usr->Delete();
-		$mod="membres";
-		$affrub="index";
-	  }
+		header('Location: /membres', true, 303);
+		exit;
+	}
 
 	if (($fonc=="desactive") && ($id>0) && (GetDroit("DesactiveUser")))
-	  {
+	{
 		$usr->Desactive();
-	  }
+	}
 
   	if (($fonc=="active") && ($id>0) && (GetDroit("DesactiveUser")))
-	  {
+	{
 		$usr->Active();
-	  }
+	}
+
+// ---- Message d'update
+	if ($update==1)
+	{
+		affInformation($tabLang["lang_datasaved"],"ok");
+	}
+	else if ($update==2)
+	{
+		affInformation("Votre mot de passe a été mis à jour.","ok");
+	}
+
 
 // ---- Affiche le menu
 	$aff_menu="";

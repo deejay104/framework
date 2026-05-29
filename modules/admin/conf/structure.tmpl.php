@@ -181,7 +181,7 @@ $tabTmpl=Array
 	(
 		"id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
 		"uid" => Array("Type" => "int(10) unsigned", "Index" => "1", ),
-		"token" => Array("Type" => "varchar(64)", ),
+		"token" => Array("Type" => "varchar(64)", "Index" => "1" ),
 		"active" => Array("Type" => "enum('oui','non')", "Default"=>"oui"),
 		"dte_expire" => Array("Type" => "datetime", "Default"=>"0000-00-00 00:00:00"),
 		"uid_creat" => Array("Type" => "int(10) unsigned", "Default" => "0"),

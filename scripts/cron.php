@@ -31,7 +31,7 @@
 
 	$appfolder="..";
 	
-// ---- Défini les variables globales
+// ---- Dï¿½fini les variables globales
 	$prof="";
 	$gl_mode="batch";
 	
@@ -50,14 +50,14 @@
   	require ($appfolder."/config/config.inc.php");
 	require ($appfolder."/static/cache/config/variables.inc.php");
 
-// ---- Charge le numéro de version
+// ---- Charge le numï¿½ro de version
 	require ("version.php");
 
 // ---- Charge les class
 	require ("class/objet.inc.php");
 	require ("class/user.inc.php");
 
-// ---- Se connecte à la base MySQL
+// ---- Se connecte ï¿½ la base MySQL
 	$MyOpt["tbl"]=$gl_tbl;
 	require ("class/mysql.inc.php");
 
@@ -66,16 +66,16 @@
 
 echo "start";
 
-// ---- Défini l'utilisateur d'execution du batch
+// ---- Dï¿½fini l'utilisateur d'execution du batch
 	if ((!isset($MyOpt["uid_system"])) && (!is_numeric($MyOpt["uid_system"])) || ($MyOpt["uid_system"]==0))
 	{
-		FatalError("Compte systeme introuvable","Le compte systeme n'est pas défini.");
+		FatalError("Compte systeme introuvable","Le compte systeme n'est pas defini.");
 	}
 
 	$gl_uid=$MyOpt["uid_system"];
 	$uid=$gl_uid;
 
-// ---- Timezone d'exécution
+// ---- Timezone d'exï¿½cution
 	if ($MyOpt["timezone"]!="")
 	  { date_default_timezone_set($MyOpt["timezone"]); }
 	
@@ -88,7 +88,7 @@ echo "start";
 
 	$module="modules";
 
-// ---- Execute les taches planifiées
+// ---- Execute les taches planifiï¿½es
 	$query="SELECT * FROM ".$MyOpt["tbl"]."_cron WHERE actif='oui' AND (nextrun<='".now()."' OR nextrun IS NULL)";
 	$sql_cron->Query($query);
 
@@ -113,7 +113,7 @@ echo "start";
 		$sql->Update($q);
 	}
 
-// ---- Ferme la connexion à la base de données	
+// ---- Ferme la connexion ï¿½ la base de donnï¿½es	
  	$sql->closedb();
 
 ?>

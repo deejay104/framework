@@ -30,7 +30,7 @@
 // ---- Enregistrer
 	$msg_erreur="";
 	$msg_confirmation="";
-	if (($fonc=="Enregistrer") && (!isset($_SESSION['tab_checkpost'][$checktime])))
+	if ($fonc=="Enregistrer")
 	{
 		$form_data=checkVar("form_data","array");
 		$pb=new amelioration_core($id,$sql);
@@ -49,20 +49,20 @@
 			$id=$pb->id;
 		}
 
-		$_SESSION['tab_checkpost'][$checktime]=$checktime;
+			header('Location: /ameliorations/detail?id='.$id, true, 303);
+    	exit;
+
 	}
 // ---- Supprimer
 	if (($fonc=="supprimer") && ($id>0) && (GetDroit("SupprimeAmelioration")))
 	{
 		$pb=new amelioration_core($id,$sql);
 		$pb->Delete();
-		$mod="ameliorations";
-		$affrub="index";
-		return;
+		header('Location: /ameliorations', true, 303);
 	}
 
 // ---- Sauver une réponse
-	if (($fonc=="Poster") && ($id>0) && (GetDroit("CreeAmeliorationCommentaire")) && (!isset($_SESSION['tab_checkpost'][$checktime])))
+	if ( ($fonc=="Poster") && ($id>0) && (GetDroit("CreeAmeliorationCommentaire")) )
 	{
 		$form_desc=checkVar("form_desc","varchar");
 
@@ -70,7 +70,10 @@
 		{
 			$pb=new amelioration_core($id,$sql);
 			$pb->AddCommentaire($form_desc);
-			$_SESSION['tab_checkpost'][$checktime]=$checktime;
+
+			header('Location: /ameliorations/detail?id='.$id, true, 303);
+	    	exit;
+
 		}
 	}
 

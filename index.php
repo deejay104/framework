@@ -41,16 +41,17 @@
 	
 	$tabLang=array();
 
-// ---- Ouverture de la session
-	session_start();
-	$gl_uid=0;
-	if ((isset($_SESSION['uid'])) && ($_SESSION['uid']>0))
-	{
-		$gl_uid = $_SESSION['uid'];
-	}
-
 // ---- Charge les bibliothèques
 	require ("lib/fonctions.inc.php");
+
+
+// ---- Ouverture de la session
+	$gl_uid=0;
+	if (isset($_COOKIE['t_session']))
+	{
+		$gl_auth=verifyJWT($_COOKIE['t_session']);
+		$gl_uid=$gl_auth["uid"];
+	}
 
 // ---- Nettoyage des variables
 	$tabPost=array();
@@ -81,44 +82,7 @@
 	$MyOpt["tbl"]=$gl_tbl;
 	if ($gl_uid==0)
 	{
-		// Vérifie si la table config existe
-		$q="SHOW TABLES";
-		$sql->Query($q);
-
-		$ok=0;
-		if ($sql->rows>0)
-		{
-			for($i=0; $i<$sql->rows; $i++)
-			{
-				$sql->GetRow($i);
-				if ($sql->data["Tables_in_".$db]==$MyOpt["tbl"]."_config")
-				{
-					$ok=1;
-				}
-			}
-		}
-
-		if ($ok==0)
-		{
-			$module="modules";
-			$tmpl_prg = LoadTemplate("init","default");
-			$tmpl_prg->assign("corefolder", $MyOpt["host"]."/".$corefolder);
-			$tmpl_prg->assign("rootfolder", $MyOpt["host"]);
-
-			if (($mysqluser=="") || ($gl_tbl==""))
-			{
-				$tmpl_prg->parse("main.configdb");
-			}
-			else
-			{
-				$tmpl_prg->parse("main.createdb");
-			}
-
-			$tmpl_prg->parse("main");
-			echo $tmpl_prg->text("main");
-			exit;
-		}
-
+		//initDatabase();
 	}
 
 
@@ -177,18 +141,24 @@
 	{	
 		$themes["default"]="";
 		$themes["phone"]="phone";
-		
+
 		$theme=$themes[$_REQUEST["settheme"]];
-		$_SESSION['mytheme']=$theme;
+		setcookie('theme', $theme, [
+			'expires'  => time() + $MyOpt["sessionexpire"],
+			'path'     => '/',
+			'httponly'  => true,      // JS n'en a pas besoin non plus
+			'secure'   => true,
+			'samesite' => 'Lax',     // ← Lax et non Strict, sinon le cookie
+		]);                           //   ne part pas quand on arrive d'un
 	}
 	else if ($theme!="")
 	{
 	}
-	else if (isset($_SESSION['mytheme']))
+	else if (isset($_COOKIE['theme']))
 	{
-		$theme=$_SESSION['mytheme'];
+		$theme=$_COOKIE['theme'];
 	}
-	else if ((!isset($_SESSION['mytheme'])) || ($_SESSION['mytheme']==""))
+	else if ((!isset($_COOKIE['theme'])) || ($_COOKIE['theme']==""))
 	{
 		if ((preg_match("/CPU iPhone OS/",$_SERVER["HTTP_USER_AGENT"])) ||
 			(preg_match("/iPad; U; CPU OS/",$_SERVER["HTTP_USER_AGENT"])) ||
@@ -198,7 +168,15 @@
 		   )
 		{
 			$theme="phone";
-			$_SESSION['mytheme']=$theme;
+
+            setcookie('theme', $theme, [
+                'expires'  => time() + $MyOpt["sessionexpire"],
+                'path'     => '/',
+                'httponly'  => true,      // JS n'en a pas besoin non plus
+                'secure'   => true,
+                'samesite' => 'Lax',     // ← Lax et non Strict, sinon le cookie
+            ]);                           //   ne part pas quand on arrive d'un
+
 		}
 		
 	}
@@ -340,23 +318,7 @@
 		$tmpl_prg->assign("site_logo", $MyOpt["host"]."/".$corefolder."/static/images/logo.png");
 	}
 
-// ---- Flag pour ne pouvoir poster qu'une seule fois les mêmes infos
-	$checktime=checkVar("checktime","numeric");
-	if (!isset($_SESSION["checkpost"]))
-	{
-		$_SESSION["checkpost"]=1;
-	}
-	else
-	{	
-	  	$_SESSION["checkpost"]=$_SESSION["checkpost"]+1;
-	}
-	$checkpost=$_SESSION["checkpost"];
-
-	if (!isset($_SESSION["tab_checkpost"]))
-	  { 
-		$tab_checkpost[""]="ok";
-		$_SESSION["tab_checkpost"][""]="ok";
-	  }
+// ---- Trace le chargement de la page (debug)
 
 	if ($MyOpt["debugtime"]=="on")
 	{
@@ -529,7 +491,6 @@
 		$tmpl_x->assign("path_root",$MyOpt["host"]);
 		$tmpl_x->assign("path_core",$corefolder);
 		$tmpl_x->assign("path_module",$module."/".$mod);
-		$tmpl_x->assign("form_checktime",$_SESSION['checkpost']);
 	
 		// Charge la rubrique
 		$r=MyRep($affrub.".inc.php");

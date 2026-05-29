@@ -21,18 +21,17 @@
 
 <?
 	require_once ($appfolder."/class/project.inc.php");
-	if (!GetDroit("AccesProjet")) { FatalError("Accès non autorisé (AccesProjet)"); }
+	if (!GetDroit("AccesProjet")) { FatalError("AccÃ¨s non autorisÃ© (AccesProjet)"); }
 
 // ---- Charge le template
 	$tmpl_x = new XTemplate (MyRep("detail.htm"));
 	$tmpl_x->assign("path_module",$corefolder."/".$module."/".$mod);
-	$tmpl_x->assign("form_checktime",$_SESSION['checkpost']);
 
 	
 // ---- Enregistrer
 	$msg_erreur="";
 	$msg_confirmation="";
-	if (($fonc=="Enregistrer") && (!isset($_SESSION['tab_checkpost'][$checktime])))
+	if ($fonc=="Enregistrer")
 	{
 		$prj=new project_class($id,$sql);
 		if (count($form_data)>0)
@@ -41,7 +40,7 @@
 		  	{
 		  		$msg_erreur.=$prj->Valid($k,$v);
 		  	}
-			$msg_confirmation.="Vos données ont été enregistrées.<BR>";
+			$msg_confirmation.="Vos donnï¿½es ont ï¿½tï¿½ enregistrï¿½es.<BR>";
 		}
 
 		$prj->Save();
@@ -50,15 +49,18 @@
 			$id=$prj->id;
 		}
 
-		$_SESSION['tab_checkpost'][$checktime]=$checktime;
+		header('Location: /', true, 303);
+    	exit;
+
 	}
 // ---- Supprimer
 	if (($fonc=="supprimer") && ($id>0) && (GetDroit("SupprimeAmelioration")))
 	{
 		$prj=new project_class($id,$sql);
 		$prj->Delete();
-		$mod="projet";
-		$affrub="index";
+
+		header('Location: /', true, 303);
+    	exit;
 	}
 
 

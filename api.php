@@ -25,10 +25,20 @@
 		ini_set("display_errors", 1); 
 	}
 
+// ---- Headers
+
+	// HTTP/1.0
+	header("Pragma: no-cache");
+
+	// Charset
+	header('Content-type: application/json; charset=utf-8');
+
+// ---- Fonctions
+
   	require ("lib/fonctions.inc.php");
 
 // ---- Connexion à la base de données
-	session_start();
+
 	require ("class/mysql.inc.php");
 	$sql = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db,$port);
 	$sql->show=false;
@@ -38,17 +48,13 @@
 // ---- Variables
 	$MyOpt["tbl"]=$gl_tbl;
 
-	$myid=checkVar("myid","numeric");
-	$mykey=checkVar("mykey","varchar",500);
-	$myusr=checkVar("myusr","varchar");
-	$mypwd=checkVar("mypwd","varchar");
 	$mod=checkVar("mod","varchar");
 	$rub=checkVar("rub","varchar",50);
 	$fonc=checkVar("fonc","varchar");
 	$context=checkVar("c","varchar",10,"api");
 
 	$gl_uid = 0;
-	$token=(!isset($token)) ? "" : $token;
+	$token=(isset($token)) ? $token : "";
 	$token=($token=="sys") ? "" : $token;
 
 	if ($context=="public")
@@ -61,169 +67,45 @@
 	}
 
 // ---- Demande d'authentification --------------------------------------------------------------------
-	if (($fonc=="login") && ($mykey!=""))
-	{
-		$data=array();
-		$data["type"]="token";
 
-		$ret=array();
+	if ($fonc=="login")
+	{
+		require_once("modules/admin/login.api.php");
+
+		if (isset($_COOKIE["t_auth"]))
+		{
+			$gl_auth=verifyRefreshToken($_COOKIE["t_auth"]);
+			$gl_uid=$gl_auth["uid"];
+		}
+
+		if ($gl_uid==0)
+		{
+			$myusr=checkVar("myusr","varchar");
+			$myusr=strtolower($myusr);
+			$myusr=preg_replace("/[\"'<>\\\;]/i","",$myusr);
+			$mypwd=checkVar("mypwd","varchar");
 		
-		$ret["auth"]="NOK";
-		$ret["status"]=401;
-
-		$payload=checkToken($mykey);
-
-		// Check if token is valid
-		if ($payload["status"]=="ok")
-		{
-			$gl_uid=$payload["uid"];
-			if (($gl_uid>0) && ($payload["expire"]-time()<24*3600))
+			if ( ($myusr!="") && ($myusr!="") )
 			{
-				$token=generateToken($gl_uid);
-				$ret["token"]=$token;
+				$gl_auth=verifyCredentials($myusr,$mypwd);
+				$gl_uid=$gl_auth["uid"];
 			}
-			$_SESSION['uid']=$gl_uid;
-			$_SESSION['sessid']=$myid;
-
-			$ret["auth"]="OK";
-			$ret["status"]=200;
-			$ret["uid"]=$gl_uid;
-
-			$query = "SELECT prenom,nom FROM ".$MyOpt["tbl"]."_utilisateurs WHERE id='".$gl_uid."'";
-			$res = $sql->QueryRow($query);
-			
-			$query="INSERT INTO ".$MyOpt["tbl"]."_login SET username='".addslashes($res["prenom"])." ".addslashes($res["nom"])."', srcip='".getip()."', status='token',dte_maj='".now()."',header='".substr(addslashes($_SERVER["HTTP_USER_AGENT"]),0,200)."',type='".json_encode($data)."'";
-			$sql->Insert($query);
-
-			$query="UPDATE ".$MyOpt["tbl"]."_utilisateurs SET dte_login='".now()."' WHERE id='".$gl_uid."'";
-			$sql->Update($query);
 		}
-		else
-		{
-			$_SESSION['sessid']=-1;
-
-			// $query = "SELECT id,uid,token FROM ".$MyOpt["tbl"]."_token WHERE id='".$myid."'";
-			// $res  = $sql->QueryRow($query);
-
-			// $data["myid"]=$myid;
-			// $data["mykey"]=$mykey;
-			$data["result"]="rejected";
-
-			if ($payload["uid"]>0)
-			{
-				$query = "SELECT prenom,nom FROM ".$MyOpt["tbl"]."_utilisateurs WHERE id='".$payload["uid"]."'";
-				$res  = $sql->QueryRow($query);
-				$payload["username"]=addslashes($res["prenom"])." ".addslashes($res["nom"]);
-			}
-			
-			$query="INSERT INTO ".$MyOpt["tbl"]."_login SET username='".$payload["username"]."',srcip='".getip()."',status='rejected',dte_maj='".now()."',header='".substr(addslashes($_SERVER["HTTP_USER_AGENT"]),0,200)."',type='".json_encode($payload)."'";
-			$sql->Insert($query);
-		}
-
-		$ret["payload"]=$payload;
-		$ret["data"]=$data;
-		echo json_encode($ret);
-		exit;
 	}
-	else if (($fonc=="login") && ($mypwd!=""))
+	else if (isset($_COOKIE['t_session']))
 	{
-		$myusr=strtolower($myusr);
-		$myusr=preg_replace("/[\"'<>\\\;]/i","",$myusr);
-
-		$data=array();
-		$data["type"]="password";
-		$data["myusr"]=$myusr;
-
-		$ret=array();
-		$ret["auth"]="NOK";
-
-		$query = "SELECT id,prenom,nom,mail,password,creds FROM ".$MyOpt["tbl"]."_utilisateurs WHERE ((mail='".$myusr."' AND mail<>'') OR (initiales='".$myusr."' AND initiales<>'')) AND actif='oui' AND virtuel='non'";
-		$res = $sql->QueryRow($query);
-
-		if ((isset($res["id"])) && ($res["id"]>0) && (password_verify($mypwd,$res["creds"])))
-		{
-			$data["result"]="success";
-			$query="INSERT INTO ".$MyOpt["tbl"]."_login SET username='".addslashes($res["prenom"])." ".addslashes($res["nom"])."',srcip='".getip()."',status='password',dte_maj='".now()."',header='".substr(addslashes($_SERVER["HTTP_USER_AGENT"]),0,200)."',type='".json_encode($data)."'";
-			$sql->Insert($query);
-			$_SESSION['uid']=$res["id"];
-			$gl_uid=$res["id"];
-
-			$myid=0;
-			$token="";
-			if ($MyOpt["tokenexpire"]>0)
-			{
-				$token=generateToken($gl_uid,$MyOpt["tokenexpire"]);
-
-				// $token=bin2hex(random_bytes(32));
-				
-				// $query="INSERT INTO ".$MyOpt["tbl"]."_token SET uid=".$gl_uid.", token='".password_hash($token, PASSWORD_BCRYPT, array('cost' => 12))."', uid_creat='".$gl_uid."',uid_maj='".$gl_uid."',dte_creat='".now()."', dte_expire='".date("Y-m-d H:i:s",time()+$MyOpt["tokenexpire"]*3600*24)."'";
-				// $myid=$sql->Insert($query);
-				// $_SESSION['sessid']=$myid;
-
-				// $ret["myid"]=$myid;
-				$ret["token"]=$token;
-			}
-			
-			$query="UPDATE ".$MyOpt["tbl"]."_utilisateurs SET dte_login='".now()."' WHERE id='".$res["id"]."'";
-			$sql->Update($query);
-
-			$ret["auth"]="OK";
-		}
-		else if ((isset($res["id"])) && ($res["id"]>0) && ($res["creds"]=="") && ($mypwd==$res["password"]))  // For compatibility with older password
-		{
-			$data["result"]="success";
-			$query="INSERT INTO ".$MyOpt["tbl"]."_login SET username='".addslashes($res["prenom"])." ".addslashes($res["nom"])."',srcip='".getip()."',status='password',dte_maj='".now()."',header='".substr(addslashes($_SERVER["HTTP_USER_AGENT"]),0,200)."',type='".json_encode($data)."'";
-			$sql->Insert($query);
-			$_SESSION['uid']=$res["id"];
-			$gl_uid=$res["id"];
-
-			$ret["myid"]=0;
-			$ret["mytoken"]="";
-			
-			$query="UPDATE ".$MyOpt["tbl"]."_utilisateurs SET dte_login='".now()."',creds='".password_hash($mypwd, PASSWORD_BCRYPT, array('cost' => 12))."',password='' WHERE id='".$res["id"]."'";
-			$sql->Update($query);
-
-			$ret["auth"]="OK";
-		}
-		else
-		{
-			$data["result"]="rejected";
-
-			$query="INSERT INTO ".$MyOpt["tbl"]."_login SET username='".addslashes($myusr)."',srcip='".getip()."',status='rejected',dte_maj='".now()."',header='".substr(addslashes($_SERVER["HTTP_USER_AGENT"]),0,200)."',type='".json_encode($data)."'";
-			$sql->Insert($query);
-			$ret["error"]="Bad password";
-		}
-
-		$ret["data"]=$data;
-
-		echo json_encode($ret);
-		exit;
-		
-	}
-	else if ((isset($_SESSION['uid'])) && ($_SESSION['uid']>0))
-	{
-		$gl_uid = $_SESSION['uid'];
-	}
-	else if (($mod=="admin") && ($rub=="update"))
-	{
-		$query = "SELECT * FROM ".$MyOpt["tbl"]."_config";
-		$res  = $sql->QueryRow($query);
-		
-		if (!is_array($res))
-		{
-			$gl_uid=0;
-			$token="sys";
-		}
-		else
-		{
-			header("HTTP/1.0 401 Unauthorized"); exit;
-		}
+		$gl_auth=verifyJWT($_COOKIE['t_session']);
+		$gl_uid=$gl_auth["uid"];
 	}
 	else if ( (isset($_SERVER["PHP_AUTH_USER"])) && (isset($_SERVER["PHP_AUTH_PW"])) )
 	{
 		$gl_uid=0;
 
-		$query = "SELECT id,creds FROM ".$MyOpt["tbl"]."_utilisateurs WHERE (mail='".$_SERVER["PHP_AUTH_USER"]."' OR initiales='".$_SERVER["PHP_AUTH_USER"]."')";
+		$myusr=strtolower($_SERVER["PHP_AUTH_USER"]);
+		$myusr=preg_replace("/[\"'<>\\\;]/i","",$myusr);
+		$mypwd=$_SERVER["PHP_AUTH_PW"];
+
+		$query = "SELECT id,creds FROM ".$MyOpt["tbl"]."_utilisateurs WHERE (mail='".$myusr."' OR initiales='".$myusr."') AND actif='oui'";
 		$res = $sql->QueryRow($query);
 
 		if ($res["id"]>0)
@@ -237,33 +119,34 @@
 				$gl_uid=$res["id"];
 			}
 		}
-
-		if ($gl_uid==0)
-		{
-			header("HTTP/1.0 401 Unauthorized"); exit;
-		}		
 	}
 	else if ($context=="public")
 	{
-
+		// Définir un user anonymous
 	}
-	else
+	else if (($mod=="admin") && ($rub=="update"))
 	{
-		header("HTTP/1.0 401 Unauthorized"); exit;
+		$query = "SELECT * FROM ".$MyOpt["tbl"]."_config";
+		$res = $sql->QueryRow($query);
+		
+		if (!is_array($res))
+		{
+			$gl_uid=1;
+			$token="sys";
+		}
 	}
 	
+	if ($gl_uid==0)
+	{
+		header("HTTP/1.0 401 Unauthorized"); 
+		echo json_encode($gl_auth);
+		exit;
+	}		
+
 // ---- Header ----------------------------------------------------------------------------------------
   	// HTTP/1.1
 	// header("Cache-Control: no-store, no-cache, must-revalidate");
 	
-	// HTTP/1.0
-	header("Pragma: no-cache");
-
-	// Charset
-	// header('Content-type: text/html; charset=UTF-8');
-	header('Content-type: application/json; charset=utf-8');
-
-
 	header('access-control-allow-credentials: true');
 //	header('access-control-allow-headers: token');
 	header('Access-Control-Allow-Headers: Content-Type');
@@ -363,6 +246,11 @@
 	  { $rub = "index"; }
 
 // ---- Charge la page
+	if (($mod=="admin") && ($rub=="auth"))
+	{
+		echo json_encode($gl_auth);
+		exit;
+	}
 	if (($mod!="") && ($rub!=""))
 	{
 		// Charge le fichier de langue du module

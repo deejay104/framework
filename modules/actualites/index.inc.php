@@ -32,16 +32,15 @@
 // ---- Variables
 	$id=checkVar("id","numeric");
 	$idstart=checkVar("idstart","numeric");
-	$form_titre=checkVar("form_titre","varchar");
-	$form_message=checkVar("form_message","text");
 	$favid=checkVar("favid","numeric");
 	$setfav=checkVar("setfav","numeric");
 	
 // ---- Enregistre le post
 
-	if ( ($fonc==$tabLang["lang_post"]) && (!isset($_SESSION['tab_checkpost'][$checktime])) )
+	if ($fonc==$tabLang["lang_post"])
 	{
-		$_SESSION['tab_checkpost'][$checktime]=$checktime;
+		$form_titre=checkVar("form_titre","varchar");
+		$form_message=checkVar("form_message","text");
 
 		if (($form_message!="") || ($id>0))
 		{
@@ -76,6 +75,9 @@
 			$id=0;
 
 		}
+
+		header('Location: /', true, 303);
+    	exit;
 	}
 
 // ---- Avatar

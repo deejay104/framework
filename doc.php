@@ -18,19 +18,21 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-// ---- Gestion des droits
-	session_start();
 
 // ---- Fonctions communes  
    	require ("lib/fonctions.inc.php");
 
 	$id=checkVar("id","numeric");
 
-	if ((isset($_SESSION['uid'])) && ($_SESSION['uid']>0))
+// ---- Gestion des droits
+	$gl_uid=0;
+	if (isset($_COOKIE['t_session']))
 	{
-		$gl_uid = $_SESSION['uid'];
+		$gl_auth=verifyJWT($_COOKIE['t_session']);
+		$gl_uid=$gl_auth["uid"];
 	}
-	else
+
+	if ($gl_uid==0)
 	{
 		header("HTTP/1.0 302 Unauthorized"); 
 		header("Location: ".$MyOpt["host"]."?redirect=/doc.php?id=".$id);

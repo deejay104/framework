@@ -410,21 +410,20 @@
 
     function checkCredentials() {
       hideError();
-      const username = document.getElementById('username').value;
-      const password = MD5(document.getElementById('mypassword').value);
+      const username = $("#username").val();
+      const password = MD5($("#mypassword").val());
       const btn = document.getElementById('fonc');
       btn.disabled = true;
       btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px"></div> Connexion…';
-	  $("#loginbox").hide();
-	  $("#load").show();
+	    $("#loginbox").hide();
+	    $("#load").show();
 
       $.ajax({
         url: API, type: 'POST', dataType: 'json',
         data: JSON.stringify({ fonc: 'login', myusr: username, mypwd: password }),
         contentType: 'application/json; charset=utf-8',
         success: function(r) {
-          if (r.auth === 'OK') {
-            localStorage.setItem('token', r.token);
+          if (r.status === 200) {
             document.location = HOME;
           } 
           else 
@@ -432,19 +431,18 @@
             $("#loginbox").show();
             $("#load").hide();
 
-			      showError("{core_autherror}: "+r.error);
             btn.disabled = false;
             btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Se connecter';
+			      showError("{core_autherror}: "+r.message);
           }
         },
-        error: function(e) {
-			console.log(e);
-			$("#loginbox").show();
-			$("#load").hide();
-
-			showError('Impossible de contacter le serveur.');
-			btn.disabled = false;
-			btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Se connecter';
+        error: function(r) {
+          $("#loginbox").show();
+          $("#load").hide();
+          btn.disabled = false;
+          btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Se connecter';
+          console.log(r);
+          showError("{core_autherror}: "+r.responseJSON.message);
         }
       });
 
@@ -458,25 +456,23 @@
     }
 
     // Vérification du token existant
-    if (localStorage) {
-      const mytoken = localStorage.getItem('token');
-      $.ajax({
-        url: API, type: 'POST', dataType: 'json',
-        data: JSON.stringify({ fonc: 'login', mykey: mytoken }),
-        contentType: 'application/json; charset=utf-8',
-        success: function(r) {
-          if (r.auth === 'OK') {
-            if (r.token) localStorage.setItem('token', r.token);
-            document.location = HOME;
-          } else {
-            loadIndex();
-          }
-        },
-        error: function() { loadIndex(); }
-      });
-    } else {
-      loadIndex();
-    }
+    $.ajax({
+      url: API, type: 'POST', dataType: 'json',
+      data: JSON.stringify({ fonc: 'login' }),
+      contentType: 'application/json; charset=utf-8',
+      success: function(r) {
+        if (r.status === 200)
+        {
+          document.location = HOME;
+        }
+        else
+        {
+          loadIndex();
+        }
+      },
+      error: function() { loadIndex(); }
+    });
+
   </script>
 </body>
 </html>

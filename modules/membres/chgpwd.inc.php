@@ -27,8 +27,6 @@
 	$form_newmdp=checkVar("form_newmdp","varchar");
 	$form_oldmdp=checkVar("form_oldmdp","varchar");
 
-	$tmpl_x->assign("form_checktime",$_SESSION['checkpost']);
-
 	$msg_erreur="";
 	$msg_confirmation="";
 
@@ -58,6 +56,9 @@
 				SendMailFromFile($from,$usr->data["mail"],"","[".$MyOpt["site_title"]."] : Changement de votre mot de passe",array("username"=>$usr->fullname,"initiales"=>$usr->data["initiales"],"url"=>$MyOpt["host"]),"chgpwd");
 			
 				$msg_confirmation.="Votre mot de passe a été mis à jour.<br />";
+
+				header('Location: /membres/detail?id='.$id.'&update=2', true, 303);
+				exit;
 			}
 			else
 			{ 
@@ -76,7 +77,8 @@
 
 	if ($fonc=="Annuler")
 	{
-		$affrub="detail";
+		header('Location: /membres/detail?id='.$id, true, 303);
+    	exit;
 	}
 	
 // ---- Affiche le menu

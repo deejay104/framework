@@ -6,12 +6,8 @@
 //   Variables  : 
 // ---------------------------------------------------------------------------------------------
 
-	if (session_status() == PHP_SESSION_NONE) {
-		session_start();
-	}
 
-
-// ---- R�cup�re les variables transmises
+// ---- Récupère les variables transmises
 	$redirect=checkVar("redirect","varchar");
   	$url=$MyOpt["host"].(($redirect!="") ? $redirect : "/index.php?".$_SERVER['QUERY_STRING']);
 
@@ -58,40 +54,33 @@
 // ---- Connection � la base de donn�es
 	$sql   = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db,$port);
 
-// ---- Test si l'on a valid� la page
+// ---- Test si l'on a validé la page
 	if ($fonc == "logout")
 	{
-		if ($_SESSION['sessid']>0)
+		/*
+		if ($_COOKIE['sessid']>0)
 		{
-			$query="UPDATE ".$MyOpt["tbl"]."_token SET active='non' WHERE id='".$_SESSION['sessid']."'";
+			$query="UPDATE ".$MyOpt["tbl"]."_token SET active='non' WHERE id='".$_COOKIE['sessid']."'";
 			$sql->Update($query);
 		}
+		*/
 
-		$_SESSION['uid']=0;
-		$_SESSION['sessid']=0;
+		//$_COOKIE['uid']=0;
+		//$_COOKIE['sessid']=0;
 		
-		echo "<html><body>";
-		echo "<script>";
-		echo "if (localStorage) { localStorage.setItem(\"token\",\"\"); }";
-		echo "document.location=\"index.php\";";
-		echo "</script>";
-		echo "</body></html>";
-		exit;
 
+
+		exit;
 	}
 
 // ---- 
 	// if ($tmpl_prg->text("main.unsecure")=="")
 	$tmpl_prg->parse("main.secure");
 
-// ---- Calcul de l'id
-	$myid=md5(session_id());
 
 // ---- Affiche la page
 
-	// $tmpl_prg->assign("myid", $myid);
 	$tmpl_prg->assign("url", $url);
-	// $tmpl_prg->assign("errmsg", $errmsg);
 	$tmpl_prg->assign("version", $version."-".$core_version.(($MyOpt["maintenance"]=="on") ? " - ".ucwords($tabLang["core_maintenance"]) : ""));
 	$tmpl_prg->assign("site_title", $MyOpt["site_title"]);
 	$tmpl_prg->assign("corefolder", $corefolder);

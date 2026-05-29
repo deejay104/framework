@@ -355,6 +355,111 @@ function myPrint($txt)
 	}
 }
 
+// ---- Token management
+
+function base64url_encode(string $data): string {
+    return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+}
+
+function generateJWT(int $userId): string 
+{
+	global $MyOpt;
+
+    // JWT simplifié — en production, utilise firebase/php-jwt
+    $header  = base64url_encode(json_encode(['alg' => 'HS256', 'typ' => 'JWT']));
+    $payload = base64url_encode(json_encode([
+        'sub' => $userId,
+        'iat' => time(),
+        'exp' => time() + $MyOpt["sessionexpire"],
+    ]));
+
+	$signature = base64url_encode(
+        hash_hmac('sha256', "$header.$payload", $MyOpt["jwtsecret"], true)
+    );
+
+
+    return "$header.$payload.$signature";
+}
+ 
+
+function verifyJWT($token)
+{
+	global $sql,$MyOpt;
+
+
+	$ses=explode(".",$token);
+
+	$b64_header=(isset($ses[0])) ? $ses[0] : "";
+	$b64_payload=(isset($ses[1])) ? $ses[1] : "";
+	$b64_sign=(isset($ses[2])) ? $ses[2] :"";
+
+	$my_sign = base64url_encode(
+        hash_hmac('sha256', "$b64_header.$b64_payload", $MyOpt["jwtsecret"], true)
+    );
+
+
+	$data=array(
+		"uid"=>0,
+		"status"=>401,
+		"message"=>"Bad signature",
+	);
+
+	if ($my_sign==$b64_sign)
+	{
+		$payload=json_decode(base64_decode($b64_payload),true);
+
+		$data["uid"]=(isset($payload["sub"])) ? $payload["sub"] : 0;
+		$data["status"]=200;
+		$data["message"]="Token accepted";
+	}
+
+	return $data;
+}
+
+function generateRefreshToken($gl_uid,$expire)
+{
+	global $sql,$MyOpt;
+
+	$refreshTokenRaw=bin2hex(random_bytes(32));
+	$refreshTokenHash = hash('sha256', $refreshTokenRaw);
+
+	$expiresAt = date('Y-m-d H:i:s', strtotime('+'.$expire.' days'));
+    $deviceInfo = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
+
+	
+	$query="INSERT INTO ".$MyOpt["tbl"]."_token SET uid=".$gl_uid.", token='".$refreshTokenHash."', uid_creat='".$gl_uid."',uid_maj='".$gl_uid."',dte_creat='".now()."', dte_expire='".$expiresAt."'";
+	$myid=$sql->Insert($query);
+
+	setcookie('t_auth', $refreshTokenRaw, [
+        'expires'  => strtotime($expiresAt),
+        'path'     => '/api/v1/admin/auth',    // Restreint aux endpoints d'auth seulement
+        'httponly'  => true,           			// ← Très important !
+        'secure'   => true,
+        'samesite' => 'Strict',
+    ]);
+
+}
+
+function clearSessionCookie(): void {
+    setcookie('t_session', '', [
+        'expires'  => 1,
+        'path'     => '/',
+        'httponly'  => true,
+        'secure'   => true,
+        'samesite' => 'Strict',
+    ]);
+}
+
+function clearRefreshCookie(): void {
+    setcookie('t_auth', '', [
+        'expires'  => 1,
+        'path'     => '/api/v1/admin/auth',
+        'httponly'  => true,
+        'secure'   => true,
+        'samesite' => 'Strict',
+    ]);
+}
+/*
 function checkToken($token)
 {
 	global $sql, $MyOpt;
@@ -427,6 +532,8 @@ function generateToken($gl_uid,$expire=0)
 	return $b64_token;
 
 }
+*/
+
 
 // Charge un template
 function LoadTemplate($tmpl,$mymod="",$custom=true)
@@ -532,6 +639,11 @@ function date2sql($date) {
   if ($d == $date) { $d = preg_replace('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{2,4}) ?([0-9:]*)?$/','\\3-\\2-\\1', $date); }
   if (($d == $date) && ($date != '')) { $d = "nok"; }
   return $d;
+}
+
+function extractDate($date)
+{
+	return date("Y-m-d",strtotime($date));
 }
 
 // Transforme une date SQL en date jj/mm/aaaa
@@ -1830,7 +1942,7 @@ function GenereVariables($tab)
 					$query="SELECT id FROM ".$gl_tbl."_config WHERE param='variable' AND name1='".$name1."' AND name2='".$name2."'";
 					$res=$sql->QueryRow($query);
 
-					if ($res["id"]>0)
+					if ( (isset($res["id"])) && ($res["id"]>0) )
 					{
 						$query="UPDATE ".$gl_tbl."_config SET value='".addslashes($dd)."', dte_creat='".now()."' WHERE id='".$res["id"]."'";
 						$sql->Update($query);
@@ -2118,6 +2230,50 @@ function maskPart(string $str, int $keep): string
     if ($len <= $keep) return $str;
 
     return mb_substr($str, 0, $keep) . str_repeat('•', $len - $keep);
+}
+
+function initDatabase($sql)
+{
+	global $tmpl_prg,$MyOpt,$mysqluser,$gl_tbl;
+
+	// Vérifie si la table config existe
+	$q="SHOW TABLES";
+	$sql->Query($q);
+
+	$ok=0;
+	if ($sql->rows>0)
+	{
+		for($i=0; $i<$sql->rows; $i++)
+		{
+			$sql->GetRow($i);
+			if ($sql->data["Tables_in_".$db]==$MyOpt["tbl"]."_config")
+			{
+				$ok=1;
+			}
+		}
+	}
+
+	if ($ok==0)
+	{
+		$module="modules";
+		$tmpl_prg = LoadTemplate("init","default");
+		$tmpl_prg->assign("corefolder", $MyOpt["host"]."/".$corefolder);
+		$tmpl_prg->assign("rootfolder", $MyOpt["host"]);
+
+		if (($mysqluser=="") || ($gl_tbl==""))
+		{
+			$tmpl_prg->parse("main.configdb");
+		}
+		else
+		{
+			$tmpl_prg->parse("main.createdb");
+		}
+
+		$tmpl_prg->parse("main");
+		echo $tmpl_prg->text("main");
+		exit;
+	}
+	
 }
 
 ?>

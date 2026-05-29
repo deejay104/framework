@@ -47,14 +47,17 @@
 
 
 // ---- Enregistre le groupe
-	if (($grp=="") && ($fonc==$tabLang["lang_save"]) && (GetDroit("CreeGroupe")) && (!isset($_SESSION['tab_checkpost'][$checktime])))
+	if ( ($grp=="") && ($fonc==$tabLang["lang_save"]) && (GetDroit("CreeGroupe")) )
 	{
 		$q="INSERT INTO ".$MyOpt["tbl"]."_groupe SET groupe='$form_grp',description='$form_desc',principale='$form_princ'";
 		$sql->Insert($q);
 		$grp=$form_grp;
-		$_SESSION['tab_checkpost'][$checktime]=$checktime;
+
+		header('Location: /admin/groupes/gdetail?grp='.$grp, true, 303);
+    	exit;
+
 	}
-	else if (($grp!="") && ($fonc==$tabLang["lang_save"]) && (GetDroit("ModifGroupe")) && (!isset($_SESSION['tab_checkpost'][$checktime])))
+	else if ( ($grp!="") && ($fonc==$tabLang["lang_save"]) && (GetDroit("ModifGroupe")) )
 	{
 		$q="UPDATE ".$MyOpt["tbl"]."_groupe SET groupe='$form_grp',description='$form_desc',principale='$form_princ' WHERE groupe='$grp'";
 		$sql->Update($q);
@@ -67,7 +70,8 @@
 
 		$grp=$form_grp;
 
-		$_SESSION['tab_checkpost'][$checktime]=$checktime;
+		header('Location: /admin/groupes/gdetail?grp='.$grp, true, 303);
+    	exit;
 	}
 
 // ---- Supprime le groupe
@@ -88,7 +92,7 @@
 	}
 
 // ---- Copie un groupe
-	if (($grp!="") && ($fonc=="copier") && (GetDroit("CreeGroupe")) && (!isset($_SESSION['tab_checkpost'][$checktime])))
+	if ( ($grp!="") && ($fonc=="copier") && (GetDroit("CreeGroupe")) )
 	{
 
 		$query="SELECT description FROM ".$MyOpt["tbl"]."_groupe WHERE groupe='$grp' LIMIT 1";
@@ -116,7 +120,8 @@
 
 
 		$grp=$form_grp;
-		$_SESSION['tab_checkpost'][$checktime]=$checktime;
+		header('Location: /admin/groupes/gdetail?grp='.$grp, true, 303);
+    	exit;
 	}
 
 
