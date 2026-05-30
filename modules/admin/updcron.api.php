@@ -5,34 +5,35 @@
 
 // ---- Vérifie les paramètres
 	$res=array();
-	if (!isset($_GET["id"]))
+	$id=checkVar("id","numeric");
+	if ($id==0)
 	{
-		$res["result"]="NOK";
+		$res["status"]=500;
+		$res["message"]="id not provided.";
 		echo json_encode($res);
-		error_log("id not provided.");
 	  	exit;
 	}
-	$id=$_GET["id"];
+
 
 	if (!isset($_GET["var"]))
 	{
-		$res["result"]="NOK";
+		$res["status"]=500;
+		$res["message"]="var not provided.";
 		echo json_encode($res);
-		error_log("var not provided.");
 	  	exit;
 	}
 	$var=$_GET["var"];
 
 	if (!isset($_GET["val"]))
 	{
-		$res["result"]="NOK";
+		$res["status"]=500;
+		$res["message"]="val not provided.";
 		echo json_encode($res);
-		error_log("val not provided.");
 	  	exit;
 	}
 	$val=$_GET["val"];
 
-	$res["result"]="NOK";
+	$res["status"]=500;
 
 	if ($var=="schedule")
 	{
@@ -48,7 +49,7 @@
 		
 		$q="UPDATE ".$MyOpt["tbl"]."_cron SET schedule='".$val."' WHERE id='".$id."'";
 		$sql->Update($q);
-		$res["result"]="OK";
+		$res["status"]=200;
 		$res["value"]=AffTemps($val,"full");
 	}
 	else if ($var=="actif")
@@ -58,7 +59,7 @@
 			$val="non";
 			$q="UPDATE ".$MyOpt["tbl"]."_cron SET actif='$val' WHERE id='".$id."'";
 			$sql->Update($q);
-			$res["result"]="OK";
+			$res["status"]=200;
 			$res["value"]=$val;
 		}
 		else if ($val=="non")
@@ -66,7 +67,7 @@
 			$val="oui";
 			$q="UPDATE ".$MyOpt["tbl"]."_cron SET actif='$val' WHERE id='".$id."'";
 			$sql->Update($q);
-			$res["result"]="OK";
+			$res["status"]=200;
 			$res["value"]=$val;
 		}
 	}

@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <!DOCTYPE html>
-<html lang="fr">
-<head>
+<html lang="fr"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>{site_title} - Login</title>
@@ -21,6 +21,7 @@
       --surface:   #ffffff;
       --bg:        #eef1f6;
       --danger:    #e53935;
+      --success:   #2e7d32;
       --radius:    10px;
     }
 
@@ -37,7 +38,6 @@
       content: '';
       position: fixed;
       inset: 0;
-
 	  background:
         linear-gradient(135deg, #eef1f6 0%, #eef1f6 30%, #38a9e3 100%); 
       z-index: 0;
@@ -48,7 +48,6 @@
       content: '';
       position: fixed;
       inset: 0;
-
 	  background:
         radial-gradient(circle at 15% 85%, rgba(56,169,227,0.18) 0%, transparent 45%),
         radial-gradient(circle at 85% 15%, rgba(255,255,255,0.05) 0%, transparent 40%),
@@ -214,22 +213,31 @@
     .field input:focus ~ .field-icon,
     .field-inner:focus-within .field-icon { color: var(--sky); }
 
-    /* ── Message d'erreur ── */
-    .error-msg {
+    /* ── Messages d'erreur et succès ── */
+    .error-msg, .success-msg {
       display: none;
       align-items: center;
       gap: 0.5rem;
-      background: #fff5f5;
-      border: 1px solid #fca5a5;
-      border-left: 3px solid var(--danger);
       padding: 0.65rem 0.9rem;
       border-radius: 6px;
       font-size: 0.82rem;
-      color: #b91c1c;
       margin-bottom: 1.25rem;
       animation: shake 0.3s ease;
     }
-    .error-msg.show { display: flex; }
+    .error-msg {
+      background: #fff5f5;
+      border: 1px solid #fca5a5;
+      border-left: 3px solid var(--danger);
+      color: #b91c1c;
+    }
+    .success-msg {
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      border-left: 3px solid var(--success);
+      color: var(--success);
+      animation: none;
+    }
+    .error-msg.show, .success-msg.show { display: flex; }
 
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
@@ -237,7 +245,7 @@
       75%       { transform: translateX(5px); }
     }
 
-    /* ── Bouton ── */
+    /* ── Bouton principal ── */
     .btn-login {
       display: flex;
       align-items: center;
@@ -265,7 +273,132 @@
     .btn-login:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
 
     .btn-login svg { width: 18px; height: 18px; flex-shrink: 0; }
-	.img-login { width: 24px; }
+	  .img-login { width: 24px; }
+
+    /* ── Lien mot de passe oublié ── */
+    .forgot-link {
+      display: block;
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.15s;
+    }
+    .forgot-link:hover { color: var(--sky); }
+
+    /* ── Modal overlay ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(26, 35, 50, 0.55);
+      backdrop-filter: blur(4px);
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      animation: fadeIn 0.2s ease;
+    }
+    .modal-overlay.show { display: flex; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 400px;
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+      animation: modalIn 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(12px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-header h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--muted);
+      padding: 0.25rem;
+      border-radius: 4px;
+      transition: color 0.15s, background 0.15s;
+      line-height: 1;
+    }
+    .modal-close:hover { color: var(--ink); background: var(--bg); }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .modal-body .form-intro {
+      margin-bottom: 1.25rem;
+    }
+
+    .modal-body .btn-login {
+      margin-top: 1rem;
+    }
+
+    /* ── Lien retour ── */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.15s;
+      margin-bottom: 1rem;
+    }
+    .back-link:hover { color: var(--sky); }
+    .back-link svg { width: 14px; height: 14px; }
+
+    /* ── Indicateur de force du mot de passe ── */
+    .pwd-strength {
+      display: flex;
+      gap: 4px;
+      margin-top: 0.5rem;
+    }
+    .pwd-strength-bar {
+      flex: 1;
+      height: 3px;
+      border-radius: 2px;
+      background: var(--border);
+      transition: background 0.2s;
+    }
+    .pwd-strength[data-score="1"] .pwd-strength-bar:nth-child(-n+1) { background: var(--danger); }
+    .pwd-strength[data-score="2"] .pwd-strength-bar:nth-child(-n+2) { background: #f59e0b; }
+    .pwd-strength[data-score="3"] .pwd-strength-bar:nth-child(-n+3) { background: #38bdf8; }
+    .pwd-strength[data-score="4"] .pwd-strength-bar:nth-child(-n+4) { background: var(--success); }
+
+    .pwd-hint {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 0.35rem;
+    }
 
     /* ── Spinner de chargement ── */
     .loader-wrap {
@@ -313,10 +446,15 @@
       z-index: 2;
       letter-spacing: 0.04em;
     }
+
+    @media (max-width: 767px) {
+      input, select, textarea { font-size: 16px! important;}
+    }
+
   </style>
 </head>
 
-<body onload="setFormFocus();">
+<body onload="init();">
 
   <div class="login-screen">
     <div class="login-card">
@@ -326,23 +464,26 @@
         <div class="logo-wrap">
           <img src="{rootfolder}/{site_logo}" alt="Polygone 67">
           <div class="app-subtitle">{core_authenticate}</div>
+          <div class="spinner"></div>
         </div>
       </div>
 
-      <!-- Chargement (affiché par défaut pendant la vérif du token) -->
-      <div id="load" class="loader-wrap">
+      <!-- Chargement -->
+      <div id="load" class="loader-wrap" style="display: none;">
         <div class="spinner"></div>
         <p>Vérification de la session…</p>
       </div>
 
-      <!-- Formulaire (masqué par défaut) -->
-      <div id="loginbox" style="display:none;">
+      <!-- ============================================ -->
+      <!-- VUE 1 : Formulaire de login                  -->
+      <!-- ============================================ -->
+      <div id="loginbox" style="display: none;">
         <div class="card-body">
 
           <p class="form-intro">Entrez votre adresse mail ou vos initiales et votre mot de passe.</p>
 
           <div id="errormsg" class="error-msg">
-            <svg viewBox="0 0 20 20" fill="currentColor" class="img-login"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
+            <svg viewBox="0 0 20 20" fill="currentColor" class="img-login"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
             <span id="errormsg-text"></span>
           </div>
 
@@ -351,10 +492,9 @@
             <div class="field">
               <label for="username">Identifiant</label>
               <div class="field-inner">
-                <input type="text" name="username" id="username"
-                       maxlength="256" placeholder="Mail ou initiales" autocomplete="username">
+                <input type="text" name="username" id="username" maxlength="256" placeholder="Mail ou initiales" autocomplete="username">
                 <span class="field-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                 </span>
               </div>
             </div>
@@ -362,20 +502,89 @@
             <div class="field">
               <label for="mypassword">Mot de passe</label>
               <div class="field-inner">
-                <input type="password" name="mypassword" id="mypassword"
-                       maxlength="256" placeholder="••••••••" autocomplete="current-password">
+                <input type="password" name="mypassword" id="mypassword" maxlength="256" placeholder="••••••••" autocomplete="current-password">
                 <span class="field-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                 </span>
               </div>
             </div>
 
             <button type="submit" id="fonc" class="btn-login">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
               Se connecter
             </button>
 
           </form>
+
+          <a class="forgot-link" onclick="openResetModal()">Mot de passe oublié ?</a>
+
+        </div>
+
+        <div class="card-footer">
+          Easyaero - {core_version} {version}
+        </div>
+      </div>
+
+      <!-- ============================================ -->
+      <!-- VUE 2 : Changement de mot de passe           -->
+      <!--   Affiché quand l'URL contient ?fonc=resetpwd -->
+      <!-- ============================================ -->
+      <div id="resetpwdbox" style="display: none;">
+        <div class="card-body">
+
+          <a class="back-link" href="?">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            Retour à la connexion
+          </a>
+
+          <p class="form-intro">Choisissez votre nouveau mot de passe.</p>
+
+          <div id="reset-errormsg" class="error-msg">
+            <svg viewBox="0 0 20 20" fill="currentColor" class="img-login"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
+            <span id="reset-errormsg-text"></span>
+          </div>
+
+          <div id="reset-successmsg" class="success-msg">
+            <svg viewBox="0 0 20 20" fill="currentColor" class="img-login"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+            <span id="reset-successmsg-text"></span>
+          </div>
+
+          <form id="resetPwdForm" onsubmit="submitNewPassword(); return false;">
+
+            <div class="field">
+              <label for="new_password">Nouveau mot de passe</label>
+              <div class="field-inner">
+                <input type="password" name="new_password" id="new_password" maxlength="256" placeholder="••••••••" autocomplete="new-password" oninput="checkPasswordStrength()">
+                <span class="field-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </span>
+              </div>
+              <div class="pwd-strength" id="pwd-strength" data-score="0">
+                <div class="pwd-strength-bar"></div>
+                <div class="pwd-strength-bar"></div>
+                <div class="pwd-strength-bar"></div>
+                <div class="pwd-strength-bar"></div>
+              </div>
+              <div class="pwd-hint" id="pwd-hint">Min. 8 caractères, majuscule, minuscule, chiffre</div>
+            </div>
+
+            <div class="field">
+              <label for="confirm_password">Confirmer le mot de passe</label>
+              <div class="field-inner">
+                <input type="password" name="confirm_password" id="confirm_password" maxlength="256" placeholder="••••••••" autocomplete="new-password">
+                <span class="field-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </span>
+              </div>
+            </div>
+
+            <button type="submit" id="btn-changepwd" class="btn-login">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              Modifier le mot de passe
+            </button>
+
+          </form>
+
         </div>
 
         <div class="card-footer">
@@ -386,67 +595,117 @@
     </div>
   </div>
 
+  <!-- ============================================ -->
+  <!-- MODAL : Demande de réinitialisation           -->
+  <!-- ============================================ -->
+  <div class="modal-overlay" id="resetModal">
+    <div class="modal-box">
+
+      <div class="modal-header">
+        <h3>Réinitialisation du mot de passe</h3>
+        <button class="modal-close" onclick="closeResetModal()" aria-label="Fermer">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <p class="form-intro">Entrez votre adresse mail. Si un compte existe, vous recevrez un lien de réinitialisation.</p>
+
+        <div id="modal-errormsg" class="error-msg">
+          <svg viewBox="0 0 20 20" fill="currentColor" class="img-login"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
+          <span id="modal-errormsg-text"></span>
+        </div>
+
+        <div id="modal-successmsg" class="success-msg">
+          <svg viewBox="0 0 20 20" fill="currentColor" class="img-login"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+          <span id="modal-successmsg-text"></span>
+        </div>
+
+        <form id="resetRequestForm" onsubmit="requestPasswordReset(); return false;">
+
+          <div class="field">
+            <label for="reset_email">Adresse email</label>
+            <div class="field-inner">
+              <input type="email" name="reset_email" id="reset_email" maxlength="256" placeholder="vous@exemple.com" autocomplete="email" required>
+              <span class="field-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+              </span>
+            </div>
+          </div>
+
+          <button type="submit" id="btn-resetrequest" class="btn-login">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            Envoyer le lien
+          </button>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+
 
   <script src="{rootfolder}/{corefolder}/external/jquery/jquery.min.js"></script>
-  <script src="{rootfolder}/{corefolder}/static/js/_md5.js"></script>
+  <script src="{rootfolder}/{corefolder}/static/js/md5.js"></script>
   <script>
+    // ── Configuration ──
     const API = '{rootfolder}/api/v1/admin/auth';
+    const API_RESETREQ  = '{rootfolder}/pub/v1/admin/resetpwd';
+    const API_CHANGEPWD = '{rootfolder}/pub/v1/admin/changepwd';
     const HOME = '{url}';
 
-    function setFormFocus() {
-      const u = document.getElementById('username');
-      if (u) { u.focus(); u.select(); }
+    const POST_TOKEN = '{post_token}';      // le token du lien email
+
+
+    // ── Détection du mode via l'URL ──
+    const urlParams  = new URLSearchParams(window.location.search);
+    const MODE       = urlParams.get('fonc');       // "resetpwd" ou null
+    const RESET_TOKEN = urlParams.get('token');      // le token du lien email
+
+
+
+    // =============================
+    // Initialisation
+    // =============================
+    function init() {
+      if (MODE === 'resetpwd') {
+        // Mode réinitialisation : afficher le formulaire de changement
+        //document.getElementById('header-subtitle').textContent = 'Nouveau mot de passe';
+        document.getElementById('resetpwdbox').style.display = '';
+        if (!RESET_TOKEN) {
+          showResetError("Lien invalide ou expiré. Veuillez refaire une demande.");
+          document.getElementById('resetPwdForm').style.display = 'none';
+        }
+        document.getElementById('new_password').focus();
+      } else {
+        // Mode login classique : vérifier la session existante
+        checkExistingSession();
+      }
     }
 
-    function showError(msg) {
-      const box = document.getElementById('errormsg');
-      document.getElementById('errormsg-text').textContent = msg;
-      box.classList.add('show');
-    }
-
-    function hideError() {
-      document.getElementById('errormsg').classList.remove('show');
-    }
-
-    function checkCredentials() {
-      hideError();
-      const username = $("#username").val();
-      const password = MD5($("#mypassword").val());
-      const btn = document.getElementById('fonc');
-      btn.disabled = true;
-      btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px"></div> Connexion…';
-	    $("#loginbox").hide();
-	    $("#load").show();
-
+    function checkExistingSession() {
       $.ajax({
         url: API, type: 'POST', dataType: 'json',
-        data: JSON.stringify({ fonc: 'login', myusr: username, mypwd: password }),
+        data: JSON.stringify({ fonc: 'login' }),
         contentType: 'application/json; charset=utf-8',
         success: function(r) {
-          if (r.status === 200) {
-            document.location = HOME;
-          } 
-          else 
-          {
-            $("#loginbox").show();
-            $("#load").hide();
-
-            btn.disabled = false;
-            btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Se connecter';
-			      showError("{core_autherror}: "+r.message);
+          if (r.status === 200)
+          { 
+            document.location = HOME; 
           }
+          else { loadIndex(); }
         },
-        error: function(r) {
-          $("#loginbox").show();
-          $("#load").hide();
-          btn.disabled = false;
-          btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Se connecter';
-          console.log(r);
-          showError("{core_autherror}: "+r.responseJSON.message);
-        }
+        error: function() { loadIndex(); }
       });
+    }
 
-      return false;
+    // =============================
+    // Login
+    // =============================
+    function setFormFocus() {
+      var u = document.getElementById('username');
+      if (u) { u.focus(); u.select(); }
     }
 
     function loadIndex() {
@@ -455,27 +714,202 @@
       setFormFocus();
     }
 
-    // Vérification du token existant
-    $.ajax({
-      url: API, type: 'POST', dataType: 'json',
-      data: JSON.stringify({ fonc: 'login' }),
-      contentType: 'application/json; charset=utf-8',
-      success: function(r) {
-        if (r.status === 200)
-        {
-          document.location = HOME;
+    function showError(msg) {
+      document.getElementById('errormsg-text').textContent = msg;
+      document.getElementById('errormsg').classList.add('show');
+    }
+
+    function hideError() {
+      document.getElementById('errormsg').classList.remove('show');
+    }
+
+    var loginBtnDefault = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Se connecter';
+
+    function checkCredentials() {
+      hideError();
+      var username = $("#username").val();
+      var password = MD5($("#mypassword").val());
+      console.log(MD5($("#mypassword").val()));
+      var btn = document.getElementById('fonc');
+      btn.disabled = true;
+      btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px"></div> Connexion…';
+      $("#loginbox").hide();
+      $("#load").show();
+
+      $.ajax({
+        url: API, type: 'POST', dataType: 'json',
+        data: JSON.stringify({ fonc: 'login', myusr: username, mypwd: password }),
+        contentType: 'application/json; charset=utf-8',
+        success: function(r) {
+          if (r.status === 200) {
+            document.location = HOME;
+          } else {
+            $("#loginbox").show();
+            $("#load").hide();
+            btn.disabled = false;
+            btn.innerHTML = loginBtnDefault;
+            showError("{core_autherror}: " + r.message);
+          }
+        },
+        error: function(r) {
+          $("#loginbox").show();
+          $("#load").hide();
+          btn.disabled = false;
+          btn.innerHTML = loginBtnDefault;
+          console.log(r);
+          showError("{core_autherror}: " + r.responseJSON.message);
         }
-        else
-        {
-          loadIndex();
-        }
-      },
-      error: function() { loadIndex(); }
+      });
+
+      return false;
+    }
+
+    // =============================
+    // Modal — Demande de reset
+    // =============================
+    function openResetModal() {
+      // Reset l'état du modal
+      document.getElementById('modal-errormsg').classList.remove('show');
+      document.getElementById('modal-successmsg').classList.remove('show');
+      document.getElementById('reset_email').value = '';
+      document.getElementById('resetRequestForm').style.display = '';
+      var btn = document.getElementById('btn-resetrequest');
+      btn.disabled = false;
+      btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg> Envoyer le lien';
+
+      document.getElementById('resetModal').classList.add('show');
+      setTimeout(function() { document.getElementById('reset_email').focus(); }, 100);
+    }
+
+    function closeResetModal() {
+      document.getElementById('resetModal').classList.remove('show');
+    }
+
+    // Fermer le modal en cliquant sur l'overlay
+    document.getElementById('resetModal').addEventListener('click', function(e) {
+      if (e.target === this) closeResetModal();
     });
 
+    // Fermer le modal avec Escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeResetModal();
+    });
+
+    function showModalError(msg) {
+      document.getElementById('modal-successmsg').classList.remove('show');
+      document.getElementById('modal-errormsg-text').textContent = msg;
+      document.getElementById('modal-errormsg').classList.add('show');
+    }
+
+    function showModalSuccess(msg) {
+      document.getElementById('modal-errormsg').classList.remove('show');
+      document.getElementById('modal-successmsg-text').textContent = msg;
+      document.getElementById('modal-successmsg').classList.add('show');
+    }
+
+    function requestPasswordReset() {
+      var email = document.getElementById('reset_email').value.trim();
+      if (!email) { showModalError("Veuillez saisir votre adresse email."); return; }
+
+      var btn = document.getElementById('btn-resetrequest');
+      btn.disabled = true;
+      btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px"></div> Envoi…';
+
+      $.ajax({
+        url: API_RESETREQ, type: 'POST', dataType: 'json',
+        data: JSON.stringify({ email: email, token: POST_TOKEN }),
+        contentType: 'application/json; charset=utf-8',
+        success: function(r) {
+          // Toujours afficher un message de succès (ne pas révéler si le compte existe)
+          showModalSuccess("Si un compte est associé à cette adresse, un email de réinitialisation a été envoyé.");
+          document.getElementById('resetRequestForm').style.display = 'none';
+        },
+        error: function(r) {
+          // Même en cas d'erreur serveur, on affiche le message générique
+          // pour ne pas révéler d'information
+          showModalSuccess("Si un compte est associé à cette adresse, un email de réinitialisation a été envoyé.");
+          document.getElementById('resetRequestForm').style.display = 'none';
+        }
+      });
+    }
+
+    // =============================
+    // Changement de mot de passe
+    // =============================
+    function showResetError(msg) {
+      document.getElementById('reset-successmsg').classList.remove('show');
+      document.getElementById('reset-errormsg-text').textContent = msg;
+      document.getElementById('reset-errormsg').classList.add('show');
+    }
+
+    function showResetSuccess(msg) {
+      document.getElementById('reset-errormsg').classList.remove('show');
+      document.getElementById('reset-successmsg-text').textContent = msg;
+      document.getElementById('reset-successmsg').classList.add('show');
+    }
+
+    function checkPasswordStrength() {
+      var pwd = document.getElementById('new_password').value;
+      var score = 0;
+      if (pwd.length >= 8)        score++;
+      if (/[a-z]/.test(pwd) && /[A-Z]/.test(pwd)) score++;
+      if (/\d/.test(pwd))         score++;
+      if (/[^a-zA-Z0-9]/.test(pwd)) score++;
+
+      document.getElementById('pwd-strength').setAttribute('data-score', score);
+
+      var hints = ['Très faible', 'Faible', 'Moyen', 'Bon', 'Excellent'];
+      document.getElementById('pwd-hint').textContent = pwd.length > 0 ? hints[score] : 'Min. 8 caractères, majuscule, minuscule, chiffre';
+    }
+
+    function submitNewPassword() {
+      var pwd     = document.getElementById('new_password').value;
+      var confirm = document.getElementById('confirm_password').value;
+
+      // Validations côté client
+      if (pwd.length < 8) {
+        showResetError("Le mot de passe doit contenir au moins 8 caractères.");
+        return;
+      }
+
+      if (pwd !== confirm) {
+        showResetError("Les mots de passe ne correspondent pas.");
+        return;
+      }
+
+      var btn = document.getElementById('btn-changepwd');
+      btn.disabled = true;
+      btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px"></div> Modification…';
+
+      $.ajax({
+        url: API_CHANGEPWD, type: 'POST', dataType: 'json',
+        data: JSON.stringify({
+          token: RESET_TOKEN,
+          password: MD5(pwd)
+        }),
+        contentType: 'application/json; charset=utf-8',
+        success: function(r) {
+          if (r.status === 200) {
+            showResetSuccess("Mot de passe modifié avec succès. Redirection…");
+            document.getElementById('resetPwdForm').style.display = 'none';
+            setTimeout(function() { window.location.href = '?'; }, 2000);
+          } else {
+            btn.disabled = false;
+            btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Modifier le mot de passe';
+            showResetError(r.message || "Une erreur est survenue.");
+          }
+        },
+        error: function(r) {
+          btn.disabled = false;
+          btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Modifier le mot de passe';
+          var msg = (r.responseJSON && r.responseJSON.message) ? r.responseJSON.message : "Lien expiré ou invalide. Veuillez refaire une demande.";
+          showResetError(msg);
+        }
+      });
+    }
   </script>
-</body>
-</html>
+
+</body></html>
 
 
 <!-- END: main -->

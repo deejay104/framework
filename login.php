@@ -39,48 +39,39 @@
 		require (MyRep("lang.".$MyOpt["DefaultLanguage"].".php","default",false));
 	}
 
-// ---- Charge les pr�requis
+// ---- Charge les prérequis
 	require_once ("class/xtpl.inc.php");
 	require_once ("class/mysql.inc.php");
 
 
-// ---- Charge le num�ro de version
+// ---- Charge le numéro de version
 	require ("version.php");
 
 // ---- Charge les templates
 	$module="modules";
 	$tmpl_prg = LoadTemplate("login","default");
 
-// ---- Connection � la base de donn�es
+// ---- Connection à la base de données
 	$sql   = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db,$port);
 
 // ---- Test si l'on a validé la page
 	if ($fonc == "logout")
 	{
-		/*
-		if ($_COOKIE['sessid']>0)
-		{
-			$query="UPDATE ".$MyOpt["tbl"]."_token SET active='non' WHERE id='".$_COOKIE['sessid']."'";
-			$sql->Update($query);
-		}
-		*/
-
-		//$_COOKIE['uid']=0;
-		//$_COOKIE['sessid']=0;
+		// TODO : Efface le token de la base si on le trouve
 		
+		clearSessionCookie();
+		clearRefreshCookie();
 
-
+		header('Location: /', true, 303);
 		exit;
 	}
-
-// ---- 
-	// if ($tmpl_prg->text("main.unsecure")=="")
-	$tmpl_prg->parse("main.secure");
 
 
 // ---- Affiche la page
 
 	$tmpl_prg->assign("url", $url);
+	$tmpl_prg->assign("post_token", generateToken(0,5,$base="token_post"));
+
 	$tmpl_prg->assign("version", $version."-".$core_version.(($MyOpt["maintenance"]=="on") ? " - ".ucwords($tabLang["core_maintenance"]) : ""));
 	$tmpl_prg->assign("site_title", $MyOpt["site_title"]);
 	$tmpl_prg->assign("corefolder", $corefolder);

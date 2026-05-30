@@ -33,7 +33,7 @@ function SwitchHtml(champ,id)
 			{
 				console.log(response);
 
-				if (response.result=="OK")
+				if (response.status==200)
 				{
 					document.getElementById(champ+"_"+id).style.backgroundColor = "#BBFFAA";
 					document.getElementById(champ+"_"+id).innerHTML = "<a id='"+champ+"_"+id+"_a' onClick=\"SwitchEdit('"+champ+"',"+id+")\">"+response.value+"</a>";
@@ -65,7 +65,7 @@ function SwitchOn(champ,id)
 			{
 				console.log(response);
 
-				if (response.result=="OK")
+				if (response.status==200)
 				{
 					document.getElementById(champ+"_"+id).style.backgroundColor = "#BBFFAA";
 					document.getElementById(champ+"_"+id).innerHTML = "<a id='"+champ+"_"+id+"_val' onClick=\"SwitchOn('"+champ+"',"+id+")\">"+response.value+"</a>";

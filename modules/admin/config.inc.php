@@ -47,6 +47,9 @@
 		affInformation($ret,"ok");
 		$MyOpt=UpdateVariables($MyOptTab);
 		$MyOpt["tbl"]=$gl_tbl;
+
+		header('Location: /admin/config', true, 303);
+		exit;
 	}
 
 // ---- Charge les variables

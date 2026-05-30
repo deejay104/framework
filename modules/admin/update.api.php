@@ -262,7 +262,7 @@ function AjoutLog($txt)
                                                 $ret["data"].=AjoutLog(" - ".$tabLang["lang_modify"]." ".$MyOpt["tbl"]."_".$tab.":".$field." -> ".$tabTmpl[$tab][$field]["Type"]." '".$tabTmpl[$tab][$field]["Default"]."'!='".(isset($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Default"]) ? $tabProd[$MyOpt["tbl"]."_".$tab][$field]["Default"] : "")."'");
                                         }
                                 }
-                                else if ( ($field=="id") && ($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Extra"]!="auto_increment") )
+                                else if ( ($field=="id") && (isset($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Extra"])) && ($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Extra"]!="auto_increment") )
                                 {
                                         // ALTER TABLE `core_tarifs` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT;
                                         $q="ALTER TABLE `".$MyOpt["tbl"]."_".$tab."` CHANGE `".$field."` `".$field."` int(10) UNSIGNED NOT NULL AUTO_INCREMENT";

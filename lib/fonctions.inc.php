@@ -418,18 +418,9 @@ function verifyJWT($token)
 
 function generateRefreshToken($gl_uid,$expire)
 {
-	global $sql,$MyOpt;
-
-	$refreshTokenRaw=bin2hex(random_bytes(32));
-	$refreshTokenHash = hash('sha256', $refreshTokenRaw);
-
+	$refreshTokenRaw=generateToken($gl_uid,$expire*60*24,"token");
 	$expiresAt = date('Y-m-d H:i:s', strtotime('+'.$expire.' days'));
-    $deviceInfo = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
-
 	
-	$query="INSERT INTO ".$MyOpt["tbl"]."_token SET uid=".$gl_uid.", token='".$refreshTokenHash."', uid_creat='".$gl_uid."',uid_maj='".$gl_uid."',dte_creat='".now()."', dte_expire='".$expiresAt."'";
-	$myid=$sql->Insert($query);
-
 	setcookie('t_auth', $refreshTokenRaw, [
         'expires'  => strtotime($expiresAt),
         'path'     => '/api/v1/admin/auth',    // Restreint aux endpoints d'auth seulement
@@ -437,7 +428,43 @@ function generateRefreshToken($gl_uid,$expire)
         'secure'   => true,
         'samesite' => 'Strict',
     ]);
+}
 
+function generateToken($gl_uid,$expire,$base)
+{
+	global $sql,$MyOpt;
+
+	$TokenRaw  = bin2hex(random_bytes(32));
+	$TokenHash = hash('sha256', $TokenRaw);
+
+	$expiresAt = date('Y-m-d H:i:s', strtotime('+'.$expire.' minutes'));
+    $deviceInfo = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
+	$client_ip=$_SERVER[$MyOpt["ipfield"]];
+
+	$query="INSERT INTO ".$MyOpt["tbl"]."_".$base." SET uid=".$gl_uid.", token='".$TokenHash."', uid_creat='".$gl_uid."',uid_maj='".$gl_uid."',dte_creat='".now()."', dte_expire='".$expiresAt."', client_ip='".$client_ip."'";
+	$myid=$sql->Insert($query);
+
+	return $TokenRaw;
+}
+
+function verifyToken($token,$base)
+{
+	global $sql,$MyOpt;
+
+	$query="SELECT id,uid FROM ".$MyOpt["tbl"]."_".$base." WHERE token='".hash('sha256', $token)."' AND actif='oui' AND dte_expire>'".now()."'";
+	$res = $sql->QueryRow($query);
+
+	if ((isset($res["id"])) && ($res["id"]>0))
+	{
+		$query="UPDATE ".$MyOpt["tbl"]."_".$base." SET actif='non' WHERE id='".$res["id"]."'";
+		$sql->Update($query);
+
+		return $res["uid"];
+	}
+	else
+	{
+		return -1;
+	}
 }
 
 function clearSessionCookie(): void {
@@ -451,88 +478,31 @@ function clearSessionCookie(): void {
 }
 
 function clearRefreshCookie(): void {
-    setcookie('t_auth', '', [
+	global $MyOpt,$gl_uid;
+
+	if (isset($_COOKIE["t_auth"]))
+	{
+
+		$token=$_COOKIE["t_auth"];
+		$query="SELECT id FROM ".$MyOpt["tbl"]."_token WHERE token='".hash('sha256', $token)."'";
+		$res = $sql->QueryRow($query);
+
+		if ((isset($res["id"])) && ($res["id"]>0))
+		{
+			$query="UPDATE ".$MyOpt["tbl"]."_token SET actif='non' WHERE token='".hash('sha256', $token)."', uid_maj='".$gl_uid."',dte_maj='".now()."'";
+			$sql->Update($query);
+		}
+	}
+
+	setcookie('t_auth', '', [
         'expires'  => 1,
         'path'     => '/api/v1/admin/auth',
         'httponly'  => true,
         'secure'   => true,
         'samesite' => 'Strict',
     ]);
-}
-/*
-function checkToken($token)
-{
-	global $sql, $MyOpt;
-	$ses=explode(".",$token);
-
-	$b64_header=(isset($ses[0])) ? $ses[0] : "";
-	$b64_payload=(isset($ses[1])) ? $ses[1] : "";
-	$b64_sign=(isset($ses[2])) ? $ses[2] :"";
-
-	$my_sign=str_replace(['+', '/', '='],['-', '_', ''],base64_encode(hash_hmac("sha256",$b64_header.".".$b64_payload,$MyOpt["jwtsecret"],true)));
-
-	$payload=json_decode(base64_decode($b64_payload),true);
-
-	$result=array();
-	$result["status"]="nok";
-	$result["tid"]=isset($payload["tid"]) ? $payload["tid"] : 0;
-	$result["uid"]=0;
-	$result["expire"]=0;
-	$result["signed"]=0;
-
-	if (($my_sign==$b64_sign) && ($result["tid"]>0))
-	{
-		$result["signed"]=1;
-		$query = "SELECT id,uid,token,dte_expire FROM ".$MyOpt["tbl"]."_token WHERE id='".$result["tid"]."' AND active='oui' AND dte_expire<>'0000-00-00 00:00:00' AND dte_expire>'".now()."'";
-		$res = $sql->QueryRow($query);
-
-		if ((is_array($res)) && ($res["id"]>0))
-		{
-			$result["uid"]=$res["uid"];
-			if (password_verify($payload["token"],$res["token"]))
-			{
-				$result["status"]="ok";
-				$result["expire"]=strtotime($res["dte_expire"]);
-			}
-		}
-	}
-
-	return $result;
-}
-
-
-function generateToken($gl_uid,$expire=0)
-{
-	global $sql,$MyOpt;
-	
-	if ($expire==0)
-	{
-		$expire=$MyOpt["tokenexpire"]*3600*24;
-	}
-	
-	$token=bin2hex(random_bytes(32));
-	$query="INSERT INTO ".$MyOpt["tbl"]."_token SET uid=".$gl_uid.", token='".password_hash($token, PASSWORD_BCRYPT, array('cost' => 12))."', uid_creat='".$gl_uid."',uid_maj='".$gl_uid."',dte_creat='".now()."',dte_maj='".now()."', dte_expire='".date("Y-m-d H:i:s",time()+$MyOpt["tokenexpire"]*24*3600)."'";
-	$tid=$sql->Insert($query);
-
-	$header='{"typ":"JWT","alg":"HS256"}';
-
-	$payload=array(
-		"iss"=>$MyOpt["host"],
-		"iat"=>time(),
-		"exp"=>time()+$expire,
-		"tid"=>$tid,
-		"token"=>$token
-	);
-
-	$b64_header=str_replace(['+', '/', '='],['-', '_', ''],base64_encode($header));
-	$b64_payload=str_replace(['+', '/', '='],['-', '_', ''],base64_encode(json_encode($payload)));
-	$b64_sign=str_replace(['+', '/', '='],['-', '_', ''],base64_encode(hash_hmac('sha256',$b64_header.".".$b64_payload,$MyOpt["jwtsecret"],true)));
-	$b64_token=$b64_header.".".$b64_payload.".".$b64_sign;
-	
-	return $b64_token;
 
 }
-*/
 
 
 // Charge un template
@@ -688,7 +658,7 @@ function CalcDate($dte, $n)
 
 
 
-  
+// Envoie un email à partir d'un template en base
 function SendMailFromFile($from,$to,$tabcc,$subject="",$tabvar=array(),$name="",$files="",$dest="mail")
 { global $sql,$mod,$appfolder,$MyOpt,$gl_uid;
 	$q="SELECT * FROM ".$MyOpt["tbl"]."_mailtmpl WHERE nom='".$name."'";
@@ -743,6 +713,7 @@ function SendMailFromFile($from,$to,$tabcc,$subject="",$tabvar=array(),$name="",
 	}
 }
 
+// Envoie d'un email
 function MyMail($from,$to,$tabcc,$subject,$message,$headers="",$files="")
 { global $MyOpt;
 

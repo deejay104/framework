@@ -36,6 +36,23 @@ Cordialement"
 	);
 // *****************************************************************
 
+// *****************************************************************
+$tabMails["resetpwd"]=Array
+(
+	"titre"=>"Demande de nouveau mot de passe",
+	"balise"=>"url",
+	"mail"=>
+"Bonjour,
+
+Vous avez demandez une re-initialisation de votre mot de passe.
+Pour changer le changer, utilisez le lien suivant :
+{url}
+
+Cordialement"
+);
+// *****************************************************************
+
+
 
 // *****************************************************************
 	$tabMails["amelioration"]=Array

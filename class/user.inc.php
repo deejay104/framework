@@ -52,6 +52,7 @@ class user_core extends objet_core
 		"aff_mail" => Array("type" => "bool", "default" => "oui", ),
 		"aff_infos" => Array("type" => "bool", "default" => "oui", ),
 		"dte_login" => Array("type" => "datetime", "default" => "0000-00-00 00:00:00"),
+		"dte_resetpwd" => Array("type" => "datetime", "default" => "0000-00-00 00:00:00"),
 		"uid_creat" => Array("type" => "number", "default" => "0"),
 		"dte_creat" => Array("type" => "date", "default" => "0000-00-00"),
 		"uid_maj" => Array("type" => "number", "default" => "0", ),

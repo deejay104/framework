@@ -180,18 +180,12 @@
 		}
 		
 	}
-	
+
 // ---- Gestion des droits
-	if ($fonc=="logout")
+	if ( ($fonc=="logout") || ($gl_uid==0) )
 	{
 		include "login.php";
 		exit;
-	}
-	if ($gl_uid==0)
-	{
-			include "login.php";
-			exit;
-
 	}
 
 // ---- Header de la page
@@ -532,7 +526,7 @@
 
 	if ($gl_myprint_txt!="")
 	{
-		affInformation(nl2br(htmlentities(utf8_decode($gl_myprint_txt),ENT_COMPAT,'ISO-8859-1')),"warning");
+		affInformation(nl2br(htmlentities($gl_myprint_txt,ENT_COMPAT,'UTF-8')),"warning");
 	}
 
 // ---- Calcul du temps d'affichage

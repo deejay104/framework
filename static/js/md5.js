@@ -14,7 +14,7 @@
  * Of course, this soft is provided "as is" without express or implied
  * warranty of any kind.
  *
- * $Id: _md5.js,v 1.3 2007-09-19 18:02:26 miniroot Exp $
+ * $Id: md5.js,v 1.3 2007-09-19 18:02:26 miniroot Exp $
  *
  */
 
@@ -290,31 +290,31 @@ function not(a) {
 
     }
 
-    function init() {
-	count[0]=count[1] = 0;
-	state[0] = 0x67452301;
-	state[1] = 0xefcdab89;
-	state[2] = 0x98badcfe;
-	state[3] = 0x10325476;
-	for (i = 0; i < digestBits.length; i++)
-	    digestBits[i] = 0;
-    }
+    function initmd5() {
+		count[0]=count[1] = 0;
+		state[0] = 0x67452301;
+		state[1] = 0xefcdab89;
+		state[2] = 0x98badcfe;
+		state[3] = 0x10325476;
+		for (i = 0; i < digestBits.length; i++)
+			digestBits[i] = 0;
+		}
 
-    function update(b) { 
-	var index,i;
-	
-	index = and(shr(count[0],3) , 0x3f);
-	if (count[0]<0xffffffff-7) 
-	  count[0] += 8;
-        else {
-	  count[1]++;
-	  count[0]-=0xffffffff+1;
-          count[0]+=8;
-        }
-	buffer[index] = and(b,0xff);
-	if (index  >= 63) {
-	    transform(buffer, 0);
-	}
+		function update(b) { 
+		var index,i;
+		
+		index = and(shr(count[0],3) , 0x3f);
+		if (count[0]<0xffffffff-7) 
+		count[0] += 8;
+			else {
+		count[1]++;
+		count[0]-=0xffffffff+1;
+			count[0]+=8;
+			}
+		buffer[index] = and(b,0xff);
+		if (index  >= 63) {
+			transform(buffer, 0);
+		}
     }
 
     function finish() {
@@ -364,18 +364,18 @@ var ascii="01234567890123456789012345678901" +
 
 function MD5(entree) 
 {
- var l,s,k,ka,kb,kc,kd;
- init();
- for (k=0;k<entree.length;k++) {
-   l=entree.charAt(k);
-   update(ascii.lastIndexOf(l));
- }
- finish();
- ka=kb=kc=kd=0;
- for (i=0;i<4;i++) ka+=shl(digestBits[15-i], (i*8));
- for (i=4;i<8;i++) kb+=shl(digestBits[15-i], ((i-4)*8));
- for (i=8;i<12;i++) kc+=shl(digestBits[15-i], ((i-8)*8));
- for (i=12;i<16;i++) kd+=shl(digestBits[15-i], ((i-12)*8));
- s=hexa(kd)+hexa(kc)+hexa(kb)+hexa(ka);
- return s; 
+	var l,s,k,ka,kb,kc,kd;
+	initmd5();
+	for (k=0;k<entree.length;k++) {
+		l=entree.charAt(k);
+		update(ascii.lastIndexOf(l));
+	}
+	finish();
+	ka=kb=kc=kd=0;
+	for (i=0;i<4;i++) ka+=shl(digestBits[15-i], (i*8));
+	for (i=4;i<8;i++) kb+=shl(digestBits[15-i], ((i-4)*8));
+	for (i=8;i<12;i++) kc+=shl(digestBits[15-i], ((i-8)*8));
+	for (i=12;i<16;i++) kd+=shl(digestBits[15-i], ((i-12)*8));
+	s=hexa(kd)+hexa(kc)+hexa(kb)+hexa(ka);
+	return s; 
 }

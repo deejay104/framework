@@ -67,10 +67,20 @@
 	}
 
 // ---- Demande d'authentification --------------------------------------------------------------------
-
-	if ($fonc=="login")
+	if (isset($_COOKIE['t_session']))
+	{
+		$gl_auth=verifyJWT($_COOKIE['t_session']);
+		$gl_uid=$gl_auth["uid"];
+	}
+	else if ($fonc=="login")
 	{
 		require_once("modules/admin/login.api.php");
+
+		$gl_auth=array(
+			"uid"=>0,
+			"status"=>401,
+			"message"=>"",
+		);				
 
 		if (isset($_COOKIE["t_auth"]))
 		{
@@ -81,21 +91,18 @@
 		if ($gl_uid==0)
 		{
 			$myusr=checkVar("myusr","varchar");
-			$myusr=strtolower($myusr);
-			$myusr=preg_replace("/[\"'<>\\\;]/i","",$myusr);
 			$mypwd=checkVar("mypwd","varchar");
-		
+
 			if ( ($myusr!="") && ($myusr!="") )
 			{
+				$myusr=strtolower($myusr);
+				$myusr=preg_replace("/[\"'<>\\\;]/i","",$myusr);
+			
 				$gl_auth=verifyCredentials($myusr,$mypwd);
-				$gl_uid=$gl_auth["uid"];
+				$gl_uid=$gl_auth["uid"];	
 			}
+
 		}
-	}
-	else if (isset($_COOKIE['t_session']))
-	{
-		$gl_auth=verifyJWT($_COOKIE['t_session']);
-		$gl_uid=$gl_auth["uid"];
 	}
 	else if ( (isset($_SERVER["PHP_AUTH_USER"])) && (isset($_SERVER["PHP_AUTH_PW"])) )
 	{
@@ -119,10 +126,20 @@
 				$gl_uid=$res["id"];
 			}
 		}
+		$gl_auth=array(
+			"uid"=>$gl_uid,
+			"status"=>($gl_uid>0) ? 200 : 401,
+			"message"=>"",
+		);
 	}
 	else if ($context=="public")
 	{
 		// Définir un user anonymous
+		$gl_auth=array(
+			"uid"=>0,
+			"status"=>200,
+			"message"=>"",
+		);
 	}
 	else if (($mod=="admin") && ($rub=="update"))
 	{
@@ -131,12 +148,32 @@
 		
 		if (!is_array($res))
 		{
-			$gl_uid=1;
 			$token="sys";
+			$gl_auth=array(
+				"uid"=>0,
+				"status"=>200,
+				"message"=>"",
+			);	
+		}
+		else
+		{
+			$gl_auth=array(
+				"uid"=>0,
+				"status"=>401,
+				"message"=>"Initial config already done",
+			);
 		}
 	}
+	else
+	{
+		$gl_auth=array(
+			"uid"=>0,
+			"status"=>200,
+			"message"=>"",
+		);
+	}
 	
-	if ($gl_uid==0)
+	if ($gl_auth["status"]!=200)
 	{
 		header("HTTP/1.0 401 Unauthorized"); 
 		echo json_encode($gl_auth);
