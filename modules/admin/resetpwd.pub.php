@@ -11,7 +11,7 @@
     $minwait=10; // Temps avant nouvelle autorisation de changement de mot de passe
 
     // Check POST token
-    $tid=verifyToken($token,"token_post");
+    $tid=verifyToken($token,"token_post",true);
     if ($tid==-1)
     {
         $ret=array(

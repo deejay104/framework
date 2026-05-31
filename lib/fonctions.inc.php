@@ -430,6 +430,8 @@ function generateRefreshToken($gl_uid,$expire)
         'secure'   => true,
         'samesite' => 'Strict',
     ]);
+
+	return ($refreshTokenRaw!="") ? true : false;
 }
 
 function generateToken($gl_uid,$expire,$base)
@@ -443,13 +445,13 @@ function generateToken($gl_uid,$expire,$base)
     $deviceInfo = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
 	$client_ip=$_SERVER[$MyOpt["ipfield"]];
 
-	$query="INSERT INTO ".$MyOpt["tbl"]."_".$base." SET uid=".$gl_uid.", token='".$TokenHash."', uid_creat='".$gl_uid."',uid_maj='".$gl_uid."',dte_creat='".now()."', dte_expire='".$expiresAt."', client_ip='".$client_ip."'";
+	$query="INSERT INTO ".$MyOpt["tbl"]."_".$base." SET uid=".$gl_uid.", token='".$TokenHash."', uid_creat='".$gl_uid."',uid_maj='".$gl_uid."',dte_creat='".now()."',dte_maj='".now()."', dte_expire='".$expiresAt."', client_ip='".$client_ip."'";
 	$myid=$sql->Insert($query);
 
 	return $TokenRaw;
 }
 
-function verifyToken($token,$base)
+function verifyToken($token,$base,$expire=false)
 {
 	global $sql,$MyOpt;
 
@@ -458,8 +460,11 @@ function verifyToken($token,$base)
 
 	if ((isset($res["id"])) && ($res["id"]>0))
 	{
-		$query="UPDATE ".$MyOpt["tbl"]."_".$base." SET actif='non' WHERE id='".$res["id"]."'";
-		$sql->Update($query);
+		if ($expire)
+		{
+			$query="UPDATE ".$MyOpt["tbl"]."_".$base." SET actif='non', dte_maj='".now()."' WHERE id='".$res["id"]."'";
+			$sql->Update($query);	
+		}
 
 		return $res["uid"];
 	}

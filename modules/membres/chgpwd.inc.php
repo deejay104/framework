@@ -41,8 +41,6 @@
 	}
 
 // ---- Modification du mot de passe
-echo "**".$form_newmdp."**";
-
 	if ( ($fonc=="Enregistrer") && ($form_newmdp!="") && ($form_newmdp!="**NONE**") && ( ((GetMyId($id)) && ($form_oldmdp!="")) || (GetDroit("ModifUserPassword")) ) )
 	{
 		if (($usr->CheckPassword($form_oldmdp)) || (GetDroit("ModifUserPassword")))

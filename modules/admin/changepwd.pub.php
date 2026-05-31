@@ -2,7 +2,7 @@
     $token=checkVar("token","varchar");
 
     // Check RESET token
-    $gl_uid=verifyToken($token,"token_resetpwd");
+    $gl_uid=verifyToken($token,"token_resetpwd",true);
 
     if ($gl_uid==-1)
     {

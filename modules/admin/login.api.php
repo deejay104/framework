@@ -66,7 +66,7 @@
 		$ret["uid"]=0;
 		$ret["code"]="none";
 
-		$gl_uid=verifyToken($token,"token");
+		$gl_uid=verifyToken($token,"token",false);
 
 		if ($gl_uid>0)
 		{
@@ -77,7 +77,10 @@
 			if ($MyOpt["sessionTokenExpire"]>0)
 			{
 				$t_expire=((isset($MyOpt["sessionTokenExpire"])) && ($MyOpt["sessionTokenExpire"]>0)) ? $MyOpt["sessionTokenExpire"] : 7;
-				generateRefreshToken($ret["uid"],$t_expire);
+				if (generateRefreshToken($ret["uid"],$t_expire))
+				{
+					verifyToken($token,"token",true);
+				}
 			}
 
 			$ret["token"]=generateJWT($gl_uid);
