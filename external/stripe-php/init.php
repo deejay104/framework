@@ -191,7 +191,7 @@ require __DIR__ . '/lib/Events/V2CoreAccountUpdatedEventNotification.php';
 require __DIR__ . '/lib/Events/V2CoreEventDestinationPingEvent.php';
 require __DIR__ . '/lib/Events/V2CoreEventDestinationPingEventNotification.php';
 require __DIR__ . '/lib/Exception/RateLimitException.php';
-require __DIR__ . '/lib/Exception/TemporarySessionExpiredException.php';
+require __DIR__ . '/lib/Exception/TemporarysessionExpiredException.php';
 require __DIR__ . '/lib/ExchangeRate.php';
 require __DIR__ . '/lib/File.php';
 require __DIR__ . '/lib/FileLink.php';

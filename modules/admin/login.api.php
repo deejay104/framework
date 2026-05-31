@@ -20,13 +20,13 @@
 			$ret["uid"]=$res["id"];
 
 			$myid=0;
-			if ($MyOpt["tokenexpire"]>0)
+			if ($MyOpt["sessionTokenExpire"]>0)
 			{
-				$t_expire=((isset($MyOpt["tokenexpire"])) && ($MyOpt["tokenexpire"]>0)) ? $MyOpt["tokenexpire"] : 7;
+				$t_expire=((isset($MyOpt["sessionTokenExpire"])) && ($MyOpt["sessionTokenExpire"]>0)) ? $MyOpt["sessionTokenExpire"] : 7;
 				generateRefreshToken($res["id"],$t_expire);
 				$ret["token"]=generateJWT($res["id"]);
 
-				$s_expire=((isset($MyOpt["sessionexpire"])) && ($MyOpt["sessionexpire"]>0)) ? $MyOpt["sessionexpire"] : 600;
+				$s_expire=((isset($MyOpt["sessionExpire"])) && ($MyOpt["sessionExpire"]>0)) ? $MyOpt["sessionExpire"] : 600;
 
 				setcookie('t_session', $ret["token"], [
 					'expires'  => time() + $s_expire,
@@ -75,14 +75,14 @@
 			$ret["code"]="token";
 			$ret["uid"]=$gl_uid;
 
-			if ($MyOpt["tokenexpire"]>0)
+			if ($MyOpt["sessionTokenExpire"]>0)
 			{
-				$t_expire=((isset($MyOpt["tokenexpire"])) && ($MyOpt["tokenexpire"]>0)) ? $MyOpt["tokenexpire"] : 7;
+				$t_expire=((isset($MyOpt["sessionTokenExpire"])) && ($MyOpt["sessionTokenExpire"]>0)) ? $MyOpt["sessionTokenExpire"] : 7;
 				generateRefreshToken($ret["uid"],$t_expire);
 			}
 
 			$ret["token"]=generateJWT($gl_uid);
-			$s_expire=((isset($MyOpt["sessionexpire"])) && ($MyOpt["sessionexpire"]>0)) ? $MyOpt["sessionexpire"] : 600;
+			$s_expire=((isset($MyOpt["sessionExpire"])) && ($MyOpt["sessionExpire"]>0)) ? $MyOpt["sessionExpire"] : 600;
 
 			setcookie('t_session', $ret["token"], [
 				'expires'  => time() + $s_expire,

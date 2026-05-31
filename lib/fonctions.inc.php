@@ -365,7 +365,7 @@ function generateJWT(int $userId): string
 {
 	global $MyOpt;
 
-	$s_expire=((isset($MyOpt["sessionexpire"])) && ($MyOpt["sessionexpire"]>0)) ? $MyOpt["sessionexpire"] : 600;
+	$s_expire=((isset($MyOpt["sessionExpire"])) && ($MyOpt["sessionExpire"]>0)) ? $MyOpt["sessionExpire"] : 600;
 
     // JWT simplifié — en production, utilise firebase/php-jwt
     $header  = base64url_encode(json_encode(['alg' => 'HS256', 'typ' => 'JWT']));

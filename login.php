@@ -70,7 +70,14 @@
 // ---- Affiche la page
 
 	$tmpl_prg->assign("url", $url);
-	$tmpl_prg->assign("post_token", generateToken(0,5,$base="token_post"));
+	if ($fonc=="resetpwd")
+	{
+		$tmpl_prg->assign("post_token", generateToken(0,5,$base="token_post"));
+	}
+	else
+	{
+		$tmpl_prg->assign("post_token", "");
+	}
 
 	$tmpl_prg->assign("version", $version."-".$core_version.(($MyOpt["maintenance"]=="on") ? " - ".ucwords($tabLang["core_maintenance"]) : ""));
 	$tmpl_prg->assign("site_title", $MyOpt["site_title"]);

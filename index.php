@@ -52,7 +52,7 @@
 		$gl_auth=verifyJWT($_COOKIE['t_session']);
 		$gl_uid=$gl_auth["uid"];
 
-		$s_expire=((isset($MyOpt["sessionexpire"])) && ($MyOpt["sessionexpire"]>0)) ? $MyOpt["sessionexpire"] : 600;
+		$s_expire=((isset($MyOpt["sessionExpire"])) && ($MyOpt["sessionExpire"]>0)) ? $MyOpt["sessionExpire"] : 600;
 //		echo date("Y-m-d H:i:s",$gl_auth["expire"])."**".(($gl_auth["expire"]-time())/$s_expire);
 
 		if (($gl_auth["expire"]-time())/$s_expire<0.1)
@@ -158,7 +158,7 @@
 
 		$theme=$themes[$_REQUEST["settheme"]];
 		setcookie('theme', $theme, [
-			'expires'  => time() + $MyOpt["sessionexpire"],
+			'expires'  => time() + $MyOpt["sessionExpire"],
 			'path'     => '/',
 			'httponly'  => true,      // JS n'en a pas besoin non plus
 			'secure'   => true,
@@ -184,7 +184,7 @@
 			$theme="phone";
 
             setcookie('theme', $theme, [
-                'expires'  => time() + $MyOpt["sessionexpire"],
+                'expires'  => time() + $MyOpt["sessionExpire"],
                 'path'     => '/',
                 'httponly'  => true,      // JS n'en a pas besoin non plus
                 'secure'   => true,

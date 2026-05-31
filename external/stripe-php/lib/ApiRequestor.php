@@ -281,7 +281,7 @@ class ApiRequestor
                 );
 
             case 'temporary_session_expired':
-                return Exception\TemporarySessionExpiredException::factory(
+                return Exception\TemporarysessionExpiredException::factory(
                     $msg,
                     $rcode,
                     $rbody,

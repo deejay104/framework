@@ -66,12 +66,12 @@ $MyOptTmpl["site_title"]="MnMs";
 $MyOptHelp["site_title"]="Titre du site web";
 
 // Temps de validité des tokens de reauthentification
-$MyOptTmpl["tokenexpire"]="7";
-$MyOptHelp["tokenexpire"]="Nombre de jours de validité des tokens de re-authentification (0=désactivé)";
+$MyOptTmpl["sessionTokenExpire"]="7";
+$MyOptHelp["sessionTokenExpire"]="Nombre de jours de validité des tokens de re-authentification (0=désactivé)";
 
 // Temps de validité des sessions
-$MyOptTmpl["sessionexpire"]="600";
-$MyOptHelp["sessionexpire"]="Nombre de secondes de validité des sessions (0=désactivé)";
+$MyOptTmpl["sessionExpire"]="600";
+$MyOptHelp["sessionExpire"]="Nombre de secondes de validité des sessions (0=désactivé)";
 
 // email par défault d'envoie des mails
 $MyOptTmpl["from_email"]="noreply@les-mnms.net";

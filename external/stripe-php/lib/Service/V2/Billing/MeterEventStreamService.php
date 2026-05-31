@@ -21,7 +21,7 @@ class MeterEventStreamService extends \Stripe\Service\AbstractService
      *
      * @return void
      *
-     * @throws \Stripe\Exception\TemporarySessionExpiredException
+     * @throws \Stripe\Exception\TemporarysessionExpiredException
      */
     public function create($params = null, $opts = null)
     {
