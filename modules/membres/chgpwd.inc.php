@@ -41,13 +41,13 @@
 	}
 
 // ---- Modification du mot de passe
+echo "**".$form_newmdp."**";
 
 	if ( ($fonc=="Enregistrer") && ($form_newmdp!="") && ($form_newmdp!="**NONE**") && ( ((GetMyId($id)) && ($form_oldmdp!="")) || (GetDroit("ModifUserPassword")) ) )
 	{
 		if (($usr->CheckPassword($form_oldmdp)) || (GetDroit("ModifUserPassword")))
 		{
 			$ret=$usr->SavePassword($form_newmdp);
-
 			if ($ret=="") 
 			{
 				// ENVOIE DU MDP PAR MAIL (+LOGIN)
@@ -104,9 +104,14 @@
 	  // { $tmpl_x->assign("form_$k", $usr->aff($k,$typeaff)); }
 
 	if (!GetDroit("ModifUserPassword"))
-	  { $tmpl_x->parse("corps.oldpwd"); }
+	{
+		$tmpl_x->parse("corps.oldpwd"); 
+	}
 	else
-	  { $tmpl_x->parse("corps.oldpwdadm"); }
+	{
+		$tmpl_x->parse("corps.oldpwdadm");
+	}
+
 
 	if ((GetMyId($id)) || (GetDroit("ModifUser")))
 	  { $tmpl_x->parse("infos.modification"); }

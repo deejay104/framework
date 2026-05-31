@@ -7,6 +7,66 @@
 
 
 <!-- BEGIN: corps -->
+<style>
+    .field {
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    .field label {
+      display: block;
+    }
+
+
+
+    .field-icon {
+      position: absolute;
+      left: 0.85rem;
+      color: var(--muted);
+      font-size: 1.1rem;
+      pointer-events: none;
+      transition: color 0.15s;
+      line-height: 1;
+	  top:40px;
+    }
+
+    .field input {
+      width: 100%;
+      height: 46px;
+      padding: 0 0.9rem 0 2.6rem;
+      font-size: 0.875rem;
+      font-family: inherit;
+    }
+
+    .field input::placeholder { color: #b0bac8; }
+
+    .field input:focus ~ .field-icon,
+
+    .pwd-strength {
+      display: flex;
+      gap: 4px;
+      margin-top: 0.5rem;
+    }
+    .pwd-strength-bar {
+      flex: 1;
+      height: 3px;
+      border-radius: 2px;
+      background: var(--border);
+      transition: background 0.2s;
+    }
+    .pwd-strength[data-score="1"] .pwd-strength-bar:nth-child(-n+1) { background: var(--danger); }
+    .pwd-strength[data-score="2"] .pwd-strength-bar:nth-child(-n+2) { background: #f59e0b; }
+    .pwd-strength[data-score="3"] .pwd-strength-bar:nth-child(-n+3) { background: #38bdf8; }
+    .pwd-strength[data-score="4"] .pwd-strength-bar:nth-child(-n+4) { background: var(--success); }
+
+    .pwd-hint {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 0.35rem;
+    }
+
+
+</style>
 
 <FORM name="form_detail" method="post" action="index.php" enctype="multipart/form-data">
 <INPUT type="hidden" name="mod" value="membres">
@@ -14,49 +74,6 @@
 <INPUT type="hidden" name="id" value="{id}">
 
 <SCRIPT language="JavaScript" src="{path_root}/{path_core}/static/js/md5.js"></SCRIPT>
-<SCRIPT language="javascript">
-	<!-- 
-	function cryptData()
-	{
-   		var str0 = document.getElementById('my_form_mdp0').value;
-		var str1 = document.getElementById('my_form_mdp1').value;
-		var str2 = document.getElementById('my_form_mdp2').value;
-
-		if ((str1=="") || (str2==""))
-		{
-			alert("Le mot de passe ne doit pas être vide.");
-		  	return false;
-		}
-
-		if ((str1==str2))
-		{
-			if (str1=="")
-			{
-				document.getElementById('form_newmdp').value = "**NONE**";
-				alert("Le mot de passe ne doit pas être vide.");
-				return false;
-			}
-			else
-			{
-			  	document.getElementById('form_oldmdp').value = MD5(str0);
-			  	document.getElementById('form_newmdp').value = MD5(str1);
-			}
-
-			document.getElementById('my_form_mdp0').value = "";
-			document.getElementById('my_form_mdp1').value = "";
-			document.getElementById('my_form_mdp2').value = "";
-
-			document.form_detail.submit();
-		}
-		else
-		{
-		  	alert ("Les deux mots de passe sont différents !");
-		  	return false;
-		}
-	}
-	// -->
-</SCRIPT>
-
 
 <div class="row">
 
@@ -71,14 +88,43 @@
 					<!-- END: neverset -->
 
 					<!-- BEGIN: oldpwd -->
-					<label>{lang_lastpwd}</label><INPUT type="password" class='form-control' id="my_form_mdp0" name="my_form_mdp0"><br />
+					<div class="field">
+						<label>{lang_oldpwd}</label>
+						<input type="password" class='form-control'  name="old_password" id="old_password" maxlength="256" placeholder="••••••••" autocomplete="new-password">
+						<span class="field-icon">
+							<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+						</span>
+					</div>
+					<br />	
 					<!-- END: oldpwd -->
-					<p><label>{lang_newpwd}</label><INPUT type="password" class='form-control' id="my_form_mdp1" name="my_form_mdp1"></p>
-					<p><label>{lang_confirmpwd}</label><INPUT type="password" class='form-control' id="my_form_mdp2" name="my_form_mdp2"></p>
-
 					<!-- BEGIN: oldpwdadm -->
-					<INPUT type="hidden"  id="my_form_mdp0" name="my_form_mdp0">
+					<input type="hidden" name="old_password" id="old_password">
 					<!-- END: oldpwdadm -->
+
+					<div class="field">
+						<label>{lang_newpwd}</label>
+						<input type="password" class='form-control'  name="new_password" id="new_password" maxlength="256" placeholder="••••••••" autocomplete="new-password" oninput="checkPasswordStrength()">
+						<span class="field-icon">
+							<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+						</span>
+					</div>
+			  
+					<div class="pwd-strength" id="pwd-strength" data-score="0">
+						<div class="pwd-strength-bar"></div>
+						<div class="pwd-strength-bar"></div>
+						<div class="pwd-strength-bar"></div>
+						<div class="pwd-strength-bar"></div>
+					</div>
+					<div class="pwd-hint" id="pwd-hint">Min. 8 caractères, majuscule, minuscule, chiffre</div>
+					<br />
+					<div class="field">
+						<label>{lang_confirmpwd}</label>
+						<input type="password" class='form-control' name="confirm_password" id="confirm_password" maxlength="256" placeholder="••••••••" autocomplete="new-password">
+						<span class="field-icon">
+							<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+						</span>
+					</div>
+
 					<INPUT type="hidden" id="form_oldmdp" name="form_oldmdp">
 					<INPUT type="hidden" id="form_newmdp" name="form_newmdp">
 					<INPUT type="hidden" name="fonc" value="Enregistrer">
@@ -91,5 +137,64 @@
 	</div>
 </div>
 </FORM>
+
+
+
+<SCRIPT language="javascript">
+    function checkPasswordStrength() {
+      var pwd = document.getElementById('new_password').value;
+      var score = 0;
+      if (pwd.length >= 8)        score++;
+      if (/[a-z]/.test(pwd) && /[A-Z]/.test(pwd)) score++;
+      if (/\d/.test(pwd))         score++;
+      if (/[^a-zA-Z0-9]/.test(pwd)) score++;
+
+      document.getElementById('pwd-strength').setAttribute('data-score', score);
+
+      var hints = ['Très faible', 'Faible', 'Moyen', 'Bon', 'Excellent'];
+      document.getElementById('pwd-hint').textContent = pwd.length > 0 ? hints[score] : 'Min. 8 caractères, majuscule, minuscule, chiffre';
+    }
+
+	function cryptData()
+	{
+   		var str0 = document.getElementById('old_password').value;
+		var str1 = document.getElementById('new_password').value;
+		var str2 = document.getElementById('confirm_password').value;
+
+		if ((str1=="") || (str2==""))
+		{
+			showToast("Erreur","Le mot de passe ne doit pas être vide","error");
+			return false;
+		}
+
+		if ((str1==str2))
+		{
+			if (str1=="")
+			{
+				document.getElementById('form_newmdp').value = "**NONE**";
+				showToast("Erreur","Le mot de passe ne doit pas être vide","error");
+				return false;
+			}
+			else
+			{
+			  	document.getElementById('form_oldmdp').value = MD5(str0);
+			  	document.getElementById('form_newmdp').value = MD5(str1);
+			}
+
+			document.getElementById('old_password').value = "";
+			document.getElementById('new_password').value = "";
+			document.getElementById('confirm_password').value = "";
+
+			document.form_detail.submit();
+		}
+		else
+		{
+			showToast("Erreur","Les mots de passe ne correspondent pas.","error");
+
+		  	return false;
+		}
+	}
+
+</SCRIPT>
 
 <!-- END: corps -->

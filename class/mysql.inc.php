@@ -156,8 +156,8 @@ class mysql_core{
 			$this->Update($query);
 			$ret=$id;
 
-			$query ="INSERT INTO ".$MyOpt["tbl"]."_historique (`class` ,`table` ,`idtable` ,`uid_maj` ,`dte_maj` ,`type` ,`comment`) ";
-			$query.="VALUES ('".$class."', '".$tab."', '$id', '$gl_uid', '".now()."', 'MOD', '".(($comment!="") ? $comment : $c)."')";
+			$query ="INSERT INTO ".$MyOpt["tbl"]."_historique (`class` ,`table` ,`idtable` ,`type` ,`comment`,`uid_creat` ,`dte_creat`,`uid_maj` ,`dte_maj`) ";
+			$query.="VALUES ('".$class."', '".$tab."', '$id', 'MOD', '".(($comment!="") ? $comment : $c)."', '$gl_uid', '".now()."', '$gl_uid', '".now()."')";
 			$this->Insert($query);
 		}
 		else
@@ -165,8 +165,8 @@ class mysql_core{
 			$query="INSERT INTO ".$tab." SET ".$v;
 			$ret=$this->Insert($query);
 
-			$query ="INSERT INTO ".$MyOpt["tbl"]."_historique (`class` ,`table` ,`idtable` ,`uid_maj` ,`dte_maj` ,`type` ,`comment`) ";
-			$query.="VALUES ('".$class."', '".$tab."', '$ret', '$gl_uid', '".now()."', 'ADD', '".(($comment!="") ? $comment : $c)."')";
+			$query ="INSERT INTO ".$MyOpt["tbl"]."_historique (`class` ,`table` ,`idtable` , `type` ,`comment`,`uid_creat` ,`dte_creat`,`uid_maj` ,`dte_maj`)";
+			$query.="VALUES ('".$class."', '".$tab."', '$ret', 'ADD', '".(($comment!="") ? $comment : $c)."', '$gl_uid', '".now()."', '$gl_uid', '".now()."')";
 			$this->Insert($query);
 		}
 		return $ret;

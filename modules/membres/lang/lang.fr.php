@@ -52,6 +52,6 @@
 	$tabLang["lang_passwordneverset"]="Le mot de passe n'a jamais été défini";
 	$tabLang["lang_oldpwd"]="Ancien mot de passe";
 	$tabLang["lang_newpwd"]="Nouveau mot de passe";
-	$tabLang["lang_confirmpwd"]="Confirmation";
+	$tabLang["lang_confirmpwd"]="Confirmation le nouveu mot de passe";
 
 ?>

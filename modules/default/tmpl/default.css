@@ -1313,23 +1313,25 @@ textarea.form-control { min-height: 100px; resize: none; }
 
 /* ── 21. Class ─────────────────────────────────────────────── */
 
+
 /* Échéances */
 .echeance-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 10px;
-  border-radius: 6px;
+  display:       flex;
+  align-items:   center;
+  gap:           8px;
+  padding:       6px 10px;
+  border-radius: 4px;
   margin-bottom: 4px;
-  font-size: 0.82rem;
-  background: #f0faf0;
-  height:28px;
+  font-size:     0.82rem;
+  background:    var(--p67-success-soft);
 }
-.echeance-item.danger { background: #fff5f5; }
-.echeance-item i.ok  { color: #2e7d32; font-size: 1.05rem; }
-.echeance-item i.nok { color: #c0392b; font-size: 1.05rem; }
+.echeance-item.danger  { background: var(--p67-danger-soft); }
+.echeance-item i.ok    { color: var(--p67-success); font-size: 1.05rem; }
+.echeance-item i.err   { color: var(--p67-danger);  font-size: 1.05rem; }
+.echeance-item i.nok   { color: var(--p67-danger);  font-size: 1.05rem; }
 .echeance-item span { color: #2d3748; }
 .echeance-item a { margin-left:auto; font-size:0.8rem; }
+
 
 /* ── 21. Footer ─────────────────────────────────────────────── */
 .footer {
@@ -1931,15 +1933,12 @@ div {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 8px;
   border-radius: 0;
-  border-bottom: 1px solid var(--p67-border);
   font-size: 0.82rem;
   text-decoration: none;
   color: var(--p67-text);
   transition: background .12s;
 }
-.doc-list-item:last-child { border-bottom: none; }
 .doc-list-item:hover {
   background: var(--p67-primary-light);
   color: var(--p67-primary);
@@ -1953,21 +1952,8 @@ div {
 }
 .doc-list-item .doc-name { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .doc-list-item .doc-size { font-size: 0.72rem; color: var(--p67-text-muted); flex-shrink: 0; padding-left: 6px; }
-
-/* Échéances */
-.echeance-item {
-  display:       flex;
-  align-items:   center;
-  gap:           8px;
-  padding:       6px 10px;
-  border-radius: 4px;
-  margin-bottom: 4px;
-  font-size:     0.82rem;
-  background:    var(--p67-success-soft);
-}
-.echeance-item.danger  { background: var(--p67-danger-soft); }
-.echeance-item i.ok    { color: var(--p67-success); font-size: 1.05rem; }
-.echeance-item i.err   { color: var(--p67-danger);  font-size: 1.05rem; }
+.sidebar-list-item .doc-list-item { padding: 2px 8px;  border-bottom: 1px solid var(--p67-border); }
+.sidebar-list-item .doc-list-item:last-child { border-bottom: none; }
 
 /* Infos personnelles */
 .info-row {
