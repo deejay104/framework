@@ -464,7 +464,6 @@
         <div class="logo-wrap">
           <img src="{rootfolder}/{site_logo}" alt="Polygone 67">
           <div class="app-subtitle">{core_authenticate}</div>
-          <div class="spinner"></div>
         </div>
       </div>
 
@@ -685,6 +684,7 @@
     }
 
     function checkExistingSession() {
+      $("#load").show();
       $.ajax({
         url: API, type: 'POST', dataType: 'json',
         data: JSON.stringify({ fonc: 'login' }),
@@ -742,7 +742,7 @@
         contentType: 'application/json; charset=utf-8',
         success: function(r) {
           if (r.status === 200) {
-            document.location = HOME;
+     //       document.location = HOME;
           } else {
             $("#loginbox").show();
             $("#load").hide();

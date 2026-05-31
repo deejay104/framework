@@ -22,21 +22,20 @@
 			$myid=0;
 			if ( (isset($MyOpt["sessionTokenExpire"])) && ($MyOpt["sessionTokenExpire"]>0) )
 			{
-				$t_expire=((isset($MyOpt["sessionTokenExpire"])) && ($MyOpt["sessionTokenExpire"]>0)) ? $MyOpt["sessionTokenExpire"] : 7;
+				$t_expire=($MyOpt["sessionTokenExpire"]>0) ? $MyOpt["sessionTokenExpire"] : 7;
 				generateRefreshToken($res["id"],$t_expire);
-				$ret["token"]=generateJWT($res["id"]);
-
-				$s_expire=((isset($MyOpt["sessionExpire"])) && ($MyOpt["sessionExpire"]>0)) ? $MyOpt["sessionExpire"] : 600;
-
-				setcookie('t_session', $ret["token"], [
-					'expires'  => time() + $s_expire,
-					'path'     => '/',
-					'httponly'  => true,      // JS n'en a pas besoin non plus
-					'secure'   => true,
-					'samesite' => 'Lax',     // ← Lax et non Strict, sinon le cookie
-				]);                           //   ne part pas quand on arrive d'un
-											//   lien externe (ex: email, Google)
 			}
+
+			$token=generateJWT($res["id"]);
+			$s_expire=((isset($MyOpt["sessionExpire"])) && ($MyOpt["sessionExpire"]>0)) ? $MyOpt["sessionExpire"] : 600;
+			setcookie('t_session', $token, [
+				'expires'  => time() + $s_expire,
+				'path'     => '/',
+				'httponly'  => true,      // JS n'en a pas besoin non plus
+				'secure'   => true,
+				'samesite' => 'Lax',     // ← Lax et non Strict, sinon le cookie
+			]);                           //   ne part pas quand on arrive d'un
+										//   lien externe (ex: email, Google)
 			
 			$query="UPDATE ".$MyOpt["tbl"]."_utilisateurs SET dte_login='".now()."' WHERE id='".$res["id"]."'";
 			$sql->Update($query);
