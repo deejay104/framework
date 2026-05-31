@@ -20,7 +20,7 @@
 			$ret["uid"]=$res["id"];
 
 			$myid=0;
-			if ($MyOpt["sessionTokenExpire"]>0)
+			if ( (isset($MyOpt["sessionTokenExpire"])) && ($MyOpt["sessionTokenExpire"]>0) )
 			{
 				$t_expire=((isset($MyOpt["sessionTokenExpire"])) && ($MyOpt["sessionTokenExpire"]>0)) ? $MyOpt["sessionTokenExpire"] : 7;
 				generateRefreshToken($res["id"],$t_expire);
