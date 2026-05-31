@@ -51,6 +51,20 @@
 	{
 		$gl_auth=verifyJWT($_COOKIE['t_session']);
 		$gl_uid=$gl_auth["uid"];
+
+		$s_expire=((isset($MyOpt["sessionexpire"])) && ($MyOpt["sessionexpire"]>0)) ? $MyOpt["sessionexpire"] : 600;
+//		echo date("Y-m-d H:i:s",$gl_auth["expire"])."**".(($gl_auth["expire"]-time())/$s_expire);
+
+		if (($gl_auth["expire"]-time())/$s_expire<0.1)
+		{
+			setcookie('t_session', generateJWT($gl_uid), [
+				'expires'  => time() + $s_expire,
+				'path'     => '/',
+				'httponly'  => true,      // JS n'en a pas besoin non plus
+				'secure'   => true,
+				'samesite' => 'Lax',     
+			]);
+		}
 	}
 
 // ---- Nettoyage des variables

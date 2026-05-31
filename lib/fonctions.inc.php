@@ -365,12 +365,14 @@ function generateJWT(int $userId): string
 {
 	global $MyOpt;
 
+	$s_expire=((isset($MyOpt["sessionexpire"])) && ($MyOpt["sessionexpire"]>0)) ? $MyOpt["sessionexpire"] : 600;
+
     // JWT simplifié — en production, utilise firebase/php-jwt
     $header  = base64url_encode(json_encode(['alg' => 'HS256', 'typ' => 'JWT']));
     $payload = base64url_encode(json_encode([
         'sub' => $userId,
         'iat' => time(),
-        'exp' => time() + $MyOpt["sessionexpire"],
+        'exp' => time() + $s_expire,
     ]));
 
 	$signature = base64url_encode(
@@ -407,10 +409,10 @@ function verifyJWT($token)
 	if ($my_sign==$b64_sign)
 	{
 		$payload=json_decode(base64_decode($b64_payload),true);
-
 		$data["uid"]=(isset($payload["sub"])) ? $payload["sub"] : 0;
 		$data["status"]=200;
 		$data["message"]="Token accepted";
+		$data["expire"]=(isset($payload["exp"])) ? $payload["exp"] : 0;
 	}
 
 	return $data;
