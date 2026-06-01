@@ -38,6 +38,7 @@
 		}
 
 		$result["lastid"]=(isset($sql->data["id"])) ? $sql->data["id"] : "0";
+		$result["news"]=array();
 
 		$idprev=0;
 		foreach($news as $nid=>$d)

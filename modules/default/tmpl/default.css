@@ -666,7 +666,7 @@ a:focus, .btn:focus {
   background: linear-gradient(135deg, #f0f5ff 0%, #fafbff 100%);
   border: 1px solid #d6e3f7;
   border-left: 4px solid #4a6fa5;
-  border-radius: 10px;
+  border-radius: 5px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(74,111,165,.08);
 }
@@ -1482,6 +1482,9 @@ div.tagsinput span.tag a { color: #ffffff; }
 .dt-center { text-align:center; white-space: nowrap; }
 .dt-right { text-align:right; white-space: nowrap; }
 .dt-action { padding:0px!important; }
+.bor-left { border-left: 1px solid var(--p67-primary); }
+.bor-large-top { border-top: 2px solid var(--p67-primary); }
+.txt-light { color: var(--p67-primary); }
 
 
 .dataTables_wrapper .dataTables_filter input { margin-left: 0.5em; }
