@@ -68,7 +68,7 @@
     	exit;
 	}
 
-	$ok=0;
+	$save_ok=0;
 	if ( ($fonc==$tabLang["lang_save"]) && ((GetMyId($id)) || (GetDroit("ModifUser"))) )
 	{
 		// Sauvegarde les données
@@ -155,7 +155,7 @@
 				}
 			}
 		}
-		$ok=1;
+		$save_ok=1;
 	}
 
 	// Sauvegarde les droits
@@ -163,13 +163,13 @@
 	{
 		$err=$usr->SaveDroits($form_droits);
 		affInformation($err,"error");
-		$ok=1;
+		$save_ok=1;
 	}
 	if (($fonc==$tabLang["lang_save"]) && ($id>0) && (GetDroit("ModifUserGroupe")) && ($usr->data["groupe"]!=""))
 	{
 		$err=$usr->AddGroupe($usr->data["groupe"]);
 		affInformation($err,"error");
-		$ok=1;
+		$save_ok=1;
 	}
 
 	// Sauvegarde les données utilisateurs
@@ -178,15 +178,8 @@
 		$usr->LoadDonneesComp();
 		$err=$usr->SaveDonneesComp($form_donnees);
 		affInformation($err,"error");
-		$ok=1;
+		$save_ok=1;
 	}
-
-	if ($ok==1)
-	{
-		header('Location: /membres/detail?id='.$id.'&update=1', true, 303);
-		exit;
-	}
-
 
 // ---- Supprimer l'utilisateur
 	if (($fonc=="delete") && ($id>0) && (GetDroit("SupprimeUser")))
@@ -407,6 +400,13 @@
 		{
 			$tmpl_x->assign("aff_data_right",$right);
 		}
+	}
+
+// ---- Redirige la page si une sauvegarde est faite
+	if ($save_ok==1)
+	{
+		header('Location: /membres/detail?id='.$id.'&update=1', true, 303);
+		exit;
 	}
 
 // ---- Affiche le bloc de données		
