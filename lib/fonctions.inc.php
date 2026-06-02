@@ -1162,7 +1162,7 @@ function AfficheTableauRemote($tabTitre,$url,$order="",$trie="d",$search="",$nbl
 	{
 		$idtbl=uniqid("tbl_");
 	}
-	$ret ="\n<div class='table-responsive'><table id='".$idtbl."' class='table table-hover'>\n";
+	$ret ="\n<div class='table-responsive'><table id='".$idtbl."' class='table table-hover '>\n";
 
 	$ret.="<thead><tr>";
 
@@ -1331,10 +1331,9 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 		}
 	}
 
-	$ret ="\n<div class='table-responsive'><table class='table table-hover'>\n";
+	$ret ="\n<div class='table-responsive'><table class='table table-hover datatable'>\n";
 
-	$ret.="<tr>";
-	// $ret.="<th width=20>&nbsp;</th>";
+	$ret.="<tr class='t-header'>";
 	$nb=1;
 	
 	$page=$MyOpt["host"]."/".$mod."/".$rub;
@@ -1383,7 +1382,7 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 			{
 				$ret.="<b>".$v["aff"]."</b>";
 			}
-		  	$ret.=" <img src='".$MyOpt["host"]."/".$corefolder."/static/images/sens_$trie.gif' border=0><input type='hidden' name='trie' value='".$trie."'><input type='hidden' name='order' value='".$order."'>";
+		  	$ret.=" <i class='mdi mdi-arrow-".(($trie=="d") ? "up" : "down")."'></i><input type='hidden' name='trie' value='".$trie."'><input type='hidden' name='order' value='".$order."'>";
 			$sub.="<th align='".$v["align"]."'>".((isset($v["sub"])) ? $v["sub"] : "").(($v["mobile"]=="no") ? " class='noMobile'" :"")."</th>";
 			$subb.="<th align='".$v["align"]."'>".((isset($v["bottom"])) ? $v["bottom"] : "").(($v["mobile"]=="no") ? " class='noMobile'" :"")."</th>";
 			$search.="<th><input type='text' class='form-control'  name='tabsearch[".$name."]' value='".((isset($tabsearch[$name])) ? $tabsearch[$name] : '').(($v["mobile"]=="no") ? " class='noMobile'" :"")."' OnChange='document.getElementById(\"form_tableau\").submit();'></th>";
@@ -1446,21 +1445,12 @@ function AfficheTableauFiltre($tabValeur,$tabTitre="",$order="",$trie="",$url=""
 
 		foreach($tabValeur as $i=>$val)
 		  { 
-//			if (($ii>=$start) && ($ii<$start+$limit))
-//			  {
-				// $col = abs($col-110);
-				// $ret.="<tr onmouseover=\"setPointer(this, 'over', '#".$myColor[$col]."', '#".$myColor[$col+5]."', '#FF0000')\" onmouseout=\"setPointer(this, 'out', '#".$myColor[$col]."', '#".$myColor[$col+5]."', '#FF0000')\">";
-				// $ret.="<tr>";
-				// $ret.="<td bgcolor=\"#".$myColor[$col]."\">&nbsp;</td>";
 				$ret.="<tr";
 				if ($showicon!="")
 				{
-//					$ret.=" OnMouseOver=\"document.getElementById('".$showicon."_".$val["id"]["val"]."').style.display='block';\" OnMouseOut=\"document.getElementById('".$showicon."_".$val["id"]["val"]."').style.display='none';\"";
 					$ret.=" class='action'";
 				}
 				$ret.=">";
-
-				// $ret.="<td>&nbsp;</td>";
 
 				foreach($tabTitre as $name=>$v)
 				  {

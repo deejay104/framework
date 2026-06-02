@@ -89,6 +89,9 @@
 		$q="DELETE FROM ".$MyOpt["tbl"]."_droits WHERE groupe='$grp'";
 		$sql->Delete($q);
 		$grp="";
+
+		header('Location: /admin/groupes', true, 303);
+    	exit;
 	}
 
 // ---- Copie un groupe
@@ -130,6 +133,8 @@
 	{
 		$q="DELETE FROM ".$MyOpt["tbl"]."_droits WHERE groupe='$grp' AND uid='$sup'";
 		$sql->Delete($q);
+		header('Location: /admin/groupes/gdetail?grp='.$grp, true, 303);
+    	exit;
 	}
 
 // ---- Affiche le menu

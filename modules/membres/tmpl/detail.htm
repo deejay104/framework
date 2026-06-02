@@ -39,174 +39,158 @@
 <INPUT type="hidden" name="id" value="{id}">
 
 <div class="row">
-	<div class="col-md-4 grid-margin stretch-card">
-		<div class="row flex-grow">
+	<div class="col-md-4 grid-margin stretch-card flex-column">
+		<div class="card flex-fill">
+			<div class="card-header">{lang_informations}</div>
+			<div class="card-body">
 
-			<div class="col-12 grid-margin stretch-card">
-				<div class="card">
-					<div class="card-header">{lang_informations}</div>
-					<div class="card-body">
+				<div class="form-group">
+					<IMG src="{aff_avatar}" alt="" width=200 height=240>
 
-						<div class="form-group">
-							<IMG src="{aff_avatar}" alt="" width=200 height=240>
-
-							<!-- BEGIN: photos -->
-							<div class="doc-list-item">
-								<div class="file-input-wrapper ">
-								  <input name="form_photo" type="file" id="form_photo">
-								  <label for="form_photo" class="file-input-label">
-									<i class="mdi mdi-cloud-upload-outline"></i>
-									Choisir un fichier
-								  </label>
-								  <span class="file-input-name" id="form_photo_name">Aucun fichier sélectionné</span>
-								</div>
-							</div>
-										
-								<script>document.getElementById("form_photo").addEventListener("change", function() {
-									var nom = this.files.length ? this.files[0].name : "Aucun fichier sélectionné";
-									document.getElementById("form_photo_name").textContent = nom;
-								  });</script>
-
-							<div class="form-group">
-								{lang_selectpicture}
-								{lang_selectpicture2}
-							</div>
-							<!-- END: photos -->
-						</div>
-
-
-						<div class="form-group">
-							<label class="col-form-label"  for="prenom">{lang_firstname}</label>{form_prenom}
-						</div>
-						<div class="form-group">
-							<label class="col-form-label"  for="nom">{lang_name}</label>{form_nom}
-						</div>
-			
-						<div class="form-group">
-							<label class="col-form-label"  for="initiales">{lang_nickname}</label>{form_initiales}
-						</div>
-						<!-- BEGIN: aff_mail -->
-						<div class="form-group">
-							<label class="col-form-label"  for="mail">{lang_email}</label>{form_mail}
-						</div>
-						<!-- END: aff_mail -->
-						<!-- BEGIN: virtuel -->
-						<div class="form-group">
-							<label class="col-form-label" >{lang_virtual}</label>{form_virtuel}
-						</div>
-						<!-- END: virtuel -->
-						
-						<!-- BEGIN: aff_infos -->
-						<div class="form-group">
-							<label class="col-form-label" >{lang_notification}</label>{form_notification}
-						</div>
-						<div class="form-group">
-							<label class="col-form-label" >{lang_aff_mail}</label>{form_aff_mail}
-						</div>
-						<div class="form-group">
-							<label class="col-form-label" >{lang_aff_infos}</label>{form_aff_infos}
-						</div>
-						<div class="form-group">
-							<label class="col-form-label" >{lang_language}</label>{form_language}
-						</div>
-						<!-- END: aff_infos -->
-
-						<div class="form-group">
-							<label class="col-form-label" >{lang_maingroup}</label>{form_groupe}
-						</div>
-
-
-
-						<div class="form-group">
-						<h4>{lang_comments}</h4>
-						{form_commentaire}
+					<!-- BEGIN: photos -->
+					<div class="doc-list-item">
+						<div class="file-input-wrapper ">
+							<input name="form_photo" type="file" id="form_photo">
+							<label for="form_photo" class="file-input-label">
+							<i class="mdi mdi-cloud-upload-outline"></i>
+							Choisir un fichier
+							</label>
+							<span class="file-input-name" id="form_photo_name">Aucun fichier sélectionné</span>
 						</div>
 					</div>
+								
+						<script>document.getElementById("form_photo").addEventListener("change", function() {
+							var nom = this.files.length ? this.files[0].name : "Aucun fichier sélectionné";
+							document.getElementById("form_photo_name").textContent = nom;
+							});</script>
 
-					<!-- BEGIN: submit -->
-					<div class="card-footer">
-						<input type="submit" class="btn btn-primary mr-2" name="fonc" id="enregistrer" value="{lang_save}">
-						<input type="submit" class="btn btn-light"  name="fonc" id="annuler" value="{lang_cancel}">
+					<div class="form-group">
+						{lang_selectpicture}
+						{lang_selectpicture2}
 					</div>
-					<!-- END: submit -->
+					<!-- END: photos -->
+				</div>
 
+
+				<div class="form-group">
+					<label class="col-form-label"  for="prenom">{lang_firstname}</label>{form_prenom}
+				</div>
+				<div class="form-group">
+					<label class="col-form-label"  for="nom">{lang_name}</label>{form_nom}
+				</div>
+	
+				<div class="form-group">
+					<label class="col-form-label"  for="initiales">{lang_nickname}</label>{form_initiales}
+				</div>
+				<!-- BEGIN: aff_mail -->
+				<div class="form-group">
+					<label class="col-form-label"  for="mail">{lang_email}</label>{form_mail}
+				</div>
+				<!-- END: aff_mail -->
+				<!-- BEGIN: virtuel -->
+				<div class="form-group">
+					<label class="col-form-label" >{lang_virtual}</label>{form_virtuel}
+				</div>
+				<!-- END: virtuel -->
+				
+				<!-- BEGIN: aff_infos -->
+				<div class="form-group">
+					<label class="col-form-label" >{lang_notification}</label>{form_notification}
+				</div>
+				<div class="form-group">
+					<label class="col-form-label" >{lang_aff_mail}</label>{form_aff_mail}
+				</div>
+				<div class="form-group">
+					<label class="col-form-label" >{lang_aff_infos}</label>{form_aff_infos}
+				</div>
+				<div class="form-group">
+					<label class="col-form-label" >{lang_language}</label>{form_language}
+				</div>
+				<!-- END: aff_infos -->
+
+				<div class="form-group">
+					<label class="col-form-label" >{lang_maingroup}</label>{form_groupe}
+				</div>
+
+
+
+				<div class="form-group">
+				<h4>{lang_comments}</h4>
+				{form_commentaire}
 				</div>
 			</div>
-	
+
+			<!-- BEGIN: submit -->
+			<div class="card-footer">
+				<input type="submit" class="btn btn-primary mr-2" name="fonc" id="enregistrer" value="{lang_save}">
+				<input type="submit" class="btn btn-light"  name="fonc" id="annuler" value="{lang_cancel}">
+			</div>
+			<!-- END: submit -->
+
 		</div>
 	</div>
 
 	<!-- BEGIN: aff_donnees -->
-	<div class="col-md-4 grid-margin stretch-card">
-		<div class="row flex-grow">
-			<div class="col-12 grid-margin stretch-card">
-				<div class="card">
-					<div class="card-header">{lang_data}</div>
-					<div class="card-body">
-						<!-- BEGIN: aff_donnees_left -->
-						{aff_data_left}
-						<!-- END: aff_donnees_left -->
-					</div>
-				</div>
+	<!-- flex-column : Met les cards l'une en dessous de l'autre -->
+	<!-- flex-fill : rempli la hauteur de la colonne -->
+	<div class="col-md-4 grid-margin stretch-card flex-column">
+		<div class="card flex-fill">
+			<div class="card-header">{lang_data}</div>
+			<div class="card-body">
+				<!-- BEGIN: aff_donnees_left -->
+				{aff_data_left}
+				<!-- END: aff_donnees_left -->
 			</div>
-
-			<!-- BEGIN: aff_donnees_util -->
-			<div class="col-12 grid-margin stretch-card">
-				<div class="card">
-					<div class="card-body">
-					<!-- BEGIN: lst_donnees -->
-							<div class="form-group">
-							{form_donnees}
-							</div>
-							<!-- END: lst_donnees -->
-					</div>
-				</div>
-			</div>
-			<!-- END: aff_donnees_util -->
 		</div>
+
+		<!-- BEGIN: aff_donnees_util -->
+		<div class="card">
+			<div class="card-header">Donnéees complémentaires</div>
+			<div class="card-body">
+			<!-- BEGIN: lst_donnees -->
+				<div class="form-group">
+				{form_donnees}
+				</div>
+			<!-- END: lst_donnees -->
+			</div>
+		</div>
+		<!-- END: aff_donnees_util -->
 	</div>
 	<!-- END: aff_donnees -->
 
-	<div class="col-md-4 grid-margin stretch-card">
-		<div class="row flex-grow">
-			{aff_data_right}
+	<div class="col-md-4 grid-margin stretch-card flex-column">
+		{aff_data_right}
 
-			<!-- BEGIN: aff_documents -->
-			<div class="col-12 grid-margin stretch-card">
-				<div class="card">
-					<div class="card-header">{lang_documents}</div>
-					<div class="card-body">
-						<!-- BEGIN: lst_document -->
-						{form_document}
-						<!-- END: lst_document -->
-					</div>
-				</div>
+		<!-- BEGIN: aff_documents -->
+		<div class="card">
+			<div class="card-header">{lang_documents}</div>
+			<div class="card-body">
+				<!-- BEGIN: lst_document -->
+				{form_document}
+				<!-- END: lst_document -->
 			</div>
-			<!-- END: aff_documents -->
-
-			<!-- BEGIN: aff_echeances -->
-			<div class="col-12 grid-margin stretch-card">
-				<div class="card">
-					<div class="card-header">{lang_deadline}</div>
-					<div class="card-body">
-						<!-- BEGIN: lst_echeance -->
-						{form_echeance}
-						<!-- END: lst_echeance -->
-					</div>
-				</div>
-			</div>
-			<!-- END: aff_echeances -->
-			<!-- BEGIN: droits -->
-			<div class="col-12 grid-margin stretch-card">
-				<div class="card">
-					<div class="card-header">{lang_rights}</div>
-					<div class="card-body">
-						{form_droits}
-					</div>
-				</div>
-			</div>
-			<!-- END: droits -->
 		</div>
+		<!-- END: aff_documents -->
+
+		<!-- BEGIN: aff_echeances -->
+		<div class="card">
+			<div class="card-header">{lang_deadline}</div>
+			<div class="card-body">
+				<!-- BEGIN: lst_echeance -->
+				{form_echeance}
+				<!-- END: lst_echeance -->
+			</div>
+		</div>
+		<!-- END: aff_echeances -->
+
+		<!-- BEGIN: droits -->
+		<div class="card">
+			<div class="card-header">{lang_rights}</div>
+			<div class="card-body">
+				{form_droits}
+			</div>
+		</div>
+		<!-- END: droits -->
 	</div>
 </div>
 

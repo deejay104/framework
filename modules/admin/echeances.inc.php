@@ -116,7 +116,7 @@
 		
 		$tabValeur[$i]["id"]["val"]=$id;
 		$tabValeur[$i]["action"]["val"]=$id;
-		$tabValeur[$i]["action"]["aff"]="<span class='feed-actions'><a id='edit_".$id."' class='imgDelete' href='".geturl("admin","echeances","fonc=delete&id=".$id)."'><i class='mdi mdi-window-close'></i></a></span>";
+		$tabValeur[$i]["action"]["aff"]="<div  style='width: 32px;><span class='feed-actions'><a id='edit_".$id."' class='imgDelete' href='".geturl("admin","echeances","fonc=delete&id=".$id)."'><i class='mdi mdi-window-close'></i></a></span></div>";
 
 
 		$tabValeur[$i]["poste"]["val"]=$ech->val("poste");

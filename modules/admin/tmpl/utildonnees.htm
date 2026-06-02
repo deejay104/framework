@@ -43,63 +43,57 @@ $(function() {
 <form name="echeance" method="post" action="{path_root}/admin/utildonnees" enctype="multipart/form-data">
 	
 <div class="row">
-	<div class="col grid-margin stretch-card">
-		<div class="card">
-			<div class="card-header">Données utilisateurs</div>
-			<div class="card-body">	
+	<div class="card">
+		<div class="card-header">Données utilisateurs</div>
+		<div class="card-body">	
 
-				<ul class="sortable">
-					<li>
-						<span style="width:24px; display:inline-block;"></span>
-						<span style="width:300px; display:inline-block;">{lang_name}</span>
-						<span style="width:100px; display:inline-block;">{lang_type}</span>
-					</li>
-				</ul>
+			<ul class="sortable">
+				<li class="t-header">
+					<span style="width:24px; display:inline-block;"></span>
+					<span style="width:300px; display:inline-block;">{lang_name}</span>
+					<span style="width:100px; display:inline-block;">{lang_type}</span>
+				</li>
+			</ul>
 
-				<ul id="tableauOrdre" class="sortable">
-				<!-- BEGIN: lst_donnees -->
-					<li id="id_{form_id}" class="formulaireSep" OnMouseOver="document.getElementById('imgsort_{form_id}').style.visibility='visible'; document.getElementById('del_{form_id}').style.display='block';" OnMouseOut="document.getElementById('imgsort_{form_id}').style.visibility='hidden'; document.getElementById('del_{form_id}').style.display='none';">
-						<span style="width:24px; display:inline-block;"><div style='display:inline-block; vertical-align:middle; font-size:24px;'><i id='imgsort_{form_id}' class="mdi mdi-drag"></i></div></span>
-						<span style="width:300px; display:inline-block; text-align:left;"><INPUT type="text" class="form-control" name="form_nom[{form_id}]" style="width:250px;" value="{form_nom}"></span>
-						<span style="width:100px; display:inline-block;">
-							<select name="form_type[{form_id}]" class="form-control">
-								<option value="text" {select_type_text}>{lang_text}</option>
-								<option value="number" {select_type_number}>{lang_number}</option>
-								<option value="date" {select_type_date}>{lang_date}</option>
-								<option value="tel" {select_type_tel}>{lang_phone}</option>
-							</select>
-						</span>
-						<span class="bouttonSupprime"><div  style='width: 24px; height:24px; vertical-align:middle; display:inline-block; padding-top:1px;'  ><a href="/admin/utildonnees?fonc=delete&id={form_id}" ><i id="del_{form_id}" class="mdi mdi-close" style="display:none;"></i></a></div></span>
-					</li>	
-				<!-- END: lst_donnees -->
-					<li class="formulaireSep">
-						<span style="width:24px; display:inline-block;"><div  style='width: 24px; height:24px; display:inline-block;'></div></span>
-						<span style="width:300px; display:inline-block;text-align:left;"><INPUT type="text" class="form-control" name="form_nom[0]" style="width:250px;" value="{form_description}"></span>
-						<span style="width:100px; display:inline-block;">
-							<select name="form_type[0]"class="form-control" >
-								<option value="text" >{lang_text}</option>
-								<option value="number">{lang_number}</option>
-								<option value="date" >{lang_date}</option>
-								<option value="tel" >{lang_phone}</option>
-							</select>
-						</span>
-					</li>
+			<ul id="tableauOrdre" class="sortable">
+			<!-- BEGIN: lst_donnees -->
+				<li id="id_{form_id}" class="formulaireSep action" >
+					<div style="width:32px!important; display:inline-block"><span class="feed-actions"><a href="#"><i id='imgsort_{form_id}' class="mdi mdi-drag"></i></a></span></div>
+					<span style="width:300px; display:inline-block; text-align:left;"><INPUT type="text" class="form-control" name="form_nom[{form_id}]" style="width:250px;" value="{form_nom}"></span>
+					<span style="width:100px; display:inline-block;">
+						<select name="form_type[{form_id}]" class="form-control">
+							<option value="text" {select_type_text}>{lang_text}</option>
+							<option value="number" {select_type_number}>{lang_number}</option>
+							<option value="date" {select_type_date}>{lang_date}</option>
+							<option value="tel" {select_type_tel}>{lang_phone}</option>
+						</select>
+					</span>
+					<span class="feed-actions"><a href="/admin/utildonnees?fonc=delete&id={form_id}" ><i class="mdi mdi-close"></i></a></span>
+				</li>	
+			<!-- END: lst_donnees -->
+				<li class="formulaireSep">
+					<span style="width:32px; display:inline-block;"><div  style='width: 24px; height:24px; display:inline-block;'></div></span>
+					<span style="width:300px; display:inline-block;text-align:left;"><INPUT type="text" class="form-control" name="form_nom[0]" style="width:250px;" value="{form_description}"></span>
+					<span style="width:100px; display:inline-block;">
+						<select name="form_type[0]"class="form-control" >
+							<option value="text" >{lang_text}</option>
+							<option value="number">{lang_number}</option>
+							<option value="date" >{lang_date}</option>
+							<option value="tel" >{lang_phone}</option>
+						</select>
+					</span>
+				</li>
 
-				</ul>
+			</ul>
 
 
-			</div>
+		</div>
 
-			<div class="card-footer">	
-				<INPUT type="submit" class="btn btn-primary" name="fonc" value="{lang_save}"> <INPUT type="submit" class="btn btn-light" name="fonc" value="{lang_cancel}">
-			</div>
+		<div class="card-footer">	
+			<INPUT type="submit" class="btn btn-primary" name="fonc" value="{lang_save}"> <INPUT type="submit" class="btn btn-light" name="fonc" value="{lang_cancel}">
 		</div>
 	</div>
 </div>
 </form>
-<script>
-	<!-- BEGIN: lst_sort -->
-document.getElementById('imgsort_{form_id}').style.visibility='hidden';  
-	<!-- END: lst_sort -->
-</script>
+
 <!-- END: corps -->

@@ -53,11 +53,12 @@
 			<div class="card-body">
 				<h6>{lang_grpmembers}</h6>
 				<!-- BEGIN: lst_user -->
-				<p>{aff_user}
-				<!-- BEGIN: aff_sup -->
-				<a href="{path_root}/admin/grpdetail?grp={form_grp}&sup={aff_uid}"><i class="mdi mdi-close"></i></a>
-				<!-- END: aff_sup -->
-				</p>
+				<div class="action" style="height:36px;">
+					<i class="mdi mdi-account"></i> {aff_user}
+					<!-- BEGIN: aff_sup -->
+					<span class="feed-actions"><a href="{path_root}/admin/gdetail?grp={form_grp}&sup={aff_uid}"><i class="mdi mdi-close"></i></a></span>
+					<!-- END: aff_sup -->
+				</div>
 				<!-- END: lst_user -->
 			</div>
 		</div>
@@ -69,7 +70,7 @@
 	.adminRouge { background-color:#FFBBAA!important; background-image:none; }		
 
 	.dropBox { display: block; list-style-type: none; margin-bottom: 10px; padding: 5px; width: 220px; border: 1px solid #cdd4e0; border-radius: 5px;  margin-right: 10px; vertical-align: top; }
-	.dropBox li { display:inline-block; margin: 2px; padding: 2px 5px 2px 5px; width: 200px; color: #000000; border: 1px solid #cccccc; background-color: #cdd4e0; font-size:12px!important; }
+	.dropBox li { display:inline-block; margin: 2px; padding: 4px 5px 4px 5px; width: 200px; color: #000000; border: 1px solid #eff2f9; background-color: #eff2f9; font-size:12px!important; border-radius:4px; }
 	.dropBox li:hover {  background-color: #fdd4e0; cursor: pointer; }
 
 	.dropSelected { background-color:#fdf4e0!important; }

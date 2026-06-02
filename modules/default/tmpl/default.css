@@ -140,6 +140,13 @@ a:focus, .btn:focus {
 .d-none { display: none !important; }
 
 
+.col, .col-1, .col-10, .col-11, .col-12, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-auto, .col-lg, .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-auto, .col-md, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-auto, .col-sm, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-auto, .col-xl, .col-xl-1, .col-xl-10, .col-xl-11, .col-xl-12, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-auto {
+  padding-right: 0px;
+  padding-left: 0px;
+}
+
+.m-left { margin-left: 20px; }
+
 /* ── 4. Mise en page principale ──────────────────────────────── */
 .container-scroller {
   display: flex;
@@ -408,8 +415,6 @@ a:focus, .btn:focus {
 .sidebar .sub-menu .nav-link.active { border-left-color: var(--p67-primary); }
 
 /* ── 7. Cards (pas de border-radius) ────────────────────────── */
-.row > * { width: 100%; }
-.row { display: flex; flex-wrap: wrap; margin-right: -0.625rem; margin-left: -0.625rem; }
 
 .card {
   background:    var(--p67-white);
@@ -434,23 +439,15 @@ a:focus, .btn:focus {
 .card-header span { min-width: 14rem; }
 .card-header select { min-width: 14rem; }
 
-  /* h4 à l'intérieur d'un card-body : même style que card-header, sans le fond */
-/*
-.card-body > h4:first-child,
-.card-body > h3:first-child {
-  font-size:     0.875rem;
-  font-weight:   600;
-  color:         var(--p67-text);
-  margin:        0 0 1rem;
-  padding-bottom: 0.6rem;
-  border-bottom: 1px solid var(--p67-border);
-  border-left:   3px solid var(--p67-primary);
-  padding-left:  0.75rem;
-  margin-left:   -1.25rem;
-  margin-right:  -1.25rem;
-  padding-right: 1.25rem;
+.card-line {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.25rem;
+  font-size: 0.875rem;
+  color: var(--p67-text);
 }
-*/
+
 /* Titre secondaire dans la card (h4 pas en premier) */
 .card-body h4,
 .card-body h3 {
@@ -496,17 +493,15 @@ a:focus, .btn:focus {
   flex-wrap:    wrap;
   align-items:  center;
   gap:          8px;
-  margin-left: 15px;
-  margin-right: 15px;
   padding-left: 15px;
   padding-right: 15px;
   padding-top: 10px;
   padding-bottom: 10px;
-  margin-bottom: 16px;
   background:   var(--p67-white);
   border:       1px solid var(--p67-border);
   border-top:   3px solid var(--p67-primary);
   box-shadow:   0 1px 4px rgba(0,0,0,0.05);
+  margin-bottom: 0.6rem;
 }
 
 .content-menu a { text-decoration: none; }
@@ -656,8 +651,8 @@ a:focus, .btn:focus {
 .info-cartouche-wrap {
   border-top: none;
   margin-bottom: 10px;
-  margin-left: 5px;
-  margin-right: 5px;
+  margin-left: 0px;
+  margin-right: 0px;
 }
 
 .info-cartouche {
@@ -728,7 +723,6 @@ a:focus, .btn:focus {
   font-size: 0.82rem;
   margin-top: 2px;
   margin-bottom: 10px;
-  margin-left: 5px;
   margin-right: 5px;
   width: fit-content;
 }
@@ -1345,8 +1339,6 @@ textarea.form-control { min-height: 100px; resize: none; }
 .footer a { color: var(--p67-primary); font-size: inherit; }
 
 /* ── 22. Utilitaires template ───────────────────────────────── */
-.action:hover .feed-actions { display: inline-flex; }
-.action { line-height: 25px; }
 
 .grid-margin { margin-bottom: 2px; }
 
@@ -1361,7 +1353,21 @@ textarea.form-control { min-height: 100px; resize: none; }
   min-width: 100%;
 }
 
+.flex-column { flex-direction: column; }
+
 .flex-grow { flex-grow: 1; }
+
+.row > * { width: 100%; }
+.row { display: flex; flex-wrap: wrap; margin-right: 0px; margin-left: 0px; margin-bottom:0.6rem; }
+.row > .grid-margin:not(:last-child) {
+    padding-right: 1.2rem;
+}
+
+.d-flex { display: flex; }
+
+.action:hover .feed-actions { display: inline-flex; }
+.action { line-height: 25px; }
+
 
 /* Couleurs de texte */
 .text-primary   { color: var(--p67-primary) !important; }
@@ -1483,6 +1489,8 @@ div.tagsinput span.tag a { color: #ffffff; }
 .dt-right { text-align:right; white-space: nowrap; }
 .dt-action { padding:0px!important; }
 .bor-left { border-left: 1px solid var(--p67-primary); }
+.bor-right { border-right: 1px solid var(--p67-primary); }
+.bor-large-bottom { border-bottom: 2px solid var(--p67-primary)!important; }
 .bor-large-top { border-top: 2px solid var(--p67-primary); }
 .txt-light { color: var(--p67-primary); }
 
@@ -1583,15 +1591,17 @@ div.tagsinput span.tag a { color: #ffffff; }
 
 /* ── 24. Responsive ─────────────────────────────────────────── */
 
+/* Mobile */
 @media (max-width: 767px) {
   .content-wrapper { padding: 0.4rem; }
   .border-top.grid-margin.stretch-card > .d-flex::before { min-width:  36px; font-size:  1rem; }
   .card-header { flex-wrap: wrap; gap: 8px; }
   .card-header select.form-control { width: 100%; }
   input, select, textarea { font-size: 16px! important;}
-
+  .row .grid-margin { padding-right: 0px!important; }
 }
 
+/* Small screen */
 @media (max-width: 576px) {
   .card-body { max-width:368px;  }
 }
@@ -1802,7 +1812,7 @@ div {
   background:    #f0f3f8;
   color:         var(--p67-text-muted);
   text-decoration: none;
-  font-size:     0.85rem;
+  font-size:     1rem;
   transition:    background .12s, color .12s;
 }
 .feed-actions a:hover { background: var(--p67-primary); color: #fff; }
