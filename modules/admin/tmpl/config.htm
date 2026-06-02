@@ -34,34 +34,32 @@
 
 
 <div class='row'>
-    <div class='col grid-margin stretch-card'>
-        <div class='card'>
-            <div class='card-footer'><input type="submit" class="btn btn-primary mr-2" name="fonc" id="enregistrer" value="{lang_save}"></div>
-            <div class='card-body'>
-              <div class="form-group ">
-                <div class="row">
-                  <label class="col-sm-2 col-form-label">{lang_parameter}</label>
-                  <label class="col-sm-2 col-form-label">{lang_variable}</label>
-                  <label class="col-sm-3 col-form-label">{lang_value}</label>
-                  <label class="col-sm-4 col-form-label">{lang_default}</label>
-                </div>
+  <div class='card'>
+      <div class='card-header'><input type="submit" class="btn btn-primary mr-2" name="fonc" id="enregistrer" value="{lang_save}"></div>
+      <div class='card-body'>
 
-                <!-- BEGIN: lst_param -->
-                <div class="row">
-                  <label class="col-sm-2 col-form-label">{param_nom}</label>
-                  <label class="col-sm-2 col-form-label">{param_var}</label>
-                  <div class="col-sm-3"><input class="form-control" name="MyOptTab[{param_var1}][{param_var2}]" value="{param_txt}"  title="{param_help}"/></div>
-                  <div class="col-sm-4">{param_default}</div>
-                </div>
-                <!-- END: lst_param -->
-              </div>
-            </div>
-            <div class='card-footer'><input type="submit" class="btn btn-primary mr-2" name="fonc" id="enregistrer" value="{lang_save}"></div>
-        </div>
-    </div>
+        <table class="table table-hover datatable">
+          <tr class="t-header">
+            <th>{lang_parameter}</th>
+            <th>{lang_variable}</th>
+            <th>{lang_value}</th>
+            <th>{lang_default}</th>
+          </div>
+
+          <!-- BEGIN: lst_param -->
+          <tr>
+            <td>{param_nom}</td>
+            <td>{param_var}</td>
+            <td><input class="form-control" name="MyOptTab[{param_var1}][{param_var2}]" value="{param_txt}"  title="{param_help}" style="width:300px;"/></td>
+            <td>{param_default}</td>
+          </tr>
+          <!-- END: lst_param -->
+        </table>
+      </div>
+
+      <div class='card-footer'><input type="submit" class="btn btn-primary mr-2" name="fonc" id="enregistrer" value="{lang_save}"></div>
+  </div>
 </div>
-
-<br />
 
 </form>
 <!-- END: corps -->
