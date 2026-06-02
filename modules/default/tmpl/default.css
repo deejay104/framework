@@ -145,7 +145,8 @@ a:focus, .btn:focus {
   padding-left: 0px;
 }
 
-.m-left { margin-left: 20px; }
+.m-left-20 { margin-left: 20px; }
+.m-top-15 { margin-top: 15px; }
 
 /* ── 4. Mise en page principale ──────────────────────────────── */
 .container-scroller {
