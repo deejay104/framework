@@ -729,7 +729,7 @@ class objet_core
 		}
 		else if ($this->type[$key]=="number")
 		{
-			$vv=intval($v);
+			$vv=getInt($v);
 		}		
 		else if ($this->type[$key]=="duration")
 		{

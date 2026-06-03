@@ -531,9 +531,16 @@ function LoadTemplate($tmpl,$mymod="",$custom=true)
 	return $tmpl;
 }
 
+function getInt($var)
+{
+	return is_numeric($var) ? (int) $var : 0;
+}
+
+
+
 // Affiche un temps en minute en heures/minutes
 function AffTemps($tps=0,$short="yes") {
-	$tps=intval($tps);
+	$tps=getInt($tps);
 	$th=floor(abs($tps)/60);
 	$tm=abs($tps)-$th*60;
 	$tm=substr("00",0,2-strlen($tm)).$tm;
