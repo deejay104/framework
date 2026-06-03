@@ -173,25 +173,27 @@
 	}
 	else if ((!isset($_COOKIE['theme'])) || ($_COOKIE['theme']==""))
 	{
-		if ((preg_match("/CPU iPhone OS/",$_SERVER["HTTP_USER_AGENT"])) ||
-			(preg_match("/iPad; U; CPU OS/",$_SERVER["HTTP_USER_AGENT"])) ||
-			(preg_match("/Linux; U; Android/",$_SERVER["HTTP_USER_AGENT"])) ||
-			(preg_match("/Linux; Android/",$_SERVER["HTTP_USER_AGENT"])) ||
-			(preg_match("/Android 11; Mobile;/",$_SERVER["HTTP_USER_AGENT"]))
-		   )
+		if (isset($_SERVER["HTTP_USER_AGENT"]))
 		{
-			$theme="phone";
+			if ((preg_match("/CPU iPhone OS/",$_SERVER["HTTP_USER_AGENT"])) ||
+				(preg_match("/iPad; U; CPU OS/",$_SERVER["HTTP_USER_AGENT"])) ||
+				(preg_match("/Linux; U; Android/",$_SERVER["HTTP_USER_AGENT"])) ||
+				(preg_match("/Linux; Android/",$_SERVER["HTTP_USER_AGENT"])) ||
+				(preg_match("/Android 11; Mobile;/",$_SERVER["HTTP_USER_AGENT"]))
+			)
+			{
+				$theme="phone";
 
-            setcookie('theme', $theme, [
-                'expires'  => time() + $MyOpt["sessionExpire"],
-                'path'     => '/',
-                'httponly'  => true,      // JS n'en a pas besoin non plus
-                'secure'   => true,
-                'samesite' => 'Lax',     // ← Lax et non Strict, sinon le cookie
-            ]);                           //   ne part pas quand on arrive d'un
+				setcookie('theme', $theme, [
+					'expires'  => time() + $MyOpt["sessionExpire"],
+					'path'     => '/',
+					'httponly'  => true,      // JS n'en a pas besoin non plus
+					'secure'   => true,
+					'samesite' => 'Lax',     // ← Lax et non Strict, sinon le cookie
+				]);                           //   ne part pas quand on arrive d'un
 
+			}
 		}
-		
 	}
 
 // ---- Gestion des droits
