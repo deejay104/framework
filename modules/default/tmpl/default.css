@@ -314,6 +314,7 @@ a:focus, .btn:focus {
   top:        var(--p67-navbar-h);
   left:       0;
   width:      var(--p67-sidebar-width);
+  min-width:  var(--p67-sidebar-width);
   background: var(--p67-sidebar-bg);
   overflow-y: auto;
   overflow-x: hidden;
@@ -1546,6 +1547,11 @@ div.tagsinput span.tag a { color: #ffffff; }
   .sidebar.sidebar-offcanvas-open { transform: translateX(0); }
 
   .main-panel { margin-left: 0; }
+
+  .table th, .table td,
+  .jsgrid .jsgrid-table th, .jsgrid .jsgrid-table td {
+    padding:        0.2rem 0.8rem;
+  }
 
   .navbar .navbar-menu-wrapper {
     width: calc(100% - 240px);

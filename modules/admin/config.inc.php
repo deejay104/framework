@@ -39,6 +39,14 @@
 // ---- Enregistre le fichier des variables
 	if ($fonc==$tabLang["lang_save"])
 	{
+		$purge=checkVar("purge","varchar");
+
+		if ($purge=="yes")
+		{
+			$q="DELETE FROM ".$MyOpt["tbl"]."_config WHERE param='variable'";
+			$sql->Delete($q);			
+		}
+
 		$MyOptTab=checkVar("MyOptTab","array");
 		
 		$ret=GenereVariables($MyOptTab);

@@ -53,7 +53,6 @@
 		$gl_uid=$gl_auth["uid"];
 
 		$s_expire=((isset($MyOpt["sessionExpire"])) && ($MyOpt["sessionExpire"]>0)) ? $MyOpt["sessionExpire"] : 600;
-//		echo date("Y-m-d H:i:s",$gl_auth["expire"])."**".(($gl_auth["expire"]-time())/$s_expire);
 
 		if (($gl_auth["expire"]-time())/$s_expire<0.2)
 		{

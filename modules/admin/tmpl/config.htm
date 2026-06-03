@@ -37,27 +37,28 @@
   <div class='card'>
       <div class='card-header'><input type="submit" class="btn btn-primary mr-2" name="fonc" id="enregistrer" value="{lang_save}"></div>
       <div class='card-body'>
+        <div class='table-responsive'>
+          <table class="table table-hover datatable">
+            <tr class="t-header">
+              <th>{lang_parameter}</th>
+              <th>{lang_variable}</th>
+              <th>{lang_value}</th>
+              <th>{lang_default}</th>
+            </div>
 
-        <table class="table table-hover datatable">
-          <tr class="t-header">
-            <th>{lang_parameter}</th>
-            <th>{lang_variable}</th>
-            <th>{lang_value}</th>
-            <th>{lang_default}</th>
-          </div>
-
-          <!-- BEGIN: lst_param -->
-          <tr>
-            <td>{param_nom}</td>
-            <td>{param_var}</td>
-            <td><input class="form-control" name="MyOptTab[{param_var1}][{param_var2}]" value="{param_txt}"  title="{param_help}" style="width:300px;"/></td>
-            <td>{param_default}</td>
-          </tr>
-          <!-- END: lst_param -->
-        </table>
+            <!-- BEGIN: lst_param -->
+            <tr>
+              <td>{param_nom}</td>
+              <td>{param_var}</td>
+              <td><input class="form-control" name="MyOptTab[{param_var1}][{param_var2}]" value="{param_txt}"  title="{param_help}" style="width:300px;"/></td>
+              <td>{param_default}</td>
+            </tr>
+            <!-- END: lst_param -->
+          </table>
+        </div>
       </div>
 
-      <div class='card-footer'><input type="submit" class="btn btn-primary mr-2" name="fonc" id="enregistrer" value="{lang_save}"></div>
+      <div class='card-footer'><input type="submit" class="btn btn-primary mr-2" name="fonc" id="enregistrer" value="{lang_save}"> <input type="checkbox" name="purge" value="yes"> Purger la base</div>
   </div>
 </div>
 
