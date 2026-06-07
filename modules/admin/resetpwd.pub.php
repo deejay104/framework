@@ -11,6 +11,7 @@
     $minwait=10; // Temps avant nouvelle autorisation de changement de mot de passe
 
     // Check POST token
+/*
     $tid=verifyToken($token,"token_post",true);
     if ($tid==-1)
     {
@@ -22,6 +23,7 @@
         echo json_encode($ret);
         exit;
     }
+*/
 
     // Get number of change from the same ip during the last 5 min
     $q="SELECT COUNT(*) AS nb FROM ".$MyOpt["tbl"]."_token_post WHERE client_ip='".$_SERVER[$MyOpt["ipfield"]]."' AND dte_creat>='".date('Y-m-d H:i:s', strtotime('-5 minutes'))."'";
@@ -39,7 +41,7 @@
 
 
     // Get user info from the email
-    $q="SELECT id,mail FROM ".$MyOpt["tbl"]."_utilisateurs WHERE mail='".$email."' AND actif='oui'";
+    $q="SELECT id,mail,dte_resetpwd FROM ".$MyOpt["tbl"]."_utilisateurs WHERE mail='".$email."' AND actif='oui'";
     $res=$sql->QueryRow($q);
 
     if (!isset($res["id"]))
@@ -54,17 +56,12 @@
     }
 
     // Check last password update, skip if less than 10 min
-    $q="SELECT dte_resetpwd FROM ".$MyOpt["tbl"]."_utilisateurs WHERE id=".$ret["uid"];
-    $res=$sql->QueryRow($q);
 
     if (date_diff_txt($res["dte_resetpwd"],date("Y-m-d H:i:s"))<60*$minwait)
     {
+        $ret["lastdte"]=$res["dte_resetpwd"];
         $ret["status"]=403;
         $ret["uid"]=0;
-    }
-    else
-    {
-        $ret["dte_resetpwd"]=$res["dte_resetpwd"];
     }
 
     // Generate temp session token
