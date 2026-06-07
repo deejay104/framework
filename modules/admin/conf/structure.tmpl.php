@@ -230,6 +230,10 @@ $tabTmpl=Array
 	$obj=new amelioration_core(0,$sql);
 	$obj->genSqlTab($tabTmpl);
 
+	require_once ("class/document.inc.php");
+	$obj=new document_lus_core(0,$sql);
+	$obj->genSqlTab($tabTmpl);
+
 	require_once ("class/folder.inc.php");
 	$obj=new folder_core(0,$sql);
 	$obj->genSqlTab($tabTmpl);

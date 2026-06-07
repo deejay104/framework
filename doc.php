@@ -77,39 +77,28 @@
 	require ("class/document.inc.php");
 	$doc = new document_core($id,$sql);
 
+
+// ---- Force la timezone
+	if ($MyOpt["timezone"]!="")
+	  { date_default_timezone_set($MyOpt["timezone"]); }
+
 // ---- Delete document
-	if ( (isset($_REQUEST["fonc"])) && ($_REQUEST["fonc"]=="delete") )
+	$fonc=checkVar("fonc","varchar");
+	if ($fonc=="delete")
 	{
 		$ret=array();
 		$ret["result"]=$doc->delete();
 		echo json_encode($ret);
-		// echo "<script>opener.location.reload(); window.close();</script>";
 		exit;		
 	}
 
-
-//	header("Content-Type: image/jpeg");
-//	header('Content-Disposition: inline; filename="'.substr($name,strrpos($name,"/")+1,strlen($name)-strrpos($name,"/")).'";');
-
 // ---- Renvoie le contenu du fichier
-	if ( (isset($_REQUEST["type"])) && ($_REQUEST["type"]=="image") )
+	$type=checkVar("type","varchar");
+
+	if ( $type=="image")
 	{
-		if ((isset($_REQUEST["width"])) && (is_numeric($_REQUEST["width"])))
-		{
-			$w=$_REQUEST["width"];
-		}
-		else
-		{
-			$w=0;
-		}
-		if ((isset($_REQUEST["height"])) && (is_numeric($_REQUEST["height"])))
-		{
-			$h=$_REQUEST["height"];
-		}
-		else
-		{
-			$h=0;
-		}
+		$w=checkVar("width","numeric");
+		$c=checkVar("height","numeric");
 		$doc->ShowImage($w,$h);
 	}
 	else

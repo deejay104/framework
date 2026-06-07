@@ -163,6 +163,7 @@ class document_core{
 
 		$ret="";
 
+		$td=array();
 		$td["uid"]=$this->uid;
 		$td["type"]=$this->type;
 		$td["name"]=$this->name;
@@ -421,20 +422,36 @@ class document_core{
 		{
 			$fsize = filesize($fname);
 		
-			if ($myext=="jpg")
-			  { header("Content-Type: image/jpeg"); }
-			else if ($myext=="png")
-			  { header("Content-Type: image/png"); }
-			else if ($myext=="pdf")
-			  { header("Content-type: application/pdf"); }
+			// Set document as read
+			$sql=$this->sql;	
+			$query="SELECT * FROM ".$this->tbl."_doc_lus WHERE actif='oui' AND uid='".$gl_uid."' AND id_doc='".$this->id."'";
+			$res=$sql->QueryRow($query);
+		
+			if ((isset($res["id"])) && ($res["id"]>0))
+			{
+				$query="UPDATE ".$this->tbl."_doc_lus SET dte_maj='".now()."'";
+				$sql->Update($query);
+			}			
 			else
-			  { header("Content-type: application/octet-stream"); }
+			{
+				$query="INSERT INTO ".$this->tbl."_doc_lus SET id_doc='".$this->id."', uid='".$gl_uid."', dte_read='".now()."', uid_creat='".$gl_uid."',dte_creat='".now()."', uid_maj='".$gl_uid."', dte_maj='".now()."'";
+				$sql->Update($query);
+			}
+
+			if ($myext=="jpg")
+			{ header("Content-Type: image/jpeg"); }
+			else if ($myext=="png")
+			{ header("Content-Type: image/png"); }
+			else if ($myext=="pdf")
+			{ header("Content-type: application/pdf"); }
+			else
+			{ header("Content-type: application/octet-stream"); }
 
 			header("Content-Disposition: ".$mode." filename=\"".$this->name."\";");
 			header("Content-length: $fsize");
 			header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 			header('Pragma: public');
-		
+
 			while(!feof($fd))
 			{
 				$buffer = fread($fd, 2048);
@@ -792,5 +809,25 @@ function ListDocument($sql,$uid,$type)
 
 	return $lstdoc;
   }
+
+  class document_lus_core extends objet_core {
+	protected $table="doc_lus";
+	protected $mod="document";
+	protected $rub="folder";
+
+	protected $droit=array();
+
+	protected $fields=array(
+		"id_doc"=>Array("type" => "number", "index"=>1),
+		"uid"=>Array("type" => "number", "index"=>1),
+		"dte_read"=>Array("type" => "datetime"),
+	);
+	
+	protected $tabList=array(
+
+	);
+
+
+}
 
 ?>
