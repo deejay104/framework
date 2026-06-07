@@ -663,8 +663,12 @@ function sql2time($date,$aff="") {
 // Calcul le nombre de secondes entre deux dates
 function date_diff_txt($date1, $date2)
 {
-  $s = strtotime($date2)-strtotime($date1);
-  return $s;
+	if (($date2=="") || ($date1==""))
+	{ 
+		return 0;
+	}
+	$s = strtotime($date2)-strtotime($date1);
+	return $s;
 }
 
 

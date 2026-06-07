@@ -26,13 +26,18 @@
 */
 
     // Get number of change from the same ip during the last 5 min
+    if (!isset($_SERVER[$MyOpt["ipfield"]]))
+    {
+        echo json_encode(array("status"=>500,"message"=>"configuration"));
+        exit;
+    }
     $q="SELECT COUNT(*) AS nb FROM ".$MyOpt["tbl"]."_token_post WHERE client_ip='".$_SERVER[$MyOpt["ipfield"]]."' AND dte_creat>='".date('Y-m-d H:i:s', strtotime('-5 minutes'))."'";
     $res=$sql->QueryRow($q);
 
     if ($res["nb"]>$nbreq)
     {
-        $ret["status"]=502;
-        $ret["uid"]=0;
+        echo json_encode(array("status"=>502,"message"=>"token"));
+        exit;
     }
     else
     {
@@ -46,22 +51,18 @@
 
     if (!isset($res["id"]))
     {
-        $ret["status"]=404;
-        $ret["uid"]=0;
+        echo json_encode(array("status"=>502,"message"=>"user"));
+        exit;
     }
-    else
-    {
-        $ret["uid"]=$res["id"];
-        $ret["mail"]=$res["mail"];
-    }
+
+    $ret["uid"]=$res["id"];
+    $ret["mail"]=$res["mail"];
 
     // Check last password update, skip if less than 10 min
-
     if (date_diff_txt($res["dte_resetpwd"],date("Y-m-d H:i:s"))<60*$minwait)
     {
-        $ret["lastdte"]=$res["dte_resetpwd"];
-        $ret["status"]=403;
-        $ret["uid"]=0;
+        echo json_encode(array("status"=>403,"message"=>"waittime"));
+        exit;
     }
 
     // Generate temp session token
@@ -77,13 +78,9 @@
         $tabvar=array(
             "url"=>$MyOpt["host"]."/login.php?fonc=resetpwd&token=".$token,
         );
-        $from=array(
-            "name"=>"Aéroclub Polygone 67",
-            "mail"=>"noreply@polygone67.com"
-        );
-        SendMailFromFile($MyOpt["from_email"],$ret["mail"],"","",$tabvar,"resetpwd");
+        $r=SendMailFromFile($MyOpt["from_email"],$ret["mail"],"","",$tabvar,"resetpwd");
     
-        $ret["message"]="email sent";
+        $ret["message"]=($r) ? "sent" : "email";
     }
     echo json_encode($ret);
 
