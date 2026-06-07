@@ -535,6 +535,11 @@ function getInt($var)
 {
 	return is_numeric($var) ? (int) $var : 0;
 }
+function getDecimal($var)
+{
+	$var= ($var=="") ? "0.00" : $var;
+	return is_numeric($var) ? $var : "0.00";
+}
 
 
 

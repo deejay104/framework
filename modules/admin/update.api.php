@@ -214,7 +214,7 @@ function AjoutLog($txt)
                                         }
                                 }
                                 // Le champ n'a pas de valeur par défaut et n'est pas à NULL
-                                else if ( ($field!="id") && ($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Null"]=="NO") && (!isset($tabTmpl[$tab][$field]["Default"])) )
+                                else if ( ($field!="id") && ($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Null"]=="NO") && ((!isset($tabTmpl[$tab][$field]["Default"])) || ($tabTmpl[$tab][$field]["Default"]=="NULL")) )
                                 {
                                         $q="ALTER TABLE `".$MyOpt["tbl"]."_".$tab."` MODIFY `".$field."` ".$tabTmpl[$tab][$field]["Type"]." NULL";
                                         $res=$sql->Update($q);
@@ -229,7 +229,7 @@ function AjoutLog($txt)
                                         }
                                 }
                                 // Le champs est à NULL et à une valeur par défaut
-                                else if ( ($field!="id") && ($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Null"]=="YES") && (isset($tabTmpl[$tab][$field]["Default"])) )
+                                else if ( ($field!="id") && ($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Null"]=="YES") && (isset($tabTmpl[$tab][$field]["Default"])) && ($tabTmpl[$tab][$field]["Default"]!="NULL") )
                                 {
                                         $q="UPDATE `".$MyOpt["tbl"]."_".$tab."` SET `".$field."`='".$tabTmpl[$tab][$field]["Default"]."' WHERE ".$field." IS NULL";
                                         $res=$sql->Update($q);
@@ -243,7 +243,7 @@ function AjoutLog($txt)
                                         }
                                         else
                                         {
-                                                $ret["data"].=AjoutLog(" - ".$tabLang["lang_changetonull"]." ".$MyOpt["tbl"]."_".$tab.":".$field." -> NOT NULL");
+                                                $ret["data"].=AjoutLog(" - ".$tabLang["lang_changenonull"]." ".$MyOpt["tbl"]."_".$tab.":".$field." -> NOT NULL");
                                         }
                                 }
                                 //

@@ -321,25 +321,35 @@ class objet_core
 			$placeholder="";
 			if ((isset($this->fields[$key]["placeholder"])) && ($this->fields[$key]["placeholder"]))
 			{
-				$defaultaff=(isset($this->fields[$key]["default"])) ? $this->fields[$key]["default"] : "";
-
-				if (($type=="number") && ($txt=="0"))
-				{
-					$txt="";
-				}
-				else if (($type=="duration") && ($txt=="0h 00"))
-				{
-					$txt="";
-				}
-
+				$defaultaff=(isset($this->fields[$key]["placeholder"])) ? $this->fields[$key]["placeholder"] : ((isset($this->fields[$key]["default"])) ? $this->fields[$key]["default"] : "");
 				$placeholder="placeholder='".$defaultaff."'";
 			}
 
+			if (($type=="number") && ($txt=="0"))
+			{
+				$txt="";
+				if ($placeholder=="")
+				{
+					$placeholder="placeholder='0'";
+				}
+			}
+			else if (($type=="duration") && ($txt=="0h 00"))
+			{
+				$txt="";
+			}
+			else if (($type=="price") && (getInt($txt)==0))
+			{
+				$txt="";
+			}
+			else if ((isset($this->fields[$key]["defaultnew"])) && ($this->fields[$key]["defaultnew"]))
+			{
+				$txt=$this->fields[$key]["defaultnew"];;
+			}
 
 
 			if ($type=="text")
 		  	{
-				$ret="<textarea id='".(($formid!="") ? $formid : "").$key."' class='form-control form-input' name=\"".$formname."[$key]\" rows=8>".$txt."</textarea>";
+				$ret="<textarea id='".(($formid!="") ? $formid : "").$key."' class='form-control form-input' name=\"".$formname."[$key]\" rows=8 ".$placeholder.">".$txt."</textarea>";
 			}
 			else if ($type=="bool")
 		  	{
@@ -427,7 +437,7 @@ class objet_core
 			}
 			else if ($type=="price")
 			{
-				$ret="<INPUT id='".(($formid!="") ? $formid : "").$key."' class='form-control form-input'  name=\"".$formname."[$key]\" value=\"".$txt."\" type=\"number\" step=\"0.01\" style='width:150px!important;' placeholder='0'>";
+				$ret="<INPUT id='".(($formid!="") ? $formid : "").$key."' class='form-control form-input'  name=\"".$formname."[$key]\" value=\"".$txt."\" type=\"number\" step=\"0.01\" style='width:150px!important;' placeholder='".AffMontant("0.00")."'>";
 			}
 			else if ($type=="duration")
 			{
@@ -731,6 +741,10 @@ class objet_core
 		{
 			$vv=getInt($v);
 		}		
+		else if ($this->type[$key]=="price")
+		{
+			$vv=getDecimal($v);
+		}
 		else if ($this->type[$key]=="duration")
 		{
 			$vv=CalcTemps($v,false);
@@ -1166,6 +1180,10 @@ class objet_core
 					if (isset($field["default"]))
 					{
 						$tabobj[$key]["Default"]=$field["default"];
+					}
+					else
+					{
+						$tabobj[$key]["Default"]="NULL";
 					}
 				}
 
