@@ -66,7 +66,7 @@ function AjoutLog($txt)
                 $q.="AND T.table_schema = '".$db."' ";
                 $q.="AND T.table_name = '".$tab."'; ";
                 $res=$sql->QueryRow($q);
-                if ($res["charset"]!="utf8mb4")
+                if ((isset($res["charset"])) && ($res["charset"]!="utf8mb4"))
                 {
                         $ret["data"].=AjoutLog("Convert characterset from ".$res["charset"]." to UTF-8 for ".$db.".".$tab);
                         $q="ALTER TABLE ".$tab." CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci";
