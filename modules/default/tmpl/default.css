@@ -661,7 +661,6 @@ a:focus, .btn:focus {
   align-items: stretch;
   background: linear-gradient(135deg, #f0f5ff 0%, #fafbff 100%);
   border: 1px solid #d6e3f7;
-  border-left: 4px solid #4a6fa5;
   border-radius: 5px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(74,111,165,.08);
@@ -855,7 +854,7 @@ select.form-control {
 
 
 /* Textarea */
-textarea.form-control { min-height: 100px; resize: none; }
+textarea.form-control { min-height: 55px; resize: none; }
 
 
 /* Groups */
@@ -1442,6 +1441,7 @@ textarea.form-control { min-height: 100px; resize: none; }
 .bg-gradient-danger  { background: linear-gradient(135deg, #e53935, #b71c1c); }
 .bg-gradient-info    { background: linear-gradient(135deg, #039be5, #01579b); }
 .bg-gradient-warning { background: linear-gradient(135deg, #fb8c00, #e65100); }
+.bg-gradient-warning-light { background: linear-gradient(135deg, #ffe5c5, #fbbf75); }
 .bg-gradient-light { background: linear-gradient(to right, #cfd9df 0%, #e2ebf0 100%); }
 .bg-gradient-dark { background: linear-gradient(to right, #7d7979 0%, #000000 100%); }
 

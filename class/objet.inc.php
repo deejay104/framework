@@ -349,7 +349,7 @@ class objet_core
 
 			if ($type=="text")
 		  	{
-				$ret="<textarea id='".(($formid!="") ? $formid : "").$key."' class='form-control form-input' name=\"".$formname."[$key]\" rows=8 ".$placeholder.">".$txt."</textarea>";
+				$ret="<textarea id='".(($formid!="") ? $formid : "").$key."' class='form-control form-input' name=\"".$formname."[$key]\" rows=".(((isset($this->fields[$key]["row"])) && ($this->fields[$key]["row"]>0)) ? $this->fields[$key]["row"] : 8)." ".$placeholder.">".$txt."</textarea>";
 			}
 			else if ($type=="bool")
 		  	{
