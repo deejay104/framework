@@ -195,9 +195,8 @@
 	header('X-Frame-Options: DENY');
 	header('Referrer-Policy: no-referrer');
 
-	$allowed = [$MyOpt["host"], 'https://www.polygone67.com'];
+	$allowed = [$MyOpt["host"], $MyOpt["public_host"]];
 	$origin  = $_SERVER['HTTP_ORIGIN'] ?? '';
-
 	if (in_array($origin, $allowed, true)) {
 		header("Access-Control-Allow-Origin: $origin");
 		header('Vary: Origin');
