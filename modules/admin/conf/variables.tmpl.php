@@ -53,6 +53,10 @@ $MyOptHelp["jwtsecret"]="Secret utilisé pour signer les token";
 $MyOptTmpl["host"]=htmlentities($_SERVER["REQUEST_SCHEME"]."://".$_SERVER["SERVER_NAME"].preg_replace("/\/[a-z]*\.php/","",$_SERVER["SCRIPT_NAME"]));
 $MyOptHelp["host"]="Chemin complet du site. Utilisé pour générer les url statiques.";
 
+$MyOptTmpl["public_host"]=htmlentities($_SERVER["REQUEST_SCHEME"]."://".$_SERVER["SERVER_NAME"].preg_replace("/\/[a-z]*\.php/","",$_SERVER["SCRIPT_NAME"]));
+$MyOptHelp["public_host"]="URL du site public autorisé à executer des requêtes CORS";
+
+
 // Forwarded source IP
 $MyOptTmpl["ipfield"]="HTTP_X_REAL_IP";
 $MyOptHelp["ipfield"]="Nom du header dans lequel se trouve l'IP source";
