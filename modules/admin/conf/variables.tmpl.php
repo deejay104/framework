@@ -44,6 +44,11 @@ $MyOptHelp["DefaultLanguage"]="Langue par défault du site";
 $MyOptTmpl["timezone"]=date_default_timezone_get();
 $MyOptHelp["timezone"]="Sélectionner la timezone locale (Europe/Paris)";
 
+// First day of the week
+$MyOptTmpl["weekFirstDay"]=1;
+$MyOptHelp["weekFirstDay"]="Premier jour de la semaine (dimanche: 0, lundi: 1)";
+
+
 // JWT secret
 $MyOptTmpl["jwtsecret"]=bin2hex(random_bytes(32));
 $MyOptHelp["jwtsecret"]="Secret utilisé pour signer les token";

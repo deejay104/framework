@@ -133,9 +133,14 @@
 			$tmpl_x->assign("form_document_name",$doc->name);
 			$tmpl_x->assign("form_document_link",$doc->Affiche("name","name"));
 			$tmpl_x->assign("form_document_time",DisplayDate($doc->dte_creat));
-			$tmpl_x->parse("corps.lst_lastdocs");
+			$tmpl_x->parse("corps.aff_lastdocs.lst_lastdocs");
 		}
 	}	
+
+	if (GetDroit("VisuLastDocument"))
+	{
+		$tmpl_x->parse("corps.aff_lastdocs");
+	}
 
 // ---- Dernieres actualités
 

@@ -34,6 +34,7 @@ $tabRoles["VisuDocument"]="Visualisation de tous les documents";
 $tabRoles["VisuUserDocument"]="Visualisation des documents des utilisateurs";
 $tabRoles["SupprimeDocument"]="Autorisation de supprimer tous les documents";
 $tabRoles["ModifMessage"]="Modification d'un message dans le module document";
+$tabRoles["VisuLastDocument"]="Visualisation des derniers documents sur la page d'actualité";
 
 
 // ---- Users
