@@ -59,10 +59,14 @@
   --success:   #10b981;
   --radius:    10px;
   --shadow:    0 1px 4px rgba(0,0,0,.07), 0 4px 16px rgba(0,0,0,.05);
-  --font:      'DM Sans', sans-serif;
-  --mono:      'DM Mono', monospace;
+  --font:      -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --mono:      "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
 
+  /* FullCalendar */
+  --fc-button-text-color: #1a1d23;
+  --fc-non-business-color: #eeeeee;
 }
+
 
 /* ── 3. Reset & base ─────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
@@ -1523,7 +1527,9 @@ div.tagsinput span.tag a { color: #ffffff; }
   place-items: center!important;
   transition: all .12s!important;
 }
-.fc-button:hover { background: #eef3fc!important; color: var(--primary)!important; }
+.fc-button:hover { background: #eef3fc!important; color: var(--p67-primary)!important; }
+.fc-button-active { color: var(--p67-primary-light)!important; background: var(--accent)!important; }
+
 .fc-state-active, .fc-state-down { background: var(--accent)!important; color: #fff!important; border-color: var(--accent)!important; }
 .fc-state-default { text-shadow: unset!important; box-shadow: unset; }
 
@@ -2024,6 +2030,7 @@ div {
   text-align:    center;
 }
 .manif-date-badge .day { font-size: 1rem; }
+.manif-date-badge .hour { font-size: 0.7rem; }
 
 /* Upload photo */
 .thumbnail { max-width: 100%; max-height: 300px; overflow: hidden; margin-top: 8px; }

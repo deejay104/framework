@@ -1637,6 +1637,12 @@ function FatalError($txt,$msg="")
 	exit;			 
   }
 
+function apiError($code,$txt)
+{
+	echo json_encode(array("status"=>$code,"error"=>$txt));
+	exit;	
+}
+
 // Affiche une valeur au format xxx,yy
 function AffMontant($val)
   {
