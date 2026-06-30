@@ -1044,8 +1044,7 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 	$ret.="</tbody>\n";
 	$ret.="</table></div>\n";
 
-	//$ret.="<link rel='stylesheet' type='text/css' href='".$MyOpt["host"]."/core/external/jquery/css/dataTables.min.css2' />";
-	$ret.="<script type='text/javascript' src='".$MyOpt["host"]."/core/external/jquery/jquery.dataTables.min.js'></script>";
+	$ret.="<script type='text/javascript' src='".$MyOpt["host"]."/core/external/jquery/datatables.v3.js'></script>";
 
 	$ret.="<script>";
 	$ret.="$(document).ready(function() {";
@@ -1247,8 +1246,7 @@ function AfficheTableauRemote($tabTitre,$url,$order="",$trie="d",$search="",$nbl
 	// }
 	$ret.="</table></div>\n";
 
-	//$ret.="<link rel='stylesheet' type='text/css' href='".$MyOpt["host"]."/core/external/jquery/css/dataTables.min.css2' />";
-	$ret.="<script type='text/javascript' src='".$MyOpt["host"]."/core/external/jquery/jquery.dataTables.min.js'></script>";
+	$ret.="<script type='text/javascript' src='".$MyOpt["host"]."/core/external/jquery/datatables.v3.js'></script>";
 
 	$ret.="<script>";
 	$ret.='$(document).ready(function() {';
