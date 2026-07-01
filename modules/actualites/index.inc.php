@@ -112,13 +112,29 @@
 		
 	if (is_array($lstdte))
 	{
+		$nb=0;
 		foreach($lstdte as $i=>$did)
-		  {
+		{
 			$dte = new echeance_core($did,$sql,$gl_uid);
-			$dte->editmode="html";
-			$tmpl_x->assign("form_echeance",$dte->Affiche());
+
+			if (($theme!="phone") || (TestDate($dte->dte_echeance)>0))
+			{
+				$dte->editmode="html";
+				$tmpl_x->assign("form_echeance",$dte->Affiche());
+				$tmpl_x->parse("corps.lst_echeance");
+				$nb++;
+			}
+		}
+
+				echo count($lstdte);
+		if ($nb==0)
+		{
+			$txt ='<div class="echeance-item success">Echéances à jour</div>';
+
+			$tmpl_x->assign("form_echeance",$txt);
 			$tmpl_x->parse("corps.lst_echeance");
-		  }
+		}
+
 	}
 
 // ---- Derniers message des forums

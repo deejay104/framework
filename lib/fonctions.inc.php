@@ -1818,29 +1818,32 @@ function AffDate($dte)
 		$ret=sql2date($dte);
 		if (date_diff_txt($dte,date("Y-m-d"))>0)
 		{
-			$ret="<B><font color=\"red\">$ret</font></B>";
+			$ret="<b class='danger'>".$ret."</b>";
 		}
 		else if (date_diff_txt($dte,date("Y-m-d"))>-30*24*3600)
 		{
-			$ret="<B><font color=\"orange\">$ret</font></B>";
+			$ret="<b class='warning'>".$ret."</b>";
 		}
 	}
 	else
-	{	$ret="-"; }
+	{	
+		$ret="-";
+	}
 	return $ret;
 }
 
 function TestDate($dte)
 {
 	// Ex EcheanceDate
-	$ret="ok";
-	if (date_diff_txt($dte,date("Y-m-d"))>0)
+	$ret=0;
+
+	if (date_diff_txt(date("Y-m-d"),$dte)<0)
 	{
-		$ret="nok";
+		$ret=2;
 	}
-	else if (date_diff_txt($dte,date("Y-m-d"))>-30*24*3600)
+	else if (date_diff_txt(date("Y-m-d"),$dte)<30*24*3600)
 	{
-		$ret="ok";
+		$ret=1;
 	}
 	return $ret;
 }

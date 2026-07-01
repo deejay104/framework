@@ -9,6 +9,7 @@
 /* ── 1. Dépendances externes ─────────────────────────────────── */
 
 .mdi-list { font-size:20px; color:#888888; }
+.mdi-large { font-size:1.5rem; }
 
 /* ── 2. Variables de design (tokens) ─────────────────────────── */
 :root {
@@ -22,6 +23,7 @@
   --p67-success:        #2e7d32;
   --p67-success-soft:   #e8f5e9;
   --p67-warning:        #e67e22;
+  --p67-warning-soft:   #fffdf5;
   --p67-info:           #0288d1;
 
   /* Fonds & textes */
@@ -1331,13 +1333,16 @@ textarea.form-control { min-height: 55px; resize: none; }
   font-size:     0.82rem;
   background:    var(--p67-success-soft);
 }
-.echeance-item.danger  { background: var(--p67-danger-soft); }
-.echeance-item i.ok    { color: var(--p67-success); font-size: 1.05rem; }
-.echeance-item i.err   { color: var(--p67-danger);  font-size: 1.05rem; }
-.echeance-item i.nok   { color: var(--p67-danger);  font-size: 1.05rem; }
 .echeance-item span { color: #2d3748; }
 .echeance-item a { margin-left:auto; font-size:0.8rem; }
+.echeance-item i { font-size: 1.05rem; }
 
+.success { color: var(--p67-success); }
+.success-bg { background-color: var(--p67-success-soft); }
+.danger  { color: var(--p67-danger);  }
+.danger-bg  { background-color: var(--p67-danger-soft); }
+.warning { color: var(--p67-warning); }
+.warning-bg  { background-color: var(--p67-warning-soft); }
 
 /* ── 21. Footer ─────────────────────────────────────────────── */
 .footer {
@@ -1720,6 +1725,11 @@ div.tagsinput span.tag a { color: #ffffff; }
   max-height:  250px;
   overflow-y:  auto;
   z-index:1010;
+
+  position: absolute;
+	top: 0;
+	left: 0;
+	cursor: default;
 }
 
 .ui-menu-item { padding: 0; }
@@ -1733,6 +1743,8 @@ div.tagsinput span.tag a { color: #ffffff; }
   background: var(--p67-primary-light);
   color:      var(--p67-primary);
 }
+
+
 
 /* ── 27. Impressions ─────────────────────────────────────────── */
 @media print {

@@ -262,9 +262,25 @@ class echeance_core extends objet_core
 		}
 		else
 		{
-			$tabIcon=array("ok"=>array("icon"=>"mdi-checkbox-marked-outline","color"=>"green"),"nok"=>array("icon"=>"mdi-close-box-outline","color"=>"red"));
+			$tabIcon=array(
+				0=>array(
+					"icon"=>"mdi-checkbox-marked-circle",
+					"color"=>"success",
+					"background"=>"success-bg",
+				),
+				1=>array(
+					"icon"=>"mdi-check-decagram",
+					"color"=>"warning",
+					"background"=>"warning-bg",
+				),
+				2=>array(
+					"icon"=>"mdi-alert-circle",
+					"color"=>"danger",
+					"background"=>"danger-bg",
+				)
+			);
+
 			$chkDate=TestDate($this->dte_echeance);
-			//$ret="<div><i class='mdi ".$tabIcon[$r]["icon"]."' style='font-size:20px; color:".$tabIcon[$r]["color"].";'></i> ".$tabLang["lang_echeance"]." ".$this->description." ".$tabLang["core_the"]." ".AffDate($this->dte_echeance)." ".($this->checkDoc())."</div>";
 
 			if ($this->id==0)
 			{
@@ -276,10 +292,8 @@ class echeance_core extends objet_core
 				$dte=AffDate($this->dte_echeance);
 			}
 
-			$tabColor=array("ok"=>"success","nok"=>"danger","warning"=>"warning","none"=>"secondary");
-
-			$ret ='<div class="echeance-item '.$tabColor[$chkDate].'">';
-            $ret.='<i class="mdi mdi-checkbox-marked-circle '.$chkDate.'"></i>';
+			$ret ='<div class="echeance-item '.$tabIcon[$chkDate]["background"].'">';
+            $ret.='<i class="mdi '.$tabIcon[$chkDate]["icon"].' '.$tabIcon[$chkDate]["color"].'"></i>';
             $ret.='<span>'.(($description!="") ? $description : $this->description).' — <strong>'.$dte.'</strong></span>';
             $ret.=$this->checkDoc();
             $ret.='</div>';
