@@ -9,4 +9,4 @@ then
 fi
 
 echo "Starting PHP FPM"
-exec /usr/sbin/php-fpm8.3 --fpm-config /etc/php/8.3/fpm/php-fpm.conf
+exec /usr/sbin/php-fpm8.5 --fpm-config /etc/php/8.5/fpm/php-fpm.conf

@@ -104,7 +104,7 @@ class amelioration_core extends objet_core
 			$ch = curl_init($url); 
 			curl_setopt_array( $ch, $options );
 			$data = curl_exec($ch); 
-			curl_close($ch); 
+
 			$tabList=json_decode($data,true);
 
 			$this->id=$id;
@@ -166,7 +166,6 @@ class amelioration_core extends objet_core
 			$ch = curl_init($url); 
 			curl_setopt_array( $ch, $options );
 			$data = curl_exec($ch); 
-			curl_close($ch); 
 
 			$tabList=json_decode($data,true);
 			if ($this->id==0)
@@ -263,7 +262,7 @@ class amelioration_core extends objet_core
 			$ch = curl_init($url); 
 			curl_setopt_array( $ch, $options );
 			$data = curl_exec($ch); 
-			curl_close($ch); 
+
 		}
 		else
 		{
@@ -324,7 +323,7 @@ class amelioration_core extends objet_core
 			$ch = curl_init($url); 
 			curl_setopt_array( $ch, $options );
 			$data = curl_exec($ch); 
-			curl_close($ch); 
+
 			$tabList=json_decode($data,true);
 
 			$lst=array();
@@ -388,7 +387,7 @@ function ListActiveAmeliorations($sql)
 		curl_setopt_array( $ch, $options );
 		$data = curl_exec($ch); 
 
-		curl_close($ch); 
+
 		$tabList=json_decode($data,true);
 
 		$lst=array();

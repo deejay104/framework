@@ -126,7 +126,6 @@
 			}
 		}
 
-				echo count($lstdte);
 		if ($nb==0)
 		{
 			$txt ='<div class="echeance-item success">Echéances à jour</div>';

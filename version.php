@@ -1,3 +1,3 @@
 <?php
-$core_version = "123";
+$core_version = "124";
 ?>

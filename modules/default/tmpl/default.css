@@ -1455,7 +1455,7 @@ textarea.form-control { min-height: 55px; resize: none; }
 .bg-gradient-dark { background: linear-gradient(to right, #7d7979 0%, #000000 100%); }
 
 /* Tags */
-div.tagsinput { margin-right: 5px; margin-bottom: 10px; border-color: #e3e7ed; display: inline-block; }
+div.tagsinput { margin-right: 5px; margin-top: 5px; margin-bottom: 5px; display: inline-block; }
 div.tagsinput span.tag { background-color: #267CB9; border: 0; color: #ffffff; padding: 6px 14px; font-size: .8125rem; font-family: inherit; line-height: 1; white-space: nowrap;}
 div.tagsinput span.tag a { color: #ffffff; }
 
