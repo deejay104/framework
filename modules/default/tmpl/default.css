@@ -1556,6 +1556,11 @@ div.tagsinput span.tag a { color: #ffffff; }
 .fc-state-active, .fc-state-down { background: var(--accent)!important; color: #fff!important; border-color: var(--accent)!important; }
 .fc-state-default { text-shadow: unset!important; box-shadow: unset; }
 
+.fc .fc-non-business {
+  background: var(--fc-non-business-color);
+  opacity: 0.5;
+}
+
 /* Images */
 .img-xs  { width: 36px;  height: 36px; }
 .img-sm  { width: 43px;  height: 43px; }
