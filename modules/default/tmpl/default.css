@@ -8,6 +8,7 @@
 
 /* ── 1. Dépendances externes ─────────────────────────────────── */
 
+.mdi { font: 1rem; }
 .mdi-list { font-size:20px; color:#888888; }
 .mdi-large { font-size:1.5rem; }
 
@@ -681,6 +682,10 @@ a:focus, .btn:focus {
   color: #fff;
   font-size: 20px;
   flex-shrink: 0;
+}
+
+.info-cartouche-icon i {
+  font-size: 1.4rem;
 }
 
 .info-cartouche-body {
