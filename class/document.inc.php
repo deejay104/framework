@@ -129,8 +129,9 @@ class document_core{
 		$this->id=$sql->Insert($query);
 
 		$myname=CompleteTxt($this->id,6,"0");
-		$mypath=substr($myname,0,3);
 
+		# Divide files per 1000 files folders
+		$mypath=substr($myname,0,3);
 		if (!is_dir($this->filepath."/".$mypath))
 		{
 		  	mkdir($this->filepath."/".$mypath);
@@ -141,15 +142,19 @@ class document_core{
 		$this->originalname=$name;	
 		$this->name=$name;
 
-		if (!move_uploaded_file($tmpname,$this->filepath."/".$this->filename))
-		{
-		  	$ret.="Erreur de chargement du fichier<br/>";
-		}
-		else
+		## local storage
+		# Move file to documents folder
+		if (move_uploaded_file($tmpname,$this->filepath."/".$this->filename))
 		{
 		  	$query="UPDATE ".$this->tbl."_document SET filename='".$this->filename."' WHERE id='".$this->id."'";
 			$sql->Update($query);			
 		}
+		else
+		{
+			$ret.="Erreur de chargement du fichier<br/>";
+		}
+
+		## S3 storage
 
 		$this->orientation();
 
@@ -177,7 +182,7 @@ class document_core{
 
 		return $ret;
 	}
-
+/*
 	function Import($uid,$name,$filename="",$droit="")
 	{ global $gl_uid;
 		$sql=$this->sql;
@@ -209,6 +214,7 @@ class document_core{
 
 		return $ret;		
 	}
+*/
 
 	function Delete()
 	{ global $mysql,$gl_uid,$myuser;
@@ -410,6 +416,23 @@ class document_core{
 			$mode="";
 		}
 
+		// Set document as read
+		$sql=$this->sql;	
+		$query="SELECT * FROM ".$this->tbl."_doc_lus WHERE actif='oui' AND uid='".$gl_uid."' AND id_doc='".$this->id."'";
+		$res=$sql->QueryRow($query);
+	
+		if ((isset($res["id"])) && ($res["id"]>0))
+		{
+			$query="UPDATE ".$this->tbl."_doc_lus SET dte_maj='".now()."'";
+			$sql->Update($query);
+		}			
+		else
+		{
+			$query="INSERT INTO ".$this->tbl."_doc_lus SET id_doc='".$this->id."', uid='".$gl_uid."', dte_read='".now()."', uid_creat='".$gl_uid."',dte_creat='".now()."', uid_maj='".$gl_uid."', dte_maj='".now()."'";
+			$sql->Update($query);
+		}
+
+		// Check if file exists
 		$myext=GetExtension($this->filename);
 		$fname=$this->filepath."/".$this->filename;
 		if (!file_exists($fname))
@@ -421,23 +444,6 @@ class document_core{
 		if ($fd = fopen ($fname, "r"))
 		{
 			$fsize = filesize($fname);
-		
-			// Set document as read
-			$sql=$this->sql;	
-			$query="SELECT * FROM ".$this->tbl."_doc_lus WHERE actif='oui' AND uid='".$gl_uid."' AND id_doc='".$this->id."'";
-			$res=$sql->QueryRow($query);
-		
-			if ((isset($res["id"])) && ($res["id"]>0))
-			{
-				$query="UPDATE ".$this->tbl."_doc_lus SET dte_maj='".now()."'";
-				$sql->Update($query);
-			}			
-			else
-			{
-				$query="INSERT INTO ".$this->tbl."_doc_lus SET id_doc='".$this->id."', uid='".$gl_uid."', dte_read='".now()."', uid_creat='".$gl_uid."',dte_creat='".now()."', uid_maj='".$gl_uid."', dte_maj='".now()."'";
-				$sql->Update($query);
-			}
-
 			if ($myext=="jpg")
 			{ header("Content-Type: image/jpeg"); }
 			else if ($myext=="png")
@@ -677,12 +683,7 @@ class document_core{
 	
 	function GenerePath($w,$h)
 	{
-		// $f=preg_split("/\\//",$this->filename);
-		// $file=$f[1];
-		// if ($file=="")
-		// {
-			// $file=$f[0];
-		// }
+
 		$myid=CompleteTxt($this->id,6,"0");
 		$myext=GetExtension($this->filename);
 

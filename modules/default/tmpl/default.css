@@ -1342,6 +1342,8 @@ textarea.form-control { min-height: 55px; resize: none; }
 .echeance-item a { margin-left:auto; font-size:0.8rem; }
 .echeance-item i { font-size: 1.05rem; }
 
+.none { color: var(--p67-primary); }
+.none-bg { color: var(--p67-primary-border); }
 .success { color: var(--p67-success); }
 .success-bg { background-color: var(--p67-success-soft); }
 .danger  { color: var(--p67-danger);  }
@@ -1530,6 +1532,11 @@ div.tagsinput span.tag a { color: #ffffff; }
 .dt-paging-button:hover {
   border: 1px solid var(--accent);
 }
+
+.dt-column-order { font:normal normal normal 24px/1 "Material Design Icons"; font-size: 16px; margin-left:10px;}
+.dt-ordering-asc .dt-column-header .dt-column-order:before {content:"\F4BC";}
+.dt-ordering-desc .dt-column-header .dt-column-order:before {content:"\F4BD";}
+
 
 .disabled {
   opacity: .35;

@@ -263,6 +263,11 @@ class echeance_core extends objet_core
 		else
 		{
 			$tabIcon=array(
+				"none"=>array(
+					"icon"=>"mdi-checkbox-blank-circle-outline",
+					"color"=>"warning",
+					"background"=>"warning-bg",
+				),
 				0=>array(
 					"icon"=>"mdi-checkbox-marked-circle",
 					"color"=>"success",
@@ -291,7 +296,7 @@ class echeance_core extends objet_core
 			{
 				$dte=AffDate($this->dte_echeance);
 			}
-
+echo "**".$tabIcon[$chkDate]["background"]."**";
 			$ret ='<div class="echeance-item '.$tabIcon[$chkDate]["background"].'">';
             $ret.='<i class="mdi '.$tabIcon[$chkDate]["icon"].' '.$tabIcon[$chkDate]["color"].'"></i>';
             $ret.='<span>'.(($description!="") ? $description : $this->description).' — <strong>'.$dte.'</strong></span>';
