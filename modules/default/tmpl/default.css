@@ -1533,6 +1533,7 @@ div.tagsinput span.tag a { color: #ffffff; }
   border: 1px solid var(--accent);
 }
 
+.dt-column-header { cursor: pointer; }
 .dt-column-order { font:normal normal normal 24px/1 "Material Design Icons"; font-size: 16px; margin-left:10px;}
 .dt-ordering-asc .dt-column-header .dt-column-order:before {content:"\F4BC";}
 .dt-ordering-desc .dt-column-header .dt-column-order:before {content:"\F4BD";}
