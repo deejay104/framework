@@ -296,7 +296,7 @@ class echeance_core extends objet_core
 			{
 				$dte=AffDate($this->dte_echeance);
 			}
-echo "**".$tabIcon[$chkDate]["background"]."**";
+
 			$ret ='<div class="echeance-item '.$tabIcon[$chkDate]["background"].'">';
             $ret.='<i class="mdi '.$tabIcon[$chkDate]["icon"].' '.$tabIcon[$chkDate]["color"].'"></i>';
             $ret.='<span>'.(($description!="") ? $description : $this->description).' — <strong>'.$dte.'</strong></span>';
