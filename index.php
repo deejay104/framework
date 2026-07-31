@@ -84,7 +84,7 @@
 	{
 		$port=3306;
 	}
-	if (($mysqluser=="") || ($mysqlpassword=="") || ($hostname=="") || ($db=="") || ($gl_tbl==""))
+	if (($mysqluser=="") || ($mysqlpassword=="") || ($hostname=="") || ($db=="") || (PREFIX_TBL==""))
 	{
 		echo "Configuration file is missing or with bad configuration";
 		exit;
@@ -92,7 +92,7 @@
 	$sql = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db, $port);
 
 // ---- Vérifie si la configuration initiale a été faite
-	$MyOpt["tbl"]=$gl_tbl;
+	$MyOpt["tbl"]=PREFIX_TBL;
 	if ($gl_uid==0)
 	{
 		//initDatabase();
@@ -115,7 +115,7 @@
 	if ($v!=$MyOpt["version"])
 	{
 		$MyOpt=array();
-		$MyOpt["tbl"]=$gl_tbl;
+		$MyOpt["tbl"]=PREFIX_TBL;
 		$q="SELECT * FROM ".$MyOpt["tbl"]."_config WHERE param='variable'";
 		$sql->Query($q);
 		for($i=0; $i<$sql->rows; $i++)

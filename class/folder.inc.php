@@ -62,6 +62,7 @@ class paper_core extends objet_core {
 	protected $fields=array(
 		"id_folder"=>Array("type" => "number", "index"=>1),
 		"title"=>Array("type" => "varchar", "len"=>100),
+		"mandatory"=>Array("type" => "bool", "default"=>"non"),
 		"dte_start"=>Array("type" => "date"),
 		"dte_end"=>Array("type" => "date"),
 	);
@@ -86,6 +87,23 @@ function ListActivePapers($id,$sql,$sort="dte_creat")
 	return ListeObjets($sql,"doc_paper",array("id","title","dte_start","dte_end","uid_creat","dte_creat"),$crit,array($sort));
 }
 
+class paper_read_core extends objet_core {
+	protected $table="doc_read";
+	protected $mod="document";
+	protected $rub="folder";
+
+	protected $droit=array();
+
+	protected $fields=array(
+		"id_paper"=>Array("type" => "number", "index"=>1),
+		"uid"=>Array("type" => "number", "index"=>1),
+		"dte_read"=>Array("type" => "datetime"),
+	);
+	
+	protected $tabList=array(
+
+	);
+}
 
 
 class comment_core extends objet_core {
@@ -112,5 +130,7 @@ function ListActiveComments($id,$sql)
 
 	return ListeObjets($sql,"doc_comment",array("id","id_paper","description","uid_creat","dte_creat"),array("actif"=>"oui","id_paper"=>$id),array("dte_creat"));
 }
+
+
 
 ?>

@@ -41,7 +41,7 @@
 
 
 // ---- Variables
-	$MyOpt["tbl"]=$gl_tbl;
+	$MyOpt["tbl"]=PREFIX_TBL;
 
 	if ($id==0)
 	{

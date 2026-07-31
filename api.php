@@ -46,7 +46,7 @@
 
 
 // ---- Variables
-	$MyOpt["tbl"]=$gl_tbl;
+	$MyOpt["tbl"]=PREFIX_TBL;
 
 	$mod=checkVar("mod","varchar");
 	$rub=checkVar("rub","varchar",50);

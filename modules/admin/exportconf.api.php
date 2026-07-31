@@ -15,7 +15,7 @@
 	$tabMyOpt=array();
 	
 	$MyOpt=array();
-	$MyOpt["tbl"]=$gl_tbl;
+	$MyOpt["tbl"]=PREFIX_TBL;
 	$q="SELECT * FROM ".$MyOpt["tbl"]."_config WHERE param='variable'";
 	$sql->Query($q);
 	for($i=0; $i<$sql->rows; $i++)

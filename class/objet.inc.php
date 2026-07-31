@@ -1018,15 +1018,13 @@ class objet_core
 	
 	function sign($t)
 	{
-		global $hmacKey;
-
 		$payload="id=".$this->id;
 		foreach($t as $k)
 		{
 			$payload.="|".$k."=".((isset($this->data[$k])) ? $this->data[$k] : 'null');
 		}
 
-		$hash=hash_hmac('sha256', $payload, $hmacKey);
+		$hash=hash_hmac('sha256', $payload, HMAC_KEY);
 		return hash('sha256', $hash);
 	}
 

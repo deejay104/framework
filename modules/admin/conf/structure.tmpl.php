@@ -59,6 +59,8 @@ $tabTmpl=Array
 		"type" => Array("Type" => "varchar(10)", "Index" => "1", ),
 		"dossier" => Array("Type" => "tinytext", ),
 		"droit" => Array("Type" => "varchar(3)", ),
+		"storage" => Array("Type" => "varchar(10)", "Default" => "local" ),
+		"size" => Array("Type" => "numeric" ),
 		"actif" => Array("Type" => "enum('oui','non')", "Default" => "oui", "Index"=>1),
 		"uid_creat" => Array("Type" => "int(10) unsigned", "Default" => "0"),
 		"dte_creat" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
@@ -238,6 +240,8 @@ $tabTmpl=Array
 	$obj=new folder_core(0,$sql);
 	$obj->genSqlTab($tabTmpl);
 	$obj=new paper_core(0,$sql);
+	$obj->genSqlTab($tabTmpl);
+	$obj=new paper_read_core(0,$sql);
 	$obj->genSqlTab($tabTmpl);
 	$obj=new comment_core(0,$sql);
 	$obj->genSqlTab($tabTmpl);

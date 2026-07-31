@@ -221,6 +221,13 @@
   font-weight: 400;
   margin-left: auto;
 }
+
+/* Unread documents */
+.unread a {
+  background-color: var(--p67-danger-soft);
+  border: 1px solid var(--p67-danger);
+}
+
 </style>
 
 
@@ -320,7 +327,7 @@
           <div class="paper-ico" style="flex-shrink:0;">
             <i class="mdi mdi-file-document-outline"></i>
           </div>
-          <input type="text" id="contentTitle" class="form-control" readonly>
+          <input type="text" id="contentTitle" class="form-control" disabled>
         </div>
         <div class="modal-header-actions" style="margin-left:10px;">
           <!-- BEGIN: edit -->
@@ -343,19 +350,23 @@
         <div class="modal-fields-grid">
           <div class="form-group">
             <label class="col-form-label" style="font-size:0.72rem; text-transform:uppercase; letter-spacing:.06em;">Auteur</label>
-            <input type="text" id="contentAuthor" class="form-control" readonly>
+            <input type="text" id="contentAuthor" class="form-control" disabled>
           </div>
           <div class="form-group">
             <label class="col-form-label" style="font-size:0.72rem; text-transform:uppercase; letter-spacing:.06em;">Date de création</label>
-            <input type="text" id="contentDateCreate" class="form-control" readonly>
+            <input type="text" id="contentDateCreate" class="form-control" disabled>
           </div>
           <div class="form-group">
             <label class="col-form-label" style="font-size:0.72rem; text-transform:uppercase; letter-spacing:.06em;">Date de début</label>
-            <input type="date" id="contentDateStart" class="form-control" readonly>
+            <input type="date" id="contentDateStart" class="form-control" disabled>
           </div>
           <div class="form-group">
             <label class="col-form-label" style="font-size:0.72rem; text-transform:uppercase; letter-spacing:.06em;">Date d'échéance</label>
-            <input type="date" id="contentDateEnd" class="form-control" readonly>
+            <input type="date" id="contentDateEnd" class="form-control" disabled>
+          </div>
+          <div class="form-group">
+            <label class="col-form-label" style="font-size:0.72rem; text-transform:uppercase; letter-spacing:.06em;">Lecture obligatoire</label>
+            <select id="contentMandatory" class="form-control" disabled><option value="non">Non</option><option value="oui">Oui</option></select>
           </div>
         </div>
 
@@ -372,10 +383,17 @@
             </label>
             <input id="addFile" type="file" style="display:none">
           </div>
-          <div id="modalAttachments" style="margin-top:8px; display:flex; flex-wrap:wrap; gap:5px;"></div>
         </div>
-        <div class="modal-divider"></div>
 		<!-- END: adddoc -->
+        <div class="form-group">
+            <div id="modalAttachments" style="margin-top:8px; display:flex; flex-wrap:wrap; gap:5px;"></div>
+            <div id="modalReadAll" style="margin-top:15px; "></div>
+            <div id="modalConfirmRead" class="d-none" style="margin-top:15px; "><input type="checkbox" value="confirmed"> Confirmez que vous avez lu et compris les documents.</div>
+            <div id="modalSigned" class="d-none" style="margin-top:15px; ">Fiche lue le xx/xx/xxxx</div>
+        </div>
+
+
+        <div class="modal-divider"></div>
 
         <!-- Commentaires -->
         <div class="form-group">
@@ -407,6 +425,10 @@
 
   var currentPaper = 0;
   var isEditing = false;
+  var isAllRead = false;
+  var isSigned = false;
+  var lstDocuments = [];
+  var openPaper = {paper};
 
 // ── Chargement liste ──────────────────────────────────────────
   function loadPapers() {
@@ -416,23 +438,32 @@
     var sort   = $('#selectSort').val();
 
     $.get('/api/v1/docs/lstpaper?id={id}&filter='+filter+'&date='+date+'&sort='+sort+'&crit='+crit)
-          .done(function(data){ renderPapers(data); 
-    });
+      .done(function(data){ 
+        lstDocuments=data.data;
+        renderPapers(lstDocuments);
+
+        if (openPaper>0)
+        {
+          loadContent(openPaper);
+        }
+
+      });
+
   }
 
   function renderPapers(data) {
     var html = '';
     var count = 0;
 
-    for (var k in data.data) {
-      var p = data.data[k];
+    for (var k in data) {
+      var p = data[k];
       count++;
 
       // Attachements en pills
       var attachHtml = '';
       for (var d in p.doc) {
-        attachHtml += '<a href="' + p.doc[d].url + '" target="_blank" class="attach-pill" onclick="event.stopPropagation();">' +
-          '<i class="mdi mdi-file-' + p.doc[d].icon + '" style="color:' + p.doc[d].color + ';"></i>' + p.doc[d].name + '</a>';
+        attachHtml += '<div class="'+((p.doc[d].read) ? "" : "unread")+'"><a href="' + p.doc[d].url + '" target="_blank" class="attach-pill" onclick="event.stopPropagation();">' +
+          '<i class="mdi mdi-file-' + p.doc[d].icon + '" style="color:' + p.doc[d].color + ';"></i>' + p.doc[d].name + '</a></div>';
       }
 
       var authorHtml = p.author ? '<span><i class="mdi mdi-account-outline"></i>' + p.author + '</span>' : '';
@@ -472,57 +503,86 @@
     $('#paperCount').text(count + ' document' + (count > 1 ? 's' : ''));
   }
 
-  // ── Ouverture modal ───────────────────────────────────────────
-  function loadContent(id) {
-    currentPaper = id;
-    isEditing = false;
+    // ── Ouverture modal ───────────────────────────────────────────
+    function loadContent(id)
+    {
+        currentPaper = id;
+        isEditing = false;
 
-    $.get('/api/v1/docs/getpaper?id=' + id).done(function(data) {
-      $('#contentTitle').val(data.data.title);
-      $('#contentAuthor').val(data.data.author);
-      $('#contentDateCreate').val(data.data.created);
-      $('#contentDateStart').val(data.data.dte_start);
-      $('#contentDateEnd').val(data.data.dte_end);
-      $('#contentNewComment').val('');
-      setReadonly(true);
+        $.get('/api/v1/docs/getpaper?id=' + id).done(function(data) {
+            $('#contentTitle').val(data.data.title);
+            $('#contentAuthor').val(data.data.author);
+            $('#contentDateCreate').val(data.data.created);
+            $('#contentDateStart').val(data.data.dte_start);
+            $('#contentDateEnd').val(data.data.dte_end);
+            document.getElementById('contentMandatory').value = data.data.mandatory;
+            $('#contentNewComment').val('');
+            setReadonly(true);
 
-      // Pièces jointes dans la modal
-      var attHtml = '';
-      if (data.data.doc) {
-        for (var d in data.data.doc) {
-          var tmp = $('<div>').html(data.data.doc[d].url);
-          var a = tmp.find('a');
-          var fname = a.attr('title') || a.text().trim();
-          var href  = a.attr('href') || '#';
-          var ico   = fileIcon(fname);
-          var col   = fileColor(fname);
-          attHtml += '<a href="' + href + '" target="_blank" class="attach-pill">' +
-            '<i class="mdi ' + ico + '" style="color:' + col + ';"></i>' + fname + '</a>';
-        }
-      }
-      $('#modalAttachments').html(attHtml);
+            // Pièces jointes dans la modal
+            var attachHtml = '';
+            var nb=0;
+            if (lstDocuments)
+            {
+                for (var d in lstDocuments)
+                {
+                    if (lstDocuments[d].id==id)
+                    {
+                        for (var did in lstDocuments[d].doc)
+                        {
+                            attachHtml += '<div class="'+((lstDocuments[d].doc[did].read) ? "" : "unread")+'"><a href="' + lstDocuments[d].doc[did].url + '" target="_blank" class="attach-pill" onclick="event.stopPropagation();"><i class="mdi mdi-file-' + lstDocuments[d].doc[did].icon + '" style="color:' + lstDocuments[d].doc[did].color + ';"></i>' + lstDocuments[d].doc[did].name + '</a></div>';
+                            if (!lstDocuments[d].doc[did].read) { nb++; }
+                        }
+                    }
+                }
+                $('#modalAttachments').html(attachHtml);
+            }
 
-	$("#contentComment").html("");
-	$.get('/api/v1/docs/lstcomment?id='+id).done(function(data)
-	{
-    for (var key in data.data)
-		{
-		//	showComment(data.data[key].avatar,data.data[key].description,data.data[key].author,data.data[key].created);
-			var newComment='<div class="feed-item"><div class="feed-avatar"><img src="/'+data.data[key].avatar+'" alt="avatar"></div>';
-			newComment+='<div class="feed-body"><div class="feed-title"><div class="feed-meta">'+data.data[key].author+'<span class="sep">·</span><i class="mdi mdi-clock-outline" style="font-size:.8rem;"></i>'+data.data[key].created+'</div></div>';
-			newComment+='<p class="feed-text">'+data.data[key].description+'</p></div>';
-			$("#contentComment").html($("#contentComment").html()+newComment);
+            if (nb>0)
+            {
+                $('#modalReadAll').html('<i class="mdi mdi-hand-pointing-right"></i> Lisez tous les documents surlignés en rouge et rafraichissez la page. ('+nb+' document'+((nb>1) ? 's' : '')+' à lire)');
+                $('#modalSigned').addClass("d-none");
+                $('#modalConfirmRead').addClass("d-none");
+            }
+            else
+            {
+                $('#modalReadAll').addClass("d-none");
+                if (data.data.read)
+                {
+                    $('#modalSigned').html('<i class="mdi mdi-lock-outline"></i> Documents lus le '+data.data.dte_read+'.');
+                    $('#modalSigned').removeClass("d-none");
+                    $('#modalConfirmRead').addClass("d-none");
+                    isSigned=true;
+                }
+                else
+                {
+                    $('#modalSigned').addClass("d-none");
+                    $('#modalConfirmRead').removeClass("d-none");
+                    isAllRead=true;
+                }
+            }
 
-		}
-	});
 
-      $('#paperContent').modal('show');
-    });
-  }
+        $("#contentComment").html("");
+        $.get('/api/v1/docs/lstcomment?id='+id).done(function(data)
+        {
+            for (var key in data.data)
+                {
+                //	showComment(data.data[key].avatar,data.data[key].description,data.data[key].author,data.data[key].created);
+                    var newComment='<div class="feed-item"><div class="feed-avatar"><img src="/'+data.data[key].avatar+'" alt="avatar"></div>';
+                    newComment+='<div class="feed-body"><div class="feed-title"><div class="feed-meta">'+data.data[key].author+'<span class="sep">·</span><i class="mdi mdi-clock-outline" style="font-size:.8rem;"></i>'+data.data[key].created+'</div></div>';
+                    newComment+='<p class="feed-text">'+data.data[key].description+'</p></div>';
+                    $("#contentComment").html($("#contentComment").html()+newComment);
+                }
+            });
+
+            $('#paperContent').modal('show');
+        });
+    }
 
   function setReadonly(on) {
-    ['#contentTitle','#contentDateStart','#contentDateEnd'].forEach(function(sel) {
-      $(sel).prop('readonly', on);
+    ['#contentTitle','#contentDateStart','#contentDateEnd','#contentMandatory'].forEach(function(sel) {
+      $(sel).prop('disabled', on);
       if (on) $(sel).removeClass('contentEditable');
       else    $(sel).addClass('contentEditable');
     });
@@ -549,30 +609,37 @@
     });
   }
 
-  $('#save').on('click', function() {
+    $('#save').on('click', function() {
+        if (isEditing)
+        {
+            $.post('/api/v1/docs/postpaper', {
+                id: currentPaper,
+                title: $('#contentTitle').val(),
+                mandatory: $('#contentMandatory').val(),
+                dte_start: $('#contentDateStart').val(),
+                dte_end: $('#contentDateEnd').val()
+            }).done(function() {
+                $('#paperTitle_' + currentPaper).text($('#contentTitle').val());
+            });
+        }
+        if ($("#contentNewComment").val()!="")
+        {
+            $.post( "/api/v1/docs/postcomment", { id: currentPaper, comment:$("#contentNewComment").val() } ).done(function(data) {
+                console.log("Comment saved");
+                $("#contentComment").html($("#contentComment").html()+$("#contentNewComment").val());
+                //showComment(data.avatar,data.description,data.author,data.created);
+            });
+        }
+        if (isAllRead)
+        {
+            console.log("Save reading confirmation");
+            $.post( "/api/v1/docs/postread", { id: currentPaper } ).done(function(data) {
+                console.log("Confirmation saved");
+            });
+        }
 
-	if (isEditing)
-	{
-		$.post('/api/v1/docs/postpaper', {
-			id: currentPaper,
-			title: $('#contentTitle').val(),
-			dte_start: $('#contentDateStart').val(),
-			dte_end: $('#contentDateEnd').val()
-		}).done(function() {
-			$('#paperTitle_' + currentPaper).text($('#contentTitle').val());
-		});
-	}
-	if ($("#contentNewComment").val()!="")
-	{
-		$.post( "/api/v1/docs/postcomment", { id: currentPaper, comment:$("#contentNewComment").val() } ).done(function(data) {
-			console.log("Comment saved");
-			$("#contentComment").html($("#contentComment").html()+$("#contentNewComment").val());
-			//showComment(data.avatar,data.description,data.author,data.created);
-		});
-	}
-
-    $('#paperContent').modal('hide');
-  });
+        $('#paperContent').modal('hide');
+    });
 
   $('#cancel, #close').on('click', function() { $('#paperContent').modal('hide'); });
 
@@ -619,50 +686,54 @@
   });
 
 
-  function uploadData(id, fd) {
-	folder={id};
-	if (folder==0)
-	{
-		return;
-	}
+  function uploadData(id, fd)
+  {
+  	folder={id};
+	  if (folder==0)
+	  {
+		  return;
+	  }
 
-	$.ajax({
-      url: '/api/v1/docs/postdoc?id='+id+'&folder='+folder,
-      type: 'POST',
-      data: fd,
-      processData: false,
-      contentType: false,
-      success: function(response) {
-        if (id === 0) {
-          // Nouveau document : ajout en tête de liste
-          var ico = fileIcon(response.title);
-          var col = fileColor(response.title);
-          var html = '<div class="paper-item" id="paperItem_' + response.id + '" onclick="loadContent(' + response.id + ');">' +
-            '<div class="paper-ico"><i class="mdi mdi-file-document-outline"></i></div>' +
-            '<div class="paper-content">' +
-              '<div class="paper-title" id="paperTitle_' + response.id + '">' + response.title + '</div>' +
-              '<div class="paper-meta"><span><i class="mdi mdi-clock-outline"></i>' + response.created + '</span></div>' +
-              '<div class="paper-attachments">' +
-                '<a href="' + response.href + '" target="_blank" class="attach-pill" onclick="event.stopPropagation();">' +
-                  '<i class="mdi ' + ico + '" style="color:' + col + ';"></i>' + response.title + '</a>' +
+    $.ajax({
+        url: '/api/v1/docs/postdoc?id='+id+'&folder='+folder,
+        type: 'POST',
+        data: fd,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+          if (id === 0)
+          {
+            // Nouveau document : ajout en tête de liste
+            var icon = response.icon;
+            var color = response.color;
+            var html = '<div class="paper-item" id="paperItem_' + response.id + '" onclick="loadContent(' + response.id + ');">' +
+              '<div class="paper-ico"><i class="mdi mdi-file-document-outline"></i></div>' +
+              '<div class="paper-content">' +
+                '<div class="paper-title" id="paperTitle_' + response.id + '">' + response.title + '</div>' +
+                '<div class="paper-meta"><span><i class="mdi mdi-clock-outline"></i>' + response.created + '</span></div>' +
+                '<div class="paper-attachments">' +
+                  '<a href="' + response.href + '" target="_blank" class="attach-pill" onclick="event.stopPropagation();">' +
+                    '<i class="mdi ' + icon + '" style="color:' + color + ';"></i>' + response.title + '</a>' +
+                '</div>' +
               '</div>' +
-            '</div>' +
-            '<div class="paper-actions">' +
-              '<button class="action-btn" onclick="event.stopPropagation();loadContent(' + response.id + ');"><i class="mdi mdi-pencil-outline"></i></button>' +
-              '<button class="action-btn danger" onclick="event.stopPropagation();archivePaper(' + response.id + ');"><i class="mdi mdi-archive-outline"></i></button>' +
-            '</div>' +
-          '</div>';
-          $('#lstPapers').prepend(html);
-        } else {
-          // Ajout de pièce jointe à un doc existant
-          var ico2 = fileIcon(response.title);
-          var col2 = fileColor(response.title);
-          $('#paperDocument_' + id).append(
-            '<a href="' + response.href + '" target="_blank" class="attach-pill" onclick="event.stopPropagation();">' +
-              '<i class="mdi ' + ico2 + '" style="color:' + col2 + ';"></i>' + response.title + '</a>');
+              '<div class="paper-actions">' +
+                '<button class="action-btn" onclick="event.stopPropagation();loadContent(' + response.id + ');"><i class="mdi mdi-pencil-outline"></i></button>' +
+                '<button class="action-btn danger" onclick="event.stopPropagation();archivePaper(' + response.id + ');"><i class="mdi mdi-archive-outline"></i></button>' +
+              '</div>' +
+            '</div>';
+            $('#lstPapers').prepend(html);
+          } 
+          else
+          {
+            // Ajout de pièce jointe à un doc existant
+            var icon = response.icon;
+            var color = response.color;
+            $('#paperDocument_' + id).append(
+              '<a href="' + response.href + '" target="_blank" class="attach-pill" onclick="event.stopPropagation();">' +
+                '<i class="mdi ' + icon + '" style="color:' + color + ';"></i>' + response.title + '</a>');
+          }
         }
-      }
-    });
+      });
   }
   </script>
 

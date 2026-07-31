@@ -111,7 +111,7 @@
 				}
 				$doc = new document_core(0,$sql,"avatar");
 				$doc->droit="ALL";
-				$err=$doc->Save($id,$_FILES["form_photo"]["name"],$_FILES["form_photo"]["tmp_name"]);
+				$err=$doc->Save($id,$_FILES["form_photo"]["name"],$_FILES["form_photo"]["tmp_name"],$_FILES["form_photo"]["size"],"local");
 				$doc->Resize(200,240);
 
 				affInformation($err,"error");
@@ -126,7 +126,7 @@
 				if ($n!="")
 				{
 					$doc = new document_core(0,$sql);
-					$doc->Save($id,$_FILES["form_adddocument"]["name"][$i],$_FILES["form_adddocument"]["tmp_name"][$i]);
+					$doc->Save($id,$_FILES["form_adddocument"]["name"][$i],$_FILES["form_adddocument"]["tmp_name"][$i],$_FILES["form_adddocument"]["size"][$i]);
 				}
 			}
 		}
@@ -315,7 +315,7 @@
 		}
 	}
 
-	// Affiche les documents
+// ---- Affiche les documents
 
 	// Devrait être VisuDocument pour afficher le bloc
 	// ModifUserDocument pour passer en mode édition
@@ -349,7 +349,7 @@
 		$tmpl_x->parse("corps.aff_documents");		
 	}
 
-	// Echéances
+// ---- Echéances
 	if ($MyOpt["module"]["echeances"]=="on")
 	{
 		if ( (GetMyId($id)) || (GetDroit("ModifUserAll")) || (GetDroit("ModifUserEcheance")) || (GetDroit("VisuUserEcheance")) )
@@ -383,7 +383,7 @@
 		}
 	}
 
-// ---- Données spécifique
+// ---- Données spécifiques
 
 	if (file_exists($appfolder."/modules/membres/custom.inc.php"))
 	{

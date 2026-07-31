@@ -97,13 +97,13 @@
 				$doc->editmode="read";
 				$attr=$doc->getAttributes();
 				$line["doc"][$did]["url"]=$doc->Affiche();
-//				$line["doc"][$did]["name"]=$doc->name;
 				$line["doc"][$did]["name"]=$doc->originalname;
 				$line["doc"][$did]["url"]=$doc->Path();
 				$line["doc"][$did]["fullpath"]=$doc->Affiche();
 				$line["doc"][$did]["ext"]=$attr["ext"];
 				$line["doc"][$did]["icon"]=$attr["icon"];
 				$line["doc"][$did]["color"]=$attr["color"];
+				$line["doc"][$did]["read"]=$doc->read($gl_uid);
 
 				if (preg_match("/".$crit."/i",$doc->name))
 				{

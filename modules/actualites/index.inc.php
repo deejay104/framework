@@ -25,6 +25,7 @@
 	  { header("HTTP/1.0 401 Unauthorized"); exit; }
 
 // ---- Charge les dépendances
+	require_once ("class/folder.inc.php");
 	require_once ("class/document.inc.php");
 	require_once ("class/echeance.inc.php");
 
@@ -136,6 +137,36 @@
 
 	}
 
+// ---- Documents obligatoires
+
+	$lstdoc=MandatoryPaper($gl_uid);
+		
+	if (is_array($lstdoc))
+	{
+		$nb=0;
+		$showpaper=array();
+		foreach($lstdoc as $i=>$did)
+		{
+			if (($did["read"]==0) && (!isset($showpaper[$did["paper"]])))
+			{
+				$showpaper[$did["paper"]]=1;
+				$nb++;
+				$doc = new paper_core($did["paper"],$sql);
+				$tmpl_x->assign("form_mandatory_id_folder",$did["folder"]);
+				$tmpl_x->assign("form_mandatory_id_paper",$did["paper"]);
+				$tmpl_x->assign("form_mandatory_document_name",$doc->val("title"));
+				$tmpl_x->parse("corps.aff_mandatorydocs.lst_mandatorydocs");
+			}
+		}
+	}	
+
+	if ($nb>0)
+	{
+		$tmpl_x->assign("nb_mandatory",$nb." document".(($nb>1) ? "s" : "")." en attente");
+		$tmpl_x->parse("corps.aff_mandatorydocs");
+	}
+
+
 // ---- Derniers message des forums
 
 	$lstdoc=LastDocument();
@@ -145,9 +176,7 @@
 		foreach($lstdoc as $i=>$did)
 		{
 			$doc = new document_core($did,$sql);
-			$tmpl_x->assign("form_document_name",$doc->name);
 			$tmpl_x->assign("form_document_link",$doc->Affiche("name","name"));
-			$tmpl_x->assign("form_document_time",DisplayDate($doc->dte_creat));
 			$tmpl_x->parse("corps.aff_lastdocs.lst_lastdocs");
 		}
 	}	

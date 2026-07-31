@@ -171,4 +171,15 @@ $MyOptTmpl["styleColor"]["TextBackgroundHover"]="ff6600";
 $MyOptTmpl["styleColor"]["LineBackgroundHover"]="ffe1e1";
 $MyOptTmpl["styleColor"]["BorderBlack"]="013366";
 
+// S3
+$MyOptTmpl["storage"]="local";
+$MyOptHelp["storage"]="Destination par défaut des fichiers (local=Stockage local, s3=S3)";
+
+$MyOptTmpl["s3"]["bucket"]="mnms-ea-dev";
+$MyOptTmpl["s3"]["region"]="sbg";
+$MyOptTmpl["s3"]["hostname"]="s3.sbg.io.cloud.ovh.net";
+$MyOptTmpl["s3"]["key"]="";
+$MyOptTmpl["s3"]["secret"]="";
+$MyOptTmpl["s3"]["folder"]="dev";
+
 ?>

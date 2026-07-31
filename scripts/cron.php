@@ -58,7 +58,7 @@
 	require ("class/user.inc.php");
 
 // ---- Se connecte � la base MySQL
-	$MyOpt["tbl"]=$gl_tbl;
+	$MyOpt["tbl"]=PREFIX_TBL;
 	require ("class/mysql.inc.php");
 
 	$sql = new mysql_core($mysqluser, $mysqlpassword, $hostname, $db);

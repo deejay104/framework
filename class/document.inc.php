@@ -1,4 +1,6 @@
 <?php
+require_once ("class/awss3.inc.php");
+
 /*
     MnMs Framework
     Copyright (C) 2018 Matthieu Isorez
@@ -37,14 +39,16 @@ class document_core{
 	public $expire="";
 	public $name="";
 	public $originalname="";
+	public $size=0;
 	public $filename ="";
 	public $type ="";
 	public $dossier ="";
 	public $droit ="";
 	public $editmode ="";
-	public $filepath ="";
 
-
+	protected $storage = "local";
+	protected $destpath ="";
+	protected $tmpname="";
 	protected $table="document";
 
  	# Constructor
@@ -53,7 +57,6 @@ class document_core{
 		global $gl_uid;
 
 		$this->sql=$sql;
-		$this->tbl=$MyOpt["tbl"];
 		$this->myuid=$gl_uid;
 		$this->expire=$MyOpt["expireCache"];
 
@@ -69,7 +72,8 @@ class document_core{
 		$this->uid_creat=0;
 		$this->dte_creat="";
 		$this->editmode="std";
-		$this->filepath="../documents";
+		$this->destpath="../documents";
+
 
 		if ($id>0)
 		{
@@ -87,7 +91,7 @@ class document_core{
 	function load($id){
 		$this->id=$id;
 		$sql=$this->sql;
-		$query = "SELECT * FROM ".$this->tbl."_document WHERE id='$id'";
+		$query = "SELECT * FROM ".PREFIX_TBL."_document WHERE id='$id'";
 		$res = $sql->QueryRow($query);
 
 		if ((isset($res["id"])) && ($res["id"]>0))
@@ -99,6 +103,8 @@ class document_core{
 			$this->uid=$res["uid"];
 			$this->type=$res["type"];
 			$this->dossier=$res["dossier"];
+			$this->storage=$res["storage"];
+			$this->size=$res["size"];
 			$this->droit=$res["droit"];
 			$this->actif=$res["actif"];
 			$this->uid_creat=$res["uid_creat"];
@@ -111,52 +117,110 @@ class document_core{
 	}
 
 
-	function Save($uid,$name,$tmpname)
+	function Save($uid,$name,$tmpname,$size=0,$torage="")
 	{ 
-		global $gl_uid;
+		global $gl_uid,$MyOpt;
 		$sql=$this->sql;
 
 		$ret="";
-		
+
+		// Temporary location
+		$this->tmpname=$tmpname;
+
+		if (!is_uploaded_file($this->tmpname))
+		{
+			apiError(500,"File not sent with POST",true,"",array());
+		}
+		if (!is_dir($this->destpath))
+		{
+			apiError(500,"Destination folder does not exist",true,"",array());
+		}
+		if (!is_writable($this->destpath))
+		{
+			apiError(500,"Destination folder is not writable (".$destDir.")",true,"",array());
+		}
+		if (($size>0) && ($size!=filesize($this->tmpname)))
+		{
+			apiError(500,"File size is incorrect (".$size."<>".filesize($this->tmpname).")",true,"",array());
+		}
+
+
 		$myext=GetExtension($name);
 		if (strlen($name)>100)
 		{
 			$name=substr(GetFilename($name),0,96).".".$myext;
 		}
-		$name=addslashes($name);
-
-	  	$query="INSERT INTO ".$this->tbl."_document SET name='$name',originalname='$name', uid='$uid', droit='$this->droit', type='$this->type', actif='oui', uid_creat='$gl_uid',dte_creat='".now()."', uid_maj='$gl_uid',dte_maj='".now()."'";
-		$this->id=$sql->Insert($query);
-
-		$myname=CompleteTxt($this->id,6,"0");
-
-		# Divide files per 1000 files folders
-		$mypath=substr($myname,0,3);
-		if (!is_dir($this->filepath."/".$mypath))
-		{
-		  	mkdir($this->filepath."/".$mypath);
-		}
-
-		$this->uid=$uid;
-		$this->filename=$mypath."/".$myname.".".$myext;
 		$this->originalname=$name;	
 		$this->name=$name;
 
-		## local storage
-		# Move file to documents folder
-		if (move_uploaded_file($tmpname,$this->filepath."/".$this->filename))
+		$name=addslashes($name);
+
+	  	$query="INSERT INTO ".PREFIX_TBL."_document SET name='$name',originalname='$name', uid='$uid', droit='$this->droit', type='$this->type', actif='oui', uid_creat='$gl_uid',dte_creat='".now()."', uid_maj='$gl_uid',dte_maj='".now()."'";
+		$this->id=$sql->Insert($query);
+
+		$myname=CompleteTxt($this->id,6,"0");
+		$this->uid=$uid;
+
+
+		# Check orientation for images
+		if(is_array(getimagesize($this->tmpname)))
 		{
-		  	$query="UPDATE ".$this->tbl."_document SET filename='".$this->filename."' WHERE id='".$this->id."'";
-			$sql->Update($query);			
+			$this->orientation();
+		}
+
+		if ($torage=="")
+		{
+			if ($MyOpt["storage"]=="s3")
+			{
+				$storage="s3";
+			}
+			else
+			{
+				$storage="local";
+			}
+		}
+
+
+		if ($storage=="s3")
+		{
+			## S3 storage
+			$this->filename=$MyOpt["s3"]["folder"]."/uid-".$myname;
+			$s3=new s3_core($this->filename);
+			if (!$s3->save($this->tmpname))
+			{
+				apiError(500,"Error while uploading file to S3",true,"",array());
+			}
+			$query="UPDATE ".PREFIX_TBL."_document SET filename='".$this->filename."',storage='s3',size='".filesize($this->tmpname)."' WHERE id='".$this->id."'";
+			$sql->Update($query);
+			$this->storage="local";
+	
+			unlink($this->tmpname);
 		}
 		else
 		{
-			$ret.="Erreur de chargement du fichier<br/>";
+			## local storage
+
+			# Divide files per 1000 files folders
+			$mypath=substr($myname,0,3);
+			if (!is_dir($this->destpath."/".$mypath))
+			{
+				mkdir($this->destpath."/".$mypath);
+			}
+			$this->filename=$mypath."/".$myname.".".$myext;
+
+			# Move file to documents folder
+			if (move_uploaded_file($this->tmpname,$this->destpath."/".$this->filename))
+			{
+				$query="UPDATE ".PREFIX_TBL."_document SET filename='".$this->filename."',storage='local',size='".filesize($this->tmpname)."' WHERE id='".$this->id."'";
+				$sql->Update($query);
+				$this->storage="local";
+			}
+			else
+			{
+				apiError(500,"Error while moving file",true,"",array());
+			}
+
 		}
-
-		## S3 storage
-
-		$this->orientation();
 
 		return $ret;
 	}
@@ -178,7 +242,7 @@ class document_core{
 		$this->uid_maj=$gl_uid;
 		$this->dte_maj=now();
 
-		$sql->Edit($this->table,$this->tbl."_".$this->table,$this->id,$td);
+		$sql->Edit($this->table,PREFIX_TBL."_".$this->table,$this->id,$td);
 
 		return $ret;
 	}
@@ -195,21 +259,21 @@ class document_core{
 			$filename=substr(GetFilename($name),0,96).".".$myext;
 		}
 
-	  	$query="INSERT INTO ".$this->tbl."_document SET name='".(($filename!="") ? $filename : $name)."', originalname='".(($filename!="") ? $filename : $name)."', uid='$uid', type='$this->type', droit='$droit',actif='oui', uid_creat='$gl_uid',dte_creat='".now()."'";
+	  	$query="INSERT INTO ".PREFIX_TBL."_document SET name='".(($filename!="") ? $filename : $name)."', originalname='".(($filename!="") ? $filename : $name)."', uid='$uid', type='$this->type', droit='$droit',actif='oui', uid_creat='$gl_uid',dte_creat='".now()."'";
 		$this->id=$sql->Insert($query);
 
 		$myname=CompleteTxt($this->id,6,"0");
 		$mypath=substr($myname,0,3);
 
-		if (!is_dir($this->filepath."/".$mypath))
+		if (!is_dir($this->destpath."/".$mypath))
 		  {
-		  	mkdir($this->filepath."/".$mypath);
+		  	mkdir($this->destpath."/".$mypath);
 		  }
 		$this->uid=$uid;
 		$this->filename=$mypath."/".$myname.".".$myext;
 
-		rename($name,$this->filepath."/".$this->filename);
-	  	$query="UPDATE ".$this->tbl."_document SET filename='".$this->filename."' WHERE id='".$this->id."'";
+		rename($name,$this->destpath."/".$this->filename);
+	  	$query="UPDATE ".PREFIX_TBL."_document SET filename='".$this->filename."' WHERE id='".$this->id."'";
 		$sql->Update($query);
 
 		return $ret;		
@@ -223,17 +287,17 @@ class document_core{
 
 		if ( ($this->uid_creat==$gl_uid) || (GetDroit("SupprimeDocument")) || ((isset($myuser->groupe[$this->droit])) && ($myuser->groupe[$this->droit])) )
 		{
-			if (($this->filename!="") && (file_exists($this->filepath."/".$this->filename)))
+			if (($this->filename!="") && (file_exists($this->destpath."/".$this->filename)))
 			{
-				if (unlink($this->filepath."/".$this->filename))
+				if (unlink($this->destpath."/".$this->filename))
 				{
 				  	$ret.="Fichier supprimé";
 				}
 			}
 			
-			if ((!file_exists($this->filepath."/".$this->filename)) || ($this->filename==""))
+			if ((!file_exists($this->destpath."/".$this->filename)) || ($this->filename==""))
 			{
-				$sql->Edit("document",$this->tbl."_document",$this->id,array("actif"=>'non', "uid_maj"=>$gl_uid, "dte_maj"=>now()));
+				$sql->Edit("document",PREFIX_TBL."_document",$this->id,array("actif"=>'non', "uid_maj"=>$gl_uid, "dte_maj"=>now()));
 			}
 		}
 		return $ret;
@@ -270,23 +334,37 @@ class document_core{
 		{
 			$txt.="<div id='doc_".$this->id."' class='docLink'>";
 			$txt.=(($type=="large") ? "<p>" : "");
-			if (file_exists($this->filepath."/".$this->filename))
+
+			if ($this->storage=="s3")
 			{
-				$fsize=CalcSize(filesize($this->filepath."/".$this->filename));
+				$fsize=CalcSize($this->size);
+				$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><i class='mdi mdi-file-".$attr["icon"]."' style='color:".$attr["color"].";'></i> ".(($type=="large") ? $filename." (".$fsize.") " : "")."</a>";		
+			}
+			else if (file_exists($this->destpath."/".$this->filename))
+			{
+				if ($this->size>0)
+				{
+					$fsize=CalcSize($this->size);
+				}
+				else
+				{
+					$fsize=CalcSize(filesize($this->destpath."/".$this->filename));
+				}
 				$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'><i class='mdi mdi-file-".$attr["icon"]."' style='color:".$attr["color"].";'></i> ".(($type=="large") ? $filename." (".$fsize.") " : "")."</a>";
 			}
 			else
 			{
 				$txt.="<i class='mdi mdi-file-hidden' style='color:".$attr["color"].";'></i> <s>".$filename."</s>";
 			}
+
 			$txt.=(($type=="large") ? "</p>" : "");
 			$txt.="</div>";
 		}
 		else if ($this->editmode=="read")
 		{
-			if (file_exists($this->filepath."/".$this->filename))
+			if (file_exists($this->destpath."/".$this->filename))
 			{
-				$fsize=CalcSize(filesize($this->filepath."/".$this->filename));
+				$fsize=CalcSize(filesize($this->destpath."/".$this->filename));
 
 				$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank' >";
 				$txt.="<i class='mdi mdi-file-".$attr["icon"]." doc-icon' style='color:".$attr["color"].";'></i>";
@@ -311,9 +389,29 @@ class document_core{
 		else
 		{
 			$txt.="<div id='doc_".$this->id."' class='action doc-list-item'>";
-			if (file_exists($this->filepath."/".$this->filename))
+
+			if ($this->storage=="s3")
 			{
-				$fsize=CalcSize(filesize($this->filepath."/".$this->filename));
+				$fsize=CalcSize($this->size);
+			}
+			else if (file_exists($this->destpath."/".$this->filename))
+			{
+				if ($this->size>0)
+				{
+					$fsize=CalcSize($this->size);
+				}
+				else
+				{
+					$fsize=CalcSize(filesize($this->destpath."/".$this->filename));
+				}
+			}
+			else
+			{
+				$fsize=0;
+			}
+
+			if ($fsize>0)
+			{
 				$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'>";
 				$txt.="<i class='mdi mdi-file-".$attr["icon"]." doc-icon' style='color:".$attr["color"].";'></i>";
 				if ($type!="short")
@@ -322,7 +420,6 @@ class document_core{
 					$txt.="<span class='doc-size'>(".$fsize.")</span>";
 				}
 				$txt.="</a>";
-
 			}
 			else
 			{
@@ -340,6 +437,24 @@ class document_core{
 		return $txt;
 	}
 
+	function read($uid)
+	{	global $MyOpt;
+
+		$sql=$this->sql;	
+		$query="SELECT * FROM ".PREFIX_TBL."_doc_lus WHERE actif='oui' AND uid='".$uid."' AND id_doc='".$this->id."'";
+		$res=$sql->QueryRow($query);
+	
+		if ((isset($res["id"])) && ($res["id"]>0))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+
+	}
+
 	function Path()
 	{	global $MyOpt;
 		return $MyOpt["host"]."/doc.php?id=".$this->id;
@@ -347,7 +462,7 @@ class document_core{
 
 	function getAttributes()
 	{
-		$myext=GetExtension($this->filename);
+		$myext=GetExtension($this->name);
 
 		if ($myext=="xls")
 		  { $icon="excel"; $color="#27ae60"; }
@@ -418,32 +533,42 @@ class document_core{
 
 		// Set document as read
 		$sql=$this->sql;	
-		$query="SELECT * FROM ".$this->tbl."_doc_lus WHERE actif='oui' AND uid='".$gl_uid."' AND id_doc='".$this->id."'";
+		$query="SELECT * FROM ".PREFIX_TBL."_doc_lus WHERE actif='oui' AND uid='".$gl_uid."' AND id_doc='".$this->id."'";
 		$res=$sql->QueryRow($query);
 	
 		if ((isset($res["id"])) && ($res["id"]>0))
 		{
-			$query="UPDATE ".$this->tbl."_doc_lus SET dte_maj='".now()."'";
+			$query="UPDATE ".PREFIX_TBL."_doc_lus SET dte_maj='".now()."'";
 			$sql->Update($query);
 		}			
 		else
 		{
-			$query="INSERT INTO ".$this->tbl."_doc_lus SET id_doc='".$this->id."', uid='".$gl_uid."', dte_read='".now()."', uid_creat='".$gl_uid."',dte_creat='".now()."', uid_maj='".$gl_uid."', dte_maj='".now()."'";
+			$query="INSERT INTO ".PREFIX_TBL."_doc_lus SET id_doc='".$this->id."', uid='".$gl_uid."', dte_read='".now()."', uid_creat='".$gl_uid."',dte_creat='".now()."', uid_maj='".$gl_uid."', dte_maj='".now()."'";
 			$sql->Update($query);
 		}
 
 		// Check if file exists
-		$myext=GetExtension($this->filename);
-		$fname=$this->filepath."/".$this->filename;
-		if (!file_exists($fname))
-		{
-		  	$fname="static/images/icn32_erreur.png";
-		  	$myext="png";
-		}
+		$myext=GetExtension($this->originalname);
 
-		if ($fd = fopen ($fname, "r"))
+		if ($this->storage=="s3")
 		{
-			$fsize = filesize($fname);
+			## S3 storage
+			$s3=new s3_core($this->filename);
+			$data=$s3->load();
+
+
+			if ($data=="")
+			{
+				header('Content-Type: image/png');
+				header("Content-Disposition: ".$mode." filename=\"missing.png\";");
+				header('Pragma: public');
+
+				// imagegif($source);
+				readfile("static/images/icn32_erreur.png");
+				exit;
+			}		
+
+			$fsize = strlen($data);
 			if ($myext=="jpg")
 			{ header("Content-Type: image/jpeg"); }
 			else if ($myext=="png")
@@ -453,37 +578,67 @@ class document_core{
 			else
 			{ header("Content-type: application/octet-stream"); }
 
-			header("Content-Disposition: ".$mode." filename=\"".$this->name."\";");
+			header("Content-Disposition: ".$mode." filename=\"".$this->originalname."\";");
 			header("Content-length: $fsize");
 			header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 			header('Pragma: public');
 
-			while(!feof($fd))
+			echo $data;
+		}
+		else
+		{
+			$fname=$this->destpath."/".$this->filename;
+			if (!file_exists($fname))
 			{
-				$buffer = fread($fd, 2048);
-				echo $buffer;
+				$fname="static/images/icn32_erreur.png";
+				$myext="png";
+			}
+
+			if ($fd = fopen ($fname, "r"))
+			{
+				$fsize = filesize($fname);
+				if ($myext=="jpg")
+				{ header("Content-Type: image/jpeg"); }
+				else if ($myext=="png")
+				{ header("Content-Type: image/png"); }
+				else if ($myext=="pdf")
+				{ header("Content-type: application/pdf"); }
+				else
+				{ header("Content-type: application/octet-stream"); }
+
+				header("Content-Disposition: ".$mode." filename=\"".$this->originalname."\";");
+				header("Content-length: $fsize");
+				header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+				header('Pragma: public');
+
+				while(!feof($fd))
+				{
+					$buffer = fread($fd, 2048);
+					echo $buffer;
+				}
 			}
 		}
 	}
 
 	function Resize($newwidth,$newheight,$dest="")
 	{
-		$file=$this->filepath."/".$this->filename;
+		$file=$this->destpath."/".$this->filename;
+
+		if (!file_exists($file))
+		{
+		  	$file="static/images/icn32_erreur.png";
+		}
+
 		if ($dest=="")
 		{
-			$dest=$this->filepath."/".$this->filename;
+			$dest=$this->destpath."/".$this->filename;
 		}
 
 		if ((!is_numeric($newwidth)) || (!is_numeric($newheight)))
 		{
 		  	list($newwidth, $newheight) = getimagesize($file);
 		}
-		
-		if (!file_exists($file))
-		{
-		  	$file="static/images/icn32_erreur.png";
-		}
-		
+	
 		$thumb = imagecreatetruecolor($newwidth, $newheight);
 		$white = imagecolorallocate ($thumb, 255, 255, 255);
 		imagefill($thumb,0,0,$white); 
@@ -547,8 +702,9 @@ class document_core{
 
 	function orientation()
 	{
-		$file=$this->filepath."/".$this->filename;
-	  	list($newwidth, $newheight) = getimagesize($file);
+		$file=$this->tmpname;
+
+		list($newwidth, $newheight) = getimagesize($file);
 
 		if (!is_numeric($newwidth))
 		{
@@ -566,6 +722,12 @@ class document_core{
 		{
 			return false;
 		}
+
+		if (!isset($exif['Orientation']))
+		{
+			return false;
+		}
+
 		$orientation = $exif['Orientation'];	
 
 		$deg=0;
@@ -662,7 +824,7 @@ class document_core{
 
 	function isImage()
 	{
-		$file=$this->filepath."/".$this->filename;
+		$file=$this->destpath."/".$this->filename;
 
 		if(is_array(getimagesize($file))){
 			return true;
@@ -672,7 +834,7 @@ class document_core{
 
 	function getSize()
 	{
-		$file=$this->filepath."/".$this->filename;
+		$file=$this->destpath."/".$this->filename;
 
 		if (is_array(getimagesize($file)))
 		{
@@ -720,7 +882,7 @@ class document_core{
 				}
 				else
 				{
-					copy($this->filepath."/".$this->filename,"../".$mypath);
+					copy($this->destpath."/".$this->filename,"../".$mypath);
 				}
 			}
 
@@ -755,10 +917,10 @@ function GetFilename($file)
 }
 
 function ListDocument($sql,$uid,$type)
-  {
+{
 	global $MyOpt, $gl_uid, $myuser;
 
-	$query="SELECT ".$MyOpt["tbl"]."_document.id,".$MyOpt["tbl"]."_document.uid,".$MyOpt["tbl"]."_document.droit  FROM ".$MyOpt["tbl"]."_document WHERE ".$MyOpt["tbl"]."_document.actif='oui' ".(($uid>0) ? "AND ".$MyOpt["tbl"]."_document.uid='$uid'" : "" )." ".(($type!="") ? "AND ".$MyOpt["tbl"]."_document.type='$type'" : "" )." ORDER BY name";
+	$query="SELECT ".PREFIX_TBL."_document.id,".PREFIX_TBL."_document.uid,".PREFIX_TBL."_document.droit  FROM ".PREFIX_TBL."_document WHERE ".PREFIX_TBL."_document.actif='oui' ".(($uid>0) ? "AND ".PREFIX_TBL."_document.uid='$uid'" : "" )." ".(($type!="") ? "AND ".PREFIX_TBL."_document.type='$type'" : "" )." ORDER BY name";
 
 	$sql->Query($query);
 	$lstdoc=array();
@@ -778,13 +940,13 @@ function ListDocument($sql,$uid,$type)
 	}
 
 	return $lstdoc;
-  }
+}
 
-  function LastDocument()
-  {
+function LastDocument()
+{
 	global $sql,$MyOpt, $gl_uid, $myuser;
 
-	$query="SELECT id,uid,droit,type  FROM ".$MyOpt["tbl"]."_document WHERE ".$MyOpt["tbl"]."_document.actif='oui' ORDER BY dte_creat DESC LIMIT 0,20";
+	$query="SELECT id,uid,droit,type  FROM ".PREFIX_TBL."_document WHERE ".PREFIX_TBL."_document.actif='oui' ORDER BY dte_creat DESC LIMIT 0,20";
 
 	$sql->Query($query);
 	$lstdoc=array();
@@ -809,9 +971,46 @@ function ListDocument($sql,$uid,$type)
 	}
 
 	return $lstdoc;
-  }
+}
 
-  class document_lus_core extends objet_core {
+function MandatoryPaper($uid)
+{
+	global $sql,$MyOpt;
+
+	$query ="SELECT paper.id AS id_paper, paper.id_folder, folder.group_read, doc.id AS id_doc FROM ".PREFIX_TBL."_doc_paper AS paper LEFT JOIN ".PREFIX_TBL."_doc_folder AS folder ON folder.id=paper.id_folder LEFT JOIN ".PREFIX_TBL."_document AS doc ON paper.id=doc.uid AND doc.type='paper' AND doc.actif='oui' WHERE paper.actif='oui' AND (paper.dte_end>NOW() OR paper.dte_end='0000-00-00') AND paper.mandatory='oui'";
+
+	$sql->Query($query);
+
+	$lstdoc=array();
+	for($i=0; $i<$sql->rows; $i++)
+	{
+		$sql->GetRow($i);
+		if (GetDroit($sql->data["group_read"]))
+		{
+			$lstdoc[$sql->data["id_paper"]]["perm"]=$sql->data["group_read"];
+			$lstdoc[$sql->data["id_paper"]]["folder"]=$sql->data["id_folder"];
+			$lstdoc[$sql->data["id_paper"]]["paper"]=$sql->data["id_paper"];
+			$lstdoc[$sql->data["id_paper"]]["read"]=0;			
+		}
+	}
+
+	$query ="SELECT id_paper FROM ".PREFIX_TBL."_doc_read AS lus WHERE uid='".$uid."'";
+
+	$sql->Query($query);
+
+	for($i=0; $i<$sql->rows; $i++)
+	{
+		$sql->GetRow($i);
+		if (isset($lstdoc[$sql->data["id_paper"]]))
+		{
+			$lstdoc[$sql->data["id_paper"]]["read"]=1;		
+		}
+	}
+
+	return $lstdoc;
+}
+
+class document_lus_core extends objet_core {
 	protected $table="doc_lus";
 	protected $mod="document";
 	protected $rub="folder";
@@ -827,8 +1026,6 @@ function ListDocument($sql,$uid,$type)
 	protected $tabList=array(
 
 	);
-
-
 }
 
 ?>

@@ -54,7 +54,7 @@
 		// $tmpl_x->parse("corps.msgok");
 		affInformation($ret,"ok");
 		$MyOpt=UpdateVariables($MyOptTab);
-		$MyOpt["tbl"]=$gl_tbl;
+		$MyOpt["tbl"]=PREFIX_TBL;
 
 		header('Location: /admin/config', true, 303);
 		exit;

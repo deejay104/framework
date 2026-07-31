@@ -1887,7 +1887,7 @@ function AffTelephone($txt)
 // Génère le fichier des variables
 function GenereVariables($tab)
 {
-	global $sql,$gl_tbl;
+	global $sql;
 
 	$ret="";
 	$conffile="../static/cache/config/variables.inc.php";
@@ -1930,17 +1930,17 @@ function GenereVariables($tab)
 						$name2=$var;
 					}
 					
-					$query="SELECT id FROM ".$gl_tbl."_config WHERE param='variable' AND name1='".$name1."' AND name2='".$name2."'";
+					$query="SELECT id FROM ".PREFIX_TBL."_config WHERE param='variable' AND name1='".$name1."' AND name2='".$name2."'";
 					$res=$sql->QueryRow($query);
 
 					if ( (isset($res["id"])) && ($res["id"]>0) )
 					{
-						$query="UPDATE ".$gl_tbl."_config SET value='".addslashes($dd)."', dte_creat='".now()."' WHERE id='".$res["id"]."'";
+						$query="UPDATE ".PREFIX_TBL."_config SET value='".addslashes($dd)."', dte_creat='".now()."' WHERE id='".$res["id"]."'";
 						$sql->Update($query);
 					}
 					else
 					{
-						$query="INSERT INTO ".$gl_tbl."_config SET param='variable', name1='".$name1."', name2='".$name2."', value='".addslashes($dd)."', dte_creat='".now()."'";
+						$query="INSERT INTO ".PREFIX_TBL."_config SET param='variable', name1='".$name1."', name2='".$name2."', value='".addslashes($dd)."', dte_creat='".now()."'";
 						$ret=$sql->Insert($query);
 					}
 				}
@@ -2008,10 +2008,8 @@ function GenereFichierVariables($tab)
 
 function UpdateVariables($tab)
 {
-	global $gl_tbl;
-	
 	$MyOpt=array();
-	$MyOpt["tbl"]=$gl_tbl;
+	$MyOpt["tbl"]=PREFIX_TBL;
 	foreach($tab as $nom=>$d)
 	{
 		if (is_array($d))
@@ -2225,7 +2223,7 @@ function maskPart(string $str, int $keep): string
 
 function initDatabase($sql)
 {
-	global $tmpl_prg,$MyOpt,$mysqluser,$gl_tbl;
+	global $tmpl_prg,$MyOpt,$mysqluser;
 
 	// Vérifie si la table config existe
 	$q="SHOW TABLES";
@@ -2251,7 +2249,7 @@ function initDatabase($sql)
 		$tmpl_prg->assign("corefolder", $MyOpt["host"]."/".$corefolder);
 		$tmpl_prg->assign("rootfolder", $MyOpt["host"]);
 
-		if (($mysqluser=="") || ($gl_tbl==""))
+		if (($mysqluser=="") || (PREFIX_TBL==""))
 		{
 			$tmpl_prg->parse("main.configdb");
 		}

@@ -43,14 +43,13 @@
 
 		if (!GetDroit($folder->val("group_write")))
 		{
-			header("HTTP/1.0 401 Unauthorized");
+			apiError(401,"Not allowed to upload to this folder",true,"",array());
 			exit; 
 		}
 
 		$doc = new document_core(0,$sql,"paper");
 		$doc->droit=$folder->val("group_read");
-		$r=$doc->Save($id,$_FILES["file"]["name"],$_FILES["file"]["tmp_name"]);
-
+		$r=$doc->Save($id,$_FILES["file"]["name"],$_FILES["file"]["tmp_name"],$_FILES["file"]["size"]);
 		$result["id"]=$id;
 		$result["status"]=200;
 
@@ -60,6 +59,7 @@
 			$result["status"]="500";
 		}
 		$doc->editmode="regular";
+		$attr=$doc->getAttributes();
 
 		$result["command"]="new";
 		$result["type"]=$doc->type;
@@ -68,6 +68,8 @@
 		$result["link"]=$doc->Affiche();
 		$result["author"]=$myuser->fullname;
 		$result["created"]=now();
+		$result["icon"]="mdi-file-".$attr["icon"];
+		$result["color"]=$attr["color"];
 	}
 	else if ($fonc=="delete")
 	{

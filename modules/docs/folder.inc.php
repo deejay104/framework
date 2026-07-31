@@ -25,6 +25,7 @@
 	  { FatalError("Accès non autorisé (AccesDocuments)"); }
 
 	$id=checkVar("id","numeric");
+	$paper=checkVar("paper","numeric");
 	$crit=checkVar("crit","varchar",50);
 
 // --- Load folder's permission
@@ -39,6 +40,7 @@
 // ---- Affiche les bouttons
 
 	$tmpl_x->assign("id",$id);
+	$tmpl_x->assign("paper",$paper);
 	$tmpl_x->assign("crit",$crit);
 	$tmpl_x->assign("form_today",date("Y-m-d"));
 	$tmpl_x->assign("folder_name",$folder->val("title"));

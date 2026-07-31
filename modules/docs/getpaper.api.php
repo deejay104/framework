@@ -29,6 +29,10 @@
 	$result["data"]["dte_create"]=sql2date($paper->dte_creat,"jour");
 	$result["data"]["created"]=DisplayDate($paper->dte_creat);
 
+	$read = new paper_read_core($id,$sql);
+	$read->loadFromField(array("id_paper"=>$id,"uid"=>$gl_uid));
+	$result["data"]["read"]=($read->val("dte_read")!="0000-00-00 00:00:00") ? true : false;
+	$result["data"]["dte_read"]=$read->val("dte_read");
 	
 	echo json_encode($result);	
 ?>

@@ -9,5 +9,6 @@
 	$tabLang["lang_delpost"]="Souhaitez-vous supprimer cette actualité ?";
 	$tabLang["lang_upload"]="Chargement du document en cours";
 	$tabLang["lang_lastdocs"]="Derniers documents";
+	$tabLang["lang_mandatorydocs"]="Documents obligatoires";
 	
 ?>

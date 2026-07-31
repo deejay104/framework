@@ -19,7 +19,7 @@ function AjoutLog($txt)
 
 
 // ---- Charge la structure des tables de la version_compare
-        $MyOpt["tbl"]=$gl_tbl;
+        $MyOpt["tbl"]=PREFIX_TBL;
 
         $ret["data"].=AjoutLog($tabLang["lang_checkdb"]);
         require ("modules/admin/conf/structure.tmpl.php");
@@ -364,7 +364,7 @@ function AjoutLog($txt)
 
 
 // ---- Applique les patchs
-        $MyOpt["tbl"]=$gl_tbl;
+        $MyOpt["tbl"]=PREFIX_TBL;
         $ret["data"].=AjoutLog($tabLang["lang_patchcore"]);
 
         $tabPatch=array();
