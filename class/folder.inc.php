@@ -84,7 +84,7 @@ function ListActivePapers($id,$sql,$sort="dte_creat")
 		$crit["id_folder"]=$id;
 	}
 		
-	return ListeObjets($sql,"doc_paper",array("id","title","dte_start","dte_end","uid_creat","dte_creat"),$crit,array($sort));
+	return ListeObjets($sql,"doc_paper",array("id","title","mandatory","dte_start","dte_end","uid_creat","dte_creat"),$crit,array($sort));
 }
 
 class paper_read_core extends objet_core {

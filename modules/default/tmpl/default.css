@@ -1134,7 +1134,15 @@ textarea.form-control { min-height: 55px; resize: none; }
 
 .personal-badge {
   position:absolute; top:6px; right:8px;
-  background:var(--primary); color:#fff;
+  background-color:var(--p67-primary); 
+  color:#fff;
+  font-size:10px; font-weight:700; padding:2px 9px;
+  border-radius:20px; letter-spacing:.5px; text-transform:uppercase;
+}
+.mandatory-badge {
+  position:absolute; top:6px; right:8px;
+  background-color:var(--p67-warning); 
+  color:#fff;
   font-size:10px; font-weight:700; padding:2px 9px;
   border-radius:20px; letter-spacing:.5px; text-transform:uppercase;
 }

@@ -480,6 +480,10 @@
       var dte_today = new Date();
       var dte_doc = new Date(p.dte_end); 
 
+      if (p.mandatory=="oui")
+      {
+        html += '<span class="mandatory-badge">Obligatoire</span>';
+      }
       if (dte_doc<dte_today)
       {
         html += '<span class="personal-badge">Périmé</span>';
@@ -538,7 +542,11 @@
                 $('#modalAttachments').html(attachHtml);
             }
 
-            if (nb>0)
+            if (data.data.mandatory=="non")
+            {
+                $('#modalReadAll').addClass("d-none");
+            }
+            else if (nb>0)
             {
                 $('#modalReadAll').html('<i class="mdi mdi-hand-pointing-right"></i> Lisez tous les documents surlignés en rouge et rafraichissez la page. ('+nb+' document'+((nb>1) ? 's' : '')+' à lire)');
                 $('#modalSigned').addClass("d-none");
@@ -676,65 +684,81 @@
     e.stopPropagation(); e.preventDefault();
     var fd = new FormData();
     fd.append('file', e.originalEvent.dataTransfer.files[0]);
-    uploadData(currentPaper, fd);
+    uploadData(currentPaper, fd, "modal");
   });
 
   $('#addFile').on('change', function() {
     var fd = new FormData();
     fd.append('file', this.files[0]);
-    uploadData(currentPaper, fd);
+    uploadData(currentPaper, fd, "list");
   });
 
 
-  function uploadData(id, fd)
-  {
-  	folder={id};
-	  if (folder==0)
-	  {
-		  return;
-	  }
-
-    $.ajax({
-        url: '/api/v1/docs/postdoc?id='+id+'&folder='+folder,
-        type: 'POST',
-        data: fd,
-        processData: false,
-        contentType: false,
-        success: function(response) {
-          if (id === 0)
-          {
-            // Nouveau document : ajout en tête de liste
-            var icon = response.icon;
-            var color = response.color;
-            var html = '<div class="paper-item" id="paperItem_' + response.id + '" onclick="loadContent(' + response.id + ');">' +
-              '<div class="paper-ico"><i class="mdi mdi-file-document-outline"></i></div>' +
-              '<div class="paper-content">' +
-                '<div class="paper-title" id="paperTitle_' + response.id + '">' + response.title + '</div>' +
-                '<div class="paper-meta"><span><i class="mdi mdi-clock-outline"></i>' + response.created + '</span></div>' +
-                '<div class="paper-attachments">' +
-                  '<a href="' + response.href + '" target="_blank" class="attach-pill" onclick="event.stopPropagation();">' +
-                    '<i class="mdi ' + icon + '" style="color:' + color + ';"></i>' + response.title + '</a>' +
-                '</div>' +
-              '</div>' +
-              '<div class="paper-actions">' +
-                '<button class="action-btn" onclick="event.stopPropagation();loadContent(' + response.id + ');"><i class="mdi mdi-pencil-outline"></i></button>' +
-                '<button class="action-btn danger" onclick="event.stopPropagation();archivePaper(' + response.id + ');"><i class="mdi mdi-archive-outline"></i></button>' +
-              '</div>' +
-            '</div>';
-            $('#lstPapers').prepend(html);
-          } 
-          else
-          {
-            // Ajout de pièce jointe à un doc existant
-            var icon = response.icon;
-            var color = response.color;
-            $('#paperDocument_' + id).append(
-              '<a href="' + response.href + '" target="_blank" class="attach-pill" onclick="event.stopPropagation();">' +
-                '<i class="mdi ' + icon + '" style="color:' + color + ';"></i>' + response.title + '</a>');
-          }
+    function uploadData(id, fd, src)
+    {
+        folder={id};
+        if (folder==0)
+        {
+            return;
         }
-      });
-  }
-  </script>
+        $("#addContentText").html("Envoi du fichier...");
+console.log(src);
+        $.ajax({
+            url: '/api/v1/docs/postdoc?id='+id+'&folder='+folder,
+            type: 'POST',
+            data: fd,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                $.post('/api/v1/docs/postpaper', {
+                    id: id,
+                }).done(function() {
+                    console.log("paper updated");
+                });
+
+                if (id === 0)
+                {
+                    // Nouveau document : ajout en tête de liste
+                    var icon = response.icon;
+                    var color = response.color;
+                    var html = '<div class="paper-item" id="paperItem_' + response.id + '" onclick="loadContent(' + response.id + ');">' +
+                    '<div class="paper-ico"><i class="mdi mdi-file-document-outline"></i></div>' +
+                    '<div class="paper-content">' +
+                        '<div class="paper-title" id="paperTitle_' + response.id + '">' + response.title + '</div>' +
+                        '<div class="paper-meta"><span><i class="mdi mdi-clock-outline"></i>' + response.created + '</span></div>' +
+                        '<div class="paper-attachments">' +
+                        '<a href="' + response.href + '" target="_blank" class="attach-pill" onclick="event.stopPropagation();">' +
+                            '<i class="mdi ' + icon + '" style="color:' + color + ';"></i>' + response.title + '</a>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="paper-actions">' +
+                        '<button class="action-btn" onclick="event.stopPropagation();loadContent(' + response.id + ');"><i class="mdi mdi-pencil-outline"></i></button>' +
+                        '<button class="action-btn danger" onclick="event.stopPropagation();archivePaper(' + response.id + ');"><i class="mdi mdi-archive-outline"></i></button>' +
+                    '</div>' +
+                    '</div>';
+                    $('#lstPapers').prepend(html);
+                } 
+                else
+                {
+                    // Ajout de pièce jointe à un doc existant
+                    var icon = response.icon;
+                    var color = response.color;
+                    $('#paperDocument_' + id).append(
+                    '<a href="' + response.href + '" target="_blank" class="attach-pill" onclick="event.stopPropagation();">' +
+                        '<i class="mdi ' + icon + '" style="color:' + color + ';"></i>' + response.title + '</a>');
+                }
+
+                if (src=="modal")
+                {
+                    attachHtml = '<div class="unread"><a href="' + response.href + '" target="_blank" class="attach-pill" onclick="event.stopPropagation();"><i class="mdi ' + response.icon + '" style="color:' + response.color + ';"></i>' + response.name + '</a></div>';
+                    $('#modalAttachments').append(attachHtml);
+                    console.log(attachHtml);
+                }
+
+                $("#addContentText").html("Ajouter un fichier");
+            }
+        });
+    }
+</script>
 
 <!-- END: corps -->

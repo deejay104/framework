@@ -994,6 +994,7 @@ function MandatoryPaper($uid)
 		}
 	}
 
+	// Reprendre la requete précédente en tenant compte des documents lus après dte_maj
 	$query ="SELECT id_paper FROM ".PREFIX_TBL."_doc_read AS lus WHERE uid='".$uid."'";
 
 	$sql->Query($query);

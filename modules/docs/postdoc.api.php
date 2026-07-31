@@ -64,6 +64,7 @@
 		$result["command"]="new";
 		$result["type"]=$doc->type;
 		$result["title"]=$paper->val("title");
+		$result["name"]=$doc->originalname;
 		$result["docid"]=$doc->id;
 		$result["link"]=$doc->Affiche();
 		$result["author"]=$myuser->fullname;
