@@ -557,7 +557,7 @@
                 $('#modalReadAll').addClass("d-none");
                 if (data.data.read)
                 {
-                    $('#modalSigned').html('<i class="mdi mdi-lock-outline"></i> Documents lus le '+data.data.dte_read+'.');
+                    $('#modalSigned').html('<i class="mdi mdi-lock-outline"></i> Fiche lue le '+data.data.dte_read+'.');
                     $('#modalSigned').removeClass("d-none");
                     $('#modalConfirmRead').addClass("d-none");
                     isSigned=true;
@@ -702,7 +702,7 @@
             return;
         }
         $("#addContentText").html("Envoi du fichier...");
-console.log(src);
+
         $.ajax({
             url: '/api/v1/docs/postdoc?id='+id+'&folder='+folder,
             type: 'POST',

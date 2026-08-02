@@ -143,7 +143,7 @@
 			$id=$sql->Edit("actualites",$MyOpt["tbl"]."_actualites",0,$td);
 		}
 
-		$r=$doc->Save($id,$_FILES["file"]["name"],$_FILES["file"]["tmp_name"]);
+		$r=$doc->Save($id,$_FILES["file"]["name"],$_FILES["file"]["tmp_name"],$_FILES["file"]["size"],"local");
 		$result["id"]=$id;
 		$result["status"]="ok";
 		if ($r!="")

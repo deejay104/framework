@@ -117,7 +117,7 @@ class document_core{
 	}
 
 
-	function Save($uid,$name,$tmpname,$size=0,$torage="")
+	function Save($uid,$name,$tmpname,$size=0,$storage="")
 	{ 
 		global $gl_uid,$MyOpt;
 		$sql=$this->sql;
@@ -168,7 +168,7 @@ class document_core{
 			$this->orientation();
 		}
 
-		if ($torage=="")
+		if ($storage=="")
 		{
 			if ($MyOpt["storage"]=="s3")
 			{
@@ -180,7 +180,7 @@ class document_core{
 			}
 		}
 
-
+		$size=filesize($this->tmpname);
 		if ($storage=="s3")
 		{
 			## S3 storage
@@ -190,9 +190,10 @@ class document_core{
 			{
 				apiError(500,"Error while uploading file to S3",true,"",array());
 			}
-			$query="UPDATE ".PREFIX_TBL."_document SET filename='".$this->filename."',storage='s3',size='".filesize($this->tmpname)."' WHERE id='".$this->id."'";
+			$query="UPDATE ".PREFIX_TBL."_document SET filename='".$this->filename."',storage='s3',size='".$size."' WHERE id='".$this->id."'";
 			$sql->Update($query);
-			$this->storage="local";
+			$this->storage="s3";
+			$this->size=$size;
 	
 			unlink($this->tmpname);
 		}
@@ -211,9 +212,10 @@ class document_core{
 			# Move file to documents folder
 			if (move_uploaded_file($this->tmpname,$this->destpath."/".$this->filename))
 			{
-				$query="UPDATE ".PREFIX_TBL."_document SET filename='".$this->filename."',storage='local',size='".filesize($this->tmpname)."' WHERE id='".$this->id."'";
+				$query="UPDATE ".PREFIX_TBL."_document SET filename='".$this->filename."',storage='local',size='".$size."' WHERE id='".$this->id."'";
 				$sql->Update($query);
 				$this->storage="local";
+				$this->size=$size;
 			}
 			else
 			{
@@ -826,8 +828,11 @@ class document_core{
 	{
 		$file=$this->destpath."/".$this->filename;
 
-		if(is_array(getimagesize($file))){
-			return true;
+		if (file_exists($file))
+		{
+			if(is_array(getimagesize($file))){
+				return true;
+			}	
 		}
 		return false;
 	}
