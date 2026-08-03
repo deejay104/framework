@@ -464,7 +464,7 @@ class document_core{
 
 	function getAttributes()
 	{
-		$myext=GetExtension($this->name);
+		$myext=GetExtension($this->originalname);
 
 		if ($myext=="xls")
 		  { $icon="excel"; $color="#27ae60"; }
