@@ -17,8 +17,8 @@ COPY php-fpm.conf /etc/php/8.5/fpm/php-fpm.conf
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 RUN sed -i 's/short_open_tag = Off/short_open_tag = On/g' /etc/php/8.5/fpm/php.ini &&\
-        sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 32M/g' /etc/php/8.5/fpm/php.ini &&\
-        sed -i 's/post_max_size = 8M/post_max_size = 32M/g' /etc/php/8.5/fpm/php.ini && \
+        sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 128M/g' /etc/php/8.5/fpm/php.ini &&\
+        sed -i 's/post_max_size = 8M/post_max_size = 128M/g' /etc/php/8.5/fpm/php.ini && \
         chmod a+x /docker-entrypoint.sh
 
 EXPOSE 9000
