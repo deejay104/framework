@@ -65,12 +65,14 @@
 						if ($w>500)
 						{
 							$w=500;
+							$h=$h*500/$w;
 						}
 						if ($h>400)
 						{
 							$h=400;
+							$w=$w*400/$h;
 						}
-						list($w,$h)= $doc->newSize($w,$h);
+				//		list($w,$h)= $doc->newSize($w,$h);
 						$result["type"]="image";
 						$result["id"]=$doc->id;
 						$result["width"]=$w;

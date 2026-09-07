@@ -45,7 +45,7 @@
 .upload-zone {
   border: 2px dashed var(--p67-primary-border);
   background: var(--p67-primary-light);
-  padding: 20px;
+  padding: 5px;
   text-align: center;
   cursor: pointer;
   transition: border-color .2s, background .2s;
@@ -228,6 +228,22 @@
   border: 1px solid var(--p67-danger);
 }
 
+/* Badge */
+.mandatory-badge {
+  position:absolute; top:6px; right:15px;
+  background-color:var(--p67-warning); 
+  color:#fff;
+  font-size:10px; font-weight:700; padding:2px 9px;
+  border-radius:20px; letter-spacing:.5px; text-transform:uppercase;
+}
+.expired-badge {
+	position:absolute; top:6px; right:15px;
+	background-color:var(--p67-primary); 
+	color:#fff;
+	font-size:10px; font-weight:700; padding:2px 9px;
+	border-radius:20px; letter-spacing:.5px; text-transform:uppercase;
+}
+
 </style>
 
 
@@ -290,8 +306,7 @@
 			<div id="newContentFile" class="upload-zone">
 			<label for="newFile" style="cursor:pointer; margin:0; width:100%; display:block;">
 				<i class="mdi mdi-cloud-upload-outline"></i>
-				<p>Déposer un fichier ici ou <strong>parcourir</strong></p>
-				<small>Glissez-déposez ou cliquez pour ajouter un nouveau document</small>
+				<p>Déposer un fichier ici ou cliquer pour parcourir votre disque</p>
 			</label>
 			<input id="newFile" type="file" style="display:none">
 			<div style="text-align:center; font-size:0.82rem; color:var(--p67-text-muted); margin-top:6px; display:none;" id="newContentText"></div>
@@ -486,14 +501,10 @@
       }
       if (dte_doc<dte_today)
       {
-        html += '<span class="personal-badge">Périmé</span>';
+        html += '<span class="expired-badge">Périmé</span>';
       }
 
       html += (attachHtml ? '<div class="paper-attachments">' + attachHtml + '</div>' : '') +
-        '</div>' +
-        '<div class="paper-actions">' +
-          '<button class="action-btn" onclick="event.stopPropagation();loadContent(' + p.id + ');" title="Voir / modifier"><i class="mdi mdi-pencil-outline"></i></button>' +
-          '<button class="action-btn danger" onclick="event.stopPropagation();archivePaper(' + p.id + ');" title="Archiver"><i class="mdi mdi-archive-outline"></i></button>' +
         '</div>' +
       '</div>';
     }

@@ -1132,21 +1132,6 @@ textarea.form-control { min-height: 55px; resize: none; }
 .badge-outline-danger  { color: var(--p67-danger);  border: 1px solid var(--p67-danger);  }
 .badge-outline-success { color: var(--p67-success); border: 1px solid var(--p67-success); }
 
-.personal-badge {
-  position:absolute; top:6px; right:8px;
-  background-color:var(--p67-primary); 
-  color:#fff;
-  font-size:10px; font-weight:700; padding:2px 9px;
-  border-radius:20px; letter-spacing:.5px; text-transform:uppercase;
-}
-.mandatory-badge {
-  position:absolute; top:6px; right:8px;
-  background-color:var(--p67-warning); 
-  color:#fff;
-  font-size:10px; font-weight:700; padding:2px 9px;
-  border-radius:20px; letter-spacing:.5px; text-transform:uppercase;
-}
-
 
 /* ── 14. Alertes ────────────────────────────────────────────── */
 .alert {

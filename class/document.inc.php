@@ -561,7 +561,7 @@ class document_core{
 
 			if ($data=="")
 			{
-				header('Content-Type: image/png');
+				header('content-type: image/png');
 				header("Content-Disposition: ".$mode." filename=\"missing.png\";");
 				header('Pragma: public');
 
@@ -572,13 +572,13 @@ class document_core{
 
 			$fsize = strlen($data);
 			if ($myext=="jpg")
-			{ header("Content-Type: image/jpeg"); }
+			{ header("content-type: image/jpeg"); }
 			else if ($myext=="png")
-			{ header("Content-Type: image/png"); }
+			{ header("content-type: image/png"); }
 			else if ($myext=="pdf")
-			{ header("Content-type: application/pdf"); }
+			{ header("content-type: application/pdf"); }
 			else
-			{ header("Content-type: application/octet-stream"); }
+			{ header("content-type: application/octet-stream"); }
 
 			header("Content-Disposition: ".$mode." filename=\"".$this->originalname."\";");
 			header("Content-length: $fsize");
@@ -600,13 +600,13 @@ class document_core{
 			{
 				$fsize = filesize($fname);
 				if ($myext=="jpg")
-				{ header("Content-Type: image/jpeg"); }
+				{ header("content-type: image/jpeg"); }
 				else if ($myext=="png")
-				{ header("Content-Type: image/png"); }
+				{ header("content-type: image/png"); }
 				else if ($myext=="pdf")
-				{ header("Content-type: application/pdf"); }
+				{ header("content-type: application/pdf"); }
 				else
-				{ header("Content-type: application/octet-stream"); }
+				{ header("content-type: application/octet-stream"); }
 
 				header("Content-Disposition: ".$mode." filename=\"".$this->originalname."\";");
 				header("Content-length: $fsize");
@@ -816,12 +816,12 @@ class document_core{
 		{
 			list($newwidth, $newheight) = $this->getSize();
 		}
-		list($newwidth, $newheight) = $this->newSize($newwidth, $newheight);
+		list($width, $height) = $this->newSize($newwidth, $newheight);
 		
-		$thumb=$this->Resize($newwidth,$newheight,"show");
+		$thumb=$this->Resize($width,$height,"show");
 
-		header('Content-Type: image/png');
-		imagepng($thumb);
+		header('Content-Type: image/jpeg');
+		imagejpeg($thumb,NULL,95);
 	}
 
 	function isImage()

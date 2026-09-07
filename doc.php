@@ -97,9 +97,10 @@
 
 	if ( $type=="image")
 	{
-		$w=checkVar("width","numeric");
-		$c=checkVar("height","numeric");
-		$doc->ShowImage($w,$h);
+		//$w=checkVar("width","numeric");
+		//$h=checkVar("height","numeric");
+		//$doc->ShowImage($w,$h);
+		$doc->ShowImage(0,0);
 	}
 	else
 	{
