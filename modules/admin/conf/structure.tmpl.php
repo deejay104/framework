@@ -60,7 +60,7 @@ $tabTmpl=Array
 		"dossier" => Array("Type" => "tinytext", ),
 		"droit" => Array("Type" => "varchar(3)", ),
 		"storage" => Array("Type" => "varchar(10)", "Default" => "local" ),
-		"size" => Array("Type" => "numeric" ),
+		"size" => Array("Type" => "int(11) unsigned"),
 		"actif" => Array("Type" => "enum('oui','non')", "Default" => "oui", "Index"=>1),
 		"uid_creat" => Array("Type" => "int(10) unsigned", "Default" => "0"),
 		"dte_creat" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
