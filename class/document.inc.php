@@ -305,7 +305,7 @@ class document_core{
 		return $ret;
 	}
 
-	function Affiche($type="large",$name="file")
+	function Affiche($type="large",$name="file",$allowDelete=true)
 	{ global $MyOpt,$corefolder;
 
 		$attr=$this->getAttributes();
@@ -429,7 +429,7 @@ class document_core{
 			}
 
 			// Si mode édition
-			if ($this->editmode=="edit")
+			if (($this->editmode=="edit") && ($allowDelete))
 			{
 				$txt.=" <span class='feed-actions'><a href=\"#\" OnClick=\"$(function() { $.ajax({url:'".$MyOpt["host"]."/doc.php?id=".$this->id."&fonc=delete'}); document.getElementById('doc_".$this->id."').style.visibility='hidden'; document.getElementById('doc_".$this->id."').style.height='0'; }); return false;\"><i class='mdi mdi-delete'></i></a></span>";
 			}

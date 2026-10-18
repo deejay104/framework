@@ -322,7 +322,7 @@
 	
 	if ( (GetMyId($id)) || (GetDroit("ModifUserAll")) || (GetDroit("ModifUserDocument")) || (GetDroit("VisuUserDocument")) || (GetDroit("VisuDocument")) )
 	{
-		if (($typeaff=="form") && ((GetDroit("ModifUserDocument")) || (GetDroit("ModifUserAll"))))
+		if (($typeaff=="form") && ((GetMyId($id)) || (GetDroit("ModifUserDocument")) || (GetDroit("ModifUserAll"))))
 		{
 			$doc = new document_core(0,$sql);
 			$doc->editmode="form";
@@ -340,7 +340,7 @@
 				{
 					$doc = new document_core($did,$sql);
 					$doc->editmode=($typeaff=="form") ? "edit" : "std";
-					$tmpl_x->assign("form_document",$doc->Affiche("large","name"));
+					$tmpl_x->assign("form_document",$doc->Affiche("large","name",GetDroit("SupprimeDocument")));
 					$tmpl_x->parse("corps.aff_documents.lst_document");
 				}
 			}
