@@ -1213,6 +1213,11 @@ textarea.form-control { min-height: 55px; resize: none; }
   padding:     0.75rem 1.25rem;
 }
 
+.modal-border {
+  border-bottom: 1px solid var(--p67-border);
+  padding-bottom:15px;
+}
+
 /* ── 17. Pagination ──────────────────────────────────────────── */
 .pagination { display: flex; list-style: none; padding: 0; margin: 1rem 0 0; gap: 3px; }
 
