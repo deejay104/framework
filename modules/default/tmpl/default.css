@@ -766,7 +766,7 @@ select.form-control {
 
 .form-control:disabled,
 .form-control[readonly] {
-  background-color: #f0f3f8;
+  background-color: #f0f3f8!important;
   color:            var(--p67-text-muted);
   cursor:           not-allowed;
 }
@@ -1524,6 +1524,17 @@ div.tagsinput span.tag a { color: #ffffff; }
 }
 .dt-paging-button:hover {
   border: 1px solid var(--accent);
+}
+
+.dt-processing {
+  display:none!important;
+  top: 120px;
+  position: relative;
+  background: #f7f9fc;
+  height: 40px;
+  padding-top: 8px;
+  border-bottom: 1px solid var(--p67-primary);
+  border-top: 1px solid var(--p67-primary);
 }
 
 .dt-column-header { cursor: pointer; }

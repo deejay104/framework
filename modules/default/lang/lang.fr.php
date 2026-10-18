@@ -85,7 +85,7 @@
 	$tabLang["lang_tab_previous"]="Précédent";
 	$tabLang["lang_tab_search"]="Rechercher";
 	$tabLang["lang_tab_loading"]="Chargement";
-	$tabLang["lang_tab_processing"]="Mise en page";
+	$tabLang["lang_tab_processing"]="Chargement";
 	$tabLang["lang_tab_emptytable"]="Pas de donnée disponible";
 	$tabLang["lang_tab_infoempty"]="Affiche 0 ligne";
 	$tabLang["lang_tab_info"]="Lignes de _START_ à _END_ sur un total de _TOTAL_";

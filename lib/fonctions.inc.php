@@ -894,10 +894,10 @@ function SendMail($From,$To,$Cc,$Subject,$Text,$Html,$AttmFiles)
 */
 
 
-function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",$start=0,$limit=-1,$nbline=0,$showicon="")
+function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",$start=0,$limit=-1,$nbline=0,$showicon="",$id="")
   {global $mod,$rub,$corefolder,$MyOpt,$tabLang;
 	// $ret ="\n<table id='mytable' class='tableauAff' width'100%'>\n";
-	$idtbl=uniqid("tbl_");
+	$idtbl=($id!="") ? $id : uniqid("tbl_");
 	$ret ="\n";
 	$ret.="<div class='table-responsive'><table id='".$idtbl."' class='table table-hover'>\n";
 
@@ -1218,7 +1218,7 @@ function AfficheTableauRemote($tabTitre,$url,$order="",$trie="d",$search="",$nbl
 		}
 		else
 		{
-			$ret.="<th width='".$v["width"]."'".(($v["align"]!="") ? " align='".$v["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").">";
+			$ret.="<th ".((isset($v["width"])) ? "width='".$v["width"]."'" : "").(($v["align"]!="") ? " align='".$v["align"]."'" : "").(($v["mobile"]=="no") ? " class='noMobile'" :"").">";
 			$ret.=$v["aff"];
 		}
 		if (isset($v["sub"]))
