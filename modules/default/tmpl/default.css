@@ -1560,6 +1560,7 @@ div.tagsinput span.tag a { color: #ffffff; }
 }
 
 /* Fullcalander */
+
 .fc-time, .fc-title { color: #000; }
 .fc-button {
   border-radius: 6px!important;
@@ -1582,6 +1583,7 @@ div.tagsinput span.tag a { color: #ffffff; }
   background: var(--fc-non-business-color);
   opacity: 0.5;
 }
+
 
 /* Images */
 .img-xs  { width: 36px;  height: 36px; }

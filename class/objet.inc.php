@@ -292,6 +292,10 @@ class objet_core
 			{
 				$render="read";
 			}
+			else if ($render=="list")
+			{
+				$render="list";
+			}
 			else
 			{
 				$render="html";
