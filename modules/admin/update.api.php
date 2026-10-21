@@ -5,6 +5,7 @@
 
 // ----
         $ret=array();
+        $ret["status"]=200;
         $ret["result"]="OK";
         $ret["data"]="";
 
@@ -14,14 +15,17 @@
 
 function AjoutLog($txt)
 {
-        return htmlentities($txt,ENT_HTML5,"UTF-8")."<br />";
+//        return htmlentities($txt,ENT_HTML5,"UTF-8")."<br />";
+        return $txt;
 }
 
 
 // ---- Charge la structure des tables de la version_compare
         $MyOpt["tbl"]=PREFIX_TBL;
+        $ret["data"]=array();
+        $ret["error"]=array();
 
-        $ret["data"].=AjoutLog($tabLang["lang_checkdb"]);
+        //$ret["data"]["db"][]=AjoutLog($tabLang["lang_checkdb"]);
         require ("modules/admin/conf/structure.tmpl.php");
 
         if (file_exists("../modules/admin/conf/structure.tmpl.php"))
@@ -43,7 +47,7 @@ function AjoutLog($txt)
         $res=$sql->QueryRow($q);
         if ($res["charset"]!="utf8mb4")
         {
-                $ret["data"].=AjoutLog("Convert characterset from ".$res["charset"]." to UTF-8 for ".$db);
+                $ret["data"]["db"][]=AjoutLog("Convert characterset from ".$res["charset"]." to UTF-8 for ".$db);
                 $q="ALTER DATABASE ".$db." CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
                 $res=$sql->Update($q);
         }
@@ -68,7 +72,7 @@ function AjoutLog($txt)
                 $res=$sql->QueryRow($q);
                 if ((isset($res["charset"])) && ($res["charset"]!="utf8mb4"))
                 {
-                        $ret["data"].=AjoutLog("Convert characterset from ".$res["charset"]." to UTF-8 for ".$db.".".$tab);
+                        $ret["data"]["db"][]=AjoutLog("Convert characterset from ".$res["charset"]." to UTF-8 for ".$db.".".$tab);
                         $q="ALTER TABLE ".$tab." CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci";
                         $res=$sql->Update($q);
                 }
@@ -140,17 +144,19 @@ function AjoutLog($txt)
                 // Tester si la table n'existe pas
                 if (!isset($tabProd[$MyOpt["tbl"]."_".$tab]))
                 {
-                        $q="CREATE TABLE `".$MyOpt["tbl"]."_".$tab."` (`id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`)) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+                        // ALTER TABLE `core_conso` ADD `id` INT UNSIGNED NULL DEFAULT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);
+                        $q="CREATE TABLE `".$MyOpt["tbl"]."_".$tab."` (`id` int(10) UNSIGNED NULL AUTO_INCREMENT, PRIMARY KEY (`id`)) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
                         $res=$sql->Update($q);
                         if ($res==-1)
                         {
                                 $ret["result"]="NOK";
-                                $ret["data"].=AjoutLog(" ! ".$tabLang["lang_errorcreate"]." ".$MyOpt["tbl"]."_".$tab);
+                                $ret["status"]=500;
+                                $ret["error"]["db"][]=AjoutLog($tabLang["lang_errorcreate"]." ".$MyOpt["tbl"]."_".$tab);
                         }
                         else
                         {
-                                $ret["data"].=AjoutLog(" - ".$tabLang["lang_createtable"]." ".$MyOpt["tbl"]."_".$tab);
-                                $tabProd[$MyOpt["tbl"]."_".$tab]["id"]["Type"]=(isset($fields["id"]["Type"])) ? $fields["id"]["Type"] : "int(10) UNSIGNED NOT NULL AUTO_INCREMENT";
+                                $ret["data"]["db"][]=AjoutLog($tabLang["lang_createtable"]." ".$MyOpt["tbl"]."_".$tab);
+                                $tabProd[$MyOpt["tbl"]."_".$tab]["id"]["Type"]=(isset($fields["id"]["Type"])) ? $fields["id"]["Type"] : "int(10) UNSIGNED NULL AUTO_INCREMENT";
                                 $tabProd[$MyOpt["tbl"]."_".$tab]["id"]["Index"]="PRIMARY";
                         }
                 }
@@ -178,119 +184,169 @@ function AjoutLog($txt)
                         foreach($tabTmpl[$tab] as $field=>$d)
                         {
 // echo $tab.":".$field."=".$tabTmpl[$tab][$field]["Type"]." ".$tabProd[$MyOpt["tbl"]."_".$tab][$field]["Type"]."<br>\n";
-                                if (!isset($tabTmpl[$tab][$field]["Index"]))
-                                {
-                                        $tabTmpl[$tab][$field]["Index"]=0;
-                                }
+                                // Vérifie si le champs existe
+                                $none=(!isset($tabProd[$MyOpt["tbl"]."_".$tab][$field])) ? true : false;
+
+                                $typeTmpl=$tabTmpl[$tab][$field]["Type"] ?? "int";
+                                $indexTmpl=$tabTmpl[$tab][$field]["Index"] ?? 0;
+                                $defaultTmpl=$tabTmpl[$tab][$field]["Default"] ?? "";
+
+                                $typeProd=$tabProd[$MyOpt["tbl"]."_".$tab][$field]["Type"] ?? "int";
+                                $defaultProd=$tabProd[$MyOpt["tbl"]."_".$tab][$field]["Default"] ?? "";
+                                $indexProd=$tabProd[$MyOpt["tbl"]."_".$tab][$field]["Index"] ?? 0;
+
 
                                 // Le champ n'existe pas
-                                if (!isset($tabProd[$MyOpt["tbl"]."_".$tab][$field]))
+                                if ($none)
                                 {
-                                        $q="ALTER TABLE `".$MyOpt["tbl"]."_".$tab."` ADD `".$field."` ".$tabTmpl[$tab][$field]["Type"]." DEFAULT ".(isset($tabTmpl[$tab][$field]["Default"]) ? " '".$tabTmpl[$tab][$field]["Default"]."' NOT NULL" : "NULL");
+                                        if (($defaultTmpl!="") && ($defaultTmpl!="NULL"))
+                                        {
+                                                $default="'".$defaultTmpl."' NOT NULL";
+                                        }
+                                        else
+                                        {
+                                                $default="NULL";
+                                        }
+                                        $q="ALTER TABLE `".$MyOpt["tbl"]."_".$tab."` ADD `".$field."` ".$typeTmpl." DEFAULT ".$default;
                                         $res=$sql->Update($q);
                                         if ($res==-1)
                                         {
                                                 $ret["result"]="NOK";
-                                                $ret["data"].=AjoutLog(" ! ".$tabLang["lang_errorcreate"]." ".$MyOpt["tbl"]."_".$tab.":".$field);
+                                                $ret["status"]=500;
+                                                $ret["error"]["db"][]=AjoutLog($tabLang["lang_errorcreate"]." ".$MyOpt["tbl"]."_".$tab.":".$field);
                                         }
                                         else
                                         {
-                                                $ret["data"].=AjoutLog(" - ".$tabLang["lang_create"]." ".$MyOpt["tbl"]."_".$tab.":".$field." -> ".$tabTmpl[$tab][$field]["Type"]);
+                                                $ret["data"]["db"][]=AjoutLog($tabLang["lang_create"]." ".$MyOpt["tbl"]."_".$tab.":".$field." -> ". $typeTmpl);
                                         }
                                 }
                                 // Le champ n'a pas le bon type
-                                else if ( ($tabTmpl[$tab][$field]["Type"]!=$tabProd[$MyOpt["tbl"]."_".$tab][$field]["Type"]) && ($tabTmpl[$tab][$field]["Index"]!="PRIMARY") )
+                                //else if ( ( $typeTmpl!=$typeProd) && ($indexTmpl!="PRIMARY") )
+                                else if ( ( $typeTmpl!=$typeProd) )
                                 {
-                                        $q="ALTER TABLE `".$MyOpt["tbl"]."_".$tab."` MODIFY `".$field."` ".$tabTmpl[$tab][$field]["Type"]." DEFAULT ".(isset($tabTmpl[$tab][$field]["Default"]) ? " '".$tabTmpl[$tab][$field]["Default"]."' NOT NULL" : "NULL");
+                                        if (($defaultTmpl!="") && ($defaultTmpl!="NULL"))
+                                        {
+                                                $default="'".$defaultTmpl."' NOT NULL";
+                                        }
+                                        else
+                                        {
+                                                $default="NULL";
+                                        }
+                                        $q="ALTER TABLE `".$MyOpt["tbl"]."_".$tab."` MODIFY `".$field."` ".$typeTmpl." DEFAULT ".$default;
                                         $res=$sql->Update($q);
                                         if ($res==-1)
                                         {
                                                 $ret["result"]="NOK";
-                                                $ret["data"].=AjoutLog(" ! ".$tabLang["lang_errormodify"]." ".$MyOpt["tbl"]."_".$tab.":".$field." (".$q.")");
+                                                $ret["status"]=500;
+                                                $ret["error"]["db"][]=AjoutLog($tabLang["lang_errormodify"]." ".$MyOpt["tbl"]."_".$tab.":".$field." (".$q.")");
                                         }
                                         else
                                         {
-                                                $ret["data"].=AjoutLog(" - ".$tabLang["lang_modify"]." ".$MyOpt["tbl"]."_".$tab.":".$field." -> ".$tabTmpl[$tab][$field]["Type"]);
+                                                $ret["data"]["db"][]=AjoutLog($tabLang["lang_modify"]." ".$MyOpt["tbl"]."_".$tab.":".$field." -> ".$typeTmpl);
                                         }
                                 }
                                 // Le champ n'a pas de valeur par défaut et n'est pas à NULL
-                                else if ( ($field!="id") && ($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Null"]=="NO") && ((!isset($tabTmpl[$tab][$field]["Default"])) || ($tabTmpl[$tab][$field]["Default"]=="NULL")) )
+                                else if ( ($field!="id") && ($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Null"]=="NO") && (($defaultTmpl=="") || ($defaultTmpl=="NULL")) )
                                 {
-                                        $q="ALTER TABLE `".$MyOpt["tbl"]."_".$tab."` MODIFY `".$field."` ".$tabTmpl[$tab][$field]["Type"]." NULL";
+                                        $q="ALTER TABLE `".$MyOpt["tbl"]."_".$tab."` MODIFY `".$field."` ".$typeTmpl." NULL";
                                         $res=$sql->Update($q);
                                         if ($res==-1)
                                         {
                                                 $ret["result"]="NOK";
-                                                $ret["data"].=AjoutLog(" ! ".$tabLang["lang_errormodify"]." ".$MyOpt["tbl"]."_".$tab.":".$field." -> NULL");
+                                                $ret["status"]=500;
+                                                $ret["error"]["db"][]=AjoutLog($tabLang["lang_errormodify"]." ".$MyOpt["tbl"]."_".$tab.":".$field." -> NULL");
                                         }
                                         else
                                         {
-                                                $ret["data"].=AjoutLog(" - ".$tabLang["lang_changetonull"]." ".$MyOpt["tbl"]."_".$tab.":".$field." -> NULL");
+                                                $ret["data"]["db"][]=AjoutLog($tabLang["lang_changetonull"]." ".$MyOpt["tbl"]."_".$tab.":".$field." -> NULL");
                                         }
                                 }
                                 // Le champs est à NULL et à une valeur par défaut
-                                else if ( ($field!="id") && ($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Null"]=="YES") && (isset($tabTmpl[$tab][$field]["Default"])) && ($tabTmpl[$tab][$field]["Default"]!="NULL") )
+                                else if ( ($field!="id") && ($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Null"]=="YES") && ($defaultTmpl!="NULL") && ($defaultTmpl!="") )
                                 {
-                                        $q="UPDATE `".$MyOpt["tbl"]."_".$tab."` SET `".$field."`='".$tabTmpl[$tab][$field]["Default"]."' WHERE ".$field." IS NULL";
+// ALTER TABLE `core_utilisateurs` CHANGE `dte_login` `dte_login` DATETIME NOT NULL DEFAULT '0000-00-00';
+                                        $q="UPDATE `".$MyOpt["tbl"]."_".$tab."` SET `".$field."`='".$defaultTmpl."' WHERE ".$field." IS NULL";
                                         $res=$sql->Update($q);
 
-                                        $q="ALTER TABLE `".$MyOpt["tbl"]."_".$tab."` MODIFY `".$field."` ".$tabTmpl[$tab][$field]["Type"]." NOT NULL";
+                                        
+                                        $q="ALTER TABLE `".$MyOpt["tbl"]."_".$tab."` CHANGE `".$field."` `".$field."` ".$typeTmpl." NOT NULL DEFAULT '".$defaultTmpl."'";
                                         $res=$sql->Update($q);
                                         if ($res==-1)
                                         {
                                                 $ret["result"]="NOK";
-                                                $ret["data"].=AjoutLog(" ! ".$tabLang["lang_errormodify"]." ".$MyOpt["tbl"]."_".$tab.":".$field." -> NOT NULL (".$q.")");
+                                                $ret["status"]=500;
+                                                $ret["error"]["db"][]=AjoutLog($tabLang["lang_errormodify"]." ".$MyOpt["tbl"]."_".$tab.":".$field." -> NOT NULL (".$q.")");
                                         }
                                         else
                                         {
-                                                $ret["data"].=AjoutLog(" - ".$tabLang["lang_changenonull"]." ".$MyOpt["tbl"]."_".$tab.":".$field." -> NOT NULL");
+                                                $ret["data"]["db"][]=AjoutLog($tabLang["lang_changenonull"]." ".$MyOpt["tbl"]."_".$tab.":".$field." -> NOT NULL");
                                         }
                                 }
-                                //
-                                else if ( (isset($tabTmpl[$tab][$field]["Default"])) && (isset($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Default"])) && ($tabTmpl[$tab][$field]["Default"]!=$tabProd[$MyOpt["tbl"]."_".$tab][$field]["Default"]) )
+                                // La valeur par défaut n'est pas la bonne
+                                else if ( ($defaultTmpl!=$defaultProd) && ($defaultTmpl!="NULL") )
                                 {
-// ALTER TABLE `core_roles` CHANGE `dte_maj` `dte_maj` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00';
-                                        $q="ALTER TABLE `".$MyOpt["tbl"]."_".$tab."` CHANGE `".$field."` `".$field."` ".$tabTmpl[$tab][$field]["Type"]." DEFAULT ".(isset($tabTmpl[$tab][$field]["Default"]) ? " '".$tabTmpl[$tab][$field]["Default"]."' NOT NULL" : "NULL");
+                                        $q="ALTER TABLE `".$MyOpt["tbl"]."_".$tab."` CHANGE `".$field."` `".$field."` ".$typeTmpl." NOT NULL DEFAULT '".$defaultTmpl."'";
                                         $res=$sql->Update($q);
                                         if ($res==-1)
                                         {
                                                 $ret["result"]="NOK";
-                                                $ret["data"].=AjoutLog(" ! ".$tabLang["lang_errormodify"]." ".$MyOpt["tbl"]."_".$tab.":".$field." (".$q.")");
+                                                $ret["status"]=500;
+                                                $ret["error"]["db"][]=AjoutLog($tabLang["lang_errormodify"]." ".$MyOpt["tbl"]."_".$tab.":".$field." (".$q.")");
                                         }
                                         else
                                         {
-                                                $ret["data"].=AjoutLog(" - ".$tabLang["lang_modify"]." ".$MyOpt["tbl"]."_".$tab.":".$field." -> ".$tabTmpl[$tab][$field]["Type"]." '".$tabTmpl[$tab][$field]["Default"]."'!='".(isset($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Default"]) ? $tabProd[$MyOpt["tbl"]."_".$tab][$field]["Default"] : "")."'");
+                                                $ret["data"]["db"][]=AjoutLog($tabLang["lang_modify"]." ".$MyOpt["tbl"]."_".$tab.":".$field." -> ".$typeTmpl." '".$defaultTmpl."'!='".$defaultProd);
                                         }
                                 }
-                                else if ( ($field=="id") && (isset($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Extra"])) && ($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Extra"]!="auto_increment") )
+                                /*
+                                // Une valeur par défautr existe
+                                else if ( ($defaultTmpl!="") && ($defaultTmpl!="NULL"))
+                                {
+                                        $q="ALTER TABLE `".$MyOpt["tbl"]."_".$tab."` CHANGE `".$field."` `".$field."` ".$tabTmpl[$tab][$field]["Type"]." NOT NULL DEFAULT '".$tabTmpl[$tab][$field]["Default"]."'";
+                                        $res=$sql->Update($q);
+                                        if ($res==-1)
+                                        {
+                                                $ret["result"]="NOK";
+                                                $ret["data"][]=AjoutLog(" ! ".$tabLang["lang_errormodify"]." ".$MyOpt["tbl"]."_".$tab.":".$field." (".$q.")");
+                                        }
+                                        else
+                                        {
+                                                $ret["data"][]=AjoutLog(" - ".$tabLang["lang_modify"]." ".$MyOpt["tbl"]."_".$tab.":".$field." -> ".$tabTmpl[$tab][$field]["Type"]." '".$tabTmpl[$tab][$field]["Default"]."'!='".(isset($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Default"]) ? $tabProd[$MyOpt["tbl"]."_".$tab][$field]["Default"] : "")."'");
+                                        }
+                                }
+                                */
+
+                                if ( ($field=="id") && ( (!isset($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Extra"])) || ($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Extra"]!="auto_increment") ) && ($typeTmpl=="int(10)"))
                                 {
                                         // ALTER TABLE `core_tarifs` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-                                        $q="ALTER TABLE `".$MyOpt["tbl"]."_".$tab."` CHANGE `".$field."` `".$field."` int(10) UNSIGNED NOT NULL AUTO_INCREMENT";
+                                        $q="ALTER TABLE `".$MyOpt["tbl"]."_".$tab."` CHANGE `".$field."` `".$field."` int(10) UNSIGNED NULL AUTO_INCREMENT";
                                         $res=$sql->Update($q);
                                         if ($res==-1)
                                         {
                                                 $ret["result"]="NOK";
-                                                $ret["data"].=AjoutLog(" ! ".$tabLang["lang_errormodify"]." ".$MyOpt["tbl"]."_".$tab.":".$field." AUTO INCR (".$q.")");
+                                                $ret["status"]=500;
+                                                $ret["error"]["db"][]=AjoutLog($tabLang["lang_errormodify"]." ".$MyOpt["tbl"]."_".$tab.":".$field." AUTO INCR (".$q.")");
                                         }
                                         else
                                         {
-                                                $ret["data"].=AjoutLog(" - ".$tabLang["lang_addautoinc"]." ".$MyOpt["tbl"]."_".$tab.":".$field." AUTO INCR");
+                                                $ret["data"]["db"][]=AjoutLog($tabLang["lang_addautoinc"]." ".$MyOpt["tbl"]."_".$tab.":".$field." AUTO INCREMENT");
                                         }
                                 }
 
                                 // Index
-                                if (($tabTmpl[$tab][$field]["Index"]!="0") && (!isset($tabProd[$MyOpt["tbl"]."_".$tab][$field]["Index"])))
+                                if (($indexTmpl!="0") && ($indexTmpl!="PRIMARY") && ($indexProd=="0"))
                                 {
                                         $q="ALTER TABLE `".$MyOpt["tbl"]."_".$tab."` ADD INDEX (`".$field."`)";
                                         $res=$sql->Update($q);
                                         if ($res==-1)
                                         {
                                                 $ret["result"]="NOK";
-                                                $ret["data"].=AjoutLog(" ! ".$tabLang["lang_errorcreateindex"]." ".$MyOpt["tbl"]."_".$tab.":".$field);
+                                                $ret["status"]=500;
+                                                $ret["data"]["db"][]=AjoutLog($tabLang["lang_errorcreateindex"]." ".$MyOpt["tbl"]."_".$tab.":".$field);
                                         }
                                         else
                                         {
-                                                $ret["data"].=AjoutLog(" - ".$tabLang["lang_createindex"]." ".$MyOpt["tbl"]."_".$tab.":".$field);
+                                                $ret["data"]["db"][]=AjoutLog($tabLang["lang_createindex"]." ".$MyOpt["tbl"]."_".$tab.":".$field);
                                         }
                                 }
                         }
@@ -304,7 +360,7 @@ function AjoutLog($txt)
                 require("../modules/admin/conf/variables.tmpl.php");
         }
 
-        $ret["data"].=AjoutLog($tabLang["lang_checkvar"]);
+        //$ret["data"][]=AjoutLog($tabLang["lang_checkvar"]);
 
         $nb=0;
         $MyOptTab=array();
@@ -320,7 +376,7 @@ function AjoutLog($txt)
                                         $MyOptTab[$nom][$var]=$dd;
                                         $nb=$nb+1;
                                         // echo "Ajout : \$MyOpt[\"".$nom."\"][\"".$var."\"]='".$dd."'<br>";
-                                        $ret["data"].=AjoutLog(" - Ajout : ".$nom.":".$var."='".$dd."'");
+                                        $ret["data"]["variables"][]=AjoutLog("Ajout : ".$nom.":".$var."='".$dd."'");
                                 }
                                 else
                                 {
@@ -334,7 +390,7 @@ function AjoutLog($txt)
                         {
                                 $MyOptTab[$nom]["valeur"]=$d;
                                 $nb=$nb+1;
-                                $ret["data"].=AjoutLog(" - Ajout : ".$nom."='".preg_replace("/\//","-",$d)."'");
+                                $ret["data"]["variables"][]=AjoutLog("Ajout : ".$nom."='".preg_replace("/\//","-",$d)."'");
                         }
                         else
                         {
@@ -346,10 +402,10 @@ function AjoutLog($txt)
         if ($nb>0)
         {
                 // echo $nb." variables ajoutées<br>";
-                $ret["data"].=AjoutLog($nb." variables ajoutées");
+                $ret["data"]["variables"][]=AjoutLog($nb." variables ajoutées");
 
                 $res=GenereVariables($MyOptTab);
-                $ret["data"].=AjoutLog($res);
+                $ret["data"]["variables"][]=AjoutLog($res);
                 $MyOpt=UpdateVariables($MyOptTab);
         }
 
@@ -357,7 +413,8 @@ function AjoutLog($txt)
         {
                 error_log("easy-aero variable file does not exist");
                 $ret["result"]="NOK";
-                $ret["data"]=AjoutLog("La création du fichier variables a échouée");
+                $ret["status"]=500;
+                $ret["data"]["variables"][]=AjoutLog("La création du fichier variables a échouée");
                 echo json_encode($ret);
                 exit;
         }
@@ -365,7 +422,7 @@ function AjoutLog($txt)
 
 // ---- Applique les patchs
         $MyOpt["tbl"]=PREFIX_TBL;
-        $ret["data"].=AjoutLog($tabLang["lang_patchcore"]);
+        //$ret["data"][]=AjoutLog($tabLang["lang_patchcore"]);
 
         $tabPatch=array();
         $q="SELECT * FROM ".$MyOpt["tbl"]."_config WHERE param='core'";
@@ -390,19 +447,19 @@ function AjoutLog($txt)
                         require($dir."/".$d);
                         if ($ok==0)
                         {
-                                $ret["data"].=AjoutLog(" - Patch ".$p[1]);
+                                $ret["data"]["patch"][]=AjoutLog("Patch ".$p[1]);
                                 $q="INSERT INTO ".$MyOpt["tbl"]."_config SET param='core',value='".$num."',dte_creat='".now()."'";
                                 $sql->Insert($q);
                         }
                         else
                         {
-                                $ret["data"].=AjoutLog(" ! ".$tabLang["lang_errorpatch"]." ".$p[1]);
+                                $ret["data"]["patch"][]=AjoutLog(" ! ".$tabLang["lang_errorpatch"]." ".$p[1]);
                         }
                 }
         }
 
 // ---- Applique les patchs custom
-        $ret["data"].=AjoutLog($tabLang["lang_patch"]);
+        //$ret["data"]["patch"][]=AjoutLog($tabLang["lang_patch"]);
 
         $tabPatch=array();
         $q="SELECT * FROM ".$MyOpt["tbl"]."_config WHERE param='patch'";
@@ -427,13 +484,13 @@ function AjoutLog($txt)
                         require($dir."/".$d);
                         if ($ok==0)
                         {
-                                $ret["data"].=AjoutLog(" - Patch ".$p[1]);
+                                $ret["data"]["patch"][]=AjoutLog("Patch ".$p[1]);
                                 $q="INSERT INTO ".$MyOpt["tbl"]."_config SET param='patch',value='".$num."',dte_creat='".now()."'";
                                 $sql->Insert($q);
                         }
                         else
                         {
-                                $ret["data"].=AjoutLog(" ! ".$tabLang["lang_errorpatch"]." ".$p[1]);
+                                $ret["error"]["patch"][]=AjoutLog($tabLang["lang_errorpatch"]." ".$p[1]);
                         }
                 }
         }

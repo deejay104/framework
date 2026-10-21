@@ -86,9 +86,9 @@ $tabTmpl=Array
 	),
 	"forums" => Array
 	(
-		"id" => Array("Type" => "mediumint(8) unsigned", "Index" => "PRIMARY", ),
-		"fid" => Array("Type" => "mediumint(8) unsigned", "Default" => "0", "Index" => "1", ),
-		"fil" => Array("Type" => "mediumint(8) unsigned", "Default" => "0", "Index" => "1", ),
+		"id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
+		"fid" => Array("Type" => "int(10) unsigned", "Default" => "0", "Index" => "1", ),
+		"fil" => Array("Type" => "int(10) unsigned", "Default" => "0", "Index" => "1", ),
 		"titre" => Array("Type" => "varchar(104)", ),
 		"message" => Array("Type" => "text", ),
 		"pseudo" => Array("Type" => "varchar(104)", ),
@@ -112,7 +112,7 @@ $tabTmpl=Array
 	),
 	"historique" => Array
 	(
-		"id" => Array("Type" => "bigint(20) unsigned", "Index" => "PRIMARY", ),
+		"id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
 		"class" => Array("Type" => "varchar(20)", ),
 		"table" => Array("Type" => "varchar(20)", "Index" => "1", ),
 		"idtable" => Array("Type" => "bigint(20) unsigned", "Index" => "1", ),

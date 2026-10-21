@@ -142,6 +142,10 @@ class mysql_core{
 			$s=",";
 		}
 
+		if (isset($val["creds"]))
+		{
+			$val["creds"]="na";
+		}
 		$res=array();
 		$res["id"]=0;
 		if ($id>0)
@@ -157,7 +161,7 @@ class mysql_core{
 			$ret=$id;
 
 			$query ="INSERT INTO ".$MyOpt["tbl"]."_historique (`class` ,`table` ,`idtable` ,`type` ,`comment`,`uid_creat` ,`dte_creat`,`uid_maj` ,`dte_maj`) ";
-			$query.="VALUES ('".$class."', '".$tab."', '$id', 'MOD', '".(($comment!="") ? $comment : $c)."', '$gl_uid', '".now()."', '$gl_uid', '".now()."')";
+			$query.="VALUES ('".$class."', '".$tab."', '$id', 'MOD', '".stripslashes(json_encode($val))."', '$gl_uid', '".now()."', '$gl_uid', '".now()."')";
 			$this->Insert($query);
 		}
 		else
@@ -166,7 +170,7 @@ class mysql_core{
 			$ret=$this->Insert($query);
 
 			$query ="INSERT INTO ".$MyOpt["tbl"]."_historique (`class` ,`table` ,`idtable` , `type` ,`comment`,`uid_creat` ,`dte_creat`,`uid_maj` ,`dte_maj`)";
-			$query.="VALUES ('".$class."', '".$tab."', '$ret', 'ADD', '".(($comment!="") ? $comment : $c)."', '$gl_uid', '".now()."', '$gl_uid', '".now()."')";
+			$query.="VALUES ('".$class."', '".$tab."', '$ret', 'ADD', '".stripslashes(json_encode($val))."', '$gl_uid', '".now()."', '$gl_uid', '".now()."')";
 			$this->Insert($query);
 		}
 		return $ret;

@@ -1204,6 +1204,11 @@ class objet_core
 			}
 		}
 		
+		if (!isset($tabobj["id"]))
+		{
+			$tabobj["id"]=Array("Type" => "int(10) unsigned", "Default" => "NULL", "Index" => "PRIMARY");
+	//		ALTER TABLE `core_conso` ADD `id` INT UNSIGNED NULL DEFAULT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);
+		}
 		if (!isset($tabobj["actif"]))
 		{
 			$tabobj["actif"]=Array("Type" => "enum('oui','non')", "Default" => "oui", "Index" => "1");
