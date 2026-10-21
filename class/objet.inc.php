@@ -317,7 +317,8 @@ class objet_core
 		{
 			// return "<A href=\"".geturl($this->mod,$this->rub,"id=".$this->id)."\">".sql2date($this->dte_creat,"jour")."</A>";
 			$txt=sql2date($this->dte_creat,"jour");
-			$render="read";
+			$type="date";
+			$render=($render!="html") ? "read" : "html";
 		}
 
 		$disabled="";
