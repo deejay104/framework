@@ -9,7 +9,17 @@
 
 <!-- BEGIN: corps -->
 
-
+<style>
+.result-body {
+  font-size: 0.8rem;
+  color: #4a5568;
+  line-height: 1.3;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  padding: 10px !important;
+}
+</style>
 
 <div class="row">
 	<div class="card">
@@ -106,28 +116,57 @@
 <script>
 $(document).ready(function() {
 	$("#update").click(function (event) {
-		$("#form_update").css("background-color","");
-		$("#form_update").html("Re-Index en cours");
-
+		$("#form_update").addClass("result-body");
+		$("#form_update").removeClass("success-bg");
+		$("#form_update").removeClass("danger-bg");
+		$("#form_update").html("Mise à jour en cours");
 
 		$.get('{path_root}/api.php?mod=admin&rub=update')
 			.done(function(response)
 			{
 				console.log(response);
 
-				if (response.result=="OK")
+				if (response.status==200)
 				{
-					$("#form_update").css("background-color","#BBFFAA");
+					$("#form_update").addClass("success-bg");
 				}
 				else
 				{
-					$("#form_update").css("background-color","#FFBBAA");
+					$("#form_update").addClass("danger-bg");
 				}
-				$("#form_update").html(response.data);
+				//$("#form_update").html(response.data);
+				$("#form_update").html("<div>{lang_checkdb}</div>");
+				for (var k in response.data.db) {
+					var f = response.data.db[k];
+					$("#form_update").append("<div><i class='mdi mdi-check'></i> "+f+"</div>");
+				}
+				for (var k in response.error.db) {
+					var f = response.error.db[k];
+					$("#form_update").append("<div class='btn-outline-danger'><i class='mdi mdi-comment-alert-outline'></i> "+f+"</div>");
+				}
+				$("#form_update").append("<div>{lang_checkvar}</div>");
+				for (var k in response.data.variables) {
+					var f = response.data.variables[k];
+					$("#form_update").append("<div><i class='mdi mdi-check'></i> "+f+"</div>");
+				}
+				for (var k in response.error.variables) {
+					var f = response.error.variables[k];
+					$("#form_update").append("<div class='btn-outline-danger'><i class='mdi mdi-comment-alert-outline'></i> "+f+"</div>");
+				}
+				$("#form_update").append("<div>{lang_patchcore}</div>");
+				for (var k in response.data.patch) {
+					var f = response.data.patch[k];
+					$("#form_update").append("<div><i class='mdi mdi-check'></i> "+f+"</div>");
+				}
+				for (var k in response.error.patch) {
+					var f = response.error.patch[k];
+					$("#form_update").append("<div class='btn-outline-danger'><i class='mdi mdi-comment-alert-outline'></i> "+f+"</div>");
+				}
+
 			})
 			.fail(function(response)
 			{
-				$("#form_update").css("background-color","#FFBBAA");
+				$("#form_update").addClass("danger-bg");
 				$("#form_update").html(response);
 			});
 	});

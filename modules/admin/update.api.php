@@ -100,44 +100,7 @@ function AjoutLog($txt)
 
         }
 
-// ---- Exporte la structure existante
-/*
-        //[Non_unique] => 0
-        echo "Array\n(\n";
-        foreach($tabProd as $tab=>$t)
-        {
-                echo "\t\"".$tab."\" => Array (\n";
-
-                foreach($t as $f=>$d)
-                {
-                        echo "\t\t\"".$f."\" => Array(";
-                        foreach($d as $ff=>$dd)
-                        {
-                                echo "\"".$ff."\" => \"".$dd."\", ";
-                        }
-                        echo "),\n";
-                }
-                echo "\t),\n";
-        }
-        echo ");";
-*/
-
-
 // ---- Compare les structures
-    // [ae_abo_ligne] => Array
-        // (
-            // [id] => Array
-                // (
-                    // [Type] => int(10) unsigned
-                    // [Index] => PRIMARY
-                // )
-
-            // [abonum] => Array
-                // (
-                    // [Type] => varchar(8)
-                    // [Index] => 1
-                // )
-        // )
 
         foreach($tabTmpl as $tab=>$fields)
         {
