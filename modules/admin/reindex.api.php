@@ -6,18 +6,19 @@
 // ---- 
 	$ret=array();
 	$ret["result"]="OK";
-	$ret["data"]="";
+	$ret["status"]=200;
+	$ret["data"]=array();
 
 	$sql->show=true;
 
 function AjoutLog($txt)
 {
-	return htmlentities($txt)."<br />";
+	return $txt;
 }	
 
 
 // ---- Charge la structure des tables en base
-	$ret["data"].=AjoutLog("Suppression des index");
+	//$ret["data"].=AjoutLog("Suppression des index");
 
 	$tabProd=array();
 	$q="SHOW TABLES;";
@@ -61,11 +62,12 @@ function AjoutLog($txt)
 				if ($res==-1)
 				{
 					$ret["result"]="NOK";
-					$ret["data"].=AjoutLog(" ! Erreur suppression index ".$MyOpt["tbl"]."_".$tab.":".$field);	
+					$ret["status"]=200;
+					$ret["error"]["db"][]=AjoutLog("Erreur suppression index ".$MyOpt["tbl"]."_".$tab.":".$field);	
 				}
 				else
 				{
-					$ret["data"].=AjoutLog(" - Suppresion Index ".$MyOpt["tbl"]."_".$tab.":".$field);	
+					$ret["data"]["db"][]=AjoutLog("Suppresion Index ".$MyOpt["tbl"]."_".$tab.":".$field);	
 				}
 			}
 		}

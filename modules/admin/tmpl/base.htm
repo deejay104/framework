@@ -173,7 +173,9 @@ $(document).ready(function() {
 	
 	
 	$("#reindex").click(function (event) {
-		$("#form_reindex").css("background-color","");
+		$("#form_reindex").addClass("result-body");
+		$("#form_reindex").removeClass("success-bg");
+		$("#form_reindex").removeClass("danger-bg");
 		$("#form_reindex").html("Re-Index en cours");
 
 		$.get('{path_root}/api.php?mod=admin&rub=reindex')
@@ -181,19 +183,28 @@ $(document).ready(function() {
 			{
 				console.log(response);
 
-				if (response.result=="OK")
+				if (response.status==200)
 				{
-					$("#form_reindex").css("background-color","#BBFFAA");
+					$("#form_reindex").addClass("success-bg");
 				}
 				else
 				{
-					$("#form_reindex").css("background-color","#FFBBAA");
+					$("#form_reindex").addClass("danger-bg");
 				}
-				$("#form_reindex").html(response.data);
+				//$("#form_reindex").html(response.data);
+				$("#form_reindex").html("<div>{lang_checkdb}</div>");
+				for (var k in response.data.db) {
+					var f = response.data.db[k];
+					$("#form_reindex").append("<div><i class='mdi mdi-check'></i> "+f+"</div>");
+				}
+				for (var k in response.error.db) {
+					var f = response.error.db[k];
+					$("#form_reindex").append("<div class='btn-outline-danger'><i class='mdi mdi-comment-alert-outline'></i> "+f+"</div>");
+				}
 			})
 			.fail(function(response)
 			{
-				$("#form_reindex").css("background-color","#FFBBAA");
+				$("#form_update").addClass("danger-bg");
 				$("#form_reindex").html(response.data);
 			});
 	});
@@ -238,7 +249,9 @@ $(document).ready(function() {
 	
 	function applyConf(form,url)
 	{
-		$("#"+form).css("background-color","");
+		$("#"+form).addClass("result-body");
+		$("#"+form).removeClass("success-bg");
+		$("#"+form).removeClass("danger-bg");
 		$("#"+form).html("En cours...");
 
 		$.get(url)
@@ -246,17 +259,17 @@ $(document).ready(function() {
 			{
 				if (response.result=="OK")
 				{
-					$("#"+form).css("background-color","#BBFFAA");
+					$("#"+form).addClass("success-bg");
 				}
 				else
 				{
-					$("#"+form).css("background-color","#FFBBAA");
+					$("#"+form).addClass("danger-bg");
 				}
 				$("#"+form).html(response.data);
 			})
 			.fail(function(response)
 			{
-				$("#"+form).css("background-color","#FFBBAA");
+				$("#"+form).addClass("danger-bg");
 				$("#"+form).html(response.data);
 			});
 	}
