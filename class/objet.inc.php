@@ -1075,14 +1075,12 @@ class objet_core
 			foreach($this->fields as $key=>$field)
 			{
 				$tabobj[$key]=array();
+				$tabobj[$key]["Index"]=$field["index"] ?? 0;
+
 				if (($field["type"]=="number") || ($field["type"]=="numeric"))
 				{
-					$tabobj[$key]["Type"]="int(10) unsigned";
-					$tabobj[$key]["Default"]="0";
-					if (isset($field["default"]))
-					{
-						$tabobj[$key]["Default"]=$field["default"];
-					}
+					$tabobj[$key]["Type"]="int(10)".(($tabobj[$key]["Index"]=="PRIMARY") ? " unsigned" : "");
+					$tabobj[$key]["Default"]=($tabobj[$key]["Index"]=="PRIMARY") ? "NULL" : $field["default"] ?? 0;
 				}
 				else if ($field["type"]=="uuid")
 				{
@@ -1197,18 +1195,13 @@ class objet_core
 						$tabobj[$key]["Default"]="NULL";
 					}
 				}
-
-				if (isset($field["index"]))
-				{
-					$tabobj[$key]["Index"]=1;
-				}
 			}
 		}
 		
 		if (!isset($tabobj["id"]))
 		{
 			$tabobj["id"]=Array("Type" => "int(10) unsigned", "Default" => "NULL", "Index" => "PRIMARY");
-	//		ALTER TABLE `core_conso` ADD `id` INT UNSIGNED NULL DEFAULT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);
+			// ALTER TABLE `core_conso` ADD `id` INT UNSIGNED NULL DEFAULT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);
 		}
 		if (!isset($tabobj["actif"]))
 		{
