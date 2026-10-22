@@ -99,7 +99,7 @@ $tabTmpl=Array
 		"mailing" => Array("Type" => "int(11)", "Default" => "0", ),
 		"uid_creat" => Array("Type" => "int(10) unsigned", "Default" => "0"),
 		"dte_creat" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
-		"uid_maj" => Array("Type" => "int(10) unsigned", ),
+		"uid_maj" => Array("Type" => "int(10) unsigned", "Default" => "0" ),
 		"dte_maj" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00", ),
 	),
 	"forums_lus" => Array
@@ -120,7 +120,7 @@ $tabTmpl=Array
 		"comment" => Array("Type" => "text", ),
 		"uid_creat" => Array("Type" => "int(10) unsigned", "Default" => "0"),
 		"dte_creat" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00"),
-		"uid_maj" => Array("Type" => "int(10) unsigned"),
+		"uid_maj" => Array("Type" => "int(10) unsigned", "Default" => "0"),
 		"dte_maj" => Array("Type" => "datetime", "Default" => "0000-00-00 00:00:00", ),
 	),
 	"login" => Array
