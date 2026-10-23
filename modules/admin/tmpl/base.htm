@@ -84,7 +84,7 @@
 							<div class="input-group col-xs-12">
 								<input type="text" class="form-control file-upload-info" disabled="" placeholder="Fichier de configuration">
 								<span class="input-group-append">
-								  <button class="file-upload-browse btn btn-sm btn-primary" type="button">Upload</button>
+								  <button class="file-upload-browse btn btn-sm btn-primary" type="button">Sélectionner</button>
 								</span>
 							</div>
 						</div>
@@ -101,12 +101,15 @@
 						</div>
 						
 					</div>
-					<br />
-					<div class="form-inline"><label></label>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<div class="row">
+					<div>
 						<a class="btn btn-primary" id="save">Enregistrer</a>&nbsp;
 						<a class="btn btn-light" id="cancel">Annuler</a>
 					</div>
-				</form>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -224,20 +227,17 @@ $(document).ready(function() {
 	});
 
 	$("#importconf").click(function (event) {
-		$("#dialogForm").css("display","block");
-		$("#dialogForm").css("opacity",100);
-    });	
+		$('#dialogForm').modal('show');
+	});	
 	$( "#close" ).on( "click", function() {
-		$("#dialogForm").css("opacity",0);
-		$("#dialogForm").css("display","none");
-    });
+		$('#dialogForm').modal('hide');
+	});
 	$( "#save" ).on( "click", function() {
 		ImportConf();
     });
 	$( "#cancel" ).on( "click", function() {
-		$("#dialogForm").css("opacity",0);
-		$("#dialogForm").css("display","none");
-    });
+		$('#dialogForm').modal('hide');
+	});
 
     $('.file-upload-browse').on('click', function() {
       var file = $(this).parent().parent().parent().find('.file-upload-default');
@@ -286,8 +286,7 @@ $(document).ready(function() {
 		}
 		
 		if ( valid ) {
-			$("#dialogForm").css("opacity",0);
-			$("#dialogForm").css("display","none");
+			$('#dialogForm').modal('hide');
 
 			var form = document.getElementById('formdata');
 			var formData = new FormData(form);

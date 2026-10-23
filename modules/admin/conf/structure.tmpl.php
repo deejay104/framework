@@ -114,7 +114,7 @@ $tabTmpl=Array
 	(
 		"id" => Array("Type" => "int(10) unsigned", "Index" => "PRIMARY", ),
 		"class" => Array("Type" => "varchar(20)", ),
-		"table" => Array("Type" => "varchar(20)", "Index" => "1", ),
+		"table" => Array("Type" => "varchar(30)", "Index" => "1", ),
 		"idtable" => Array("Type" => "bigint(20) unsigned", "Index" => "1", ),
 		"type" => Array("Type" => "varchar(3)", ),
 		"comment" => Array("Type" => "text", ),

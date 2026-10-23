@@ -69,26 +69,22 @@ $( function() {
 
 
 	$( "#close" ).on( "click", function() {
-		$("#dialogForm").css("opacity",0);
-		$("#dialogForm").css("display","none");
+		$('#dialogForm').modal('hide');
     });
 	$( "#save" ).on( "click", function() {
 		editMail();
-		$("#dialogForm").css("opacity",0);
-		$("#dialogForm").css("display","none");
+		$('#dialogForm').modal('hide');
     });
 	$( "#cancel" ).on( "click", function() {
-		$("#dialogForm").css("opacity",0);
-		$("#dialogForm").css("display","none");
+		$('#dialogForm').modal('hide');
     });
 	
  
 <!-- BEGIN: lst_edit -->
 	$( "#edit_{lst_id}" ).on( "click", function() {
 		loadMail({lst_id});
-		$("#dialogForm").css("display","block");
-		$("#dialogForm").css("opacity",100);
-    });
+		$('#dialogForm').modal('show');
+	});
 <!-- END: lst_edit -->
 });
 </script>
@@ -121,10 +117,17 @@ $( function() {
 					<div class="form-group row">
 						<label class="col-lg-2  col-form-label"></label>
 						<div class="col-lg-8">
-							<button class="btn btn-primary" id="save">Enregistrer</button>&nbsp;
-							<button class="btn btn-light" id="cancel">Annuler</button>
+							
 						</div>
 					</div>	
+				</div>
+			</div>
+			<div class="modal-footer">
+				<div class="row">
+					<div>
+						<button class="btn btn-primary" id="save">Enregistrer</button>&nbsp;
+						<button class="btn btn-light" id="cancel">Annuler</button>
+					</div>
 				</div>
 			</div>
 		</div>

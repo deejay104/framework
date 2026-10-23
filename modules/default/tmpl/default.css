@@ -852,6 +852,9 @@ select.form-control {
 .form-check-label  { cursor: pointer; font-size: 0.875rem; }
 .form-check-input  { margin-top: 0.2rem; margin-left: -1.5rem; cursor: pointer; }
 .form-inline       { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
+.form-inline label { min-width: 200px; justify-content: left; }
+.form-inline input { min-width: 200px; max-width: 200px; }
+
 
 .form-check .form-check-input { float: left; margin-left: -1.5em; }
 .form-check .form-check-label { min-height: 18px; display: block; margin-left: 1.75rem; font-size: 0.875rem; line-height: 1.5; }
@@ -862,7 +865,7 @@ select.form-control {
 .form-check .form-check-label input[type="radio"] + .input-helper::after { content: ""; width: 8px; height: 8px; background: #ffffff; border-radius: 50%; top: 6px; left: 6px; -webkit-transition: all; -o-transition: all; transition: all; transition-duration: 0s; transition-duration: 0s; -webkit-transition-duration: 250ms; transition-duration: 250ms; opacity: 0; filter: alpha(opacity=0); -webkit-transform: scale(0); -ms-transform: scale(0); -o-transform: scale(0); transform: scale(0); position: absolute; }
 .form-check .form-check-label input[type="radio"]:checked + .input-helper::before { background: #267CB9; border-width: 0; }
 .form-check .form-check-label input[type="radio"]:checked + .input-helper::after { opacity: 1; line-height: 1.5; filter: alpha(opacity=100); -webkit-transform: scale(1); -ms-transform: scale(1); -o-transform: scale(1); transform: scale(1); }
-
+.form-check label { min-width:unset; }
 .form-check .form-check-label input[type="radio"]:disabled + .input-helper::before { background-color: #f0f3f8; }
 
 
@@ -1193,7 +1196,17 @@ textarea.form-control { min-height: 55px; resize: none; }
 .dropdown-divider { border-top: 1px solid var(--p67-border); margin: 0.25rem 0; }
 
 /* ── 16. Modales ─────────────────────────────────────────────  */
+.modal {
+	position: fixed; 
+	max-height: 90vh;                 /* repli pour les anciens navigateurs */
+	max-height: calc(100dvh - 2rem);
+	overflow-y: auto;
+	overscroll-behavior: contain;
+}
+
 .modal.fade .modal-dialog { -webkit-transform: translate(0,0px); transform: translate(0,0px); }
+
+.fade { transition: opacity .05s linear; }
 
 .modal-content {
   border:        1px solid var(--p67-border);
@@ -1687,7 +1700,7 @@ div.tagsinput span.tag a { color: #ffffff; }
   .navbar-icon { display: block !important; }
   .navbar-profile { display: flex !important; }
   .d-lg-block { display: block !important; }
-  .modal-dialog { margin-top: 40px; }
+  .modal-dialog { margin-top: 160px; }
 }
 @media (min-width: 768px) {
   .grid-margin-md   { margin-bottom: 1.25rem; }
