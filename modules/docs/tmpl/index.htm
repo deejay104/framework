@@ -197,48 +197,50 @@
 
 <!-- MODAL -->
 <div id="createFolder" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-<div class="modal-dialog modal-lg" role="document">
-	<div class="modal-content">
-	<div class="modal-header">
-		<h5 class="modal-title" id="modalLabel">Créer un nouveau classeur</h5>
-		<button id="close" type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="modalLabel">Créer un nouveau classeur</h5>
+				<button id="close" type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+			</div>
+			<div class="modal-body">
+				<div class="form-group row">
+					<label class="col-lg-3 col-form-label">Titre</label>
+					<div class="col-lg-8"><input type="text" id="contentNewTitle" class="form-control" placeholder="Nom du classeur"></div>
+				</div>
+				<div class="form-group row">
+					<label class="col-lg-3 col-form-label">Description</label>
+					<div class="col-lg-8"><textarea id="contentNewComment" class="form-control" rows="4" placeholder="Description facultative…"></textarea></div>
+				</div>
+				<div class="form-group row">
+					<label class="col-lg-3 col-form-label">Groupe de lecture</label>
+					<div class="col-lg-4">
+						<select id="group_read" class="form-control">
+						<option value="ALL">ALL</option>
+						<!-- BEGIN: lst_group_read --><option value="{aff_group}">{aff_group}</option><!-- END: lst_group_read -->
+						</select>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-lg-3 col-form-label">Groupe d'écriture</label>
+					<div class="col-lg-4">
+						<select id="group_write" class="form-control">
+						<option value="ALL">ALL</option>
+						<!-- BEGIN: lst_group_write --><option value="{aff_group}">{aff_group}</option><!-- END: lst_group_write -->
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<div class="row">
+					<div>
+						<button class="btn btn-primary" id="save"><i class="mdi mdi-content-save-outline mr-1"></i>Enregistrer</button>&nbsp;
+						<button class="btn btn-light" id="cancel">Annuler</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
-	<div class="modal-body">
-		<div class="form-group row">
-		<label class="col-lg-3 col-form-label">Titre</label>
-		<div class="col-lg-8"><input type="text" id="contentNewTitle" class="form-control" placeholder="Nom du classeur"></div>
-		</div>
-		<div class="form-group row">
-		<label class="col-lg-3 col-form-label">Description</label>
-		<div class="col-lg-8"><textarea id="contentNewComment" class="form-control" rows="4" placeholder="Description facultative…"></textarea></div>
-		</div>
-		<div class="form-group row">
-		<label class="col-lg-3 col-form-label">Groupe de lecture</label>
-		<div class="col-lg-4">
-			<select id="group_read" class="form-control">
-			<option value="ALL">ALL</option>
-			<!-- BEGIN: lst_group_read --><option value="{aff_group}">{aff_group}</option><!-- END: lst_group_read -->
-			</select>
-		</div>
-		</div>
-		<div class="form-group row">
-		<label class="col-lg-3 col-form-label">Groupe d'écriture</label>
-		<div class="col-lg-4">
-			<select id="group_write" class="form-control">
-			<option value="ALL">ALL</option>
-			<!-- BEGIN: lst_group_write --><option value="{aff_group}">{aff_group}</option><!-- END: lst_group_write -->
-			</select>
-		</div>
-		</div>
-		<div class="form-group row">
-		<div class="col-lg-8 offset-lg-3">
-			<button class="btn btn-primary" id="save"><i class="mdi mdi-content-save-outline mr-1"></i>Enregistrer</button>&nbsp;
-			<button class="btn btn-light" id="cancel">Annuler</button>
-		</div>
-		</div>
-	</div>
-	</div>
-</div>
 </div>
 
 <script>
@@ -343,11 +345,7 @@ function createFolder()
 	$("#contentNewComment").val("");
 	$("#group_read").val("");
 	$("#group_write").val("");
-	$("#createFolder").css({"display":"block"});
-	$("#createFolder").css("opacity",1);
-	$(".card").css("opacity",0.25);
-	$(".sidebar").css("opacity",0.25);
-	$(".content-menu").css("opacity",0.25);
+	$('#createFolder').modal('show');
 	currentFolder=0;
 }
 
@@ -363,42 +361,25 @@ function editFolder(id)
 		$("#contentNewComment").val(data.data.description);
 		$("#group_read").val(data.data.group_read);
 		$("#group_write").val(data.data.group_write);
-		$("#createFolder").css({"display":"block"});
-		$("#createFolder").css("opacity",1);
-		$(".card").css("opacity",0.25);
-		$(".sidebar").css("opacity",0.25);
-		$(".content-menu").css("opacity",0.25);
+		$('#createFolder').modal('show');
 		currentFolder=id;
 	});
 }
 
-$( "#cancel" ).on( "click", function() {
-	$("#createFolder").css({"display":"none"});
-	$("#createFolder").css("opacity",0);
-	$(".card").css("opacity",1);
-	$(".sidebar").css("opacity",1);
-	$(".content-menu").css("opacity",1);
-});
 
 $( "#save" ).on( "click", function() {
 	$.post( "/api/v1/docs/postfolder", { id: currentFolder, title:$("#contentNewTitle").val(), description:$("#contentNewComment").val(), group_read:$("#group_read").val(), group_write:$("#group_write").val()} ).done(function(data) {
 		console.log("Folder created");
 		loadContent();
 	});
-
-	$("#createFolder").css({"display":"none"});
-	$("#createFolder").css("opacity",0);
-	$(".card").css("opacity",1);
-	$(".sidebar").css("opacity",1);
-	$(".content-menu").css("opacity",1);
+	$('#createFolder').modal('hide');
 });
 
+$( "#cancel" ).on( "click", function() {
+	$('#createFolder').modal('hide');
+});
 $( "#close" ).on( "click", function() {
-	$("#createFolder").css("opacity",0);
-	$("#createFolder").css("display","none");
-	$(".card").css("opacity",1);
-	$(".sidebar").css("opacity",1);
-	$(".content-menu").css("opacity",1);
+	$('#createFolder').modal('hide');
 });
 	
 function showSearch()

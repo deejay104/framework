@@ -234,27 +234,40 @@ class echeance_core extends objet_core
 		else if ( ($this->editmode=="edit") && (GetDroit($this->droit)) )
 		{
 //			$ret.="<div id='aff_echeance".$this->id."' OnMouseOver='document.getElementById(\"echeance_del_".$this->id."\").style.display=\"inline-block\";' OnMouseOut='document.getElementById(\"echeance_del_".$this->id."\").style.display=\"none\";' class='showEcheance'>";
+/*
 			$ret.="<div id='aff_echeance".$this->id."' class='action showEcheance'>";
 			$ret.="<p>";
 			$ret.="<label class='col-lg-6'>".$tabLang["lang_echeance"]." ".$this->description." ".$tabLang["core_the"]."</label><input name='form_echeance[".$this->id."]' id='form_echeance".$this->id."' class='form-control' value='".$this->dte_echeance."' type='date' style='width:165px;'>&nbsp;";
 			$ret.="<span class='feed-actions'><a href=\"#\" OnClick=\"document.getElementById('form_echeance".$this->id."').value=''; document.getElementById('aff_echeance".$this->id."').style.display='none'; return false;\"><i class='mdi mdi-delete'></i></a></span>";
 			$ret.="</p>";
+*/
+			$ret.="<div id='aff_echeance".$this->id."' class='action showEcheance form-inline'>";
+			$ret.="<p><label class='col-lg-6'>".$tabLang["lang_echeance"]." ".$this->description." ".$tabLang["core_the"]."</label>";
+			$ret.="<input name='form_echeance[".$this->id."]' id='form_echeance".$this->id."' class='form-control form-input' value='".$this->dte_echeance."' type='date' style='width:165px;'>&nbsp;";
 
-
-			$lstdoc=ListDocument($this->sql,$this->uid,"document");
-			
-			if (is_array($lstdoc))
+			$query="SELECT id,document FROM ".$MyOpt["tbl"]."_echeancetype AS type WHERE id='".$this->typeid."'";
+			$sql=$this->sql;
+			$res=$sql->QueryRow($query);
+			if ($res["document"]=="oui")
 			{
-				$ret.="<select name='form_echeance_doc[".$this->id."]' id='form_echeance_doc".$this->id."' class='form-control'><option value=0>Aucun</option>";
-				foreach($lstdoc as $i=>$did)
-				{
-					$doc = new document_core($did,$this->sql);
-					$ret.="<option value='".$doc->id."' ".(($this->doc==$doc->id) ? "selected" : "").">".$doc->name."</option>";
-				}
-				$ret.="<select>";
-			}	
+				$lstdoc=ListDocument($this->sql,$this->uid,"document");
 
-			$ret.="</div>";
+				if (is_array($lstdoc))
+				{
+					$ret.="<select name='form_echeance_doc[".$this->id."]' id='form_echeance_doc".$this->id."' class='form-control form-input'><option value=0>Aucun</option>";
+					foreach($lstdoc as $i=>$did)
+					{
+						$doc = new document_core($did,$this->sql);
+						$ret.="<option value='".$doc->id."' ".(($this->doc==$doc->id) ? "selected" : "").">".$doc->name."</option>";
+					}
+					$ret.="<select>";
+				}					
+			}
+
+			$ret.="<span class='feed-actions'><a href=\"#\" OnClick=\"document.getElementById('form_echeance".$this->id."').value=''; document.getElementById('aff_echeance".$this->id."').style.display='none'; return false;\"><i class='mdi mdi-delete'></i></a></span>";
+			$ret.="</p></div>";
+
+
 		}
 		else if ($type=="val")
 		{
@@ -439,7 +452,7 @@ class echeancetype_core extends objet_core
 					$tabgrp[$sql->data["groupe"]]=$sql->data["description"];
 				}
 
-				$ret="<select name=\"".$formname."[$key]\">";
+				$ret="<select name=\"".$formname."[$key]\" class='form-control'>";
 				$ret.="<option value=''>Tout le monde</option>";
 				foreach($tabgrp as $grp=>$d)
 				{
@@ -459,7 +472,7 @@ class echeancetype_core extends objet_core
 					$tabgrp[$sql->data["groupe"]]=$sql->data["description"];
 				}
 
-				$ret="<select name=\"".$formname."[$key]\">";
+				$ret="<select name=\"".$formname."[$key]\" class='form-control'>";
 				$ret.="<option value=''>Utilisateur</option>";
 				foreach($tabgrp as $grp=>$d)
 				{

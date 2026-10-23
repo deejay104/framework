@@ -8,6 +8,8 @@
 <!-- BEGIN: corps -->
 <style>
 /* ── Styles locaux — page Documents ── */
+.card-body .form-inline { height: 30px; }
+.form-inline { gap: unset; margin-bottom:10px;  }
 
 /* Barre de filtres */
 .filters-bar {
@@ -362,32 +364,27 @@
       <div class="modal-body">
 
         <!-- Métadonnées 2 colonnes -->
-        <div class="modal-fields-grid">
-          <div class="form-group">
-            <label class="col-form-label" style="font-size:0.72rem; text-transform:uppercase; letter-spacing:.06em;">Auteur</label>
-            <input type="text" id="contentAuthor" class="form-control" disabled>
+        <div class="row">
+          <div class="form-inline">
+            <label>Auteur</label><input type="text" id="contentAuthor" class="form-control form-input" disabled>
           </div>
-          <div class="form-group">
-            <label class="col-form-label" style="font-size:0.72rem; text-transform:uppercase; letter-spacing:.06em;">Date de création</label>
-            <input type="text" id="contentDateCreate" class="form-control" disabled>
+          <div class="form-inline">
+            <label>Date de création</label><input type="text" id="contentDateCreate" class="form-control form-input" disabled>
           </div>
-          <div class="form-group">
-            <label class="col-form-label" style="font-size:0.72rem; text-transform:uppercase; letter-spacing:.06em;">Date de début</label>
-            <input type="date" id="contentDateStart" class="form-control" disabled>
+          <div class="form-inline">
+            <label>Date de début</label><input type="date" id="contentDateStart" class="form-control form-input" disabled>
           </div>
-          <div class="form-group">
-            <label class="col-form-label" style="font-size:0.72rem; text-transform:uppercase; letter-spacing:.06em;">Date d'échéance</label>
-            <input type="date" id="contentDateEnd" class="form-control" disabled>
+          <div class="form-inline">
+            <label>Date d'échéance</label><input type="date" id="contentDateEnd" class="form-control form-input" disabled>
           </div>
-          <div class="form-group">
-            <label class="col-form-label" style="font-size:0.72rem; text-transform:uppercase; letter-spacing:.06em;">Lecture obligatoire</label>
-            <select id="contentMandatory" class="form-control" disabled><option value="non">Non</option><option value="oui">Oui</option></select>
+          <div class="form-inline">
+            <label>Lecture obligatoire</label><select id="contentMandatory" class="form-control form-input" disabled><option value="non">Non</option><option value="oui">Oui</option></select>
           </div>
         </div>
 
         <div class="modal-divider"></div>
 
-		<!-- BEGIN: adddoc -->
+		    <!-- BEGIN: adddoc -->
         <!-- Pièces jointes -->
         <div class="form-group">
           <label class="col-form-label" style="font-size:0.72rem; text-transform:uppercase; letter-spacing:.06em;">Pièces jointes</label>
@@ -399,7 +396,7 @@
             <input id="addFile" type="file" style="display:none">
           </div>
         </div>
-		<!-- END: adddoc -->
+		    <!-- END: adddoc -->
         <div class="form-group">
             <div id="modalAttachments" style="margin-top:8px; display:flex; flex-wrap:wrap; gap:5px;"></div>
             <div id="modalReadAll" style="margin-top:15px; "></div>
@@ -418,14 +415,18 @@
 
         <div id="contentComment" class="profile-feed"></div>
 
+  	  </div>
 
-	  </div>
-
-		<!-- Boutons -->
-		<div class="card-footer">
-			<input id="save" type="button" value="Enregistrer" class="btn btn-primary btn-sm">
-			<input id="cancel" type="button" value="Annuler" class="btn btn-light btn-sm">
-		</div>
+      <!-- Boutons -->
+      <div class="modal-footer">
+          <div class="row">
+            <div>
+              <input id="save" type="button" value="Enregistrer" class="btn btn-primary btn-sm">
+              <input id="cancel" type="button" value="Annuler" class="btn btn-light btn-sm">
+            </div>
+          </div>
+        </div>
+      </div>
 
     </div>
   </div>
@@ -521,88 +522,80 @@
     // ── Ouverture modal ───────────────────────────────────────────
     function loadContent(id)
     {
-        currentPaper = id;
-        isEditing = false;
+      currentPaper = id;
+      isEditing = false;
 
-        $.get('/api/v1/docs/getpaper?id=' + id).done(function(data) {
-            $('#contentTitle').val(data.data.title);
-            $('#contentAuthor').val(data.data.author);
-            $('#contentDateCreate').val(data.data.created);
-            $('#contentDateStart').val(data.data.dte_start);
-            $('#contentDateEnd').val(data.data.dte_end);
-            document.getElementById('contentMandatory').value = data.data.mandatory;
-            $('#contentNewComment').val('');
-            setReadonly(true);
+      $.get('/api/v1/docs/getpaper?id=' + id).done(function(data) {
+        $('#contentTitle').val(data.data.title);
+        $('#contentAuthor').val(data.data.author);
+        $('#contentDateCreate').val(data.data.created);
+        $('#contentDateStart').val(data.data.dte_start);
+        $('#contentDateEnd').val(data.data.dte_end);
+        document.getElementById('contentMandatory').value = data.data.mandatory;
+        $('#contentNewComment').val('');
+        setReadonly(true);
 
-            // Pièces jointes dans la modal
-            var attachHtml = '';
-            var nb=0;
-            if (lstDocuments)
+        // Pièces jointes dans la modal
+        var attachHtml = '';
+        var nb=0;
+        if (lstDocuments)
+        {
+            for (var d in lstDocuments)
             {
-                for (var d in lstDocuments)
+                if (lstDocuments[d].id==id)
                 {
-                    if (lstDocuments[d].id==id)
+                    for (var did in lstDocuments[d].doc)
                     {
-                        for (var did in lstDocuments[d].doc)
-                        {
-                            attachHtml += '<div class="'+((lstDocuments[d].doc[did].read) ? "" : "unread")+'"><a href="' + lstDocuments[d].doc[did].url + '" target="_blank" class="attach-pill" onclick="event.stopPropagation();"><i class="mdi mdi-file-' + lstDocuments[d].doc[did].icon + '" style="color:' + lstDocuments[d].doc[did].color + ';"></i>' + lstDocuments[d].doc[did].name + '</a></div>';
-                            if (!lstDocuments[d].doc[did].read) { nb++; }
-                        }
+                        attachHtml += '<div class="'+((lstDocuments[d].doc[did].read) ? "" : "unread")+'"><a href="' + lstDocuments[d].doc[did].url + '" target="_blank" class="attach-pill" onclick="event.stopPropagation();"><i class="mdi mdi-file-' + lstDocuments[d].doc[did].icon + '" style="color:' + lstDocuments[d].doc[did].color + ';"></i>' + lstDocuments[d].doc[did].name + '</a></div>';
+                        if (!lstDocuments[d].doc[did].read) { nb++; }
                     }
                 }
-                $('#modalAttachments').html(attachHtml);
             }
+            $('#modalAttachments').html(attachHtml);
+        }
 
-            if (data.data.mandatory=="non")
+        if (data.data.mandatory=="non")
+        {
+            $('#modalReadAll').addClass("d-none");
+        }
+        else if (nb>0)
+        {
+            $('#modalReadAll').html('<i class="mdi mdi-hand-pointing-right"></i> Lisez tous les documents surlignés en rouge et rafraichissez la page. ('+nb+' document'+((nb>1) ? 's' : '')+' à lire)');
+            $('#modalSigned').addClass("d-none");
+            $('#modalConfirmRead').addClass("d-none");
+        }
+        else
+        {
+            $('#modalReadAll').addClass("d-none");
+            if (data.data.read)
             {
-                $('#modalReadAll').addClass("d-none");
-            }
-            else if (nb>0)
-            {
-                $('#modalReadAll').html('<i class="mdi mdi-hand-pointing-right"></i> Lisez tous les documents surlignés en rouge et rafraichissez la page. ('+nb+' document'+((nb>1) ? 's' : '')+' à lire)');
-                $('#modalSigned').addClass("d-none");
+                $('#modalSigned').html('<i class="mdi mdi-lock-outline"></i> Fiche lue le '+data.data.dte_read+'.');
+                $('#modalSigned').removeClass("d-none");
                 $('#modalConfirmRead').addClass("d-none");
+                isSigned=true;
             }
             else
             {
-                $('#modalReadAll').addClass("d-none");
-                if (data.data.read)
-                {
-                    $('#modalSigned').html('<i class="mdi mdi-lock-outline"></i> Fiche lue le '+data.data.dte_read+'.');
-                    $('#modalSigned').removeClass("d-none");
-                    $('#modalConfirmRead').addClass("d-none");
-                    isSigned=true;
-                }
-                else
-                {
-                    $('#modalSigned').addClass("d-none");
-                    $('#modalConfirmRead').removeClass("d-none");
-                    isAllRead=true;
-                }
+                $('#modalSigned').addClass("d-none");
+                $('#modalConfirmRead').removeClass("d-none");
+                isAllRead=true;
             }
-
+        }
 
         $("#contentComment").html("");
         $.get('/api/v1/docs/lstcomment?id='+id).done(function(data)
         {
-            for (var key in data.data)
-                {
-                //	showComment(data.data[key].avatar,data.data[key].description,data.data[key].author,data.data[key].created);
-                    var newComment='<div class="feed-item"><div class="feed-avatar"><img src="/'+data.data[key].avatar+'" alt="avatar"></div>';
-                    newComment+='<div class="feed-body"><div class="feed-title"><div class="feed-meta">'+data.data[key].author+'<span class="sep">·</span><i class="mdi mdi-clock-outline" style="font-size:.8rem;"></i>'+data.data[key].created+'</div></div>';
-                    newComment+='<p class="feed-text">'+data.data[key].description+'</p></div>';
-                    $("#contentComment").html($("#contentComment").html()+newComment);
-                }
-            });
-
-            $('#paperContent').modal('show');
-
-          $(".card").css("opacity",0.25);
-          $(".sidebar").css("opacity",0.25);
-          $(".content-menu").css("opacity",0.25);
-          $(".info-cartouche-wrap").css("opacity",0.25);
-
+          for (var key in data.data)
+          {
+            var newComment='<div class="feed-item"><div class="feed-avatar"><img src="/'+data.data[key].avatar+'" alt="avatar"></div>';
+            newComment+='<div class="feed-body"><div class="feed-title"><div class="feed-meta">'+data.data[key].author+'<span class="sep">·</span><i class="mdi mdi-clock-outline" style="font-size:.8rem;"></i>'+data.data[key].created+'</div></div>';
+            newComment+='<p class="feed-text">'+data.data[key].description+'</p></div>';
+            $("#contentComment").html($("#contentComment").html()+newComment);
+          }
         });
+
+        $('#paperContent').modal('show');
+      });
     }
 
   function setReadonly(on) {
@@ -666,7 +659,8 @@
         $('#paperContent').modal('hide');
     });
 
-  $('#cancel, #close').on('click', function() { $('#paperContent').modal('hide'); });
+  $('#cancel').on('click', function() { $('#paperContent').modal('hide'); });
+  $('#close').on('click', function() { $('#paperContent').modal('hide'); });
 
   // ── Recherche ─────────────────────────────────────────────────
   var timer = null;

@@ -853,7 +853,6 @@ select.form-control {
 .form-check-input  { margin-top: 0.2rem; margin-left: -1.5rem; cursor: pointer; }
 .form-inline       { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
 .form-inline label { min-width: 200px; justify-content: left; }
-.form-inline input { min-width: 200px; max-width: 200px; }
 
 
 .form-check .form-check-input { float: left; margin-left: -1.5em; }
@@ -1701,6 +1700,8 @@ div.tagsinput span.tag a { color: #ffffff; }
   .navbar-profile { display: flex !important; }
   .d-lg-block { display: block !important; }
   .modal-dialog { margin-top: 160px; }
+  .form-inline .form-control { display: inline-block; width: auto; }
+  .form-inline input { min-width: 200px; max-width: 200px; }
 }
 @media (min-width: 768px) {
   .grid-margin-md   { margin-bottom: 1.25rem; }
