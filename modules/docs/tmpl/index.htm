@@ -453,8 +453,8 @@ function searchList()
 				for (var ii in data.data[key].doc)
 				{
 					txtFiles=txtFiles+"<div class='doc-list-item'>";
-					txtFiles=txtFiles+"<a href='https://easyaero.dev.les-mnms.net/docs/folder?id="+data.data[key].folder.id+"''>"+data.data[key].folder.data.title+"</a> / ";
-					txtFiles=txtFiles+"<a href='https://easyaero.dev.les-mnms.net/docs/folder?id="+data.data[key].folder.id+"&paper="+data.data[key].id+"'>"+data.data[key].title+"</a> / ";
+					txtFiles=txtFiles+"<a href='/docs/folder?id="+data.data[key].folder.id+"''>"+data.data[key].folder.data.title+"</a> / ";
+					txtFiles=txtFiles+"<a href='/docs/folder?id="+data.data[key].folder.id+"&paper="+data.data[key].id+"'>"+data.data[key].title+"</a> / ";
 					txtFiles=txtFiles+data.data[key].doc[ii].fullpath;
 					txtFiles=txtFiles+"</div>";
 					i=i+1;
