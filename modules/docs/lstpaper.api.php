@@ -86,6 +86,9 @@
 		$line["author"]=$usr->fullname;
 		$line["created"]=DisplayDate($d["dte_creat"]);
 
+		$folder = new folder_core($d["id_folder"],$sql,false);
+		$line["folder"]=$folder->export();
+
 		// Affiche les pièces jointes au message
 		$lstdoc=ListDocument($sql,$d["id"],"paper");
 

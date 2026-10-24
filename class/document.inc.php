@@ -364,7 +364,15 @@ class document_core{
 		}
 		else if ($this->editmode=="read")
 		{
-			if (file_exists($this->destpath."/".$this->filename))
+			if ($this->storage=="s3")
+			{
+				$fsize=CalcSize($this->size);
+				$txt.="<a href='".$MyOpt["host"]."/doc.php?id=".$this->id."' target='_blank'>";
+				$txt.="<i class='mdi mdi-file-".$attr["icon"]."' style='color:".$attr["color"].";'></i> ";
+				$txt.=(($type=="large") ? $filename." (".$fsize.") " : "");
+				$txt.="</a>";		
+			}
+			else if (file_exists($this->destpath."/".$this->filename))
 			{
 				$fsize=CalcSize(filesize($this->destpath."/".$this->filename));
 
