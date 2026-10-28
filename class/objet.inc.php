@@ -1057,6 +1057,19 @@ class objet_core
 		return $ret;
 	}
 
+	# Cehck if the object contains a value
+	function search($search)
+	{
+		foreach($this->data as $i=>$d)
+		{
+			if (preg_match("/".$search."/i",$d))	
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	
 	function genSqlTab(&$tab)
 	{

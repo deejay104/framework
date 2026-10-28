@@ -680,6 +680,20 @@ function CalcDate($dte, $n)
 }	
 
 
+function CheckSearch($tab,$search)
+{
+	// Check if a value is contain in an array
+	foreach($tab as $i=>$d)
+	{
+		if (preg_match("/".$search."/i",$d))	
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+// ---------------------------------------------------------------------
 
 // Envoie un email à partir d'un template en base
 function SendMailFromFile($from,$to,$tabcc,$subject="",$tabvar=array(),$name="",$files="",$dest="mail")
@@ -735,6 +749,9 @@ function SendMailFromFile($from,$to,$tabcc,$subject="",$tabvar=array(),$name="",
 		return MyMail($from,$to,$tabcc,$subject,$mail,"",$files);
 	}
 }
+
+// ---------------------------------------------------------------------
+
 
 // Envoie d'un email
 function MyMail($from,$to,$tabcc,$subject,$message,$headers="",$files="")
@@ -860,6 +877,11 @@ function SendMail($From,$To,$Cc,$Subject,$Text,$Html,$AttmFiles)
 {
 	affInformation("*Fonction SendMail supprimée*","warning");
 }
+
+
+
+// ---------------------------------------------------------------------
+
 
 
 /* **** Fonction d'affichage d'un tableau ****
@@ -1100,7 +1122,8 @@ function AfficheTableau($tabValeur,$tabTitre=array(),$order="",$trie="",$url="",
 	$ret.='       "emptyTable":     "'.$tabLang["lang_tab_emptytable"].'",';
 	$ret.='       "info":           "'.$tabLang["lang_tab_info"].'",';
  	$ret.='       "infoEmpty":      "'.$tabLang["lang_tab_infoempty"].'",';
-	$ret.='       "infoFiltered":   "(filtered from _MAX_ total entries)",';
+ 	$ret.='       "zeroRecords":      "'.$tabLang["lang_tab_zerorecord"].'",';
+	$ret.='       "infoFiltered":   "('.$tabLang["lang_tab_infofiltered"].')",';
 	$ret.='    },';
 	$ret.='    "pageLength": '.$limit.',';
 	$ret.='    "lengthMenu": [ '.$lstLimit.' ],';
@@ -1169,7 +1192,7 @@ function TrieValInv ($a, $b)
 
 */
 
-function AfficheTableauRemote($tabTitre,$url,$order="",$trie="d",$search="",$nbline=25,$idtbl="")
+function AfficheTableauRemote($tabTitre,$url,$order="",$trie="d",$search=true,$nbline=25,$idtbl="")
 {
 	global $mod,$rub,$corefolder,$MyOpt,$tabLang;
 
@@ -1238,12 +1261,6 @@ function AfficheTableauRemote($tabTitre,$url,$order="",$trie="d",$search="",$nbl
 	$ret.="<tbody>\n";
 
 	$ret.="</tbody>\n";
-	// if ($affsubb==1)
-	// {
-		// $ret.="<tfoot>";
-		// $ret.=$subb;
-		// $ret.="</tfoot>";
-	// }
 	$ret.="</table></div>\n";
 
 	$ret.="<script type='text/javascript' src='".$MyOpt["host"]."/core/external/jquery/datatables.v3.js'></script>";
@@ -1258,7 +1275,7 @@ function AfficheTableauRemote($tabTitre,$url,$order="",$trie="d",$search="",$nbl
 
 	$limit=$nbline;
 
-// $limit.',10, 25, 50, 75, 100
+	// $limit.',10, 25, 50, 75, 100
 	$lstLimit="";
 	$tabLimit=array(10,25,50,75,100);
 	$s="";
@@ -1288,41 +1305,39 @@ function AfficheTableauRemote($tabTitre,$url,$order="",$trie="d",$search="",$nbl
 	$ret.='       "emptyTable":     "'.$tabLang["lang_tab_emptytable"].'",';
 	$ret.='       "info":           "'.$tabLang["lang_tab_info"].'",';
  	$ret.='       "infoEmpty":      "'.$tabLang["lang_tab_infoempty"].'",';
-	$ret.='       "infoFiltered":   "(filtered from _MAX_ total entries)",';
+ 	$ret.='       "zeroRecords":      "'.$tabLang["lang_tab_zerorecord"].'",';
+	$ret.='       "infoFiltered":   "('.$tabLang["lang_tab_infofiltered"].')",';
 	$ret.='    },';
 	$ret.='    "pageLength": '.$limit.',';
 	$ret.='    "lengthMenu": [ '.$lstLimit.' ],';
 	$ret.='    "processing": true,';
     $ret.='    "serverSide": true,';
-    $ret.='    "ajax": "'.$url.'",';
-	$ret.='    "columns": [';
+    $ret.='    "ajax": "'.$url.'",'."\n";
+
 	
-	$o='"order": [';
 	$align="";
+	$columns="";
+	$columnDefs="";
+	$ordercol="";
 	$i=0;
 	foreach($tabTitre as $name=>$t)
 	{
-		$ret.='{ "data": "'.$name.'"},';
+		$columns.='{ "data": "'.$name.'"},';
 		if (($name==$order) && ($trie!="none"))
 		{
-			$o.='[ '.$i.', "'.(($trie=="d") ? "asc" : "desc").'" ]';
+			$ordercol.='[ '.$i.', "'.(($trie=="d") ? "asc" : "desc").'" ]';
 		}
-		if ((isset($t["calign"])) && ($t["calign"]=="right"))
-		{
-			$align.='{"targets":'.$i.',"className": "dt-right"},';
-		}
+
+		$columnDefs.='{"targets":'.$i.', "render": function ( data, type, row, meta ) { if ((row._link) && (row._link.'.$name.')) { return row._link.'.$name.'; } else { return data; } }, '.(((isset($t["calign"])) && ($t["calign"]=="right")) ? '"className": "dt-right",' : '').' '.(((isset($t["order"])) && ($t["order"]=="no")) ? '"orderable": false,' : '').'},';
 		$i=$i+1;
 	}
-	$o.='],';
-	$ret.=' ],';
-	$ret.=$o;
-	$ret.='"columnDefs":[';
-	if ($trie=="none")
-	{
-		$ret.='{"targets":"no-sort","orderable": false},';
-	}
-	$ret.=$align;
-	$ret.='],';
+
+
+	$ret.='    "columns": ['.$columns.' ],'."\n";
+
+	$ret.='   "order": ['.$ordercol.'],'."\n";
+	$ret.='   "columnDefs":['.$columnDefs.'],'."\n";
+
 	$ret.='   });';
 	$ret.='});';
 	$ret.="</script>";

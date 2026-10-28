@@ -89,6 +89,8 @@
 	$tabLang["lang_tab_processing"]="Processing";
 	$tabLang["lang_tab_emptytable"]="Empty table";
 	$tabLang["lang_tab_infoempty"]="No data";
+	$tabLang["lang_tab_zerorecord"]="No matching records found";
+	$tabLang["lang_tab_infofiltered"]="filtered from _MAX_ total entries";
 	$tabLang["lang_tab_info"]="Showing _START_ to _END_ of _TOTAL_ entries";
 	$tabLang["lang_tab_lengthmenu"]="Show _MENU_ entries";
 
