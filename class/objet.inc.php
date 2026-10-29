@@ -324,7 +324,7 @@ class objet_core
 		$disabled="";
 		if ($render=="read")
 		{
-			$disabled=" disabled ";
+			$disabled=" readonly ";
 		}
 
 
