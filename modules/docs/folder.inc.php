@@ -50,6 +50,8 @@
 		$tmpl_x->parse("corps.edit");
 		$tmpl_x->parse("corps.createdoc");
 		$tmpl_x->parse("corps.adddoc");
+		$tmpl_x->parse("corps.approve");
+		$tmpl_x->parse("corps.writer");
 	}
 	else
 	{

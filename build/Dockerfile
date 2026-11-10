@@ -7,7 +7,7 @@ RUN apt-get -qq update -y && \
         apt-get -qq upgrade -y && \
         apt-get -qq -y --no-install-recommends install curl openssl ca-certificates && \
         update-ca-certificates && \
-        apt-get -qq -y --no-install-recommends install php php-gd php-mysql php-curl php-json php-xml php-fpm php-mbstring php-intl php-zip cron git && \
+        apt-get -qq -y --no-install-recommends install php php-gd php-mysql php-curl php-json php-xml php-fpm php-mbstring php-intl php-zip cron git qpdf && \
         apt-get clean && \
         rm -rf /var/lib/apt/lists/*
 

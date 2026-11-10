@@ -693,6 +693,14 @@ function CheckSearch($tab,$search)
 	return false;
 }
 
+function apiError($code,$txt,$errorcode="error")
+{
+	header("HTTP/1.0 ".$code." ".$errorcode);
+	echo json_encode(array("status"=>$code,"error"=>$txt));
+	exit;	
+}
+
+
 // ---------------------------------------------------------------------
 
 // Envoie un email à partir d'un template en base
@@ -1632,7 +1640,7 @@ function UpperFirstLetter($txt)
   }
 
 function FatalError($txt,$msg="")
-  { global $MyOpt,$tmpl_prg,$corefolder,$theme;
+{ global $MyOpt,$tmpl_prg,$corefolder,$theme;
   	if (isset($tmpl_prg))
   	{
 		$tmpl_prg->assign("style_url", $MyOpt["host"]."/".GenereStyle("default"));
@@ -1648,17 +1656,12 @@ function FatalError($txt,$msg="")
 		echo $msg."\"n";
 	}
 	exit;			 
-  }
-
-function apiError($code,$txt)
-{
-	echo json_encode(array("status"=>$code,"error"=>$txt));
-	exit;	
 }
+  
 
 // Affiche une valeur au format xxx,yy
 function AffMontant($val)
-  {
+{
   	global $MyOpt;
 	if (!is_numeric($val))
 	{
@@ -1670,7 +1673,7 @@ function AffMontant($val)
 	$ret=$ret." ".$MyOpt["devise"];
 	
 	return $ret;
-  }
+}
 
 // Duplique une chaine de caractères
 function Duplique($txt,$nb)

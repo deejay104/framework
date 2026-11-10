@@ -23,6 +23,7 @@
    	require ("lib/fonctions.inc.php");
 
 	$id=checkVar("id","numeric");
+	$docid=checkVar("docid","numeric");
 
 // ---- Gestion des droits
 	$gl_uid=0;
@@ -43,11 +44,12 @@
 // ---- Variables
 	$MyOpt["tbl"]=PREFIX_TBL;
 
-	if ($id==0)
+	if (($id==0) && ($docid==0))
 	{
 		$ret=array();
 		$ret["result"]="incorrect id";
-		$ret["status"]=500;
+		$ret["status"]=402;
+		header("HTTP/1.0 402 bad_parameters"); exit;
 		echo json_encode($ret);
 		exit;
 	}
@@ -56,8 +58,9 @@
 	{
 		$ret=array();
 		$ret["result"]="Fichier de configuration introuvable";
-		$ret["status"]=500;
+		$ret["status"]=402;
 		echo json_encode($ret);
+		header("HTTP/1.0 402 bad_parameters"); exit;
 		exit;
 	}
 
@@ -75,6 +78,14 @@
 
 // ---- Charge le document
 	require ("class/document.inc.php");
+	require ("class/folder.inc.php");
+
+	if ($docid>0)
+	{
+		$paperdoc = new paper_docs_core($docid,$sql);
+		$id=$paperdoc->val("id_doc");
+	}
+
 	$doc = new document_core($id,$sql);
 
 

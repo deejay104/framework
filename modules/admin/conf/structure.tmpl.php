@@ -241,9 +241,17 @@ $tabTmpl=Array
 	$obj->genSqlTab($tabTmpl);
 	$obj=new paper_core(0,$sql);
 	$obj->genSqlTab($tabTmpl);
+	$obj=new paper_docs_core(0,$sql);
+	$obj->genSqlTab($tabTmpl);
 	$obj=new paper_read_core(0,$sql);
 	$obj->genSqlTab($tabTmpl);
 	$obj=new comment_core(0,$sql);
+	$obj->genSqlTab($tabTmpl);
+
+	require_once ("class/tags.inc.php");
+	$obj=new tags_core(0,$sql);
+	$obj->genSqlTab($tabTmpl);
+	$obj=new tags_conf_core(0,$sql);
 	$obj->genSqlTab($tabTmpl);
 
 	require_once ("class/echeance.inc.php");

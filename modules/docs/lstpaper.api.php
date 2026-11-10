@@ -25,30 +25,54 @@
 	}
 
 	
-	$lst=ListActivePapers($id,$sql,$sort);
+//	$lst=ListActivePapers($id,$sql,$sort);
 
 	$result=array();
 	$result["crit"]=$crit;
 	$result["date"]=$date;
 	$result["filter"]=$filter;
+	$result["data"]=array();
 
-	$k=0;
-	foreach($lst as $i=>$d)
+
+	$q ="SELECT doc.*,r.dte_read FROM ".PREFIX_TBL."_doc_paper AS doc ";
+	$q.="LEFT JOIN ".PREFIX_TBL."_doc_read AS r ON doc.id=r.id_paper ";
+	$q.="WHERE doc.actif='oui' AND doc.id_folder=".$id." ORDER BY doc.".$sort;
+
+	$sql->Query($q);
+
+	$nb=0;
+	$lst=array();
+	for($i=0; $i<$sql->rows; $i++)
+	{ 
+		$sql->GetRow($i);
+		$lst[$sql->data["id"]]=array();
+		foreach($sql->data as $k=>$v)
+		{
+			if (!is_numeric($k))
+			{
+				$lst[$sql->data["id"]][$k]=$v;
+			}
+		}
+	}
+
+	foreach($lst as $i=>$line)
 	{
-		if (($limit>0) && ($k>=$limit))
+		if (($limit>0) && ($nb>$limit))
 		{
 			break;
 		}
 
 		$okcrit=false;
 		$okfilter=false;
-		$line=array();
-
-		$line=$d;
 
 		if ($crit!="")
 		{
-			if (preg_match("/".$crit."/i",$d["title"]))
+			if (preg_match("/".$crit."/i",$line["title"]))
+			{
+				$okcrit=true;
+			}
+			$ref=$line["nature"]."-".CompleteTxt($line["refid"],3,"0");
+			if (preg_match("/".$crit."/i",$ref))
 			{
 				$okcrit=true;
 			}
@@ -60,19 +84,19 @@
 
 		if (($date!="0000-00-00") && ($filter!="all"))
 		{
-			if ((strtotime($d["dte_start"])<=strtotime($date)) && (strtotime($d["dte_end"])>=strtotime($date)))
+			if ((strtotime($line["dte_start"])<=strtotime($date)) && (strtotime($line["dte_end"])>strtotime($date)))
 			{
 				$okfilter=true;
 			}
-			else if ((strtotime($d["dte_start"])<=strtotime($date)) && ($d["dte_end"]=="0000-00-00"))
+			else if ((strtotime($line["dte_start"])<=strtotime($date)) && ($line["dte_end"]=="0000-00-00"))
 			{
 				$okfilter=true;
 			}
-			else if (($d["dte_start"]=="0000-00-00") && (strtotime($d["dte_end"])>=strtotime($date)))
+			else if (($line["dte_start"]=="0000-00-00") && (strtotime($line["dte_end"])>strtotime($date)))
 			{
 				$okfilter=true;
 			}
-			else if ((($d["dte_start"]=="0000-00-00")) && ($d["dte_end"]=="0000-00-00") )
+			else if ((($line["dte_start"]=="0000-00-00")) && ($line["dte_end"]=="0000-00-00") )
 			{
 				$okfilter=true;
 			}
@@ -81,44 +105,75 @@
 		{
 			$okfilter=true;
 		}
-		
-		$usr = new user_core($d["uid_creat"],$sql,false);
-		$line["author"]=$usr->fullname;
-		$line["created"]=DisplayDate($d["dte_creat"]);
 
-		$folder = new folder_core($d["id_folder"],$sql,false);
+		$line["reference"]=$line["nature"]."-".CompleteTxt($line["refid"],3,"0");
+
+		$line["begin"]=sql2date($line["dte_start"],"jour");
+		$line["expire"]=sql2date($line["dte_end"],"jour");
+
+		$usr = new user_core($line["uid_creat"],$sql,false);
+		$line["author"]=$usr->fullname;
+		$line["created"]=sql2date($line["dte_creat"],"jour");
+
+		$usr = new user_core($line["uid_checked"],$sql,false);
+		$line["reviewer"]=$usr->fullname;
+		$line["checked"]=sql2date($line["dte_creat"],"jour");
+
+		$usr = new user_core($line["uid_approved"],$sql,false);
+		$line["approver"]=$usr->fullname;
+		$line["approved"]=sql2date($line["dte_creat"],"jour");
+
+		$folder = new folder_core($line["id_folder"],$sql,false);
 		$line["folder"]=$folder->export();
 
+		// Si on a le droit de modifier le dossier, on peut voir les fiches en draft ou submitted
+		if ((!GetDroit($folder->val("group_write"))) && ($line["status"]!="open") && ($line["status"]!="approved"))
+		{
+			$okfilter=false;
+		}
+
 		// Affiche les pièces jointes au message
-		$lstdoc=ListDocument($sql,$d["id"],"paper");
+		$lstdoc=ListDocsPaper($sql,$line["id"]);
 
 		if ((is_array($lstdoc)) && (count($lstdoc)>0))
 		{
 			foreach($lstdoc as $ii=>$did)
 			{
-				$doc = new document_core($did,$sql);
-				$doc->editmode="read";
+				$doc = new paper_docs_core($did,$sql);
 				$attr=$doc->getAttributes();
-				$line["doc"][$did]["url"]=$doc->Affiche();
-				$line["doc"][$did]["name"]=$doc->originalname;
-				$line["doc"][$did]["url"]=$doc->Path();
-				$line["doc"][$did]["fullpath"]=$doc->Affiche();
-				$line["doc"][$did]["ext"]=$attr["ext"];
+				$line["doc"][$did]["id"]=$did;
+				$line["doc"][$did]["name"]=$doc->val("name");
+				$line["doc"][$did]["read"]=$doc->read($gl_uid);
 				$line["doc"][$did]["icon"]=$attr["icon"];
 				$line["doc"][$did]["color"]=$attr["color"];
-				$line["doc"][$did]["read"]=$doc->read($gl_uid);
 
-				if (preg_match("/".$crit."/i",$doc->name))
+				if (preg_match("/".$crit."/i",$doc->val("name")))
 				{
 					$okcrit=true;
 				}
 			}
 		}
 
+
+		// Nombre de documents lus
+		$line["nbread"]=null;
+		$line["nbtotalread"]=null;
+		if ($line["mandatory"]=="oui")
+		{
+			$query="SELECT COUNT(*) AS nb FROM ".PREFIX_TBL."_doc_read WHERE id_paper=".$line["id"];
+			$res=$sql->QueryRow($query);
+			$line["nbread"]=$res["nb"];
+
+			$query="SELECT COUNT(*) AS nb FROM ".PREFIX_TBL."_droits WHERE groupe='".$folder->val("group_read")."'";
+			$res=$sql->QueryRow($query);
+			$line["nbtotalread"]=$res["nb"];
+		}
+
+		// Ranvoie la ligne
 		if (($okcrit) && ($okfilter))
 		{
-			$result["data"][$k]=$line;
-			$k++;
+			$result["data"][$nb]=$line;
+			$nb++;
 		}
 	}
 	

@@ -1699,7 +1699,7 @@ div.tagsinput span.tag a { color: #ffffff; }
   .navbar-icon { display: block !important; }
   .navbar-profile { display: flex !important; }
   .d-lg-block { display: block !important; }
-  .modal-dialog { margin-top: 160px; }
+  .modal-dialog { margin-top: 80px; }
   .form-inline .form-control { display: inline-block; width: auto; }
   .form-inline input { min-width: 200px; max-width: 200px; }
 }
@@ -1710,7 +1710,7 @@ div.tagsinput span.tag a { color: #ffffff; }
 @media (min-width: 992px) {
   .grid-margin-lg   { margin-bottom: 1.25rem; }
   .grid-margin-lg-0 { margin-bottom: 0; }
-  .modal-lg, .modal-xl { max-width: 800px; }
+  .modal-lg, .modal-xl { max-width: 900px; }
   .d-lg-none { display: none !important; }
 }
 

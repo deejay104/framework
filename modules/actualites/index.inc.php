@@ -169,20 +169,20 @@
 
 // ---- Derniers message des forums
 
-	$lstdoc=LastDocument();
-		
-	if (is_array($lstdoc))
-	{
-		foreach($lstdoc as $i=>$did)
-		{
-			$doc = new document_core($did,$sql);
-			$tmpl_x->assign("form_document_link",$doc->Affiche("name","name"));
-			$tmpl_x->parse("corps.aff_lastdocs.lst_lastdocs");
-		}
-	}	
-
 	if (GetDroit("VisuLastDocument"))
 	{
+		$lstdoc=LastDocument();
+		
+		if (is_array($lstdoc))
+		{
+			foreach($lstdoc as $i=>$did)
+			{
+				$doc = new document_core($did,$sql);
+				$tmpl_x->assign("form_document_link",$doc->Affiche("name","name"));
+				$tmpl_x->parse("corps.aff_lastdocs.lst_lastdocs");
+			}
+		}	
+
 		$tmpl_x->parse("corps.aff_lastdocs");
 	}
 

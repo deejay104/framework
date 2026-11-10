@@ -8,6 +8,7 @@
 	
 	$id=checkVar("id","numeric");
 	$idfolder=checkVar("folder","numeric");
+	$dest=checkVar("dest","varchar",10,"doc");
 	$fonc=checkVar("fonc","varchar");
 
 	require_once ("class/folder.inc.php");
@@ -25,18 +26,14 @@
 // ----
 	$result=array();
 
-	if ($idfolder>0)
+	if (($idfolder>0) && ($dest="paper"))
 	{
 		$paper=new paper_core($id,$sql);
-
 		if ($id==0)
 		{
-			$paper->Create();
-			$id=$paper->id;
 			$paper->valid("title",$_FILES["file"]["name"]);
 			$paper->valid("id_folder",$idfolder);
 			$paper->valid("dte_start",date("Y-m-d"));
-			$paper->Save();
 		}
 
 		$folder=new folder_core($paper->val("id_folder"),$sql);
@@ -44,55 +41,90 @@
 		if (!GetDroit($folder->val("group_write")))
 		{
 			apiError(401,"Not allowed to upload to this folder",true,"",array());
-			exit; 
 		}
+
+		if ($id==0)
+		{
+			$paper->Save();
+			$id=$paper->id;
+		}
+		$result["id"]=$id;
+		$result["status"]=200;
 
 		$doc = new document_core(0,$sql,"paper");
 		$doc->droit=$folder->val("group_read");
 		$r=$doc->Save($id,$_FILES["file"]["name"],$_FILES["file"]["tmp_name"],$_FILES["file"]["size"]);
-		$result["id"]=$id;
-		$result["status"]=200;
 
 		if ($r!="")
 		{
 			$result["error"]=$r;
 			$result["status"]="500";
 		}
+
+		$refdoc = new paper_docs_core(0,$sql);
+		$refdoc->valid("id_paper",$id);
+		$refdoc->valid("id_doc",$doc->id);
+		$refdoc->valid("name",$doc->originalname);
+		$refdoc->Save();
+
 		$doc->editmode="regular";
 		$attr=$doc->getAttributes();
 
 		$result["command"]="new";
-		$result["type"]=$doc->type;
-		$result["title"]=$paper->val("title");
+		$result["data"]["title"]=$paper->val("title");
+
+		$result["data"]["id"]=$refdoc->id;
+		$result["data"]["name"]=$refdoc->val("name");
+		$result["data"]["read"]=$refdoc->read($gl_uid);
+		$result["data"]["icon"]=$attr["icon"];
+		$result["data"]["color"]=$attr["color"];
+
+
+		/*
 		$result["name"]=$doc->originalname;
-		$result["docid"]=$doc->id;
+		$result["docid"]=$refdoc->id;
 		$result["link"]=$doc->Affiche();
 		$result["author"]=$myuser->fullname;
 		$result["created"]=now();
 		$result["icon"]="mdi-file-".$attr["icon"];
 		$result["color"]=$attr["color"];
+		*/
 	}
 	else if ($fonc=="delete")
 	{
-	
 		if ($id>0)
 		{
-			$result["command"]="delete";
-			$doc = new document_core($id,$sql);
-			if (($doc->uid==$gl_uid) || (GetDroit("ModifUserAll")) || (GetDroit("ModifUserDocument")))
+			if ($dest=="doc")
 			{
-				$result["status"]=200;
-				$doc->Delete();
+				$result["command"]="remove doc";
+				$doc = new document_core($id,$sql);
+				if (($doc->uid==$gl_uid) || (GetDroit("ModifUserAll")) || (GetDroit("ModifUserDocument")))
+				{
+					$result["status"]=200;
+					$doc->Delete();
+				}
+				else
+				{
+					apiError(401,"Not allowed to upload to this folder",true,"",array());
+				}	
 			}
 			else
 			{
-				$result["status"]=401;
-			}
-				
+				$result["command"]="remove paper doc";
+				$doc = new paper_docs_core($id,$sql);
+				$paper=new paper_core($doc->val("id_paper"),$sql);		
+				$folder=new folder_core($paper->val("id_folder"),$sql);
+		
+				if (!GetDroit($folder->val("group_write")))
+				{
+					apiError(401,"Not allowed to upload to this folder",true,"",array());
+				}
+				$doc->Delete();
+			}				
 		}
 		else
 		{
-			$result["status"]=500;
+			apiError(402,"Document ID not set","bad_parameter");
 		}
 		$result["id"]=$doc->id;
 	}

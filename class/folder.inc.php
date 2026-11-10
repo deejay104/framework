@@ -62,16 +62,86 @@ class paper_core extends objet_core {
 	protected $fields=array(
 		"id_folder"=>Array("type" => "number", "index"=>1),
 		"title"=>Array("type" => "varchar", "len"=>100),
+		"refid"=>Array("type" => "numeric","default"=>0,"index"=>1),
+		"version"=>Array("type" => "numeric","default"=>1),
+		"controlled"=>Array("type" => "bool", "default"=>"non"),
+		"nature"=>Array("type" => "enum", "default"=>"GEN"),
+		"status"=>Array("type" => "enum", "default"=>"open","index"=>1),
 		"mandatory"=>Array("type" => "bool", "default"=>"non"),
+		"history"=>Array("type" => "text"),
 		"dte_start"=>Array("type" => "date"),
 		"dte_end"=>Array("type" => "date"),
+		"dte_review"=>Array("type" => "date"),
+		"uid_checked"=>Array("type" => "numeric"),
+		"dte_checked"=>Array("type" => "datetime"),
+		"uid_approved"=>Array("type" => "numeric"),
+		"dte_approved"=>Array("type" => "datetime"),
 	);
 
 	
 	protected $tabList=array(
-
+		"status"=>array(
+			"fr"=>array('open'=>'Normal','draft'=>'Brouillon','submitted'=>'Soumis','approved'=>'Approuvé','cancel'=>'Annulé'),
+			"en"=>array('open'=>'Open','draft'=>'Draft','submitted'=>'Submitted','approved'=>'Approuved','cancel'=>'Canceled'),
+			"ca"=>array('open'=>'Normal','draft'=>'Brouillon','submitted'=>'Soumis','approved'=>'Approuvé','cancel'=>'Annulé'),
+		),
+		"nature"=>array(
+			"fr"=>array('GEN'=>'Autre','SOP'=>'Procédure','ANX'=>'Annexe','FOR'=>'Formulaire'),
+			"en"=>array('GEN'=>'Generic','SOP'=>'Procedure','ANX'=>'Annex','FOR'=>'Form'),
+			"ca"=>array('GEN'=>'Autre','SOP'=>'Procédure','ANX'=>'Annexe','FOR'=>'Formulaire'),
+		),
 	);
 
+	function ArchiveOlder()
+	{
+		$sql=$this->sql;
+
+		if ($this->val("dte_start")=="0000-00-00")
+		{
+			$this->valid("dte_start",now()); 
+		}
+		if (($this->val("dte_review")=="0000-00-00") || (strtotime($this->val("dte_review"))-time()<0))
+		{
+			$this->valid("dte_review",CalcDate($this->val("dte_start"), 365)); 
+		}
+		$this->Save();
+
+		$dte=$this->val("dte_start");
+		$query="UPDATE ".PREFIX_TBL."_doc_paper SET dte_end='".$this->val("dte_start")."' WHERE refid='".$this->val("refid")."' AND refid>0";
+		$sql->Update($query);
+	}
+	function getNextID()
+	{
+		$sql=$this->sql;
+		$query="SELECT MAX(refid) AS nb FROM ".PREFIX_TBL."_doc_paper ";
+		$res=$sql->QueryRow($query);
+		return $res["nb"]+1;
+	}
+	function ref()
+	{
+		return $this->val("nature")."-".CompleteTxt($this->val("refid"),3,"0");
+	}
+	function docs()
+	{
+		return ListDocsPaper($this->sql,$this->id);
+	}
+
+	function nbRead()
+	{
+		$sql=$this->sql;
+		$query="SELECT COUNT(*) AS nb FROM ".PREFIX_TBL."_doc_read WHERE id_paper=".$this->id;
+		$res=$sql->QueryRow($query);
+		return $res["nb"];
+	}
+	function nbTotalRead($grp)
+	{
+		$sql=$this->sql;
+		$query="SELECT COUNT(*) AS nb FROM ".PREFIX_TBL."_droits WHERE groupe=".$grp;
+		$res=$sql->QueryRow($query);
+		
+
+		return $res["nb"];		
+	}
 
 }
 
@@ -83,8 +153,124 @@ function ListActivePapers($id,$sql,$sort="dte_creat")
 	{
 		$crit["id_folder"]=$id;
 	}
-		
-	return ListeObjets($sql,"doc_paper",array("id","id_folder","title","mandatory","dte_start","dte_end","uid_creat","dte_creat"),$crit,array($sort));
+	
+	return ListeObjets($sql,"doc_paper",array("id","id_folder","title","nature","refid","version","mandatory","controlled","dte_start","dte_end","dte_review","status","uid_creat","dte_creat","uid_checked","dte_checked","uid_approved","dte_approved"),$crit,array($sort));
+}
+
+
+
+function MandatoryPaper($uid)
+{
+	global $sql,$MyOpt;
+
+	$query ="SELECT paper.id AS id_paper, paper.id_folder, folder.group_read, doc.id AS id_doc ";
+	$query.="FROM ".PREFIX_TBL."_doc_paper AS paper ";
+	$query.="LEFT JOIN ".PREFIX_TBL."_doc_folder AS folder ON folder.id=paper.id_folder ";
+	$query.="LEFT JOIN ".PREFIX_TBL."_document AS doc ON paper.id=doc.uid AND doc.type='paper' AND doc.actif='oui' ";
+	$query.="WHERE paper.actif='oui' AND paper.status='approved' AND (paper.dte_end>'".now()."' OR paper.dte_end='0000-00-00') AND paper.dte_start<'".now()."' AND paper.mandatory='oui'";
+
+	$sql->Query($query);
+
+	$lstdoc=array();
+	for($i=0; $i<$sql->rows; $i++)
+	{
+		$sql->GetRow($i);
+		if (GetDroit($sql->data["group_read"]))
+		{
+			$lstdoc[$sql->data["id_paper"]]["perm"]=$sql->data["group_read"];
+			$lstdoc[$sql->data["id_paper"]]["folder"]=$sql->data["id_folder"];
+			$lstdoc[$sql->data["id_paper"]]["paper"]=$sql->data["id_paper"];
+			$lstdoc[$sql->data["id_paper"]]["read"]=0;			
+		}
+	}
+
+	// Reprendre la requete précédente en tenant compte des documents lus après dte_maj
+	$query ="SELECT id_paper FROM ".PREFIX_TBL."_doc_read AS lus WHERE uid='".$uid."'";
+
+	$sql->Query($query);
+
+	for($i=0; $i<$sql->rows; $i++)
+	{
+		$sql->GetRow($i);
+		if (isset($lstdoc[$sql->data["id_paper"]]))
+		{
+			$lstdoc[$sql->data["id_paper"]]["read"]=1;		
+		}
+	}
+
+	return $lstdoc;
+}
+
+class paper_docs_core extends objet_core {
+	protected $table="doc_docs";
+	protected $mod="document";
+	protected $rub="folder";
+
+	protected $droit=array();
+
+	protected $fields=array(
+		"id_paper"=>Array("type" => "number", "index"=>1),
+		"id_doc"=>Array("type" => "number", "index"=>1),
+		"name"=>Array("type" => "varchar", "len"=>100),
+	);
+	
+	protected $tabList=array(
+
+	);
+
+	function read($uid)
+	{	global $MyOpt;
+
+		$sql=$this->sql;	
+		$query="SELECT id FROM ".PREFIX_TBL."_doc_lus WHERE actif='oui' AND uid='".$uid."' AND id_doc='".$this->data["id_doc"]."'";
+		$res=$sql->QueryRow($query);
+	
+		if ((isset($res["id"])) && ($res["id"]>0))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+
+	}
+
+	function getAttributes()
+	{
+		return getAttributes($this->data["name"]);
+	}
+
+}
+
+
+function ListDocsPaper($sql,$id)
+{
+	global $MyOpt, $gl_uid, $myuser;
+
+	$query ="SELECT doc.id,doc.id_doc,d.droit ";
+	$query.="FROM ".PREFIX_TBL."_doc_docs AS doc ";
+	$query.="LEFT JOIN ".PREFIX_TBL."_document AS d ON doc.id_doc=d.id ";
+	$query.="WHERE doc.actif='oui' ".(($id>0) ? "AND doc.id_paper='".$id."'" : "" )." AND d.type='paper' ORDER BY doc.name";
+
+	$sql->Query($query);
+	$lstdoc=array();
+	for($i=0; $i<$sql->rows; $i++)
+	{
+		$sql->GetRow($i);
+		if ( 
+			($gl_uid==$sql->data["id"]) 
+			|| (($sql->data["droit"]!="") && (isset($myuser->groupe[$sql->data["droit"]])) && ($myuser->groupe[$sql->data["droit"]]))
+			|| ($sql->data["droit"]=="ALL") 
+			|| (GetDroit("VisuDocument"))
+			|| (GetDroit("VisuUserDocument"))
+		)
+		{
+			$lstdoc[$i]=$sql->data["id"];
+		}
+	}
+
+	return $lstdoc;
 }
 
 class paper_read_core extends objet_core {

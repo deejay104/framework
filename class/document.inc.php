@@ -472,50 +472,7 @@ class document_core{
 
 	function getAttributes()
 	{
-		$myext=GetExtension($this->originalname);
-
-		if ($myext=="xls")
-		  { $icon="excel"; $color="#27ae60"; }
-		else if ($myext=="xlsx")
-		  { $icon="excel"; $color="#27ae60"; }
-		else if ($myext=="doc")
-		  { $icon="word"; $color="#2980b9"; }
-		else if ($myext=="docx")
-		  { $icon="word"; $color="#2980b9"; }
-		else if ($myext=="ppt")
-		  { $icon="powerpoint"; $color="#e67e22"; }
-		else if ($myext=="pptx")
-		  { $icon="powerpoint"; $color="#e67e22"; }
-		else if ($myext=="pps")
-		  { $icon="powerpoint"; $color="#e67e22"; }
-		else if ($myext=="jpg")
-		  { $icon="image"; $color="#8e44ad"; }
-		else if ($myext=="jpeg")
-		  { $icon="image"; $color="#8e44ad"; }
-		else if ($myext=="gif")
-		  { $icon="image"; $color="#8e44ad"; }
-		else if ($myext=="png")
-		  { $icon="image"; $color="#8e44ad"; }
-		else if ($myext=="pdf")
-		  { $icon="pdf"; $color="#c0392b"; }
-		else if ($myext=="mp3")
-		  { $icon="music"; $color="#c0a52b"; }
-		else if ($myext=="zip")
-		  { $icon="multiple"; $color="#ec622c"; }
-		else if ($myext=="rar")
-		  { $icon="multiple"; $color="#ec622c"; }
-		else if ($myext=="xml")
-		  { $icon="xml"; $color="#2980b9"; }
-		else if ($myext=="json")
-		  { $icon="document"; $color="#2980b9"; }
-		else if ($myext=="css")
-		  { $icon="document"; $color="#2980b9"; }
-		else if ($myext=="txt")
-		  { $icon="document"; $color="#2980b9"; }
-		else
-		  { $icon="outline"; $color="#8e8e8e";}
-
-		return array("ext"=>$myext, "icon"=>$icon, "color"=>$color);
+		return getAttributes($this->originalname);
 	}
 
 	function Download($mode)
@@ -921,6 +878,55 @@ function GetExtension($file)
 	$myext=strtolower(substr($file,strrpos($file,".")+1,strlen($file)-strrpos($file,".")-1));
 	return $myext;
 }
+
+function getAttributes($name)
+{
+	$myext=GetExtension($name);
+
+	if ($myext=="xls")
+	  { $icon="excel"; $color="#27ae60"; }
+	else if ($myext=="xlsx")
+	  { $icon="excel"; $color="#27ae60"; }
+	else if ($myext=="doc")
+	  { $icon="word"; $color="#2980b9"; }
+	else if ($myext=="docx")
+	  { $icon="word"; $color="#2980b9"; }
+	else if ($myext=="ppt")
+	  { $icon="powerpoint"; $color="#e67e22"; }
+	else if ($myext=="pptx")
+	  { $icon="powerpoint"; $color="#e67e22"; }
+	else if ($myext=="pps")
+	  { $icon="powerpoint"; $color="#e67e22"; }
+	else if ($myext=="jpg")
+	  { $icon="image"; $color="#8e44ad"; }
+	else if ($myext=="jpeg")
+	  { $icon="image"; $color="#8e44ad"; }
+	else if ($myext=="gif")
+	  { $icon="image"; $color="#8e44ad"; }
+	else if ($myext=="png")
+	  { $icon="image"; $color="#8e44ad"; }
+	else if ($myext=="pdf")
+	  { $icon="pdf"; $color="#c0392b"; }
+	else if ($myext=="mp3")
+	  { $icon="music"; $color="#c0a52b"; }
+	else if ($myext=="zip")
+	  { $icon="multiple"; $color="#ec622c"; }
+	else if ($myext=="rar")
+	  { $icon="multiple"; $color="#ec622c"; }
+	else if ($myext=="xml")
+	  { $icon="xml"; $color="#2980b9"; }
+	else if ($myext=="json")
+	  { $icon="document"; $color="#2980b9"; }
+	else if ($myext=="css")
+	  { $icon="document"; $color="#2980b9"; }
+	else if ($myext=="txt")
+	  { $icon="document"; $color="#2980b9"; }
+	else
+	  { $icon="outline"; $color="#8e8e8e";}
+
+	return array("ext"=>$myext, "icon"=>$icon, "color"=>$color);
+}
+
 function GetFilename($file)
 {
 	$p=strrpos("/".$file,"/");
@@ -986,43 +992,6 @@ function LastDocument()
 	return $lstdoc;
 }
 
-function MandatoryPaper($uid)
-{
-	global $sql,$MyOpt;
-
-	$query ="SELECT paper.id AS id_paper, paper.id_folder, folder.group_read, doc.id AS id_doc FROM ".PREFIX_TBL."_doc_paper AS paper LEFT JOIN ".PREFIX_TBL."_doc_folder AS folder ON folder.id=paper.id_folder LEFT JOIN ".PREFIX_TBL."_document AS doc ON paper.id=doc.uid AND doc.type='paper' AND doc.actif='oui' WHERE paper.actif='oui' AND (paper.dte_end>NOW() OR paper.dte_end='0000-00-00') AND paper.mandatory='oui'";
-
-	$sql->Query($query);
-
-	$lstdoc=array();
-	for($i=0; $i<$sql->rows; $i++)
-	{
-		$sql->GetRow($i);
-		if (GetDroit($sql->data["group_read"]))
-		{
-			$lstdoc[$sql->data["id_paper"]]["perm"]=$sql->data["group_read"];
-			$lstdoc[$sql->data["id_paper"]]["folder"]=$sql->data["id_folder"];
-			$lstdoc[$sql->data["id_paper"]]["paper"]=$sql->data["id_paper"];
-			$lstdoc[$sql->data["id_paper"]]["read"]=0;			
-		}
-	}
-
-	// Reprendre la requete précédente en tenant compte des documents lus après dte_maj
-	$query ="SELECT id_paper FROM ".PREFIX_TBL."_doc_read AS lus WHERE uid='".$uid."'";
-
-	$sql->Query($query);
-
-	for($i=0; $i<$sql->rows; $i++)
-	{
-		$sql->GetRow($i);
-		if (isset($lstdoc[$sql->data["id_paper"]]))
-		{
-			$lstdoc[$sql->data["id_paper"]]["read"]=1;		
-		}
-	}
-
-	return $lstdoc;
-}
 
 class document_lus_core extends objet_core {
 	protected $table="doc_lus";
