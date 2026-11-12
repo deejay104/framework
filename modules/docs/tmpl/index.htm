@@ -455,7 +455,7 @@ function searchList()
 					txtFiles=txtFiles+"<div class='doc-list-item'>";
 					txtFiles=txtFiles+"<a href='/docs/folder?id="+data.data[key].folder.id+"''>"+data.data[key].folder.data.title+"</a> / ";
 					txtFiles=txtFiles+"<a href='/docs/folder?id="+data.data[key].folder.id+"&paper="+data.data[key].id+"'>"+data.data[key].title+"</a> / ";
-					txtFiles=txtFiles+data.data[key].doc[ii].fullpath;
+					txtFiles=txtFiles+data.data[key].doc[ii].name;
 					txtFiles=txtFiles+"</div>";
 					i=i+1;
 				}
