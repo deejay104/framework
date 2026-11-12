@@ -36,7 +36,7 @@
 
 	$q ="SELECT doc.*,r.dte_read FROM ".PREFIX_TBL."_doc_paper AS doc ";
 	$q.="LEFT JOIN ".PREFIX_TBL."_doc_read AS r ON doc.id=r.id_paper ";
-	$q.="WHERE doc.actif='oui' AND doc.id_folder=".$id." ORDER BY doc.".$sort;
+	$q.="WHERE doc.actif='oui' ".(($id>0) ? "AND doc.id_folder=".$id : "")." ORDER BY doc.".$sort;
 
 	$sql->Query($q);
 
@@ -71,6 +71,7 @@
 			{
 				$okcrit=true;
 			}
+
 			$ref=$line["nature"]."-".CompleteTxt($line["refid"],3,"0");
 			if (preg_match("/".$crit."/i",$ref))
 			{
