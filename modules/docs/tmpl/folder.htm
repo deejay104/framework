@@ -257,6 +257,17 @@
 
 .modal-divider { height: 1px; background: var(--p67-border); margin: 16px 0; }
 
+#modal-status { position: absolute;
+  left: 90px;
+  top: 59px;
+  border: 1px solid var(--p67-danger);
+  color: var(--p67-danger);
+  padding: 0px 10px;
+  background-color: var(--p67-danger-soft);
+  border-radius: 10px; }
+#modal-status:empty { display: none; }
+
+
 /* Commentaires dans modal */
 .comment-block {
   background: var(--p67-primary-light);
@@ -308,6 +319,7 @@
 .st-reread{color:#1f5fa3;background:#eaf3fc;}
 .st-unread{color:#b03a2e;background:#fdeeec;}
 .st-viewed{color:#c27c0e;background:#ffeccf;}
+
 
 </style>
 
@@ -409,6 +421,7 @@
           <div class="paper-ico" style="flex-shrink:0;">
             <i class="mdi mdi-file-document-outline"></i>
           </div>
+          <input type="text" id="content-reference" class="form-control form-input" style="max-width:90px;" disabled>
           <input type="text" id="content-title" class="form-control" disabled>
         </div>
         <div class="modal-header-actions" style="margin-left:10px;">
@@ -427,6 +440,7 @@
             <i class="mdi mdi-close"></i>
           </button>
         </div>
+        <div id="modal-status"></div>
       </div>
 
       <div class="modal-body">
@@ -466,11 +480,11 @@
                 <label>Date d'applications</label><input type="date" id="content-dte_start" class="form-control form-input" disabled>
               </div>
               <div class="form-inline">
-                <label>Référence</label><input type="text" id="content-reference" class="form-control form-input" disabled>
-              </div>  
-              <div class="form-inline">
                 <label>Version</label><input type="text" id="content-version" class="form-control form-input" disabled>
               </div>  
+              <div class="form-inline">
+                <label>Prochaine revue</label><input type="date" id="content-dte_review" class="form-control form-input" disabled>
+              </div>
   
             </div>
             <div class="col-6">
@@ -483,9 +497,6 @@
               <div class="form-inline">
                 <label>Status</label><select id="content-status" class="form-control form-input" disabled><option value="open">Non controllé</option><option value="draft">Brouillon</option><option value="submitted">Soumis</option><option value="approved">Approuvé</option><option value="cancelled">Annulé</option></select>
               </div> 
-              <div class="form-inline">
-                <label>Prochaine revue</label><input type="date" id="content-dte_review" class="form-control form-input" disabled>
-              </div>
             </div>
           </div>
 
@@ -782,12 +793,12 @@
 
       for (var k in data.data)
       {     
-        $('#content-'+k).val(data.data[k]);
+        $('#content-'+k).val(paper[k]);
       }
 
-      document.getElementById('content-status').value = data.data.status;
-      document.getElementById('content-controlled').value = data.data.controlled;
-      document.getElementById('content-mandatory').value = data.data.mandatory;
+      document.getElementById('content-status').value = paper.status;
+      document.getElementById('content-controlled').value = paper.controlled;
+      document.getElementById('content-mandatory').value = paper.mandatory;
       $('#contentNewComment').val('');
       setReadonly(true);
 
@@ -807,33 +818,56 @@
       }
       $('#modalAttachments').html(attachHtml);
 
-      if ((data.data.controlled=="oui") && (data.data.status=="approved"))
+
+      $('#modal-status').html("");
+
+      var dte_today = new Date();
+      var dte_start = new Date(paper.dte_start); 
+      var dte_end = new Date(paper.dte_end); 
+      if (dte_end<dte_today)
       {
-        $('#adddoc').hide();
-        $("#duplicate").show();
-      }
-      else
-      {
-        $('#adddoc').show();
-        $("#duplicate").hide();
+        $('#modal-status').html("Périmé");
       }
 
-      if ((data.data.controlled=="oui") && (data.data.status=="draft"))
+      if (data.data.controlled=="oui")
       {
-        $('#submit').show();
+        if (data.data.status=="approved")
+        {
+          $('#adddoc').hide();
+          $("#duplicate").show();
+        }
+        else
+        {
+          $('#adddoc').show();
+          $("#duplicate").hide();
+        }
+
+        if (data.data.status=="draft")
+        {
+          $('#submit').show();
+          $('#modal-status').html("Brouillon");
+        }
+        else
+        {
+          $('#submit').hide();
+        }
+        if (data.data.status=="submitted")
+        {
+          $('#approve').show();
+          $('#modal-status').html("Soumis");
+        }
+        else
+        {
+          $('#approve').hide();
+        }
+
+        $('#content-reference').show();
       }
       else
       {
-        $('#submit').hide();
+        $('#content-reference').hide();
       }
-      if ((data.data.controlled=="oui") && (data.data.status=="submitted"))
-      {
-        $('#approve').show();
-      }
-      else
-      {
-        $('#approve').hide();
-      }
+      
 
       if (data.data.uid_checked>0)
       {

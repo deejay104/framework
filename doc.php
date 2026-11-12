@@ -265,6 +265,7 @@ function pdfServeControlled(string $source, array $doc, array $history, array $l
     $approval = tempnam(sys_get_temp_dir(), 'apr');
     $header   = tempnam(sys_get_temp_dir(), 'hdr');
     $output   = tempnam(sys_get_temp_dir(), 'pdf');
+    $patch    = tempnam(sys_get_temp_dir(), 'ttl');
     try {
         $approvalPages = pdfBuildApprovalPage($doc, $history, $approval, $layout);
         $sourceSizes   = pdfGetPageSizes($source);
@@ -274,7 +275,11 @@ function pdfServeControlled(string $source, array $doc, array $history, array $l
         // $source reste le fichier principal (« . ») : titre, signets et liens conservés.
         // qpdf ajoute d'abord les pages d'approbation, pose le fond de page sous celles-ci,
         // puis superpose la page N du cartouche à la page N.
-        $args = [$source, '--pages', '.', $approval, '--'];
+//        $args = [$source, '--pages', '.', $approval, '--'];
+
+        $title = pdfCleanText(implode(' – ', array_filter([trim($doc['reference'] ?? ''), trim($doc['title'] ?? '')], 'strlen')));
+        $args  = array_merge([$source], pdfTitlePatch($source, $title, $patch), ['--pages', '.', $approval, '--']);
+
         if (!empty($layout['background'])) {
             $args = array_merge($args, ['--underlay', $layout['background'],
                 '--to=' . (count($sourceSizes) + 1) . '-z', '--from=', '--repeat=1', '--']);
@@ -412,6 +417,9 @@ function pdfStatusInfo(array $doc): array
     $effective = pdfDate($doc['dte_effective'] ?? null);
     switch ($doc['status'] ?? '') {
         case 'approved':
+            return ['label' => 'En vigueur', 'detail' => "Applicable depuis le $effective",
+                    'color' => [46, 158, 91], 'watermark' => null];
+        case 'open':
             return ['label' => 'En vigueur', 'detail' => "Applicable depuis le $effective",
                     'color' => [46, 158, 91], 'watermark' => null];
         case 'upcoming':
@@ -606,6 +614,60 @@ function pdfGetPageSizes(string $file): array
     return $sizes;
 }
 
+/* Titre du PDF */
+function pdfTitlePatch(string $source, string $title, string $patchFile): array
+{
+    // Objets lus en mode objet (et non tableau) pour garder la différence entre {} et [] au réencodage
+    $trailerJson = json_decode(pdfRunQpdf(['--json=2', '--json-key=qpdf', '--json-object=trailer', $source]));
+    $header  = $trailerJson->qpdf[0] ?? null;
+    $trailer = $trailerJson->qpdf[1]->trailer->value ?? null;
+    $rootRef = $trailer->{'/Root'} ?? null;
+    if (!$header || !is_string($rootRef) || !preg_match('/^(\d+) (\d+) R$/', $rootRef, $root)) {
+        return [];
+    }
+    $infoRef = $trailer->{'/Info'} ?? null;
+    $args = ['--json=2', '--json-key=qpdf', '--json-object=' . $root[1] . ',' . $root[2], $source];
+    if (is_string($infoRef) && preg_match('/^(\d+) (\d+) R$/', $infoRef, $info)) {
+        array_splice($args, 3, 0, ['--json-object=' . $info[1] . ',' . $info[2]]);
+    } else {
+        $infoRef = null;
+    }
+    $objects = json_decode(pdfRunQpdf($args))->qpdf[1] ?? null;
+    $catalog = $objects->{'obj:' . $rootRef}->value ?? null;
+    if (!is_object($catalog)) {
+        return [];
+    }
+ 
+    $updates = new stdClass();
+ 
+    // Dictionnaire /Info : modifié s'il existe, créé sinon
+    $infoDict = $infoRef !== null ? ($objects->{'obj:' . $infoRef}->value ?? null) : null;
+    if (!is_object($infoDict)) {
+        $infoDict = new stdClass();
+        $infoRef  = ($header->maxobjectid + 1) . ' 0 R';
+        $trailer->{'/Info'} = $infoRef;
+        $updates->trailer = (object) ['value' => $trailer];
+    }
+    if ($title === '') {
+        unset($infoDict->{'/Title'});
+    } else {
+        $infoDict->{'/Title'} = 'u:' . $title;
+    }
+    $updates->{'obj:' . $infoRef} = (object) ['value' => $infoDict];
+ 
+    if (isset($catalog->{'/Metadata'})) {
+        unset($catalog->{'/Metadata'});
+        $updates->{'obj:' . $rootRef} = (object) ['value' => $catalog];
+    }
+ 
+    $json = json_encode(['qpdf' => [$header, $updates]], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    if ($json === false || file_put_contents($patchFile, $json) === false) {
+        return [];
+    }
+    return ['--update-from-json=' . $patchFile];
+}
+
+
 /** Lance qpdf sans passer par le shell et renvoie sa sortie standard. */
 function pdfRunQpdf(array $args): string
 {
@@ -691,9 +753,9 @@ function pdfBuildApprovalPage(array $doc, array $history, string $dest, array $l
     // Historique
     if ($history) {
         pdfSectionTitle($pdf, 'Historique des versions');
-        $widths = pdfScaleWidths([16, 22, 30, 30, 30, 52], $width);
+        $widths = pdfScaleWidths([16, 22, 30, 30, 82], $width);
         $tableHeader = function () use ($pdf, $widths) {
-            pdfTableRow($pdf, $widths, ['Version', 'Application', 'Rédigé par', 'Vérifié par', 'Approuvé par', 'Modifications'], 'header');
+            pdfTableRow($pdf, $widths, ['Version', 'Application', 'Rédigé par', 'Approuvé par', 'Modifications'], 'header');
         };
         $tableHeader();
         foreach ($history as $entry) {
@@ -707,7 +769,7 @@ function pdfBuildApprovalPage(array $doc, array $history, string $dest, array $l
                     'v' . ($entry['version'] ?? ''),
                     pdfDate($entry['dte_effective'] ?? null),
                     $entry['author'] ?? '',
-                    $entry['checked_by'] ?? '',
+                    //$entry['checked_by'] ?? '',
                     $entry['approved_by'] ?? '',
                     $entry['changes'] ?? '',
                 ], $style, $tableHeader);
