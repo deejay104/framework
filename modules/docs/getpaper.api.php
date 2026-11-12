@@ -58,6 +58,10 @@
 			$result["docs"][$did]["color"]=$attr["color"];
 		}
 	}
-	
+
+	// Affiche les documents lus
+	$result["read"]=$paper->getReads();
+
+
 	echo json_encode($result);	
 ?>

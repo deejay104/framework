@@ -96,7 +96,7 @@ class paper_core extends objet_core {
 	{
 		$sql=$this->sql;
 
-		if ($this->val("dte_start")=="0000-00-00")
+		if (($this->val("dte_start")=="0000-00-00") || (strtotime($this->val("dte_start"))-time()<0))
 		{
 			$this->valid("dte_start",now()); 
 		}
@@ -143,6 +143,86 @@ class paper_core extends objet_core {
 		return $res["nb"];		
 	}
 
+	function history()
+	{
+		$sql=$this->sql;
+/*
+		array('version' => '4', 'dte_effective' => '2026-09-01', 'author' => '…', 'checked_by' => '…', 'approved_by' => 'Matthieu ISOREZ', 'changes' => 'Mise à jour de la liste des instructeurs'),
+		array('dte_review' => '2026-03-12', 'par' => 'Paul MARTIN'),
+*/
+		$res=array();
+		$query ="SELECT p.version,p.dte_start,p.history,u.prenom,u.nom,a.prenom AS prenom_app,a.nom AS nom_app FROM ".PREFIX_TBL."_doc_paper AS p ";
+		$query.="LEFT JOIN ".PREFIX_TBL."_utilisateurs AS u ON p.uid_creat=u.id ";
+		$query.="LEFT JOIN ".PREFIX_TBL."_utilisateurs AS a ON p.uid_approved=a.id ";
+		$query.="WHERE p.refid=".$this->data["refid"]." AND p.refid>0 ORDER BY version DESC";
+
+		$sql->Query($query);
+		for($i=0; $i<$sql->rows; $i++)
+		{
+			$sql->GetRow($i);	
+			$res[]=array(
+				"version"=>$sql->data["version"],
+				"dte_effective"=>$sql->data["dte_start"],
+				"author"=>ucwords($sql->data["prenom"])." ".strtoupper($sql->data["nom"]),
+				"approved_by"=>ucwords($sql->data["prenom_app"])." ".strtoupper($sql->data["nom_app"]),
+				"changes"=>$sql->data["history"],
+			);
+		}
+		return $res;
+	}
+
+
+	function getReads()
+	{
+		global $gl_uid;
+
+		$sql=$this->sql;
+
+		$folder=new folder_core($this->data["id_folder"],$sql);
+		$res=array();
+
+		$query ="SELECT u.id,u.prenom,u.nom,doc.dte_read, (SELECT COUNT(*) FROM ".PREFIX_TBL."_doc_lus AS l LEFT JOIN ".PREFIX_TBL."_doc_docs AS d ON l.id_doc=d.id_doc WHERE d.id_paper=".$this->id." AND l.uid_creat=u.id) AS nb ";
+	
+		if ($folder->val("group_read")=="ALL")
+		{
+			$query.="FROM ".PREFIX_TBL."_utilisateurs AS u ";
+		}
+		else
+		{
+			$query.="FROM ".PREFIX_TBL."_droits AS grp ";
+			$query.="LEFT JOIN ".PREFIX_TBL."_utilisateurs AS u ON grp.uid=u.id ";
+		}
+
+		$query.="LEFT JOIN ".PREFIX_TBL."_doc_read AS doc ON doc.uid=u.id AND doc.id_paper=".$this->id." ";
+		$query.="WHERE u.actif='oui' ";
+
+		if ($folder->val("group_read")=="ALL")
+		{
+			$query.="AND u.virtuel='non' ";
+		}
+		else
+		{
+			$query.="AND grp.groupe='".$folder->val("group_read")."' ";
+		}
+		if (!GetDroit($folder->val("group_write")))
+		{
+			$query.="AND u.id=".$gl_uid." ";
+		}
+		$query.="GROUP BY u.id ORDER BY dte_read ASC,u.prenom,u.nom";	
+
+
+		$sql->Query($query);
+		for($i=0; $i<$sql->rows; $i++)
+		{
+			$sql->GetRow($i);	
+			$res[]=array(
+				"user"=>ucwords($sql->data["prenom"])." ".strtoupper($sql->data["nom"]),
+				"dte_read"=>($sql->data["dte_read"]!='') ? sql2date($sql->data["dte_read"],"jour") : "-",
+				"start"=>($sql->data["nb"]>0) ? true : false,
+			);	
+		}
+		return $res;
+	}
 }
 
 function ListActivePapers($id,$sql,$sort="dte_creat")

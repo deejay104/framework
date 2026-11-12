@@ -475,7 +475,7 @@ class document_core{
 		return getAttributes($this->originalname);
 	}
 
-	function Download($mode)
+	function Download($mode,$dest="")
 	{
 		global $myuser,$gl_uid;
 
@@ -517,6 +517,8 @@ class document_core{
 		// Check if file exists
 		$myext=GetExtension($this->originalname);
 
+		$data="";
+
 		if ($this->storage=="s3")
 		{
 			## S3 storage
@@ -535,6 +537,35 @@ class document_core{
 				exit;
 			}		
 
+		}
+		else
+		{
+			$fname=$this->destpath."/".$this->filename;
+			if (!file_exists($fname))
+			{
+				$fname="static/images/icn32_erreur.png";
+				$myext="png";
+			}
+
+			if ($fd = fopen ($fname, "r"))
+			{
+				while(!feof($fd))
+				{
+					$buffer = fread($fd, 2048);
+					$data.=$buffer;
+				}
+			}
+		}
+
+		if ($dest!=null)
+		{
+			$fp = fopen($dest, 'a');
+			fwrite($fp, $data);
+			fclose($fp);
+
+		}
+		else
+		{
 			$fsize = strlen($data);
 			if ($myext=="jpg")
 			{ header("content-type: image/jpeg"); }
@@ -549,41 +580,7 @@ class document_core{
 			header("Content-length: $fsize");
 			header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 			header('Pragma: public');
-
 			echo $data;
-		}
-		else
-		{
-			$fname=$this->destpath."/".$this->filename;
-			if (!file_exists($fname))
-			{
-				$fname="static/images/icn32_erreur.png";
-				$myext="png";
-			}
-
-			if ($fd = fopen ($fname, "r"))
-			{
-				$fsize = filesize($fname);
-				if ($myext=="jpg")
-				{ header("content-type: image/jpeg"); }
-				else if ($myext=="png")
-				{ header("content-type: image/png"); }
-				else if ($myext=="pdf")
-				{ header("content-type: application/pdf"); }
-				else
-				{ header("content-type: application/octet-stream"); }
-
-				header("Content-Disposition: ".$mode." filename=\"".$this->originalname."\";");
-				header("Content-length: $fsize");
-				header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-				header('Pragma: public');
-
-				while(!feof($fd))
-				{
-					$buffer = fread($fd, 2048);
-					echo $buffer;
-				}
-			}
 		}
 	}
 

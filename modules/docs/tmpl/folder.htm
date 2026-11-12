@@ -92,6 +92,10 @@
   flex-shrink: 0;
   margin-top: 2px;
   transition: background .15s;
+  font-size:26px;
+  line-height:1;
+  padding-top:1px;
+  color:#8a96a3;
 }
 .paper-ico .mdi { font-size: 1.2rem; color: var(--p67-primary); }
 .paper-item:hover .paper-ico { background: var(--p67-primary); }
@@ -110,8 +114,8 @@
 .paper-head{display:flex;align-items:flex-start;gap:6px 10px;flex-wrap:wrap;}
 .paper-title-line {flex:1 1 260px;min-width:0;display:flex;align-items:baseline;gap:4px 8px;flex-wrap:wrap;}
 
-.paper-ref{font:600 12.5px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#334155;background:var(--p67-bg); border-radius:4px;padding:4px 10px;white-space:nowrap;}
-.paper-ref .mdi{color:var(--p67-text);margin-right:3px;}
+.paper-ref{font:600 12.5px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; border-radius:4px;padding:4px 10px;white-space:nowrap; border: 1px solid var(--p67-primary-border); color:rgb(74, 111, 165);background: var(--p67-primary-light)}
+.paper-ref .mdi{color:rgb(74, 111, 165);margin-right:3px;}
 
 
 .paper-meta {
@@ -127,7 +131,6 @@
 .paper-meta .mdi { font-size: 0.85rem; }
 
 
-.paper-ico{ font-size:26px;line-height:1;padding-top:1px;color:#8a96a3;}
 
 .paper-state-draft   {border-left:4px solid var(--p67-border); background:var(--bg);}
 .paper-state-expired {border-left:4px solid var(--p67-danger); background:var(--p67-danger-soft);}
@@ -240,7 +243,7 @@
 }
 
 .modal-upload-zone {
-  border: 1.5px dashed var(--p67-primary-border);
+  border: 1px dashed var(--p67-primary-border);
   padding: 12px;
   text-align: center;
   cursor: pointer;
@@ -285,6 +288,26 @@
 .badge-toread { background-color:var(--p67-danger); color:#ffffff; }
 .badge-draft { background-color:var(--p67-white); border:1px solid var(--p67-border); }
 .badge-submitted { background-color:var(--p67-success); color:#ffffff; }
+
+/* Tabs */
+.tabs{display:flex;gap:2px;padding:6px 10px 0;border-bottom:1px solid #e3e6ea;}
+.tabs button{border:0;background:none;font:inherit;color:#6b7280;padding:9px 12px;border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer;}
+.tabs button[aria-selected="true"]{color:#1f2933;font-weight:600;border-bottom-color:#1f2933;}
+
+/* Read list */
+.reads-list{max-height:60vh;overflow-y:auto;margin:8px -16px 0;padding:0 16px;}
+.reads-group{font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:#6b7280;
+  padding:10px 0 4px;position:sticky;top:0;background:#fff;}
+.read-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #f0f2f4;}
+.read-row:last-child{border-bottom:0;}
+.read-name{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.read-name b{font-weight:600;}
+.read-status{flex:none;display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:600;padding:0 8px;border-radius:999px;line-height:1.6;}
+.read-date{flex:none;width:100px;white-space:nowrap;text-align:right;font-size:12.5px;color:#6b7280;font-variant-numeric:tabular-nums;}
+.st-read  {color:#2e7d4f;background:#effaf3;}
+.st-reread{color:#1f5fa3;background:#eaf3fc;}
+.st-unread{color:#b03a2e;background:#fdeeec;}
+.st-viewed{color:#c27c0e;background:#ffeccf;}
 
 </style>
 
@@ -408,64 +431,88 @@
 
       <div class="modal-body">
 
+        <div class="tabs" role="tablist">
+          <button id="btn-summary" type="button" role="tab" aria-selected="true">Général</button>
+          <button id="btn-detail" type="button" role="tab" aria-selected="false">Détail</button>
+          <button id="btn-view" type="button" role="tab" aria-selected="false">Vus</button>
+        </div>
+
         <!-- Métadonnées 2 colonnes -->
-        <div class="row">
-          <div class="col-6">
-            <div class="form-inline">
-              <label>Auteur</label><input type="text" id="content-author" class="form-control form-input" disabled>
+        <div id="panel-summary" style="margin-top:10px;">
+          <div class="row" >
+            <div class="col-6">
+              <div class="form-inline">
+                <label>Auteur</label><input type="text" id="content-author" class="form-control form-input" disabled>
+              </div>
+              <div class="form-inline">
+                <label>Lecture obligatoire</label><select id="content-mandatory" class="form-control form-input" disabled><option value="non">Non</option><option value="oui">Oui</option></select>
+              </div>
             </div>
-            <div class="form-inline">
-              <label>Date d'applications</label><input type="date" id="content-dte_start" class="form-control form-input" disabled>
+            <div class="col-6">
+              <div class="form-inline">
+                <label>Date de création</label><input type="text" id="content-dte_create" class="form-control form-input" disabled>
+              </div>
+              <div class="form-inline">
+                <label>Document controllé</label><select id="content-controlled" class="form-control form-input" disabled><option value="non">Non</option><option value="oui">Oui</option></select>
+              </div>
             </div>
-            <div class="form-inline">
-              <label>Lecture obligatoire</label><select id="content-mandatory" class="form-control form-input" disabled><option value="non">Non</option><option value="oui">Oui</option></select>
-            </div>  
-
-            <div class="form-inline">
-              <label>Référence</label><input type="text" id="content-reference" class="form-control form-input" disabled>
-            </div>  
-            <div class="form-inline">
-              <label>Version</label><input type="text" id="content-version" class="form-control form-input" disabled>
-            </div>  
-
           </div>
-          <div class="col-6">
-            <div class="form-inline">
-              <label>Date de création</label><input type="text" id="content-dte_create" class="form-control form-input" disabled>
-            </div>
-            <div class="form-inline">
-              <label>Date d'échéance</label><input type="date" id="content-dte_end" class="form-control form-input" disabled>
-            </div>
+        </div>
 
-            <div class="form-inline">
-              <label>Document controllé</label><select id="content-controlled" class="form-control form-input" disabled><option value="non">Non</option><option value="oui">Oui</option></select>
+        <div id="panel-detail" style='display:none; margin-top:10px;'>
+          <div class="row" >
+            <div class="col-6">
+              <div class="form-inline">
+                <label>Date d'applications</label><input type="date" id="content-dte_start" class="form-control form-input" disabled>
+              </div>
+              <div class="form-inline">
+                <label>Référence</label><input type="text" id="content-reference" class="form-control form-input" disabled>
+              </div>  
+              <div class="form-inline">
+                <label>Version</label><input type="text" id="content-version" class="form-control form-input" disabled>
+              </div>  
+  
             </div>
-            <div class="form-inline">
-              <label>Nature</label><select id="content-nature" class="form-control form-input" disabled><option value="GEN">Autre</option><option value="SOP">Procédure</option><option value="ANX">Annexe</option><option value="FOR">Formulaire</option></select>
-            </div>  
-
-            <div class="form-inline">
-              <label>Status</label><select id="content-status" class="form-control form-input" disabled><option value="open">Non controllé</option><option value="draft">Brouillon</option><option value="submitted">Soumis</option><option value="approved">Approuvé</option><option value="cancelled">Annulé</option></select>
-            </div>  
-
-            <div class="form-inline">
-              <label>Prochaine revue</label><input type="date" id="content-dte_review" class="form-control form-input" disabled>
+            <div class="col-6">
+              <div class="form-inline">
+                <label>Date d'échéance</label><input type="date" id="content-dte_end" class="form-control form-input" disabled>
+              </div>
+              <div class="form-inline">
+                <label>Nature</label><select id="content-nature" class="form-control form-input" disabled><option value="GEN">Autre</option><option value="SOP">Procédure</option><option value="ANX">Annexe</option><option value="FOR">Formulaire</option></select>
+              </div>    
+              <div class="form-inline">
+                <label>Status</label><select id="content-status" class="form-control form-input" disabled><option value="open">Non controllé</option><option value="draft">Brouillon</option><option value="submitted">Soumis</option><option value="approved">Approuvé</option><option value="cancelled">Annulé</option></select>
+              </div> 
+              <div class="form-inline">
+                <label>Prochaine revue</label><input type="date" id="content-dte_review" class="form-control form-input" disabled>
+              </div>
             </div>
-
           </div>
 
+          <div class="row">
+            <textarea id="content-history" class="form-control" disabled placeholder="Historique"></textarea>
+          </div>
+          <div class="modal-divider"></div>
+          <div class="row">
+            <div class="form-group">
+              <div id="modalChecked"></div>
+              <div id="modalApproved"></div>
+            </div>  
+          </div>  
+  
+        </div>
 
+        <div id="panel-view" style='display:none;margin-top:10px;'>
+          <div class="row">
+            <div id="lst-view" class="reads-list"></div>
+          </div>
         </div>
-        <div class="row">
-          <textarea id="content-history" class="form-control" disabled placeholder="Historique"></textarea>
-        </div>
- 
+
+
         <div class="modal-divider"></div>
-        <div class="form-group">
-          <div id="modalChecked"></div>
-          <div id="modalApproved"></div>
-        </div>
-        <div class="modal-divider"></div>
+
+
+
 
 		    <!-- BEGIN: adddoc -->
         <!-- Pièces jointes -->
@@ -535,12 +582,38 @@
   var lstDocuments = [];
   var openPaper = {paper};
 
+  $('#btn-summary').on('click', function() {
+    $('#btn-summary').attr('aria-selected', 'true');;
+    $('#btn-detail').attr('aria-selected', 'false');
+    $('#btn-view').attr('aria-selected', 'false');
+    $('#panel-summary').show();
+    $('#panel-detail').hide();
+    $('#panel-view').hide();
+  });
+  $('#btn-detail').on('click', function() {
+    $('#btn-summary').attr('aria-selected', 'false');
+    $('#btn-detail').attr('aria-selected', 'true');
+    $('#btn-view').attr('aria-selected', 'false');
+    $('#panel-summary').hide();
+    $('#panel-detail').show();
+    $('#panel-view').hide();
+  });
+  $('#btn-view').on('click', function() {
+    $('#btn-summary').attr('aria-selected', 'false');
+    $('#btn-detail').attr('aria-selected', 'false');
+    $('#btn-view').attr('aria-selected', 'true');
+    $('#panel-summary').hide();
+    $('#panel-detail').hide();
+    $('#panel-view').show();
+  });
+
 // ── Chargement liste ──────────────────────────────────────────
   function loadPapers() {
     var filter = $('#selectFilter').val();
     var date   = $('#selectDate').val();
     var crit   = $('#crit').val();
     var sort   = $('#selectSort').val();
+    var paper  = null;
 
     $.get('/api/v1/docs/lstpaper?id={id}&filter='+filter+'&date='+date+'&sort='+sort+'&crit='+crit)
       .done(function(data){ 
@@ -548,7 +621,6 @@
 
         for (var k in data.data) 
         {
-          console.log(data.data[k])
           renderPapers(data.data[k]);
         }
 
@@ -639,7 +711,7 @@
       html += '<span class="badge-doc badge-expired">Périmé</span>';
     }
     // Doc non lu
-    if (data.mandatory=='oui')
+    if ((data.mandatory=='oui') && (data.dte_read===null) && (data.status=='approved'))
     {
       html += '<span class="badge-doc badge-toread">A lire</span>';
     }
@@ -682,7 +754,7 @@
     html+='  <div class="paper-attachments">';
 
     for (var d in data.doc) {
-      html += '<div class="attach-pill '+((data.doc[d].read) ? "" : "unread")+'"><a href="/doc.php?lien='+data.doc[d].id+'" target="_blank" onclick="event.stopPropagation();">';
+      html += '<div class="attach-pill '+((data.doc[d].read) ? "" : "unread")+'"><a href="/doc.php?docid='+data.doc[d].id+'" target="_blank" onclick="event.stopPropagation();">';
       html += '<i class="mdi mdi-file-'+data.doc[d].icon+'" style="color:'+data.doc[d].color+';"></i> ' + data.doc[d].name + '</a></div>';
     }
     html+='  </div>';
@@ -697,8 +769,16 @@
   {
     currentPaper = id;
     isEditing = false;
+    $('#btn-summary').attr('aria-selected', 'true');;
+    $('#btn-detail').attr('aria-selected', 'false');
+    $('#btn-view').attr('aria-selected', 'false');
+    $('#panel-summary').show();
+    $('#panel-detail').hide();
+    $('#panel-view').hide();
 
-    $.get('/api/v1/docs/getpaper?id=' + id).done(function(data) {
+    $.get('/api/v1/docs/getpaper?id=' + id).done(function(data) 
+    {
+      paper=data.data;
 
       for (var k in data.data)
       {     
@@ -771,35 +851,63 @@
       {
         $("#modalApproved").html('');
       }
+      $('#modalSigned').html('');
+      $('#modalReadAll').html('');
       
       if (data.data.mandatory=="non")
       {
           $('#modalReadAll').addClass("d-none");
+          $('#btn-view').hide();
       }
       else if (nb>0)
       {
-          $('#modalReadAll').html('<i class="mdi mdi-glasses"></i> Lisez tous les documents surlignés en rouge et rafraichissez la page. ('+nb+' document'+((nb>1) ? 's' : '')+' à lire)');
-          $('#modalSigned').addClass("d-none");
-          $('#modalConfirmRead').addClass("d-none");
+        $('#btn-view').show();
+        $('#modalReadAll').html('<i class="mdi mdi-glasses"></i> Lisez tous les documents surlignés en rouge et rafraichissez la page. ('+nb+' document'+((nb>1) ? 's' : '')+' à lire)');
+        $('#modalSigned').addClass("d-none");
+        $('#modalConfirmRead').addClass("d-none");
       }
       else
       {
-          $('#modalReadAll').addClass("d-none");
-          if (data.data.read)
-          {
-              $('#modalSigned').html('<i class="mdi mdi-lock-outline"></i> Fiche lue le '+data.data.dte_read+'.');
-              $('#modalSigned').removeClass("d-none");
-              $('#modalConfirmRead').addClass("d-none");
-              isSigned=true;
-          }
-          else
-          {
-              $('#modalSigned').addClass("d-none");
-              $('#modalConfirmRead').removeClass("d-none");
-              isAllRead=true;
-          }
+        $('#btn-view').show();
+        $('#modalReadAll').addClass("d-none");
+        if (data.data.read)
+        {
+            $('#modalSigned').html('<i class="mdi mdi-lock-outline"></i> Fiche lue le '+data.data.dte_read+'.');
+            $('#modalSigned').removeClass("d-none");
+            $('#modalConfirmRead').addClass("d-none");
+            isSigned=true;
+        }
+        else
+        {
+            $('#modalSigned').addClass("d-none");
+            $('#modalConfirmRead').removeClass("d-none");
+            isAllRead=true;
+        }
       }
 
+      // Liste des vus
+      $("#lst-view").html("");
+      for (var k in data.read) 
+      {
+        txt ='<div class="read-row"><span class="read-name"><b>'+data.read[k].user+'</b></span>';
+        if (data.read[k].dte_read!="-")
+        {
+          txt+='<span class="read-status st-read">Lu</span>';
+        }
+        else if (data.read[k].start)
+        {
+          txt+='<span class="read-status st-viewed">Ouvert</span>';
+        }
+        else
+        {
+          txt+='<span class="read-status st-unread">Non lu</span>';
+        }
+        txt+='<span class="read-date">'+data.read[k].dte_read+'</span></div>';
+
+        $("#lst-view").append(txt);
+      }     
+
+      // Liste des commentaires
       $("#contentComment").html("");
       $.get('/api/v1/docs/lstcomment?id='+id).done(function(data)
       {
@@ -816,12 +924,14 @@
     });
   }
 
-  function setReadonly(on) {
+  function setReadonly(on) 
+  {
+    console.log(paper);
     ['#content-title','#content-dte_review','#content-mandatory'].forEach(function(sel) {
       $(sel).prop('disabled', on);
     });
 
-    if ($('#content-controlled').val()=="non")
+    if (paper.controlled=="non")
     {
       ['#content-dte_start','#content-dte_end','#content-controlled','#content-nature','#content-history'].forEach(function(sel) {
         $(sel).prop('disabled', on);
@@ -834,13 +944,13 @@
       });      
     }
 
-    if ($('#content-status').val()=="draft")
+    if (paper.status=="draft")
     {
       ['#content-dte_start','#content-history'].forEach(function(sel) {
         $(sel).prop('disabled', on);
       });
 
-      if ($('#content-nature').val()=="GEN")
+      if ((paper.refid==0) || (paper.nature=="GEN"))
       {
         $('#content-nature').prop('disabled', on);
       }
