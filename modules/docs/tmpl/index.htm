@@ -36,7 +36,7 @@
     }
 
     /* Recherche */
-    .search-wrap { position:relative; margin-bottom:28px; }
+    .search-wrap { position:relative; }
     .search-wrap .s-icon {
       position:absolute; left:16px; top:50%; transform:translateY(-50%);
       color:var(--muted); font-size:18px; pointer-events:none;
@@ -153,12 +153,21 @@
 <div class="row">
 	<div class="col grid-margin stretch-card">
 		<div class="card">
-			<div class="card-body">
-				<div class="search-wrap mb-0">
-				<i class="mdi mdi-magnify s-icon"></i>
-				<input type="text" id="crit" class="search-input"
-					placeholder="Rechercher un document dans tous les classeurs…"
-					onkeyup="searchkey(event);" autocomplete="off">
+			<div class="card-body" style="display: flex; gap: 16px; align-items: center;">
+				<div class="search-wrap" style="min-width:450px;">
+					<i class="mdi mdi-magnify s-icon"></i>
+					<input type="text" id="crit" class="search-input"
+						placeholder="Rechercher un document dans tous les classeurs…"
+						onkeyup="searchkey(event);" autocomplete="off">	
+				</div>
+				<div>Tags :</div>
+				<div>
+					<select id="tag" class="search-input">
+						<option value="{aff_tag_id}">-Aucun-</option>
+						<!-- BEGIN: lst_tag -->
+						<option value="{aff_tag_id}">#{aff_tag_name}</option>
+						<!-- END: lst_tag -->
+					</select>
 				</div>
 			</div>
 		</div>
@@ -247,6 +256,8 @@
 $(document).ready(function() {
 	loadContent();
 });
+
+
 
 var	currentFolder=0;
 
@@ -381,7 +392,11 @@ $( "#cancel" ).on( "click", function() {
 $( "#close" ).on( "click", function() {
 	$('#createFolder').modal('hide');
 });
-	
+
+$("#tag").on( "change", function() {
+	window.location.replace("/docs/folder?idtag="+$("#tag").val());
+});
+
 function showSearch()
 {
 	$("#search").css({"display":"inline-block"});

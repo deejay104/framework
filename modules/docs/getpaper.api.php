@@ -25,17 +25,30 @@
 
 	$result["data"]["reference"]=$paper->ref();
 
+	// Récupère la liste des tags
+	$lsttag=array();
+    $q ="SELECT * FROM ".PREFIX_TBL."_tags AS tag WHERE actif='oui' AND tag.id_obj='".$paper->id."' AND tag.type_obj='paper'";
+	$sql->Query($q);
+	for($i=0; $i<$sql->rows; $i++)
+	{ 
+		$sql->GetRow($i);
+        $lsttag[]=$sql->data["id_tag"];
+    }
+	$result["data"]["tags"]=implode(",",$lsttag);
 
+	// Infos Autheur
 	$usr = new user_core($paper->uid_creat,$sql,false);
 	$result["data"]["author"]=$usr->fullname;
 	$result["data"]["dte_create"]=sql2date($paper->dte_creat,"jour");
 	$result["data"]["created"]=$paper->dte_creat;
 
+	// Infos Relecteur
 	$usr = new user_core($paper->val("uid_checked"),$sql,false);
 	$result["data"]["usr_checked"]=$usr->fullname;
 	$usr = new user_core($paper->val("uid_approved"),$sql,false);
 	$result["data"]["usr_approved"]=$usr->fullname;
 
+	// Infos approbateur
 	$read = new paper_read_core($id,$sql);
 	$read->loadFromField(array("id_paper"=>$id,"uid"=>$gl_uid));
 	$result["data"]["read"]=($read->val("dte_read")!="0000-00-00 00:00:00") ? true : false;

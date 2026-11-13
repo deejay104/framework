@@ -25,11 +25,13 @@
 	  { FatalError("Accès non autorisé (AccesDocuments)"); }
 
 	$id=checkVar("id","numeric");
+	$idtag=checkVar("idtag","numeric");
 	$paper=checkVar("paper","numeric");
 	$crit=checkVar("crit","varchar",50);
 
 // --- Load folder's permission
 	require_once ("class/folder.inc.php");
+	require_once ("class/tags.inc.php");
 
 	$folder=new folder_core($id,$sql);
 
@@ -40,10 +42,20 @@
 // ---- Affiche les bouttons
 
 	$tmpl_x->assign("id",$id);
+	$tmpl_x->assign("idtag",$idtag);
 	$tmpl_x->assign("paper",$paper);
 	$tmpl_x->assign("crit",$crit);
 	$tmpl_x->assign("form_today",date("Y-m-d"));
-	$tmpl_x->assign("folder_name",$folder->val("title"));
+	
+	if ($idtag>0)
+	{
+		$tag=new tags_conf_core($idtag,$sql);
+		$tmpl_x->assign("folder_name",'<span class="tagchip" style="--tag: '.$tag->val("color").';"><span class="tagchip-label">'.$tag->val("name").'</span></span>');
+	}
+	else
+	{
+		$tmpl_x->assign("folder_name",$folder->val("title"));	
+	}
 
 	if (GetDroit($folder->val("group_write")))
 	{

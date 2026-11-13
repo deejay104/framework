@@ -12,6 +12,7 @@
 	require_once ("class/document.inc.php");
 
 	$id=checkVar("id","numeric");
+	$idtag=checkVar("idtag","numeric");
 	$crit=checkVar("crit","varchar",50);
 	$filter=checkVar("filter","varchar",10,"active");
 	$sort=checkVar("sort","varchar",10,"dte_creat");
@@ -34,9 +35,10 @@
 	$result["data"]=array();
 
 
-	$q ="SELECT doc.*,r.dte_read FROM ".PREFIX_TBL."_doc_paper AS doc ";
+	$q ="SELECT doc.*,r.dte_read,t.id AS tag FROM ".PREFIX_TBL."_doc_paper AS doc ";
 	$q.="LEFT JOIN ".PREFIX_TBL."_doc_read AS r ON doc.id=r.id_paper ";
-	$q.="WHERE doc.actif='oui' ".(($id>0) ? "AND doc.id_folder=".$id : "")." ORDER BY doc.".$sort;
+	$q.="LEFT JOIN ".PREFIX_TBL."_tags AS t ON doc.id=t.id_obj AND t.type_obj='paper' ";
+	$q.="WHERE doc.actif='oui' ".(($id>0) ? "AND doc.id_folder=".$id : "")." ".(($idtag>0) ? "AND t.id_tag=".$idtag : "")." ORDER BY doc.".$sort;
 
 	$sql->Query($q);
 

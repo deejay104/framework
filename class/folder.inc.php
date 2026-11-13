@@ -69,6 +69,7 @@ class paper_core extends objet_core {
 		"status"=>Array("type" => "enum", "default"=>"open","index"=>1),
 		"mandatory"=>Array("type" => "bool", "default"=>"non"),
 		"history"=>Array("type" => "text"),
+		"tags"=>Array("type" => "varchar","len"=>100),
 		"dte_start"=>Array("type" => "date"),
 		"dte_end"=>Array("type" => "date"),
 		"dte_review"=>Array("type" => "date"),

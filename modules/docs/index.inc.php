@@ -31,14 +31,8 @@
 		addPageMenu($corefolder,$mod,"Nouveau dossier","","",false,"","createFolder();");
 	}
 
-	$tmpl_x->assign("FormulaireBackgroundDark",$MyOpt["styleColor"]["FormulaireBackgroundDark"]);
-	$tmpl_x->assign("FormulaireBackgroundNormal",$MyOpt["styleColor"]["FormulaireBackgroundNormal"]);
-	$tmpl_x->assign("FormulaireBackgroundLight",$MyOpt["styleColor"]["FormulaireBackgroundLight"]);
-	$tmpl_x->assign("LineBackgroundHover",$MyOpt["styleColor"]["LineBackgroundHover"]);
-	$tmpl_x->assign("TextBackgroundHover",$MyOpt["styleColor"]["TextBackgroundHover"]);
-
 // ---- Liste les groupes
-	$query="SELECT groupe FROM ".$MyOpt["tbl"]."_groupe ORDER BY groupe";
+	$query="SELECT groupe FROM ".PREFIX_TBL."_groupe ORDER BY groupe";
 	$sql->Query($query);
 
 	for($i=0; $i<$sql->rows; $i++)
@@ -53,6 +47,18 @@
 		}
 	}
 
+// ---- Liste des tags
+	$query="SELECT * FROM ".PREFIX_TBL."_tags_conf ORDER BY name";
+	$sql->Query($query);
+
+	for($i=0; $i<$sql->rows; $i++)
+	{
+		$sql->GetRow($i);
+
+		$tmpl_x->assign("aff_tag_id",$sql->data["id"]);
+		$tmpl_x->assign("aff_tag_name",$sql->data["name"]);
+		$tmpl_x->parse("corps.lst_tag");
+	}
 
 // ---- Affecte les variables d'affichage
 	$tmpl_x->parse("icone");

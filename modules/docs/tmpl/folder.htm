@@ -257,6 +257,9 @@
 
 .modal-divider { height: 1px; background: var(--p67-border); margin: 16px 0; }
 
+.modal-danger { border-bottom:1px solid var(--p67-danger); }
+
+
 #modal-status { position: absolute;
   left: 90px;
   top: 59px;
@@ -267,6 +270,33 @@
   border-radius: 10px; }
 #modal-status:empty { display: none; }
 
+
+/* tags */
+.tagfield{position:relative; width:70%; }
+.tagfield-box{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-height:38px;box-sizing:border-box;padding:4px 6px; border:1px solid #cfd6dd;border-radius:6px;background:#fff;cursor:text;}',
+.tagfield.is-focused .tagfield-box{border-color:#2f7fd1;box-shadow:0 0 0 3px rgba(47,127,209,.18);}
+.tagfield.is-readonly .tagfield-box{background:#f7f8fa;cursor:default;}
+.tagchip{display:inline-flex;align-items:center;gap:6px;max-width:100%;height:26px;box-sizing:border-box;padding:0 14px 0 9px; border-radius:999px;font-size:13px;color:#1f2933;background:#f1f3f5; background:color-mix(in srgb,var(--tag) 12%,#fff);border:1px solid color-mix(in srgb,var(--tag) 30%,#fff);}
+.tagfield.is-readonly .tagchip{padding-right:9px;}
+.tagchip::before{content:"#";flex:none;margin-right:-6px;font-weight:700;color:var(--tag);}
+.tagchip-label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tagchip-remove{flex:none;display:grid;place-items:center;width:18px;height:18px;padding:0;border:0;border-radius:50%; background:transparent;color:#6b7280;font-size:15px;line-height:1;cursor:pointer;}
+.tagchip-remove:hover,.tagchip-remove:focus-visible{background:rgba(0,0,0,.08);color:#1f2933;outline:none;}
+.tagchip.is-pending{box-shadow:0 0 0 2px var(--tag);}
+/* Remise à zéro renforcée : les styles généraux du site pour input[type=text] ne doivent pas s'appliquer ici */
+.tagfield .tagfield-box input.tagfield-entry{flex:1 1 120px !important;width:auto !important;min-width:120px;height:auto !important;margin:0 !important;
+  border:0 !important;outline:none !important;box-shadow:none !important;border-radius:0 !important;padding:4px 2px !important;
+  font:inherit;font-size:14px;background:transparent !important;color:#1f2933;}
+.tagfield-menu{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:2000;margin:0;padding:4px;list-style:none;
+  background:#fff;border:1px solid #d5dbe1;border-radius:8px;box-shadow:0 8px 24px rgba(15,23,42,.12);max-height:260px;overflow-y:auto;}
+.tagfield-option{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:6px;cursor:pointer;font-size:14px;color:#1f2933;}
+.tagfield-option .dot{flex:none;width:auto;margin-right:-6px;font-weight:700;color:var(--tag);}
+.tagfield-option .dot::before{content:"#";}
+.tagfield-option .label{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tagfield-option .label b{font-weight:700;}
+.tagfield-option .scope{flex:none;font-size:12px;color:#6b7280;}
+.tagfield-option.is-active{background:#eef4fb;}
+.tagfield-empty{padding:8px 9px;font-size:13px;color:#6b7280;}
 
 /* Commentaires dans modal */
 .comment-block {
@@ -471,6 +501,12 @@
               </div>
             </div>
           </div>
+          <div class="modal-divider"></div>
+          <div class="row">
+            <div class="form-inline">
+              <label>Tags</label><input type="text" id="content-tags" class="form-control form-input">
+            </div>
+          </div>
         </div>
 
         <div id="panel-detail" style='display:none; margin-top:10px;'>
@@ -580,10 +616,6 @@
 </div>
 
 <script>
-  /* ═══════════════════════════════════════════════════
-     LOGIQUE — identique à l'original, rendu amélioré
-     ═══════════════════════════════════════════════════ */
-
   $(document).ready(function() { loadPapers(); });
 
   var currentPaper = 0;
@@ -591,7 +623,11 @@
   var isAllRead = false;
   var isSigned = false;
   var lstDocuments = [];
+
+  var openFolder={id};
   var openPaper = {paper};
+  var openTag={idtag};
+
 
   $('#btn-summary').on('click', function() {
     $('#btn-summary').attr('aria-selected', 'true');;
@@ -626,7 +662,7 @@
     var sort   = $('#selectSort').val();
     var paper  = null;
 
-    $.get('/api/v1/docs/lstpaper?id={id}&filter='+filter+'&date='+date+'&sort='+sort+'&crit='+crit)
+    $.get('/api/v1/docs/lstpaper?id='+openFolder+'&idtag='+openTag+'&filter='+filter+'&date='+date+'&sort='+sort+'&crit='+crit)
       .done(function(data){ 
         $('#lstPapers').html('');
 
@@ -799,7 +835,9 @@
       document.getElementById('content-status').value = paper.status;
       document.getElementById('content-controlled').value = paper.controlled;
       document.getElementById('content-mandatory').value = paper.mandatory;
+
       $('#contentNewComment').val('');
+      $('#content-tags').trigger('tags:refresh');
       setReadonly(true);
 
       // Pièces jointes dans la modal
@@ -820,6 +858,7 @@
 
 
       $('#modal-status').html("");
+      $('.modal-header').removeClass("modal-danger");
 
       var dte_today = new Date();
       var dte_start = new Date(paper.dte_start); 
@@ -846,6 +885,7 @@
         {
           $('#submit').show();
           $('#modal-status').html("Brouillon");
+          $('.modal-header').addClass("modal-danger");
         }
         else
         {
@@ -1057,6 +1097,7 @@
               controlled: $('#content-controlled').val(),
               mandatory: $('#content-mandatory').val(),
               history: $('#content-history').val(),
+              tags: $('#content-tags').val(),
               nature: $('#content-nature').val(),
               dte_start: $('#content-dte_start').val(),
               dte_end: $('#content-dte_end').val(),
@@ -1135,6 +1176,8 @@
     timer = setTimeout(function() { timer = null; loadPapers(); }, 350);
   }
 
+
+
   // ── Upload drag & drop ────────────────────────────────────────
   $('html').on('dragover drop', function(e) { e.preventDefault(); e.stopPropagation(); });
 
@@ -1171,15 +1214,14 @@
 
   function uploadData(id, fd, src)
   {
-      folder={id};
-      if (folder==0)
+      if (openFolder==0)
       {
           return;
       }
       $("#addContentText").html("Envoi du fichier...");
 
       $.ajax({
-          url: '/api/v1/docs/postdoc?id='+id+'&dest=paper&folder='+folder,
+          url: '/api/v1/docs/postdoc?id='+id+'&dest=paper&folder='+openFolder,
           type: 'POST',
           data: fd,
           processData: false,
@@ -1205,6 +1247,324 @@
           }
       });
   }
+
+
+
+  // -- Tags ------------------------------------------------------
+  
+  $('#content-tags').on('change', function()
+  {
+
+    console.log("change tags");
+
+    var ids = $(this).val()
+        .split(',')                                   // explode(',', …)
+        .map(function (s) { return s.trim(); })       // enlève les espaces éventuels
+        .filter(function (s) { return s !== ''; })   // enlève les valeurs vides
+        .map(Number);
+
+    $.post('/api/v1/docs/tags', {
+      id: 0,
+      data: {
+        ids: ids,
+        oid: paper.id,
+        type: 'paper'
+      }
+    })
+    .done(function() {
+
+    })
+    .fail(function(data) {
+        console.log(data);
+        showToast("",data.responseJSON.error,"error");
+    });    
+
+
+
+  });
+
+
+
+  $(function () {
+    var CONFIG = {
+        input: '#content-tags',
+        url: '/api/v1/docs/tags',
+        valueField: 'id',         // ce que contient l'input : 'id' (4,12) ou 'name' (eleve,securite)
+        minChars: 1,
+        maxTags: 0,               // 0 = pas de limite
+        placeholder: 'Ajouter un tag…',
+        scope: {               // couleur et libellé par famille de tags
+            audience: { label: 'Public', color: '#2f7fd1' },
+            topic:    { label: 'Thème',  color: '#2e9e5b' },
+            type:     { label: 'Nature', color: '#8e5bd1' },
+            aircraft: { label: 'Avion',  color: '#c27c0e' }
+        },
+        defaultColor: '#6b7280'
+    };
+ 
+    var $input = $(CONFIG.input);
+    if (!$input.length || $input.data('tagfield')) { return; }
+    $input.data('tagfield', true);
+ 
+    /* ---------- État ---------- */
+    var readonly = $input.prop('disabled') || $input.prop('readonly');
+    var known = {};          // valeur → { key, name, label, scope } (tout ce que l'API a renvoyé)
+    var codes = splitCodes($input.val());
+    var results = [];        // suggestions affichées
+    var active = -1;         // index de la suggestion en surbrillance
+    var requestId = 0;
+    var timer = null;
+    var uid = 'tagfield-' + Math.random().toString(36).slice(2, 8);
+ 
+    /* ---------- Construction ---------- */
+    var $field = $('<div class="tagfield">');
+    var $box   = $('<div class="tagfield-box">').appendTo($field);
+    var $entry = $('<input type="text" class="tagfield-entry" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false">')
+        .attr({ id: uid + '-entry', 'aria-controls': uid + '-menu', placeholder: CONFIG.placeholder });
+    var $menu  = $('<ul class="tagfield-menu" role="listbox" hidden>').attr('id', uid + '-menu').appendTo($field);
+ 
+    $input.hide().attr('aria-hidden', 'true').after($field);
+    $('label[for="' + $input.attr('id') + '"]').attr('for', uid + '-entry');   // le label pointe sur la zone de saisie
+    refresh();
+ 
+    /* ---------- Fonctions ---------- */
+ 
+    // Relit la valeur de l'input (et son état lecture seule), réaffiche les pastilles
+    // et demande à l'API les libellés encore inconnus
+    function refresh() {
+        codes = splitCodes($input.val());
+        readonly = $input.prop('disabled') || $input.prop('readonly');
+        closeMenu();
+        $entry.val('');
+        $field.toggleClass('is-readonly', readonly);
+        if (readonly) { $entry.detach(); } else if (!$entry.parent().length) { $box.append($entry); }
+        render();
+        resolveInitialLabels();
+    }
+    function splitCodes(value) {
+        return String(value || '').split(',')
+            .map(function (c) { return c.trim(); })
+            .filter(function (c) { return c !== ''; });
+    }
+ 
+    function normalize(s) {   // pour comparer sans accents ni casse
+        return String(s).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    }
+ 
+    function scopeOf(tag) {
+        return CONFIG.scope[tag.scope] || { label: '', color: CONFIG.defaultColor };
+    }
+ 
+    // Accepte une liste (enveloppe avec data[]), un enregistrement (data{}) ou un simple tableau.
+    // Champs : id, name (code du tag), scope (famille), label (facultatif : sinon on affiche name)
+    function parseResponse(resp) {
+        var data = resp && resp.data !== undefined ? resp.data : resp;
+        var rows = Array.isArray(data) ? data : (data && typeof data === 'object' ? [data] : []);
+        return $.map(rows, function (r) {
+            if (!r || r[CONFIG.valueField] === undefined || r[CONFIG.valueField] === null) { return null; }
+            var tag = {
+                key:    String(r[CONFIG.valueField]),
+                name:   String(r.name || ''),
+                label:  String(r.label || r.name || r[CONFIG.valueField]),
+                scope: r.scope || ''
+            };
+            known[tag.key] = tag;
+            return tag;
+        });
+    }
+ 
+    function render() {
+        $box.children('.tagchip').remove();
+        $.each(codes, function (i, key) {
+            var tag = known[key] || { key: key, name: '', label: key, scope: '' };
+            var fam = scopeOf(tag);
+            var $chip = $('<span class="tagchip">').attr({ 'data-key': key, title: fam.label ? fam.label + ' : ' + tag.label : tag.label })
+                .css('--tag', fam.color)
+                .append($('<span class="tagchip-label">').text(tag.label));
+            if (!readonly) {
+                $chip.append($('<button type="button" class="tagchip-remove">×</button>').attr('aria-label', 'Retirer le tag ' + tag.label));
+            }
+            if (readonly) { $box.append($chip); } else { $chip.insertBefore($entry); }
+        });
+        var full = CONFIG.maxTags > 0 && codes.length >= CONFIG.maxTags;
+        $entry.prop('disabled', full).attr('placeholder', full ? CONFIG.maxTags + ' tags maximum' : (codes.length ? '' : CONFIG.placeholder));
+    }
+ 
+    function sync() {
+        $input.val(codes.join(',')).trigger('change');
+        render();
+    }
+ 
+    function addTag(tag) {
+        if ($.inArray(tag.key, codes) === -1 && !(CONFIG.maxTags > 0 && codes.length >= CONFIG.maxTags)) {
+            known[tag.key] = tag;
+            codes.push(tag.key);
+            sync();
+        }
+        $entry.val('');
+        closeMenu();
+        $entry.trigger('focus');
+    }
+ 
+    function removeTag(key) {
+        codes = $.grep(codes, function (c) { return c !== key; });
+        sync();
+        $entry.trigger('focus');
+    }
+ 
+    // Les tags déjà enregistrés n'ont que leur identifiant : on charge chacun auprès de l'API
+    function resolveInitialLabels() {
+        $.each(codes, function (i, key) {
+            if (known[key]) { return; }                     // déjà connu : affiché tout de suite, sans appel
+            var params = {};
+            params[CONFIG.valueField === 'id' ? 'id' : 'term'] = key;
+            $.getJSON(CONFIG.url, params).done(function (resp) {
+                parseResponse(resp);
+                render();
+            });
+        });
+    }
+ 
+    function search(term) {
+        var id = ++requestId;
+        $.getJSON(CONFIG.url, { term: term }).done(function (resp) {
+            if (id !== requestId) { return; }               // réponse d'une frappe précédente : ignorée
+            var found = parseResponse(resp);
+            results = $.grep(found, function (t) { return $.inArray(t.key, codes) === -1; });
+            // Les tags dont le libellé ou le code commence par la saisie passent en premier
+            var needle = normalize(term);
+            var starts = function (t) { return normalize(t.label).indexOf(needle) === 0 || normalize(t.name).indexOf(needle) === 0 ? 0 : 1; };
+            results = results.map(function (t, i) { return [starts(t), i, t]; })
+                             .sort(function (a, b) { return a[0] - b[0] || a[1] - b[1]; })
+                             .map(function (x) { return x[2]; });
+            active = results.length ? 0 : -1;
+            openMenu(term, found.length > 0);
+        });
+    }
+ 
+    function openMenu(term, alreadyAdded) {
+        $menu.empty();
+        if (!results.length) {
+            $menu.append($('<li class="tagfield-empty">').text(alreadyAdded
+                ? 'Déjà ajouté'
+                : 'Aucun tag ne correspond à « ' + term + ' »'));
+        }
+        var needle = normalize(term);
+        $.each(results, function (i, tag) {
+            var fam = scopeOf(tag);
+            var $label = $('<span class="label">');
+            var pos = normalize(tag.label).indexOf(needle);   // met en gras la partie tapée
+            if (pos >= 0 && needle) {
+                $label.append(document.createTextNode(tag.label.slice(0, pos)),
+                              $('<b>').text(tag.label.slice(pos, pos + needle.length)),
+                              document.createTextNode(tag.label.slice(pos + needle.length)));
+            } else {
+                $label.text(tag.label);
+            }
+            $('<li class="tagfield-option" role="option">')
+                .attr({ id: uid + '-opt-' + i, 'data-index': i })
+                .css('--tag', fam.color)
+                .append('<span class="dot"></span>', $label, $('<span class="scope">').text(fam.label))
+                .appendTo($menu);
+        });
+        $menu.prop('hidden', false);
+        $entry.attr('aria-expanded', 'true');
+        highlight();
+    }
+ 
+    function closeMenu() {
+        clearTimeout(timer);
+        requestId++;
+        results = [];
+        active = -1;
+        $menu.prop('hidden', true).empty();
+        $entry.attr('aria-expanded', 'false').removeAttr('aria-activedescendant');
+    }
+ 
+    function highlight() {
+        var $options = $menu.children('.tagfield-option').removeClass('is-active').attr('aria-selected', 'false');
+        if (active >= 0) {
+            var $opt = $options.eq(active).addClass('is-active').attr('aria-selected', 'true');
+            $entry.attr('aria-activedescendant', $opt.attr('id'));
+            var el = $opt[0], menu = $menu[0];          // garde l'option visible dans la liste
+            if (el.offsetTop < menu.scrollTop) { menu.scrollTop = el.offsetTop; }
+            else if (el.offsetTop + el.offsetHeight > menu.scrollTop + menu.clientHeight) { menu.scrollTop = el.offsetTop + el.offsetHeight - menu.clientHeight; }
+        } else {
+            $entry.removeAttr('aria-activedescendant');
+        }
+    }
+ 
+    function clearPending() { $box.children('.tagchip.is-pending').removeClass('is-pending'); }
+ 
+    /* ---------- Événements ---------- */
+ 
+    // À déclencher après avoir changé la valeur par programme, par exemple à l'ouverture d'une modale :
+    //   $('#content-tags').val('securite,dr400').trigger('tags:refresh');
+    $input.on('tags:refresh', refresh);
+ 
+    $box.on('mousedown', function (e) {                 // clic dans le cadre : focus sur la saisie
+        if (!$(e.target).is('.tagchip-remove, .tagfield-entry')) { e.preventDefault(); $entry.trigger('focus'); }
+    });
+    $box.on('click', '.tagchip-remove', function () {
+        removeTag($(this).closest('.tagchip').attr('data-key'));
+    });
+ 
+    $entry.on('focus', function () { $field.addClass('is-focused'); })
+          .on('blur', function () {
+              // Le texte tapé sans choisir de tag est effacé : il ne doit pas laisser croire qu'il est enregistré
+              $field.removeClass('is-focused'); clearPending(); closeMenu(); $entry.val('');
+          });
+ 
+    $entry.on('input', function () {
+        clearPending();
+        var term = $entry.val().trim();
+        clearTimeout(timer);
+        if (term.length < CONFIG.minChars) { closeMenu(); return; }
+        timer = setTimeout(function () { search(term); }, 200);
+    });
+ 
+    $entry.on('keydown', function (e) {
+        var open = !$menu.prop('hidden');
+        switch (e.key) {
+            case 'ArrowDown':
+                if (open && results.length) { e.preventDefault(); active = (active + 1) % results.length; highlight(); }
+                break;
+            case 'ArrowUp':
+                if (open && results.length) { e.preventDefault(); active = (active - 1 + results.length) % results.length; highlight(); }
+                break;
+            case 'Enter':
+            case ',':
+                if (open || $entry.val() !== '') { e.preventDefault(); }   // pas d'envoi du formulaire en cours de saisie
+                if (open && active >= 0) { addTag(results[active]); }
+                break;
+            case 'Escape':
+                if (open) { e.preventDefault(); closeMenu(); }
+                break;
+            case 'Backspace':
+                if ($entry.val() === '' && codes.length) {
+                    var $last = $box.children('.tagchip').last();
+                    if ($last.hasClass('is-pending')) { removeTag(codes[codes.length - 1]); }
+                    else { $last.addClass('is-pending'); }
+                    e.preventDefault();
+                }
+                break;
+            default:
+                clearPending();
+        }
+    });
+ 
+    // mousedown (et non click) : l'option est choisie avant que la saisie ne perde le focus
+    $menu.on('mousedown', '.tagfield-option', function (e) {
+        e.preventDefault();
+        addTag(results[$(this).data('index')]);
+    });
+    $menu.on('mousemove', '.tagfield-option', function () {
+        var i = $(this).data('index');
+        if (i !== active) { active = i; highlight(); }
+    });
+});
+
+
 </script>
 
 <!-- END: corps -->

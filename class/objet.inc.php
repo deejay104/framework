@@ -1049,6 +1049,7 @@ class objet_core
 		$ret["id"]=$this->id;
 		$ret["type"]=$this->table;
 		$ret["data"]=array();
+		$ret["data"]["id"]=$this->id;
 		foreach($this->data as $k=>$v)
 		{
 			$ret["data"][$k]=$this->val($k);
