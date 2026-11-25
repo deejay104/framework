@@ -54,7 +54,7 @@ function ListActiveFolders($sql)
 
 class paper_core extends objet_core {
 	protected $table="doc_paper";
-	protected $mod="document";
+	protected $mod="docs";
 	protected $rub="folder";
 
 	protected $droit=array();

@@ -157,8 +157,8 @@
 				"status"=>$paper->val("status"),
 				"reference"=>$paper->ref(),
 				"version"=>$paper->val("version"),
-				"dte_effective"=>sql2date($paper->val("dte_start")),
-				"dte_expiry"=>sql2date($paper->val("dte_end")),
+				"dte_effective"=>$paper->val("dte_start"),
+				"dte_expiry"=>$paper->val("dte_end"),
                 "signatures"=> array(
                     array('role' => 'Rédigé par',   'name' => $usr_create->fullname, 'date' => $paper->dte_creat),
                     array('role' => 'Vérifié par',  'name' => $usr_submit->fullname, 'date' => $paper->val("dte_checked")),
@@ -213,7 +213,7 @@ function pdfLayout(array $overrides = []): array
         'footerLine'      => 16.4,   // ligne du bas du modèle, depuis le bord bas
         'footerLineWidth' => 0.18,   // 0,5 pt, comme dans le modèle
         'boxLeft'         => 68,     // cartouche : à droite du logo, jusqu'à la marge droite
-        'boxTop'          => 11.4,   // aligné sur le dessin du logo
+        'boxTop'          => 9,   // aligné sur le dessin du logo
         'boxHeight'       => 24,
         'idWidth'         => 30,     // colonne référence / statut
         'statusHeight'    => 7.6,    // ligne du bas du cartouche (statut)
@@ -724,7 +724,7 @@ function pdfBuildApprovalPage(array $doc, array $history, string $dest, array $l
     // Version courante
     $widths = pdfScaleWidths([30, 75, 75], $width);
     pdfTableRow($pdf, $widths, ['Version', 'Statut', "Date d'application"], 'header');
-    pdfTableRow($pdf, $widths, ['v' . ($doc['version'] ?? ''), pdfStatusInfo($doc)['label'], pdfDate($doc['dte_effective'] ?? null)]);
+    pdfTableRow($pdf, $widths, ['v' . ($doc['version'] ?? ''), pdfStatusInfo($doc)['label'], $doc['dte_effective'] ?? null]);
     $pdf->Ln(5);
 
     // Validations
